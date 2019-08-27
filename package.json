@@ -3,13 +3,12 @@
     "version": "0.0.1",
     "description": "A lightweight, scalable for agile development TypeScript web framework, based on koa2.",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "ts-node ./test/index.ts",
         "build": "tsc"
     },
-    "main": "./lib/thinkkoa.js",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/thinkkoa/thinkkoa.git"
+        "url": "git+https://github.com/thinkkoa/koatty.git"
     },
     "keywords": [
         "web",
@@ -33,13 +32,24 @@
     "homepage": "https://github.com/thinkkoa/koatty",
     "devDependencies": {
         "@types/koa": "^2.0.49",
+        "@typescript-eslint/parser": "^2.0.0",
+        "eslint": "^6.2.1",
+        "eslint-config-alloy": "^2.0.5",
+        "eslint-plugin-typescript": "^0.14.0",
         "reflect-metadata": "^0.1.13",
-        "ts-node": "^8.1.0",
-        "tslint": "^5.15.0",
-        "typescript": "^3.4.5"
+        "ts-node": "^8.3.0",
+        "tslint": "^5.19.0",
+        "tslint-config-alloy": "^0.2.1",
+        "typescript": "^3.5.3"
     },
     "dependencies": {
-        "koa": "^2.7.0"
+        "@types/lodash": "^4.14.137",
+        "debug": "^4.1.1",
+        "globby": "^10.0.1",
+        "injection": "^1.6.1",
+        "koa": "^2.8.1",
+        "think_lib": "^2.2.2",
+        "think_logger": "^2.0.4"
     },
     "maintainers": [
         {
