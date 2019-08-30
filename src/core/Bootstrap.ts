@@ -2,22 +2,23 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-08-27 14:53:28
+ * @ version: 2019-08-30 13:45:39
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
 import { Loader } from './Loader';
-import { reverseInject } from './Injectable';
-import { saveClassMetadata, getClassMetadata } from './Decorators';
-import { COM_SCAN } from './Constants';
+import { reverseInject, componentInject } from './Injectable';
+import { saveClassMetadata, getClassMetadata, listModule } from './Decorators';
+import { COMPONENT_KEY, INJECT_TAG, COMPONENT_SCAN } from './Constants';
+import { Container } from './Container';
 
 export function Bootstrap(): ClassDecorator {
     console.log('Bootstrap');
     return (target: any) => {
         //定义初始化参数
         console.log('定义初始化参数...');
-        const meta = getClassMetadata(COM_SCAN, target);
+        const meta = getClassMetadata(INJECT_TAG, COMPONENT_SCAN, target);
         let metas = [];
         if (!helper.isArray(meta)) {
             metas.push(meta);
@@ -26,15 +27,8 @@ export function Bootstrap(): ClassDecorator {
         }
         const loader = new Loader();
         loader.loadDirectory({ loadDir: metas });
-        reverseInject(target);
+        componentInject(target);
     };
-    // setTimeout(() => {
-    //     console.log(loader.applicationContext.handlerMap);
-
-    //     const cls: any = loader.applicationContext.get('Test1');
-    //     console.log(cls.sayHello());
-    //     // tslint:disable-next-line: no-magic-numbers
-    // }, 5000);
 }
 
 export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
@@ -42,7 +36,7 @@ export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
 
     return (target: any) => {
         scanPath = scanPath || '';
-        saveClassMetadata(COM_SCAN, scanPath, target);
+        saveClassMetadata(INJECT_TAG, COMPONENT_SCAN, scanPath, target);
     };
 }
 

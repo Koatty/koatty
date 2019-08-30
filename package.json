@@ -31,7 +31,9 @@
     },
     "homepage": "https://github.com/thinkkoa/koatty",
     "devDependencies": {
+        "@types/co": "^4.6.2",
         "@types/koa": "^2.0.49",
+        "@types/lodash": "^4.14.137",
         "@typescript-eslint/parser": "^2.0.0",
         "eslint": "^6.2.1",
         "eslint-config-alloy": "^2.0.5",
@@ -43,12 +45,10 @@
         "typescript": "^3.5.3"
     },
     "dependencies": {
-        "@types/lodash": "^4.14.137",
-        "debug": "^4.1.1",
+        "co": "^4.6.0",
         "globby": "^10.0.1",
-        "injection": "^1.6.1",
         "koa": "^2.8.1",
-        "think_lib": "^2.2.2",
+        "think_lib": "^2.2.4",
         "think_logger": "^2.0.4"
     },
     "maintainers": [

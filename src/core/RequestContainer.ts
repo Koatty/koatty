@@ -1,71 +1,70 @@
-import { IOContainer } from './Container';
-import { ManagedValue, VALUE_TYPE } from 'injection';
 /**
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-08-20 15:19:21
+ * @ version: 2019-08-30 15:19:16
  */
+import * as helper from "think_lib";
+import { Container, recursiveGetMetadata } from './Container';
+import { ObjectDefinitionOptions } from './IContainer';
+import { getIdentifier, getModule } from './Decorators';
+import { TAGGED_PROP, COMPONENT_KEY } from './Constants';
 
-export class RequestContainer extends IOContainer {
-    public applicationContext: IOContainer;
 
-    public constructor(applicationContext: any) {
-        super();
-        this.parent = applicationContext;
-        this.applicationContext = applicationContext;
+export class RequestContainer extends Container {
+    public ctx: any;
+    public constructor(app: any, ctx: any) {
+        super(app);
+        this.ctx = ctx;
     }
 
-    /**
-     * 
-     * @param identifier 
-     * @param args 
-     */
-    public get<T>(identifier: any, args?: any) {
-        if (typeof identifier !== 'string') {
-            // tslint:disable-next-line: no-parameter-reassignment
-            identifier = this.getIdentifier(identifier);
+    public reg<T>(target: T, options?: ObjectDefinitionOptions): T;
+    public reg<T>(identifier: string, target: T, options?: ObjectDefinitionOptions): T;
+    public reg(identifier: any, target?: any, options?: any) {
+        if (helper.isClass(identifier) || helper.isFunction(identifier)) {
+            options = target;
+            target = (identifier as any);
+            identifier = getIdentifier(target);
         }
-        if (this.registry.hasObject(identifier)) {
-            return this.registry.getObject(identifier);
-        }
-        const definition = this.applicationContext.registry.getDefinition(identifier);
-        if (definition && definition.isRequestScope()) {
-            // create object from applicationContext definition for requestScope
-            return this.resolverFactory.create(definition, args);
-        }
+        options = {
+            isAsync: false,
+            initMethod: 'constructor',
+            destroyMethod: 'distructor',
+            scope: 'Singleton', ...options
+        };
 
-        if (this.parent) {
-            return this.parent.get(identifier, args);
-        }
-    }
+        let instance = this.handlerMap.get(target);
 
-    /**
-     *
-     * @param identifier identifier
-     * @param args args
-     */
-    public async getAsync<T>(identifier: any, args?: any) {
-        if (typeof identifier !== 'string') {
-            // tslint:disable-next-line: no-parameter-reassignment
-            identifier = this.getIdentifier(identifier);
-        }
-        if (this.registry.hasObject(identifier)) {
-            return this.registry.getObject(identifier);
-        }
+        if (!this.handlerMap.has(target)) {
+            const metaDatas = recursiveGetMetadata(TAGGED_PROP, target);
+            instance = new target(this.app, this.ctx);
+            // inject options
+            helper.define(instance, 'options', options);
 
-        const definition = this.applicationContext.registry.getDefinition(identifier);
-        if (definition && definition.isRequestScope()) {
-            if (definition.creator.constructor.name === 'FunctionWrapperCreator') {
-                const valueManagedIns = new ManagedValue(this, VALUE_TYPE.OBJECT);
-                definition.constructorArgs = [valueManagedIns];
+            // inject properties
+            for (const metaData of metaDatas) {
+                // tslint:disable-next-line: forin
+                for (const metaKey in metaData) {
+                    console.log(`=> register inject properties key = ${metaKey}`);
+                    console.log(`=> register inject properties value = ${COMPONENT_KEY}:${metaData[metaKey]}`);
+                    const ref = getModule(COMPONENT_KEY, metaData[metaKey]);
+                    let dep = this.handlerMap.get(ref);
+                    if (!this.handlerMap.has(ref)) {
+                        dep = this.reg(ref);
+                    }
+
+                    helper.define(instance, metaKey, dep);
+                    // Object.defineProperty(instance, metaKey, {
+                    //     enumerable: true,
+                    //     writable: false,
+                    //     configurable: false,
+                    //     value: dep
+                    // });
+                }
             }
-            // create object from applicationContext definition for requestScope
-            return this.resolverFactory.createAsync(definition, args);
+            this.handlerMap.set(target, instance);
         }
 
-        if (this.parent) {
-            return this.parent.getAsync<T>(identifier, args);
-        }
+        return instance;
     }
 }

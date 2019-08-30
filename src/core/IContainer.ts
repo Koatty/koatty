@@ -2,18 +2,16 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-08-27 15:00:50
+ * @ version: 2019-08-30 15:01:22
  */
 export type Scope = 'Singleton' | 'Request' | 'Prototype';
 /**
  * 对象定义存储容器
  */
 export interface IContainer {
-    registry<T>(target: T, options?: ObjectDefinitionOptions): T;
-    registry<T>(identifier: string, target: T, options?: ObjectDefinitionOptions): T;
-    isAsync(identifier: string): boolean;
-    get<T>(identifier: string, args?: any): T;
-    getAsync<T>(identifier: string, args?: any): Promise<T>;
+    reg<T>(target: T, options?: ObjectDefinitionOptions): T;
+    reg<T>(identifier: string, target: T, options?: ObjectDefinitionOptions): T;
+    get<T>(identifier: string): T;
 }
 
 export interface ObjectDefinitionOptions {
@@ -26,4 +24,13 @@ export interface ObjectDefinitionOptions {
 export interface TagClsMetadata {
     id: string;
     originName: string;
+}
+
+export interface TagPropsMetadata {
+    key: string | number | symbol;
+    value: any;
+}
+
+export interface ReflectResult {
+    [key: string]: TagPropsMetadata[];
 }

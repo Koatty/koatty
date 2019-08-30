@@ -5,7 +5,7 @@ import { TestService } from './Service';
 export class TestController {
     @Autowired()
     private testService: TestService;
-    public constructor() { }
+    public constructor(aa: string, bb: string) { }
     public sayHello() {
         console.log('test1.sayHello!');
         // this.testService.sayHello();

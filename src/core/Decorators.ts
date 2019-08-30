@@ -2,39 +2,21 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-08-27 14:48:27
+ * @ version: 2019-08-30 15:08:13
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
-import { ObjectDefinitionOptions, TagClsMetadata } from './IContainer';
+import * as helper from "think_lib";
 import { TAGGED_CLS } from "./Constants";
 
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
 
-export type decoratorKey = string | symbol;
-
-export class Decorator extends Map {
-
-    public static getDecoratorClassKey(decoratorNameKey: decoratorKey) {
-        return decoratorNameKey.toString() + '_CLS';
-    }
-
-    public static getDecoratorMethodKey(decoratorNameKey: decoratorKey) {
-        return decoratorNameKey.toString() + '_METHOD';
-    }
-
-    public static getDecoratorClsMethodPrefix(decoratorNameKey: decoratorKey) {
-        return decoratorNameKey.toString() + '_CLS_METHOD';
-    }
-
-    public static getDecoratorClsMethodKey(decoratorNameKey: decoratorKey, methodKey: decoratorKey) {
-        return Decorator.getDecoratorClsMethodPrefix(decoratorNameKey) + ':' + methodKey.toString();
-    }
+export class Decorator {
 
     public static getOriginMetadata(metaKey: string, target: Object, method?: string | symbol) {
         if (method) {
-            // for property
+            // for property or method
             if (!Reflect.hasMetadata(metaKey, target, method)) {
                 Reflect.defineMetadata(metaKey, new Map(), target, method);
             }
@@ -52,84 +34,117 @@ export class Decorator extends Map {
         }
     }
 
-    /**
-     * the key for meta data store in class
-     */
-    public injectClassKeyPrefix = 'INJECTION_CLASS_META_DATA';
-    /**
-     * the key for method meta data store in class
-     */
-    public injectClassMethodKeyPrefix = 'INJECTION_CLASS_METHOD_META_DATA';
+    public handlerMap: Map<any, any>;
 
-    /**
-     * the key for method meta data store in method
-     */
-    public injectMethodKeyPrefix = 'INJECTION_METHOD_META_DATA';
-
-    public saveModule(key: string | symbol, module: any) {
-        if (!this.has(key)) {
-            this.set(key, new Set());
-        }
-        this.get(key).add(module);
+    public constructor() {
+        this.handlerMap = new Map();
     }
 
-    public listModule(key: string | symbol) {
-        return Array.from(this.get(key) || {});
+    /**
+     * 
+     * @param target 
+     */
+    public getIdentifier(target: any) {
+        const metaData = Reflect.getOwnMetadata(TAGGED_CLS, target);
+        if (metaData) {
+            return metaData.id;
+        } else {
+            return helper.camelCase(target.name, { pascalCase: true });
+        }
+    }
+
+    /**
+     * 
+     * @param key 
+     * @param module 
+     * @param identifier 
+     */
+    public saveModule(key: string, module: any, identifier?: string) {
+        identifier = identifier || this.getIdentifier(module);
+        if (!this.handlerMap.has(module)) {
+            this.handlerMap.set(`${key}:${identifier}`, module);
+        }
+    }
+
+    /**
+     * 
+     * @param key 
+     */
+    public listModule(key: string) {
+        const modules: any[] = [];
+        this.handlerMap.forEach((v, k) => {
+            if (k.startsWith(key)) {
+                modules.push({
+                    id: k,
+                    target: v
+                });
+            }
+        });
+        return modules;
+    }
+
+    /**
+     * 
+     * @param key 
+     * @param identifier 
+     */
+    public getModule(key: string, identifier: string) {
+        return this.handlerMap.get(`${key}:${identifier}`);
     }
 
     /**
      * save meta data to class or property
+     * @param type the type name for components
      * @param decoratorNameKey the alias name for decorator
      * @param data the data you want to store
      * @param target target class
      * @param propertyName
      */
-    public saveMetadata(decoratorNameKey: decoratorKey, data: any, target: any, propertyName?: undefined) {
+    public saveMetadata(type: string, decoratorNameKey: string, data: any, target: any, propertyName?: undefined) {
         if (propertyName) {
-            const originMap = Decorator.getOriginMetadata(this.injectMethodKeyPrefix, target, propertyName);
-            originMap.set(Decorator.getDecoratorMethodKey(decoratorNameKey), data);
+            const originMap = Decorator.getOriginMetadata(type, target, propertyName);
+            originMap.set(decoratorNameKey, data);
         } else {
-            const originMap = Decorator.getOriginMetadata(this.injectClassKeyPrefix, target);
-            originMap.set(Decorator.getDecoratorClassKey(decoratorNameKey), data);
+            const originMap = Decorator.getOriginMetadata(type, target);
+            originMap.set(decoratorNameKey, data);
         }
     }
 
     /**
      * attach data to class or property
+     * @param type the type name for components
      * @param decoratorNameKey
      * @param data
      * @param target
      * @param propertyName
      */
-    public attachMetadata(decoratorNameKey: decoratorKey, data: any, target: any, propertyName?: undefined) {
+    public attachMetadata(type: string, decoratorNameKey: string, data: any, target: any, propertyName?: undefined) {
         let originMap;
-        let key;
         if (propertyName) {
-            originMap = Decorator.getOriginMetadata(this.injectMethodKeyPrefix, target, propertyName);
-            key = Decorator.getDecoratorMethodKey(decoratorNameKey);
+            originMap = Decorator.getOriginMetadata(type, target, propertyName);
         } else {
-            originMap = Decorator.getOriginMetadata(this.injectClassKeyPrefix, target);
-            key = Decorator.getDecoratorClassKey(decoratorNameKey);
+            originMap = Decorator.getOriginMetadata(type, target);
         }
-        if (!originMap.has(key)) {
-            originMap.set(key, []);
+        if (!originMap.has(decoratorNameKey)) {
+            originMap.set(decoratorNameKey, []);
         }
-        originMap.get(key).push(data);
+        originMap.get(decoratorNameKey).push(data);
     }
 
     /**
      * get single data from class or property
+     * @param type the type name for components
      * @param decoratorNameKey
      * @param target
      * @param propertyName
      */
-    public getMetadata(decoratorNameKey: decoratorKey, target: any, propertyName?: undefined) {
+    public getMetadata(type: string, decoratorNameKey: string, target: any, propertyName?: undefined) {
         if (propertyName) {
-            const originMap = Decorator.getOriginMetadata(this.injectMethodKeyPrefix, target, propertyName);
-            return originMap.get(Decorator.getDecoratorMethodKey(decoratorNameKey));
+            const originMap = Decorator.getOriginMetadata(type, target, propertyName);
+            return originMap.get(decoratorNameKey);
         } else {
-            const originMap = Decorator.getOriginMetadata(this.injectClassKeyPrefix, target);
-            return originMap.get(Decorator.getDecoratorClassKey(decoratorNameKey));
+            const originMap = Decorator.getOriginMetadata(type, target);
+            return originMap.get(decoratorNameKey);
         }
     }
 
@@ -140,9 +155,9 @@ export class Decorator extends Map {
      * @param target
      * @param propertyName
      */
-    public savePropertyDataToClass(decoratorNameKey: decoratorKey, data: any, target: any, propertyName: string | symbol) {
-        const originMap = Decorator.getOriginMetadata(this.injectClassMethodKeyPrefix, target);
-        originMap.set(Decorator.getDecoratorClsMethodKey(decoratorNameKey, propertyName), data);
+    public savePropertyDataToClass(decoratorNameKey: string, data: any, target: any, propertyName: string | symbol) {
+        const originMap = Decorator.getOriginMetadata(decoratorNameKey, target);
+        originMap.set(propertyName, data);
     }
 
     /**
@@ -152,13 +167,12 @@ export class Decorator extends Map {
      * @param target
      * @param propertyName
      */
-    public attachPropertyDataToClass(decoratorNameKey: decoratorKey, data: any, target: any, propertyName: string | symbol) {
-        const originMap = Decorator.getOriginMetadata(this.injectClassMethodKeyPrefix, target);
-        const key = Decorator.getDecoratorClsMethodKey(decoratorNameKey, propertyName);
-        if (!originMap.has(key)) {
-            originMap.set(key, []);
+    public attachPropertyDataToClass(decoratorNameKey: string, data: any, target: any, propertyName: string | symbol) {
+        const originMap = Decorator.getOriginMetadata(decoratorNameKey, target);
+        if (!originMap.has(propertyName)) {
+            originMap.set(propertyName, []);
         }
-        originMap.get(key).push(data);
+        originMap.get(propertyName).push(data);
     }
 
     /**
@@ -167,9 +181,9 @@ export class Decorator extends Map {
      * @param target
      * @param propertyName
      */
-    public getPropertyDataFromClass(decoratorNameKey: decoratorKey, target: any, propertyName: string | symbol) {
-        const originMap = Decorator.getOriginMetadata(this.injectClassMethodKeyPrefix, target);
-        return originMap.get(Decorator.getDecoratorClsMethodKey(decoratorNameKey, propertyName));
+    public getPropertyDataFromClass(decoratorNameKey: string, target: any, propertyName: string | symbol) {
+        const originMap = Decorator.getOriginMetadata(decoratorNameKey, target);
+        return originMap.get(propertyName);
     }
 
     /**
@@ -177,13 +191,11 @@ export class Decorator extends Map {
      * @param decoratorNameKey
      * @param target
      */
-    public listPropertyDataFromClass(decoratorNameKey: decoratorKey, target: any) {
-        const originMap = Decorator.getOriginMetadata(this.injectClassMethodKeyPrefix, target);
+    public listPropertyDataFromClass(decoratorNameKey: string, target: any) {
+        const originMap = Decorator.getOriginMetadata(decoratorNameKey, target);
         const res = [];
         for (const [key, value] of originMap) {
-            if (key.indexOf(Decorator.getDecoratorClsMethodPrefix(decoratorNameKey)) !== -1) {
-                res.push(value);
-            }
+            res.push({ [key]: value });
         }
         return res;
     }
@@ -194,111 +206,34 @@ const manager = new Decorator();
 
 /**
  * save data to class
+ * @param type
  * @param decoratorNameKey
  * @param data
  * @param target
  */
-export function saveClassMetadata(decoratorNameKey: decoratorKey, data: any, target: any) {
-    return manager.saveMetadata(decoratorNameKey, data, target);
+export function saveClassMetadata(type: string, decoratorNameKey: string, data: any, target: any) {
+    return manager.saveMetadata(type, decoratorNameKey, data, target);
 }
 
 /**
  * attach data to class
+ * @param type
  * @param decoratorNameKey
  * @param data
  * @param target
  */
-export function attachClassMetadata(decoratorNameKey: decoratorKey, data: any, target: any) {
-    return manager.attachMetadata(decoratorNameKey, data, target);
+export function attachClassMetadata(type: string, decoratorNameKey: string, data: any, target: any) {
+    return manager.attachMetadata(type, decoratorNameKey, data, target);
 }
 
 /**
  * get data from class
+ * @param type
  * @param decoratorNameKey
  * @param target
  */
-export function getClassMetadata(decoratorNameKey: decoratorKey, target: any) {
-    return manager.getMetadata(decoratorNameKey, target);
-}
-
-/**
- * save method data to class
- * @deprecated
- * @param decoratorNameKey
- * @param data
- * @param target
- * @param method
- */
-export function saveMethodDataToClass(decoratorNameKey: decoratorKey, data: any, target: any, method: any) {
-    return manager.savePropertyDataToClass(decoratorNameKey, data, target, method);
-}
-
-/**
- * attach method data to class
- * @deprecated
- * @param decoratorNameKey
- * @param data
- * @param target
- * @param method
- */
-export function attachMethodDataToClass(decoratorNameKey: decoratorKey, data: any, target: any, method: any) {
-    return manager.attachPropertyDataToClass(decoratorNameKey, data, target, method);
-}
-
-/**
- * get method data from class
- * @deprecated
- * @param decoratorNameKey
- * @param target
- * @param method
- */
-export function getMethodDataFromClass(decoratorNameKey: decoratorKey, target: any, method: any) {
-    return manager.getPropertyDataFromClass(decoratorNameKey, target, method);
-}
-
-/**
- * list method data from class
- * @deprecated
- * @param decoratorNameKey
- * @param target
- */
-export function listMethodDataFromClass(decoratorNameKey: decoratorKey, target: any) {
-    return manager.listPropertyDataFromClass(decoratorNameKey, target);
-}
-
-/**
- * save method data
- * @deprecated
- * @param decoratorNameKey
- * @param data
- * @param target
- * @param method
- */
-export function saveMethodMetadata(decoratorNameKey: decoratorKey, data: any, target: any, method: any) {
-    return manager.saveMetadata(decoratorNameKey, data, target, method);
-}
-
-/**
- * attach method data
- * @deprecated
- * @param decoratorNameKey
- * @param data
- * @param target
- * @param method
- */
-export function attachMethodMetadata(decoratorNameKey: decoratorKey, data: any, target: any, method: any) {
-    return manager.attachMetadata(decoratorNameKey, data, target, method);
-}
-
-/**
- * get method data
- * @deprecated
- * @param decoratorNameKey
- * @param target
- * @param method
- */
-export function getMethodMetadata(decoratorNameKey: decoratorKey, target: any, method: any) {
-    return manager.getMetadata(decoratorNameKey, target, method);
+export function getClassMetadata(type: string, decoratorNameKey: string, target: any) {
+    return manager.getMetadata(type, decoratorNameKey, target);
 }
 
 /**
@@ -308,7 +243,7 @@ export function getMethodMetadata(decoratorNameKey: decoratorKey, target: any, m
  * @param target
  * @param propertyName
  */
-export function savePropertyDataToClass(decoratorNameKey: decoratorKey, data: any, target: any, propertyName: any) {
+export function savePropertyDataToClass(decoratorNameKey: string, data: any, target: any, propertyName: any) {
     return manager.savePropertyDataToClass(decoratorNameKey, data, target, propertyName);
 }
 
@@ -319,7 +254,7 @@ export function savePropertyDataToClass(decoratorNameKey: decoratorKey, data: an
  * @param target
  * @param propertyName
  */
-export function attachPropertyDataToClass(decoratorNameKey: decoratorKey, data: any, target: any, propertyName: any) {
+export function attachPropertyDataToClass(decoratorNameKey: string, data: any, target: any, propertyName: any) {
     return manager.attachPropertyDataToClass(decoratorNameKey, data, target, propertyName);
 }
 
@@ -329,7 +264,7 @@ export function attachPropertyDataToClass(decoratorNameKey: decoratorKey, data: 
  * @param target
  * @param propertyName
  */
-export function getPropertyDataFromClass(decoratorNameKey: decoratorKey, target: any, propertyName: any) {
+export function getPropertyDataFromClass(decoratorNameKey: string, target: any, propertyName: any) {
     return manager.getPropertyDataFromClass(decoratorNameKey, target, propertyName);
 }
 
@@ -338,7 +273,7 @@ export function getPropertyDataFromClass(decoratorNameKey: decoratorKey, target:
  * @param decoratorNameKey
  * @param target
  */
-export function listPropertyDataFromClass(decoratorNameKey: decoratorKey, target: any) {
+export function listPropertyDataFromClass(decoratorNameKey: string, target: any) {
     return manager.listPropertyDataFromClass(decoratorNameKey, target);
 }
 
@@ -349,7 +284,7 @@ export function listPropertyDataFromClass(decoratorNameKey: decoratorKey, target
  * @param target
  * @param propertyName
  */
-export function savePropertyMetadata(decoratorNameKey: decoratorKey, data: any, target: any, propertyName: any) {
+export function savePropertyMetadata(decoratorNameKey: string, data: any, target: any, propertyName: any) {
     return manager.saveMetadata(decoratorNameKey, data, target, propertyName);
 }
 
@@ -360,7 +295,7 @@ export function savePropertyMetadata(decoratorNameKey: decoratorKey, data: any, 
  * @param target
  * @param propertyName
  */
-export function attachPropertyMetadata(decoratorNameKey: decoratorKey, data: any, target: any, propertyName: any) {
+export function attachPropertyMetadata(decoratorNameKey: string, data: any, target: any, propertyName: any) {
     return manager.attachMetadata(decoratorNameKey, data, target, propertyName);
 }
 
@@ -370,32 +305,45 @@ export function attachPropertyMetadata(decoratorNameKey: decoratorKey, data: any
  * @param target
  * @param propertyName
  */
-export function getPropertyMetadata(decoratorNameKey: decoratorKey, target: any, propertyName: any) {
+export function getPropertyMetadata(decoratorNameKey: string, target: any, propertyName: any) {
     return manager.getMetadata(decoratorNameKey, target, propertyName);
-}
-
-/**
- * save module to inner map
- * @param decoratorNameKey
- * @param target
- */
-export function saveModule(decoratorNameKey: decoratorKey, target: any) {
-    return manager.saveModule(decoratorNameKey, target);
-}
-
-/**
- * list module from decorator key
- * @param decoratorNameKey
- */
-export function listModule(decoratorNameKey: decoratorKey) {
-    return manager.listModule(decoratorNameKey);
 }
 
 /**
  * clear all module
  */
 export function clearAllModule() {
-    return manager.clear();
+    return manager.handlerMap.clear();
+}
+
+/**
+ * list module 
+ * @param key
+ */
+export function listModule(key: string) {
+    return manager.listModule(key);
+}
+
+/**
+ * save module
+ */
+export function saveModule(key: string, module: any, identifier?: string) {
+    return manager.saveModule(key, module, identifier);
+}
+
+/**
+ * get module
+ */
+export function getModule(key: string, identifier: string) {
+    return manager.getModule(key, identifier);
+}
+
+/**
+ * get identifier
+ * @param target 
+ */
+export function getIdentifier(target: any) {
+    return manager.getIdentifier(target);
 }
 
 /**
@@ -411,13 +359,3 @@ export function getParamNames(func: { toString: () => { replace: (arg0: RegExp, 
     return result;
 }
 
-/**
- * get provider id from module
- * @param module
- */
-export function getProviderId(module: Object) {
-    const metaData = Reflect.getMetadata(TAGGED_CLS, module) as TagClsMetadata;
-    if (metaData) {
-        return metaData.id;
-    }
-}

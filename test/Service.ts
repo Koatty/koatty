@@ -1,10 +1,16 @@
 import { Autowired, Component, Controller, Service } from '../src/index';
-// import { Test3 } from './test3';
-import { provide } from 'injection';
+import { TestService2 } from './Service2';
+import { TestService3 } from './Service3';
 
 @Service()
-export class TestService {
-    public constructor() { }
+export class TestService extends TestService2 {
+    @Autowired()
+    private testService2: TestService2;
+    @Autowired()
+    private testService3: TestService3;
+    public constructor() {
+        super();
+    }
     public sayHello() {
         console.log('test2.sayHello!');
     }

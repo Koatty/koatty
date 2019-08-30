@@ -1,9 +1,8 @@
-import { Autowired, Component } from '../src/index';
+import { Autowired, Component, Service } from '../src/index';
 // import { Test1 } from './test1';
-import { provide } from 'injection';
 
-// @Component
-export class Test3 {
+@Service()
+export class TestService2 {
     // @Autowired
     // private test1: Test1;
     public constructor() { }

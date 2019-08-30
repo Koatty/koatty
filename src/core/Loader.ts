@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-08-26 17:29:50
+ * @ version: 2019-08-29 18:40:35
  */
 import * as globby from 'globby';
 import * as path from 'path';
