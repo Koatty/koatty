@@ -1395,10 +1395,17 @@ think_lib@^2.x.x:
     lodash "^4.17.15"
     typescript "^3.5.3"
 
-think_logger@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.npm.taobao.org/think_logger/download/think_logger-2.0.4.tgz?cache=0&sync_timestamp=1566890281142&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fthink_logger%2Fdownload%2Fthink_logger-2.0.4.tgz#4d4de34ad5f09caaed1796fdf018c3bee4940247"
-  integrity sha1-TU3jStXwnKrtF5b98BjDvuSUAkc=
+think_loader@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.npm.taobao.org/think_loader/download/think_loader-2.0.2.tgz#9eb27117132125df363d14947737d57ff6862503"
+  integrity sha1-nrJxFxMhJd82PRSUdzfVf/aGJQM=
+  dependencies:
+    think_lib "^2.x.x"
+
+think_logger@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.npm.taobao.org/think_logger/download/think_logger-2.0.6.tgz?cache=0&sync_timestamp=1567161258139&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fthink_logger%2Fdownload%2Fthink_logger-2.0.6.tgz#b575fdc36ffec9fbf480c2b4264bc204880ce615"
+  integrity sha1-tXX9w2/+yfv0gMK0JkvCBIgM5hU=
   dependencies:
     think_lib "^2.x.x"
 

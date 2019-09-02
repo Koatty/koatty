@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-08-30 13:43:19
+ * @ version: 2019-09-02 14:50:26
  */
 
 export const COMPONENT_KEY = 'COMPONENT';
@@ -30,3 +30,4 @@ export const TAGGED_METHOD = 'INJECT_TAGGED_METHOD';
 // used to store class to be injected
 export const TAGGED_CLS = 'INJECT_TAGGED_CLS';
 
+export const PREVENT_NEXT_PROCESS = 'PREVENT_NEXT_PROCESS';

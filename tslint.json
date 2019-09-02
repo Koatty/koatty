@@ -69,6 +69,7 @@
         "no-empty": false,
         "eofline": false,
         "no-var-requires": false,
+        "only-arrow-functions": false,
         "no-parameter-reassignment": false
     }
 }

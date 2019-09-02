@@ -2,15 +2,9 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-08-30 15:24:43
+ * @ version: 2019-09-02 15:36:55
  */
-// import { IOC } from '../src/core/Constants';
-// import { Autowired, Bootstrap } from '../src/index';
-// import { Test1 } from './Controller';
-import { Bootstrap, ComponentScan, Autowired } from '../src';
-// import { IOC } from '../src/core/Constants';
-// import { IOContainer } from '../src/core/Container';
-// import { Container, ScopeEnum, provide } from 'injection';
+import { Bootstrap, ComponentScan, Autowired, Koatty } from '../src/index';
 import * as koa from "koa";
 import * as helper from "think_lib";
 import { TestService } from './Service';
@@ -18,18 +12,11 @@ import { TestService2 } from './Service2';
 
 @Bootstrap()
 @ComponentScan('./test')
-// @Controller
-// @Service
-// @Middleware
-export class App extends koatty {
+export class App extends Koatty {
 
     public runTest() {
         console.log('App.runTest');
         // this.test.sayHello();
-    }
-
-    public listen() {
-        console.log('run ...');
     }
 
 }
