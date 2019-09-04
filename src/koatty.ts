@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-02 15:09:50
+ * @ version: 2019-09-02 19:22:40
  */
 
 import * as Koa from "koa";
@@ -211,9 +211,9 @@ export class Koatty extends Koa.default {
         //catch error
         this.captureError();
         //AutoLoader
-        loadConfigs(this);
-        loader.loadControllers(this);
-        loader.loadMiddlewares(this);
+        // loadConfigs(this);
+        // loader.loadControllers(this);
+        // loader.loadMiddlewares(this);
         //loader.loadModules(this);
 
         //emit app ready

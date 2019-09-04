@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-02 15:42:53
+ * @ version: 2019-09-02 19:27:57
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -24,8 +24,8 @@ export function Bootstrap(): ClassDecorator {
         } else {
             metas = meta;
         }
-        const loader = new Loader();
-        loader.loadDirectory({ loadDir: metas });
+        // Loader.loadDirectory({ loadDir: metas });
+        Loader.loadDirectory({ loadDir: './src/config' });
         // componentInject(target);
     };
 }

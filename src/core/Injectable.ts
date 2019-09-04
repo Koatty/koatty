@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-02 15:33:32
+ * @ version: 2019-09-02 19:22:02
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -102,10 +102,10 @@ export class Injectable {
      */
     public saveMetadata(type: string, decoratorNameKey: string, data: any, target: any, propertyName?: undefined) {
         if (propertyName) {
-            const originMap = Decorator.getOriginMetadata(type, target, propertyName);
+            const originMap = Injectable.getOriginMetadata(type, target, propertyName);
             originMap.set(decoratorNameKey, data);
         } else {
-            const originMap = Decorator.getOriginMetadata(type, target);
+            const originMap = Injectable.getOriginMetadata(type, target);
             originMap.set(decoratorNameKey, data);
         }
     }
@@ -121,9 +121,9 @@ export class Injectable {
     public attachMetadata(type: string, decoratorNameKey: string, data: any, target: any, propertyName?: undefined) {
         let originMap;
         if (propertyName) {
-            originMap = Decorator.getOriginMetadata(type, target, propertyName);
+            originMap = Injectable.getOriginMetadata(type, target, propertyName);
         } else {
-            originMap = Decorator.getOriginMetadata(type, target);
+            originMap = Injectable.getOriginMetadata(type, target);
         }
         if (!originMap.has(decoratorNameKey)) {
             originMap.set(decoratorNameKey, []);
@@ -140,10 +140,10 @@ export class Injectable {
      */
     public getMetadata(type: string, decoratorNameKey: string, target: any, propertyName?: undefined) {
         if (propertyName) {
-            const originMap = Decorator.getOriginMetadata(type, target, propertyName);
+            const originMap = Injectable.getOriginMetadata(type, target, propertyName);
             return originMap.get(decoratorNameKey);
         } else {
-            const originMap = Decorator.getOriginMetadata(type, target);
+            const originMap = Injectable.getOriginMetadata(type, target);
             return originMap.get(decoratorNameKey);
         }
     }
@@ -156,7 +156,7 @@ export class Injectable {
      * @param propertyName
      */
     public savePropertyDataToClass(decoratorNameKey: string, data: any, target: any, propertyName: string | symbol) {
-        const originMap = Decorator.getOriginMetadata(decoratorNameKey, target);
+        const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
         originMap.set(propertyName, data);
     }
 
@@ -168,7 +168,7 @@ export class Injectable {
      * @param propertyName
      */
     public attachPropertyDataToClass(decoratorNameKey: string, data: any, target: any, propertyName: string | symbol) {
-        const originMap = Decorator.getOriginMetadata(decoratorNameKey, target);
+        const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
         if (!originMap.has(propertyName)) {
             originMap.set(propertyName, []);
         }
@@ -182,7 +182,7 @@ export class Injectable {
      * @param propertyName
      */
     public getPropertyDataFromClass(decoratorNameKey: string, target: any, propertyName: string | symbol) {
-        const originMap = Decorator.getOriginMetadata(decoratorNameKey, target);
+        const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
         return originMap.get(propertyName);
     }
 
@@ -192,7 +192,7 @@ export class Injectable {
      * @param target
      */
     public listPropertyDataFromClass(decoratorNameKey: string, target: any) {
-        const originMap = Decorator.getOriginMetadata(decoratorNameKey, target);
+        const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
         const res = [];
         for (const [key, value] of originMap) {
             res.push({ [key]: value });
@@ -202,7 +202,7 @@ export class Injectable {
 }
 
 
-const manager = new Decorator();
+const manager = new Injectable();
 
 /**
  * save data to class
