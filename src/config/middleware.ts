@@ -2,9 +2,9 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-02 15:44:25
+ * @ version: 2019-09-04 11:39:59
  */
 
-export {
+export default {
 
 };

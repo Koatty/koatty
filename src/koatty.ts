@@ -2,15 +2,15 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-02 19:22:40
+ * @ version: 2019-09-05 18:38:14
  */
 
-import * as Koa from "koa";
 import * as path from "path";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { PREVENT_NEXT_PROCESS } from './core/Constants';
 const pkg = require('../package.json');
+const Koa = require("koa");
 
 /**
  * check node version
@@ -63,7 +63,7 @@ interface InitOptions {
     app_debug?: boolean;
 }
 
-export class Koatty extends Koa.default {
+export class Koatty extends Koa {
     public app_path: string;
     public think_path: string;
     public root_path: string;
@@ -221,9 +221,10 @@ export class Koatty extends Koa.default {
 
         //start server
         //port?: number, hostname?: string, listeningListener?: Function
-        let port = this.config('app_port') || 3000,
-            hostname = this.config('app_hostname') || '0.0.0.0',
-            app_debug = this.app_debug || false;
+        const port = this.config('app_port') || '3000';
+        const hostname = this.config('app_hostname') || '0.0.0.0';
+        const app_debug = this.app_debug || false;
+
         return super.listen(port, hostname, function () {
             console.log('  ________    _       __   __ \n /_  __/ /_  (_)___  / /__/ /______  ____ _\n  / / / __ \\/ / __ \\/ //_/ //_/ __ \\/ __ `/\n / / / / / / / / / / ,< / /,</ /_/ / /_/ /\n/_/ /_/ /_/_/_/ /_/_/|_/_/ |_\\____/\\__,_/');
             console.log(`                     https://ThinkKoa.org/`);
@@ -233,8 +234,9 @@ export class Koatty extends Koa.default {
             logger.custom('think', '', `App Enviroment: ${app_debug ? 'debug mode' : 'production mode'}`);
             logger.custom('think', '', `Server running at http://${hostname}:${port}/`);
             logger.custom('think', '', '====================================');
+            // tslint:disable-next-line: no-unused-expression
             app_debug && logger.warn(`Running in debug mode, please modify the app_debug value to false when production env.`);
-        }).on('clientError', function (err, sock) {
+        }).on('clientError', function (err: any, sock: any) {
             // logger.error('Bad request, HTTP parse error');
             sock.end('HTTP/1.1 400 Bad Request\r\n\r\n');
         });
@@ -248,7 +250,7 @@ export class Koatty extends Koa.default {
     private captureError() {
         //koa error
         this.removeAllListeners('error');
-        this.on('error', (err) => {
+        this.on('error', (err: any) => {
             if (!this.isPrevent(err)) {
                 logger.error(err);
             }
@@ -271,7 +273,7 @@ export class Koatty extends Koa.default {
         });
         //ubcaugth exception
         process.removeAllListeners('uncaughtException');
-        process.on('uncaughtException', err => {
+        process.on('uncaughtException', (err) => {
             if (err.message.indexOf('EADDRINUSE') > -1) {
                 logger.error(helper.toString(err));
                 process.exit(-1);

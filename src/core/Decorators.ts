@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-02 19:27:02
+ * @ version: 2019-09-04 14:28:14
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -55,11 +55,5 @@ export function Model(identifier?: any): ClassDecorator {
         saveClassMetadata(COMPONENT_KEY, TAGGED_CLS, identifier, target);
     };
 }
-export function Config(identifier?: any): ParameterDecorator {
-    console.log('Injectable: Config');
-    return (target: any, propertyKey: string) => {
-        identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
-        savePropertyDataToClass(TAGGED_ARGS, identifier, target, propertyKey);
-    };
-}
+
 

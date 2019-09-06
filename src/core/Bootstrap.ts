@@ -2,12 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-02 19:27:57
+ * @ version: 2019-09-06 17:22:09
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
-import { Loader } from '../util/Loader';
+// import { Loader } from '../util/Loader';
 import { saveClassMetadata, getClassMetadata, listModule } from './Injectable';
 import { COMPONENT_KEY, INJECT_TAG, COMPONENT_SCAN } from './Constants';
 import { Container } from './Container';
@@ -24,8 +24,10 @@ export function Bootstrap(): ClassDecorator {
         } else {
             metas = meta;
         }
+        const app = new target();
+        app.test();
         // Loader.loadDirectory({ loadDir: metas });
-        Loader.loadDirectory({ loadDir: './src/config' });
+        // Loader.loadDirectory({ loadDir: './src/config' });
         // componentInject(target);
     };
 }

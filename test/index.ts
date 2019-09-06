@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-02 15:36:55
+ * @ version: 2019-09-06 17:21:53
  */
 import { Bootstrap, ComponentScan, Autowired, Koatty } from '../src/index';
 import * as koa from "koa";
@@ -14,11 +14,15 @@ import { TestService2 } from './Service2';
 @ComponentScan('./test')
 export class App extends Koatty {
 
-    public runTest() {
-        console.log('App.runTest');
+    public init() {
+        console.log('App.init');
         // this.test.sayHello();
     }
 
+
+    public test() {
+        console.log('App.test');
+    }
 }
 
 
