@@ -2,18 +2,20 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-06 17:22:09
+ * @ version: 2019-09-06 19:32:41
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
-// import { Loader } from '../util/Loader';
 import { saveClassMetadata, getClassMetadata, listModule } from './Injectable';
 import { COMPONENT_KEY, INJECT_TAG, COMPONENT_SCAN } from './Constants';
 import { Container } from './Container';
+import { loadConfigs } from '../util/Loader';
 
 export function Bootstrap(): ClassDecorator {
     console.log('Bootstrap');
+    console.log(__dirname);
+
     return (target: any) => {
         //定义初始化参数
         console.log('定义初始化参数...');
@@ -24,11 +26,11 @@ export function Bootstrap(): ClassDecorator {
         } else {
             metas = meta;
         }
-        const app = new target();
-        app.test();
-        // Loader.loadDirectory({ loadDir: metas });
+        // loadConfigs({ loadDir: metas });
         // Loader.loadDirectory({ loadDir: './src/config' });
         // componentInject(target);
+        const app = new target();
+        app.config();
     };
 }
 
