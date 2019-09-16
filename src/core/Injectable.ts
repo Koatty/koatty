@@ -2,12 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-02 19:22:02
+ * @ version: 2019-09-10 13:47:42
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
-import { TAGGED_CLS } from "./Constants";
+import { TAGGED_CLS, TAGGED_PROP, COMPONENT_KEY } from "./Constants";
+import { Container } from './Container';
 
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
@@ -359,3 +360,130 @@ export function getParamNames(func: { toString: () => { replace: (arg0: RegExp, 
     return result;
 }
 
+
+const functionPrototype = Object.getPrototypeOf(Function);
+// get property of an object
+// https://tc39.github.io/ecma262/#sec-ordinarygetprototypeof
+function ordinaryGetPrototypeOf(O: any): any {
+    const proto = Object.getPrototypeOf(O);
+    if (typeof O !== 'function' || O === functionPrototype) {
+        return proto;
+    }
+
+    // TypeScript doesn't set __proto__ in ES5, as it's non-standard.
+    // Try to determine the superclass constructor. Compatible implementations
+    // must either set __proto__ on a subclass constructor to the superclass constructor,
+    // or ensure each class has a valid `constructor` property on its prototype that
+    // points back to the constructor.
+
+    // If this is not the same as Function.[[Prototype]], then this is definately inherited.
+    // This is the case when in ES6 or when using __proto__ in a compatible browser.
+    if (proto !== functionPrototype) {
+        return proto;
+    }
+
+    // If the super prototype is Object.prototype, null, or undefined, then we cannot determine the heritage.
+    const prototype = O.prototype;
+    const prototypeProto = prototype && Object.getPrototypeOf(prototype);
+    // tslint:disable-next-line: triple-equals
+    if (prototypeProto == undefined || prototypeProto === Object.prototype) {
+        return proto;
+    }
+
+    // If the constructor was not a function, then we cannot determine the heritage.
+    const constructor = prototypeProto.constructor;
+    if (typeof constructor !== 'function') {
+        return proto;
+    }
+
+    // If we have some kind of self-reference, then we cannot determine the heritage.
+    if (constructor === O) {
+        return proto;
+    }
+
+    // we have a pretty good guess at the heritage.
+    return constructor;
+}
+/**
+ * get metadata value of a metadata key on the prototype chain of an object and property
+ * @param metadataKey metadata's key
+ * @param target the target of metadataKey
+ */
+export function recursiveGetMetadata(metadataKey: any, target: any, propertyKey?: string | symbol): any[] {
+    const metadatas: any[] = [];
+
+    // get metadata value of a metadata key on the prototype
+    // let metadata = Reflect.getOwnMetadata(metadataKey, target, propertyKey);
+    let metadata = listPropertyDataFromClass(metadataKey, target);
+    if (metadata) {
+        metadatas.push(...metadata);
+    }
+
+    // get metadata value of a metadata key on the prototype chain
+    let parent = ordinaryGetPrototypeOf(target);
+    while (parent !== null) {
+        // metadata = Reflect.getOwnMetadata(metadataKey, parent, propertyKey);
+        metadata = listPropertyDataFromClass(metadataKey, parent);
+        if (metadata) {
+            metadatas.push(...metadata);
+        }
+        parent = ordinaryGetPrototypeOf(parent);
+    }
+    return metadatas;
+}
+
+/**
+ *
+ *
+ * @export
+ * @param {*} target
+ * @param {*} instance
+ * @param {Container} container
+ */
+export function injectAutowired(target: any, instance: any, container: Container) {
+    const metaDatas = recursiveGetMetadata(TAGGED_PROP, target);
+    for (const metaData of metaDatas) {
+        // tslint:disable-next-line: forin
+        for (const metaKey in metaData) {
+            console.log(`=> register inject properties key = ${metaKey}`);
+            console.log(`=> register inject properties value = ${COMPONENT_KEY}:${metaData[metaKey]}`);
+            const ref = getModule(COMPONENT_KEY, metaData[metaKey]);
+            let dep = container.handlerMap.get(ref);
+            if (!container.handlerMap.has(ref)) {
+                dep = container.reg(ref);
+            }
+
+            helper.define(instance, metaKey, dep);
+            // Object.defineProperty(instance, metaKey, {
+            //     enumerable: true,
+            //     writable: false,
+            //     configurable: false,
+            //     value: dep
+            // });
+        }
+    }
+}
+
+export function injectConfigs(target: any, instance: any, container: Container) {
+    const metaDatas = recursiveGetMetadata(TAGGED_PROP, target);
+    for (const metaData of metaDatas) {
+        // tslint:disable-next-line: forin
+        for (const metaKey in metaData) {
+            console.log(`=> register inject properties key = ${metaKey}`);
+            console.log(`=> register inject properties value = ${COMPONENT_KEY}:${metaData[metaKey]}`);
+            const ref = getModule(COMPONENT_KEY, metaData[metaKey]);
+            let dep = container.handlerMap.get(ref);
+            if (!container.handlerMap.has(ref)) {
+                dep = container.reg(ref);
+            }
+
+            helper.define(instance, metaKey, dep);
+            // Object.defineProperty(instance, metaKey, {
+            //     enumerable: true,
+            //     writable: false,
+            //     configurable: false,
+            //     value: dep
+            // });
+        }
+    }
+}

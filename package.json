@@ -21,6 +21,9 @@
         "koatty",
         "thinkkoa"
     ],
+    "engines": {
+        "node": ">10.0.0"
+    },
     "author": {
         "name": "richenlin",
         "email": "richenlin@gmail.com"

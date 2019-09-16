@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-05 18:38:14
+ * @ version: 2019-09-16 20:09:32
  */
 
 import * as path from "path";
@@ -17,7 +17,7 @@ const Koa = require("koa");
  * @return {void} []
  */
 const checkEnv = () => {
-    let node_engines = pkg.engines.node.slice(1) || '8.0.0';
+    let node_engines = pkg.engines.node.slice(1) || '10.0.0';
     node_engines = node_engines.slice(0, node_engines.lastIndexOf('.'));
     let nodeVersion = process.version;
     if (nodeVersion[0] === 'v') {
@@ -63,23 +63,32 @@ interface InitOptions {
     app_debug?: boolean;
 }
 
-export class Koatty extends Koa {
+class Application extends Koa {
+    public app_debug: boolean;
     public app_path: string;
     public think_path: string;
+    public options: InitOptions;
     public root_path: string;
-    public app_debug: boolean;
     private _caches: any;
 
-    public constructor(options: InitOptions) {
+    public constructor() {
         super();
+        // 
+        this.init();
         // initialize
-        this.init(options);
+        this.initialize(this.options);
     }
+
+    /**
+     * app custom init, must be defined options
+     */
+    public init() { }
+
     /**
      * initialize env
      * @param options 
      */
-    public init(options: InitOptions = {}) {
+    public initialize(options: InitOptions = {}) {
         // check env
         checkEnv();
         // define path        
@@ -110,9 +119,6 @@ export class Koatty extends Koa {
         process.env.APP_DEBUG = helper.toString(this.app_debug);
 
         // caches handle
-        // tslint:disable-next-line: no-null-keyword
-        this._caches = null;
-
         Object.defineProperty(this, '_caches', {
             value: {},
             writable: true,
@@ -285,3 +291,28 @@ export class Koatty extends Koa {
         });
     }
 }
+
+
+const propertys = ['initialize', 'config', 'isPrevent', 'prevent', 'listen', 'use', 'useExp'];
+export const Koatty = new Proxy(Application, {
+    set(target, key, value, receiver) {
+        if (Reflect.get(target, key, receiver) === undefined) {
+            return Reflect.set(target, key, value, receiver);
+        } else if (key === 'init') {
+            return Reflect.set(target, key, value, receiver);
+        } else {
+            throw Error('Cannot redefine getter-only property');
+        }
+    },
+    deleteProperty(target, key) {
+        throw Error('Cannot delete getter-only property');
+    },
+    construct(target, args, newTarget) {
+        propertys.map((n) => {
+            if (newTarget.prototype.hasOwnProperty(n)) {
+                throw Error(`Cannot override the final method '${n}'`);
+            }
+        });
+        return new target();
+    }
+});

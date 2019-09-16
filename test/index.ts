@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-06 17:21:53
+ * @ version: 2019-09-10 10:49:27
  */
 import { Bootstrap, ComponentScan, Autowired, Koatty } from '../src/index';
 import * as koa from "koa";
@@ -15,14 +15,14 @@ import { TestService2 } from './Service2';
 export class App extends Koatty {
 
     public init() {
+        // this.options = {
+        //     root_path: __dirname
+        //     app_path: __dirname + path.sep + 'app',
+        //     app_debug: true //线上环境请将debug模式关闭，即：app_debug:false
+        // };
         console.log('App.init');
-        // this.test.sayHello();
     }
 
-
-    public test() {
-        console.log('App.test');
-    }
 }
 
 

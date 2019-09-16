@@ -2,13 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-04 14:28:14
+ * @ version: 2019-09-16 20:03:46
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
 import { saveModule, saveClassMetadata, savePropertyDataToClass } from "./Injectable";
-import { CONTROLLER_KEY, COMPONENT_KEY, MIDDLEWARE_KEY, TAGGED_PROP, TAGGED_CLS, CONFIG_KEY, TAGGED_ARGS } from './Constants';
+import { CONTROLLER_KEY, COMPONENT_KEY, MIDDLEWARE_KEY, TAGGED_PROP, TAGGED_CLS, CONFIG_KEY, NAMED_TAG } from './Constants';
 
 export function Component(identifier?: any): ClassDecorator {
     console.log('Injectable: Component');
@@ -55,5 +55,11 @@ export function Model(identifier?: any): ClassDecorator {
         saveClassMetadata(COMPONENT_KEY, TAGGED_CLS, identifier, target);
     };
 }
-
+export function Value(identifier?: any): PropertyDecorator {
+    console.log('Injectable: Value');
+    return (target: any, propertyKey: string) => {
+        identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
+        savePropertyDataToClass(NAMED_TAG, identifier, target, propertyKey);
+    };
+}
 

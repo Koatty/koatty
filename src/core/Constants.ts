@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-02 14:50:26
+ * @ version: 2019-09-10 11:04:17
  */
 
 export const COMPONENT_KEY = 'COMPONENT';
@@ -12,10 +12,10 @@ export const MIDDLEWARE_KEY = 'MIDDLEWARE';
 export const PRIORITY_KEY = 'PRIORITY_KEY';
 export const CONFIG_KEY = 'CONFIG_KEY';
 export const LOGGER_KEY = 'LOGGER_KEY';
-// Used for named bindings
+// config bindings
 export const NAMED_TAG = 'NAMED_TAG';
 
-// The name of the target at design time
+// compoment scan bindings
 export const INJECT_TAG = 'INJECT_TAG';
 
 // used to store constructor arguments tags
