@@ -1,4 +1,4 @@
-import { Autowired, Component, Service } from '../src/index';
+import { Autowired, Component, Service } from '../../../src/index';
 // import { Test1 } from './test1';
 
 @Service()

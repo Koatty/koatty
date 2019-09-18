@@ -2,8 +2,8 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-16 20:03:23
+ * @ version: 2019-09-18 12:39:24
  */
 export default {
-    "test": 111
+    "test": 222
 };

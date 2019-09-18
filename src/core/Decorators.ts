@@ -2,13 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-16 20:03:46
+ * @ version: 2019-09-18 14:10:09
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
 import { saveModule, saveClassMetadata, savePropertyDataToClass } from "./Injectable";
-import { CONTROLLER_KEY, COMPONENT_KEY, MIDDLEWARE_KEY, TAGGED_PROP, TAGGED_CLS, CONFIG_KEY, NAMED_TAG } from './Constants';
+import { CONTROLLER_KEY, COMPONENT_KEY, TAGGED_PROP, TAGGED_CLS, TAGGED_ARGS } from './Constants';
 
 export function Component(identifier?: any): ClassDecorator {
     console.log('Injectable: Component');
@@ -19,6 +19,8 @@ export function Component(identifier?: any): ClassDecorator {
     };
 }
 export function Autowired(identifier?: any): PropertyDecorator {
+    console.log('Injectable: Autowired');
+
     return (target: any, propertyKey: string) => {
         identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
         savePropertyDataToClass(TAGGED_PROP, identifier, target, propertyKey);
@@ -30,14 +32,6 @@ export function Controller(path?: any): ClassDecorator {
     return (target: any) => {
         saveModule(CONTROLLER_KEY, target);
         saveClassMetadata(CONTROLLER_KEY, TAGGED_CLS, path, target);
-    };
-}
-export function Middleware(identifier?: any): ClassDecorator {
-    console.log('Injectable: Controller');
-
-    return (target: any) => {
-        saveModule(MIDDLEWARE_KEY, target);
-        saveClassMetadata(MIDDLEWARE_KEY, TAGGED_CLS, identifier, target);
     };
 }
 export function Service(identifier?: any): ClassDecorator {
@@ -59,7 +53,7 @@ export function Value(identifier?: any): PropertyDecorator {
     console.log('Injectable: Value');
     return (target: any, propertyKey: string) => {
         identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
-        savePropertyDataToClass(NAMED_TAG, identifier, target, propertyKey);
+        savePropertyDataToClass(TAGGED_ARGS, identifier, target, propertyKey);
     };
 }
 

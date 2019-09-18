@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-16 20:13:57
+ * @ version: 2019-09-18 14:04:28
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -12,31 +12,7 @@ import { Container } from '../core/Container';
 import { RequestContainer } from '../core/RequestContainer';
 import { listModule } from '../core/Injectable';
 import { COMPONENT_KEY, CONTROLLER_KEY, MIDDLEWARE_KEY, CONFIG_KEY } from '../core/Constants';
-//auto load config
-const loaderConf = {
-    'configs': {
-        root: 'config',
-        fn: function (name: string, exp: any) {
-            app._caches.configs[name] = exp;
-        }
-    },
-    'controllers': {
-        root: 'controller',
-        prefix: ''
-    },
-    'middlewares': {
-        root: 'middleware',
-        prefix: ''
-    },
-    'models': {
-        root: 'model',
-        prefix: ''
-    },
-    'services': {
-        root: 'service',
-        prefix: ''
-    }
-};
+
 /**
  * 
  * @param baseDir 
@@ -64,16 +40,14 @@ export class Loader {
      */
     public static loadModule(app: any, ctx?: any) {
         try {
-            // const componentList = listModule(COMPONENT_KEY);
-            // console.log('componentList', JSON.stringify(componentList));
-            // const container = new Container(app);
-            // componentList.map((item: any) => {
-            //     container.reg(item.target);
-            // });
+            const componentList = listModule(COMPONENT_KEY);
+            console.log('componentList', JSON.stringify(componentList));
+            const container = new Container(app);
+            componentList.map((item: any) => {
+                container.reg(item.target);
+            });
 
-            // const controllerList = listModule(CONTROLLER_KEY);
-            // console.log('controllerList', controllerList);
-            // const requestContainer = new RequestContainer(app, ctx);
+
 
             // const middlewareList = listModule(MIDDLEWARE_KEY);
             // console.log('middlewareList', middlewareList);
@@ -84,8 +58,11 @@ export class Loader {
             // });
 
             Loader.loadConfigs(app);
+
+
         } catch (error) {
             console.error(error);
+            process.exit();
         }
     }
 
@@ -95,22 +72,19 @@ export class Loader {
      * @param {any} app
      */
     public static loadConfigs(app: any) {
-        app._caches.configs = {};
-        Loader.loadDirectory([app.think_path,]);
-        //     let configs = thinkLoader(app.think_path + '/lib', loaderConf.configs);
-        //     configs = helper.extend(configs, thinkLoader(app.app_path, loaderConf.configs), true);
-        //     //日志路径
-        //     if (configs.config) {
-        //         process.env.LOGS = configs.config.logs || false;
-        //         process.env.LOGS_PATH = configs.config.logs_path || app.root_path + '/logs';
-        //         process.env.LOGS_LEVEL = configs.config.logs_level || [];
-        //     }
-        //     // lib.define(app._caches, 'configs', configs);
-        //     // tslint:disable-next-line: no-null-keyword
-        //     app._caches.configs = null;
-        //     app._caches.configs = configs;
-        //     //向下兼容
-        //     app.configs = app._caches.configs;
+
+        const defaultConfig: any = {};
+        Loader.loadDirectory([`${app.think_path}/src/config`], '', function (name: string, exp: any) {
+            defaultConfig[name] = exp.default ? exp.default : exp;
+        });
+        console.log(defaultConfig);
+
+        const appConfig: any = {};
+        Loader.loadDirectory([`${app.app_path}/config`], '', function (name: string, exp: any) {
+            appConfig[name] = exp.default ? exp.default : exp;
+        });
+        console.log(appConfig);
+        app._caches.configs = helper.extend(defaultConfig, appConfig, true);
     }
 
     // /**
@@ -176,14 +150,16 @@ export class Loader {
     //     }
     // }
 
-    // /**
-    //  * Load the controller
-    //  * 
-    //  * @param {any} app 
-    //  */
-    // public static loadControllers() {
-
-    // }
+    /**
+     * Load the controller
+     * 
+     * @param {any} app 
+     */
+    public static loadControllers(app: any, ctx?: any) {
+        const controllerList = listModule(CONTROLLER_KEY);
+        console.log('controllerList', controllerList);
+        const requestContainer = new RequestContainer(app, ctx);
+    }
 
     public static loadFiles(files: string[], dir: string) {
 
@@ -195,17 +171,17 @@ export class Loader {
      * @param pattern 
      * @param ignore 
      */
-    public static loadDirectory(loadDir: string,
-        fn?: Function,
+    public static loadDirectory(loadDir: string | string[],
         baseDir?: string,
+        fn?: Function,
         pattern?: string | string[],
         ignore?: string | string[]) {
 
         baseDir = baseDir || process.cwd();
-        loadDir = buildLoadDir(baseDir, loadDir);
         const loadDirs = [].concat(loadDir || []);
 
-        for (const dir of loadDirs) {
+        for (let dir of loadDirs) {
+            dir = buildLoadDir(baseDir, dir);
             const fileResults = globby.sync(['**/**.ts', '!**/**.d.ts'].concat(pattern || []), {
                 cwd: dir,
                 ignore: [

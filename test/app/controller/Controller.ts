@@ -1,5 +1,5 @@
-import { Component, Autowired, Controller } from '../src/index';
-import { TestService } from './Service';
+import { Component, Autowired, Controller } from '../../../src/index';
+import { TestService } from '../service/Service';
 
 @Controller()
 export class TestController {

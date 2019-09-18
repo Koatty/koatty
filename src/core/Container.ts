@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-10 13:46:56
+ * @ version: 2019-09-18 14:12:20
  */
 import * as helper from "think_lib";
 import { TAGGED_PROP, COMPONENT_KEY } from './Constants';

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-16 20:09:32
+ * @ version: 2019-09-18 13:39:36
  */
 
 import * as path from "path";
@@ -74,6 +74,8 @@ class Application extends Koa {
     public constructor() {
         super();
         // 
+        console.log('parent constructor');
+
         this.init();
         // initialize
         this.initialize(this.options);
@@ -82,13 +84,16 @@ class Application extends Koa {
     /**
      * app custom init, must be defined options
      */
-    public init() { }
+    public init() {
+        console.log('parent init');
+    }
 
     /**
      * initialize env
      * @param options 
      */
     public initialize(options: InitOptions = {}) {
+        console.log('parent initialize');
         // check env
         checkEnv();
         // define path        
@@ -313,6 +318,6 @@ export const Koatty = new Proxy(Application, {
                 throw Error(`Cannot override the final method '${n}'`);
             }
         });
-        return new target();
+        return Reflect.construct(target, args, newTarget);
     }
 });

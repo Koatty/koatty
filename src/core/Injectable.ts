@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-10 13:47:42
+ * @ version: 2019-09-18 14:16:44
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -464,7 +464,15 @@ export function injectAutowired(target: any, instance: any, container: Container
     }
 }
 
-export function injectConfigs(target: any, instance: any, container: Container) {
+/**
+ *
+ *
+ * @export
+ * @param {*} target
+ * @param {*} instance
+ * @param {Container} container
+ */
+export function injectValue(target: any, instance: any, app: any) {
     const metaDatas = recursiveGetMetadata(TAGGED_PROP, target);
     for (const metaData of metaDatas) {
         // tslint:disable-next-line: forin
@@ -472,12 +480,9 @@ export function injectConfigs(target: any, instance: any, container: Container) 
             console.log(`=> register inject properties key = ${metaKey}`);
             console.log(`=> register inject properties value = ${COMPONENT_KEY}:${metaData[metaKey]}`);
             const ref = getModule(COMPONENT_KEY, metaData[metaKey]);
-            let dep = container.handlerMap.get(ref);
-            if (!container.handlerMap.has(ref)) {
-                dep = container.reg(ref);
-            }
 
-            helper.define(instance, metaKey, dep);
+
+            // helper.define(instance, metaKey, dep);
             // Object.defineProperty(instance, metaKey, {
             //     enumerable: true,
             //     writable: false,

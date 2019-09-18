@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-16 19:49:59
+ * @ version: 2019-09-18 13:49:19
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -32,7 +32,7 @@ export function Bootstrap(): ClassDecorator {
         Loader.loadModule(app);
         // componentInject(target);
 
-        console.log(app.config());
+        console.log('app.config', app.config());
     };
 }
 
