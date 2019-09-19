@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-19 09:27:34
+ * @ version: 2019-09-19 12:41:33
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -364,9 +364,9 @@ export function getParamNames(func: { toString: () => { replace: (arg0: RegExp, 
 const functionPrototype = Object.getPrototypeOf(Function);
 // get property of an object
 // https://tc39.github.io/ecma262/#sec-ordinarygetprototypeof
-function ordinaryGetPrototypeOf(O: any): any {
-    const proto = Object.getPrototypeOf(O);
-    if (typeof O !== 'function' || O === functionPrototype) {
+function ordinaryGetPrototypeOf(obj: any): any {
+    const proto = Object.getPrototypeOf(obj);
+    if (typeof obj !== 'function' || obj === functionPrototype) {
         return proto;
     }
 
@@ -383,7 +383,7 @@ function ordinaryGetPrototypeOf(O: any): any {
     }
 
     // If the super prototype is Object.prototype, null, or undefined, then we cannot determine the heritage.
-    const prototype = O.prototype;
+    const prototype = obj.prototype;
     const prototypeProto = prototype && Object.getPrototypeOf(prototype);
     // tslint:disable-next-line: triple-equals
     if (prototypeProto == undefined || prototypeProto === Object.prototype) {
@@ -397,7 +397,7 @@ function ordinaryGetPrototypeOf(O: any): any {
     }
 
     // If we have some kind of self-reference, then we cannot determine the heritage.
-    if (constructor === O) {
+    if (constructor === obj) {
         return proto;
     }
 

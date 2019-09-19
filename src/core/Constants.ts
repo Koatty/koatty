@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-18 14:10:55
+ * @ version: 2019-09-19 13:39:23
  */
 
 export const COMPONENT_KEY = 'COMPONENT';
@@ -12,6 +12,8 @@ export const MIDDLEWARE_KEY = 'MIDDLEWARE';
 export const PRIORITY_KEY = 'PRIORITY_KEY';
 export const CONFIG_KEY = 'CONFIG_KEY';
 export const LOGGER_KEY = 'LOGGER_KEY';
+// config bindings
+export const NAMED_TAG = 'NAMED_TAG';
 
 // compoment scan bindings
 export const INJECT_TAG = 'INJECT_TAG';

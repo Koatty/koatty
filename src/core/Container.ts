@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-19 09:31:44
+ * @ version: 2019-09-19 13:35:27
  */
 import * as helper from "think_lib";
 import { COMPONENT_KEY } from './Constants';
@@ -34,18 +34,22 @@ export class Container implements IContainer {
             let instance = this.handlerMap.get(target);
 
             if (!this.handlerMap.has(target)) {
-                instance = new target(this.app);
-                // inject options
-                helper.define(instance, 'options', options);
-                // inject autowired
-                injectAutowired(target, instance, this);
-                // inject value
-                injectValue(target, instance, this.app);
+                if (helper.isClass(target)) {
+                    instance = new target(this.app);
+                    // inject options
+                    helper.define(instance, 'options', options);
+                    // inject autowired
+                    injectAutowired(target, instance, this);
+                    // inject value
+                    injectValue(target, instance, this.app);
 
-                this.handlerMap.set(target, instance);
+                    this.handlerMap.set(target, instance);
+                } else {
+                    instance = target;
+                }
             }
-
             return instance;
+
         } catch (error) {
             console.error(error);
         }

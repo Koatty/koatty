@@ -2,13 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-19 09:13:51
+ * @ version: 2019-09-19 14:02:21
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
-import { saveModule, saveClassMetadata, savePropertyDataToClass } from "./Injectable";
-import { CONTROLLER_KEY, COMPONENT_KEY, TAGGED_PROP, TAGGED_CLS, TAGGED_ARGS, MIDDLEWARE_KEY } from './Constants';
+import { saveModule, saveClassMetadata, savePropertyDataToClass, getIdentifier } from "./Injectable";
+import { CONTROLLER_KEY, COMPONENT_KEY, TAGGED_PROP, TAGGED_CLS, TAGGED_ARGS, MIDDLEWARE_KEY, NAMED_TAG } from './Constants';
 
 export function Component(identifier?: any): ClassDecorator {
     console.log('Injectable: Component');
@@ -31,7 +31,8 @@ export function Controller(path?: any): ClassDecorator {
 
     return (target: any) => {
         saveModule(CONTROLLER_KEY, target);
-        saveClassMetadata(CONTROLLER_KEY, TAGGED_CLS, path, target);
+        saveClassMetadata(CONTROLLER_KEY, TAGGED_CLS, getIdentifier(target), target);
+        savePropertyDataToClass(NAMED_TAG, path, target, 'path');
     };
 }
 export function Middleware(identifier?: any): ClassDecorator {
@@ -64,4 +65,7 @@ export function Value(identifier: string, type?: string): PropertyDecorator {
         savePropertyDataToClass(TAGGED_ARGS, `${identifier || ''}|${type || 'config'}`, target, propertyKey);
     };
 }
+export function Get(router?: any) {
+    console.log('Injectable: Get');
 
+}
