@@ -2,16 +2,16 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-18 14:12:20
+ * @ version: 2019-09-19 09:31:44
  */
 import * as helper from "think_lib";
-import { TAGGED_PROP, COMPONENT_KEY } from './Constants';
+import { COMPONENT_KEY } from './Constants';
 import { IContainer, ObjectDefinitionOptions } from './IContainer';
-import { listPropertyDataFromClass, getModule, getIdentifier, recursiveGetMetadata, injectAutowired } from './Injectable';
+import { getModule, getIdentifier, injectAutowired, injectValue } from './Injectable';
 
 export class Container implements IContainer {
-    public handlerMap: WeakMap<any, any>;
     public app: any;
+    public handlerMap: WeakMap<any, any>;
     public constructor(app: any) {
         this.app = app;
         this.handlerMap = new WeakMap<any, any>();
@@ -39,6 +39,8 @@ export class Container implements IContainer {
                 helper.define(instance, 'options', options);
                 // inject autowired
                 injectAutowired(target, instance, this);
+                // inject value
+                injectValue(target, instance, this.app);
 
                 this.handlerMap.set(target, instance);
             }
@@ -54,8 +56,8 @@ export class Container implements IContainer {
      * 
      * @param identifier 
      */
-    public get<T>(identifier: string): T {
-        const ref = getModule(COMPONENT_KEY, identifier);
+    public get<T>(identifier: string, type?: string): T {
+        const ref = getModule(type || COMPONENT_KEY, identifier);
         let dep = this.handlerMap.get(ref);
         if (!this.handlerMap.has(ref)) {
             dep = this.reg(ref);

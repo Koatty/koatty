@@ -2,12 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-18 14:16:44
+ * @ version: 2019-09-19 09:27:34
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
-import { TAGGED_CLS, TAGGED_PROP, COMPONENT_KEY } from "./Constants";
+import { TAGGED_CLS, TAGGED_PROP, COMPONENT_KEY, TAGGED_ARGS, CONFIG_KEY } from "./Constants";
 import { Container } from './Container';
 
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
@@ -473,21 +473,21 @@ export function injectAutowired(target: any, instance: any, container: Container
  * @param {Container} container
  */
 export function injectValue(target: any, instance: any, app: any) {
-    const metaDatas = recursiveGetMetadata(TAGGED_PROP, target);
+    const metaDatas = recursiveGetMetadata(TAGGED_ARGS, target);
     for (const metaData of metaDatas) {
         // tslint:disable-next-line: forin
         for (const metaKey in metaData) {
             console.log(`=> register inject properties key = ${metaKey}`);
-            console.log(`=> register inject properties value = ${COMPONENT_KEY}:${metaData[metaKey]}`);
-            const ref = getModule(COMPONENT_KEY, metaData[metaKey]);
-
-
-            // helper.define(instance, metaKey, dep);
+            console.log(`=> register inject properties value = ${CONFIG_KEY}:${metaData[metaKey]}`);
+            const propKeys = metaData[metaKey].split('|');
+            const [propKey, type] = propKeys;
+            const prop = app.config(propKey, type);
+            helper.define(instance, metaKey, prop);
             // Object.defineProperty(instance, metaKey, {
             //     enumerable: true,
             //     writable: false,
             //     configurable: false,
-            //     value: dep
+            //     value: prop
             // });
         }
     }

@@ -2,13 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-18 14:10:09
+ * @ version: 2019-09-19 09:13:51
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
 import { saveModule, saveClassMetadata, savePropertyDataToClass } from "./Injectable";
-import { CONTROLLER_KEY, COMPONENT_KEY, TAGGED_PROP, TAGGED_CLS, TAGGED_ARGS } from './Constants';
+import { CONTROLLER_KEY, COMPONENT_KEY, TAGGED_PROP, TAGGED_CLS, TAGGED_ARGS, MIDDLEWARE_KEY } from './Constants';
 
 export function Component(identifier?: any): ClassDecorator {
     console.log('Injectable: Component');
@@ -34,6 +34,14 @@ export function Controller(path?: any): ClassDecorator {
         saveClassMetadata(CONTROLLER_KEY, TAGGED_CLS, path, target);
     };
 }
+export function Middleware(identifier?: any): ClassDecorator {
+    console.log('Injectable: Middleware');
+
+    return (target: any) => {
+        saveModule(MIDDLEWARE_KEY, target);
+        saveClassMetadata(MIDDLEWARE_KEY, TAGGED_CLS, identifier, target);
+    };
+}
 export function Service(identifier?: any): ClassDecorator {
     console.log('Injectable: Service');
 
@@ -49,11 +57,11 @@ export function Model(identifier?: any): ClassDecorator {
         saveClassMetadata(COMPONENT_KEY, TAGGED_CLS, identifier, target);
     };
 }
-export function Value(identifier?: any): PropertyDecorator {
+export function Value(identifier: string, type?: string): PropertyDecorator {
     console.log('Injectable: Value');
     return (target: any, propertyKey: string) => {
         identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
-        savePropertyDataToClass(TAGGED_ARGS, identifier, target, propertyKey);
+        savePropertyDataToClass(TAGGED_ARGS, `${identifier || ''}|${type || 'config'}`, target, propertyKey);
     };
 }
 
