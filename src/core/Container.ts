@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-19 13:35:27
+ * @ version: 2019-09-20 19:27:02
  */
 import * as helper from "think_lib";
 import { COMPONENT_KEY } from './Constants';
@@ -28,7 +28,9 @@ export class Container implements IContainer {
             isAsync: false,
             initMethod: 'constructor',
             destroyMethod: 'distructor',
-            scope: 'Singleton', ...options
+            scope: 'Singleton',
+            router: "",
+            ...options
         };
         try {
             let instance = this.handlerMap.get(target);
@@ -64,7 +66,7 @@ export class Container implements IContainer {
         const ref = getModule(type || COMPONENT_KEY, identifier);
         let dep = this.handlerMap.get(ref);
         if (!this.handlerMap.has(ref)) {
-            dep = this.reg(ref);
+            dep = this.reg(identifier, ref);
         }
         return dep;
     }

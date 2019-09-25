@@ -2,12 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-19 12:41:33
+ * @ version: 2019-09-25 10:06:04
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
-import { TAGGED_CLS, TAGGED_PROP, COMPONENT_KEY, TAGGED_ARGS, CONFIG_KEY } from "./Constants";
+import { TAGGED_CLS, TAGGED_PROP, COMPONENT_KEY, TAGGED_ARGS, CONFIG_KEY, NAMED_TAG, ROUTER_NAME_METADATA, ROUTER_KEY } from "./Constants";
 import { Container } from './Container';
 
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
@@ -15,7 +15,7 @@ const ARGUMENT_NAMES = /([^\s,]+)/g;
 
 export class Injectable {
 
-    public static getOriginMetadata(metaKey: string, target: Object, method?: string | symbol) {
+    public static getOriginMetadata(metaKey: string | symbol, target: Object, method?: string | symbol) {
         if (method) {
             // for property or method
             if (!Reflect.hasMetadata(metaKey, target, method)) {
@@ -101,7 +101,7 @@ export class Injectable {
      * @param target target class
      * @param propertyName
      */
-    public saveMetadata(type: string, decoratorNameKey: string, data: any, target: any, propertyName?: undefined) {
+    public saveMetadata(type: string, decoratorNameKey: string | symbol, data: any, target: any, propertyName?: undefined) {
         if (propertyName) {
             const originMap = Injectable.getOriginMetadata(type, target, propertyName);
             originMap.set(decoratorNameKey, data);
@@ -119,7 +119,7 @@ export class Injectable {
      * @param target
      * @param propertyName
      */
-    public attachMetadata(type: string, decoratorNameKey: string, data: any, target: any, propertyName?: undefined) {
+    public attachMetadata(type: string, decoratorNameKey: string | symbol, data: any, target: any, propertyName?: undefined) {
         let originMap;
         if (propertyName) {
             originMap = Injectable.getOriginMetadata(type, target, propertyName);
@@ -139,7 +139,7 @@ export class Injectable {
      * @param target
      * @param propertyName
      */
-    public getMetadata(type: string, decoratorNameKey: string, target: any, propertyName?: undefined) {
+    public getMetadata(type: string, decoratorNameKey: string | symbol, target: any, propertyName?: undefined) {
         if (propertyName) {
             const originMap = Injectable.getOriginMetadata(type, target, propertyName);
             return originMap.get(decoratorNameKey);
@@ -156,7 +156,7 @@ export class Injectable {
      * @param target
      * @param propertyName
      */
-    public savePropertyDataToClass(decoratorNameKey: string, data: any, target: any, propertyName: string | symbol) {
+    public savePropertyDataToClass(decoratorNameKey: string | symbol, data: any, target: any, propertyName: string | symbol) {
         const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
         originMap.set(propertyName, data);
     }
@@ -168,7 +168,7 @@ export class Injectable {
      * @param target
      * @param propertyName
      */
-    public attachPropertyDataToClass(decoratorNameKey: string, data: any, target: any, propertyName: string | symbol) {
+    public attachPropertyDataToClass(decoratorNameKey: string | symbol, data: any, target: any, propertyName: string | symbol) {
         const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
         if (!originMap.has(propertyName)) {
             originMap.set(propertyName, []);
@@ -182,7 +182,7 @@ export class Injectable {
      * @param target
      * @param propertyName
      */
-    public getPropertyDataFromClass(decoratorNameKey: string, target: any, propertyName: string | symbol) {
+    public getPropertyDataFromClass(decoratorNameKey: string | symbol, target: any, propertyName: string | symbol) {
         const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
         return originMap.get(propertyName);
     }
@@ -192,7 +192,7 @@ export class Injectable {
      * @param decoratorNameKey
      * @param target
      */
-    public listPropertyDataFromClass(decoratorNameKey: string, target: any) {
+    public listPropertyDataFromClass(decoratorNameKey: string | symbol, target: any) {
         const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
         const res = [];
         for (const [key, value] of originMap) {
@@ -223,7 +223,7 @@ export function saveClassMetadata(type: string, decoratorNameKey: string, data: 
  * @param data
  * @param target
  */
-export function attachClassMetadata(type: string, decoratorNameKey: string, data: any, target: any) {
+export function attachClassMetadata(type: string, decoratorNameKey: string | symbol, data: any, target: any) {
     return manager.attachMetadata(type, decoratorNameKey, data, target);
 }
 
@@ -445,8 +445,8 @@ export function injectAutowired(target: any, instance: any, container: Container
     for (const metaData of metaDatas) {
         // tslint:disable-next-line: forin
         for (const metaKey in metaData) {
-            console.log(`=> register inject properties key = ${metaKey}`);
-            console.log(`=> register inject properties value = ${COMPONENT_KEY}:${metaData[metaKey]}`);
+            console.log(`=> register inject ${getIdentifier(target)} properties key = ${metaKey}`);
+            console.log(`=> register inject ${getIdentifier(target)} properties value = ${metaData[metaKey]}`);
             const ref = getModule(COMPONENT_KEY, metaData[metaKey]);
             let dep = container.handlerMap.get(ref);
             if (!container.handlerMap.has(ref)) {
@@ -463,22 +463,21 @@ export function injectAutowired(target: any, instance: any, container: Container
         }
     }
 }
-
 /**
  *
  *
  * @export
  * @param {*} target
  * @param {*} instance
- * @param {Container} container
+ * @param {*} app
  */
 export function injectValue(target: any, instance: any, app: any) {
     const metaDatas = recursiveGetMetadata(TAGGED_ARGS, target);
     for (const metaData of metaDatas) {
         // tslint:disable-next-line: forin
         for (const metaKey in metaData) {
-            console.log(`=> register inject properties key = ${metaKey}`);
-            console.log(`=> register inject properties value = ${CONFIG_KEY}:${metaData[metaKey]}`);
+            console.log(`=> register inject ${getIdentifier(target)} config key = ${metaKey}`);
+            console.log(`=> register inject ${getIdentifier(target)} config value = ${metaData[metaKey]}`);
             const propKeys = metaData[metaKey].split('|');
             const [propKey, type] = propKeys;
             const prop = app.config(propKey, type);
@@ -489,6 +488,42 @@ export function injectValue(target: any, instance: any, app: any) {
             //     configurable: false,
             //     value: prop
             // });
+        }
+    }
+}
+
+/**
+ *
+ *
+ * @export
+ * @param {*} target
+ * @param {*} instance
+ */
+export function injectRouter(target: any, instance: any) {
+    // Controller router path
+    const metaDatas = recursiveGetMetadata(NAMED_TAG, target);
+    let path = '';
+    if (metaDatas.length > 0 && metaDatas[0]) {
+        const identifier = getIdentifier(target);
+        path = metaDatas[0][identifier] || '';
+    }
+
+    const routerMetaDatas = recursiveGetMetadata(ROUTER_KEY, target);
+    console.log('routerMetaDatas', routerMetaDatas);
+    for (const rmetaData of routerMetaDatas) {
+        // tslint:disable-next-line: forin
+        for (const metaKey in rmetaData) {
+            console.log(`=> register inject method Router key = ${metaKey}`);
+            console.log(`=> register inject method Router value = ${JSON.stringify(rmetaData[metaKey])}`);
+
+            if (instance.options) {
+                // tslint:disable-next-line: no-unused-expression
+                !instance.options.router && (instance.options.router = []);
+                for (const val of rmetaData[metaKey]) {
+                    val.path = `${path}${val.path}`;
+                    instance.options.router.push(val);
+                }
+            }
         }
     }
 }

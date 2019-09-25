@@ -2,9 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-18 13:48:12
+ * @ version: 2019-09-24 10:57:38
  */
 
 export default {
-    mid: '2222222222222'
+    list: [], //加载的中间件列表
+    config: { //中间件配置
+        // static: {
+        //     cache: false
+        // },
+    }
 };

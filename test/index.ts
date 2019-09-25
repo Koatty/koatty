@@ -2,16 +2,17 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-18 13:46:58
+ * @ version: 2019-09-24 19:41:12
  */
-import { Bootstrap, ComponentScan, Autowired, Koatty } from '../src/index';
+import { Bootstrap, ComponentScan, Autowired, Koatty, ConfiguationScan } from '../src/index';
 import * as path from "path";
 import * as helper from "think_lib";
-import { TestService } from './app/service/Service';
-import { TestService2 } from './app/service/Service2';
+import { TestService } from './app/service/TestService';
+import { TestService2 } from './app/service/TestService2';
 
 @Bootstrap()
-@ComponentScan('./test')
+// @ComponentScan('./test')
+// @ConfiguationScan('./test/config')
 export class App extends Koatty {
 
     public init() {

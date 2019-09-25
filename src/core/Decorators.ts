@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-19 14:02:21
+ * @ version: 2019-09-23 17:02:38
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -31,8 +31,9 @@ export function Controller(path?: any): ClassDecorator {
 
     return (target: any) => {
         saveModule(CONTROLLER_KEY, target);
-        saveClassMetadata(CONTROLLER_KEY, TAGGED_CLS, getIdentifier(target), target);
-        savePropertyDataToClass(NAMED_TAG, path, target, 'path');
+        const identifier = getIdentifier(target);
+        saveClassMetadata(CONTROLLER_KEY, TAGGED_CLS, identifier, target);
+        savePropertyDataToClass(NAMED_TAG, path, target, identifier);
     };
 }
 export function Middleware(identifier?: any): ClassDecorator {
@@ -64,8 +65,4 @@ export function Value(identifier: string, type?: string): PropertyDecorator {
         identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
         savePropertyDataToClass(TAGGED_ARGS, `${identifier || ''}|${type || 'config'}`, target, propertyKey);
     };
-}
-export function Get(router?: any) {
-    console.log('Injectable: Get');
-
 }

@@ -1,6 +1,6 @@
 import { Autowired, Component, Controller, Service } from '../../../src/index';
-import { TestService2 } from './Service2';
-import { TestService3 } from './Service3';
+import { TestService2 } from './TestService2';
+import { TestService3 } from './TestService3';
 
 @Service()
 export class TestService extends TestService2 {

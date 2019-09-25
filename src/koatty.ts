@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-19 09:35:43
+ * @ version: 2019-09-24 19:44:04
  */
 
 import * as path from "path";
@@ -216,12 +216,6 @@ class Application extends Koa {
     public listen() {
         //catch error
         this.captureError();
-        //AutoLoader
-        // loadConfigs(this);
-        // loader.loadControllers(this);
-        // loader.loadMiddlewares(this);
-        //loader.loadModules(this);
-
         //emit app ready
         this.emit('appReady');
 
