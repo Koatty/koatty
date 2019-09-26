@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-24 19:31:58
+ * @ version: 2019-09-26 13:03:19
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -81,11 +81,16 @@ export class Loader {
         const controllerList = listModule(CONTROLLER_KEY);
         console.log('controllerList', controllerList);
 
-        helper.define(app._caches, 'controllers', []);
+        let id: string;
+        const controllers: any = {};
         controllerList.map((item: any) => {
-            app._caches.controllers.push((item.id || '').replace(`${CONTROLLER_KEY}:`, ''));
-            container.reg(item.target);
+            id = (item.id || '').replace(`${CONTROLLER_KEY}:`, '');
+            if (id && !controllers[id]) {
+                controllers[id] = item.target;
+                container.reg(item.target);
+            }
         });
+        helper.define(app._caches, 'controllers', controllers);
     }
 
     /**
@@ -104,7 +109,7 @@ export class Loader {
         const middlewares: any = {};
         const appMeddlewares = listModule(MIDDLEWARE_KEY) || [];
 
-        appMeddlewares.map(item => {
+        appMeddlewares.map((item) => {
             item.id = (item.id || '').replace(`${MIDDLEWARE_KEY}:`, '');
             if (item.id) {
                 middlewares[item.id] = item.target;

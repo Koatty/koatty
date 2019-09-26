@@ -2,10 +2,9 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-25 10:02:42
+ * @ version: 2019-09-26 11:33:10
  */
-import * as Koa from 'koa';
-import { PATH_METADATA, METHOD_METADATA, ROUTER_NAME_METADATA, ROUTER_KEY, CONTROLLER_KEY, PARAM } from "./Constants";
+import { PATH_METADATA, METHOD_METADATA, ROUTER_NAME_METADATA, ROUTER_KEY, PARAM } from "./Constants";
 import { attachClassMetadata } from "./Injectable";
 
 

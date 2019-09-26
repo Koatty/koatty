@@ -2,12 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-25 10:06:04
+ * @ version: 2019-09-26 12:53:42
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
-import { TAGGED_CLS, TAGGED_PROP, COMPONENT_KEY, TAGGED_ARGS, CONFIG_KEY, NAMED_TAG, ROUTER_NAME_METADATA, ROUTER_KEY } from "./Constants";
+import { TAGGED_CLS, TAGGED_PROP, COMPONENT_KEY, TAGGED_ARGS, NAMED_TAG, ROUTER_KEY, PARAM } from "./Constants";
 import { Container } from './Container';
 
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
@@ -433,6 +433,38 @@ export function recursiveGetMetadata(metadataKey: any, target: any, propertyKey?
 }
 
 /**
+ * Find methods on a given object
+ *
+ * @param {*} obj - object to enumerate on
+ * @returns {string[]} - method names
+ */
+export function getMethodNames(obj: any): string[] {
+    const enumerableOwnKeys: string[] = Object.keys(obj);
+    const ownKeysOnObjectPrototype = Object.getOwnPropertyNames(Object.getPrototypeOf({}));
+    // methods on obj itself should be always included
+    const result = enumerableOwnKeys.filter((k) => typeof obj[k] === 'function');
+
+    // searching prototype chain for methods
+    let proto = obj;
+    do {
+        proto = Object.getPrototypeOf(proto);
+        const allOwnKeysOnPrototype: string[] = Object.getOwnPropertyNames(proto);
+        // get methods from es6 class
+        allOwnKeysOnPrototype.forEach((k) => {
+            if (typeof obj[k] === 'function' && k !== 'constructor') {
+                result.push(k);
+            }
+        });
+    }
+    while (proto && proto !== Object.prototype);
+
+    // leave out those methods on Object's prototype
+    return result.filter((k) => {
+        return ownKeysOnObjectPrototype.indexOf(k) === -1;
+    });
+}
+
+/**
  *
  *
  * @export
@@ -526,4 +558,36 @@ export function injectRouter(target: any, instance: any) {
             }
         }
     }
+}
+
+/**
+ *
+ *
+ * @export
+ * @param {*} target
+ * @param {*} instance
+ * @param {*} app
+ */
+export function injectParam(target: any, instance: any, app: any) {
+    const metaDatas = recursiveGetMetadata(PARAM, target);
+    const methods = getMethodNames(instance);
+    const argsMetaObj: any = {};
+    methods.map((m) => {
+        metaDatas.map((a) => {
+            if (a[m]) {
+                console.log(`=> register inject ${getIdentifier(target)} param key = ${m}`);
+                console.log(`=> register inject ${getIdentifier(target)} param value = ${JSON.stringify(a[m])}`);
+                argsMetaObj[m] = a[m];
+            }
+        });
+    });
+    // tslint:disable-next-line: no-unused-expression
+    !instance.options.params && (instance.options.params = {});
+    helper.define(instance.options, 'params', argsMetaObj);
+    // Object.defineProperty(instance, 'params', {
+    //     enumerable: true,
+    //     writable: false,
+    //     configurable: false,
+    //     value: argsMetaObj
+    // });
 }

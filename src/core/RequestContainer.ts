@@ -2,11 +2,11 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-24 20:25:53
+ * @ version: 2019-09-26 12:52:30
  */
 import * as helper from "think_lib";
 import { Container } from './Container';
-import { getModule, injectAutowired, injectValue, injectRouter, getIdentifier } from './Injectable';
+import { getModule, injectAutowired, injectValue, injectRouter, getIdentifier, injectParam } from './Injectable';
 import { COMPONENT_KEY } from './Constants';
 
 
@@ -28,6 +28,7 @@ export class RequestContainer extends Container {
             destroyMethod: 'distructor',
             scope: 'Request',
             router: "",
+            params: {},
             ...options
         };
         try {
@@ -44,6 +45,8 @@ export class RequestContainer extends Container {
                     injectValue(target, instance, this.app);
                     // inject router
                     injectRouter(target, instance);
+                    // inject param
+                    injectParam(target, instance, this.app);
 
                     this.handlerMap.set(target, instance);
                 } else {

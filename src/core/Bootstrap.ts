@@ -2,24 +2,23 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-24 19:47:23
+ * @ version: 2019-09-26 11:35:06
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
 import { saveClassMetadata, getClassMetadata, listModule } from './Injectable';
-import { COMPONENT_KEY, INJECT_TAG, COMPONENT_SCAN, CONFIGUATION_SCAN, CONTROLLER_KEY } from './Constants';
+import { INJECT_TAG, COMPONENT_SCAN, CONFIGUATION_SCAN, CONTROLLER_KEY } from './Constants';
 import { Container } from './Container';
 import { Loader } from '../util/Loader';
 import { RequestContainer } from './RequestContainer';
+const debug = require('debug')('bootstrap');
 
 export function Bootstrap(): ClassDecorator {
-    console.log('Bootstrap');
+    debug('Bootstrap');
 
     return (target: any) => {
         try {
-            //定义初始化参数
-            console.log('定义初始化参数...');
             let componentMetas = [];
             const componentMeta = getClassMetadata(INJECT_TAG, COMPONENT_SCAN, target);
             if (componentMeta) {
@@ -43,10 +42,9 @@ export function Bootstrap(): ClassDecorator {
                     configuationMetas = configuationMeta;
                 }
             }
-            console.log(configuationMetas);
+            debug(configuationMetas);
 
 
-            //=========================================
             const app = new target();
 
             Loader.loadConfigs(app, configuationMetas);
@@ -60,11 +58,8 @@ export function Bootstrap(): ClassDecorator {
             Loader.loadControllers(app, requestContainer);
             Loader.loadMiddlewares(app);
 
+            // start app
             app.listen();
-
-            // requestContainer.updateContext({ aa: 1 });
-            // let ctl: any = requestContainer.get('TestController', CONTROLLER_KEY);
-            // console.log(ctl.sayHello());
         } catch (error) {
             console.error(error);
             process.exit();
@@ -73,7 +68,7 @@ export function Bootstrap(): ClassDecorator {
 }
 
 export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
-    console.log('ComponentScan');
+    debug('ComponentScan');
 
     return (target: any) => {
         scanPath = scanPath || '';
@@ -82,7 +77,7 @@ export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
 }
 
 export function ConfiguationScan(scanPath?: string | string[]): ClassDecorator {
-    console.log("ConfiguationScan");
+    debug("ConfiguationScan");
 
     return (target: any) => {
         scanPath = scanPath || '';
