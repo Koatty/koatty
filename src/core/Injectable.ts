@@ -2,13 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-27 10:31:55
+ * @ version: 2019-09-27 20:18:25
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
 import { TAGGED_CLS, TAGGED_PROP, COMPONENT_KEY, TAGGED_ARGS, NAMED_TAG, ROUTER_KEY, PARAM } from "./Constants";
 import { Container } from './Container';
+import { BaseController } from '../controller/BaseController';
 
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
@@ -482,7 +483,13 @@ export function injectAutowired(target: any, instance: any, container: Container
             const ref = getModule(COMPONENT_KEY, metaData[metaKey]);
             let dep = container.handlerMap.get(ref);
             if (!container.handlerMap.has(ref)) {
-                dep = container.reg(ref);
+                //不能依赖注入控制器
+                if (Reflect.getPrototypeOf(ref) === BaseController) {
+                    throw new Error('Controller cannot be injected!');
+                } else {
+                    //依赖注入默认为单例模式
+                    dep = container.reg(ref, { scope: 'Singleton' });
+                }
             }
 
             helper.define(instance, metaKey, dep);
@@ -569,7 +576,7 @@ export function injectRouter(target: any, instance: any) {
  */
 export function injectParam(target: any, instance: any) {
     const metaDatas = recursiveGetMetadata(PARAM, target);
-    const methods = Reflect.ownKeys(instance);
+    const methods = Reflect.ownKeys(target.prototype);
     const argsMetaObj: any = {};
     methods.map((m) => {
         metaDatas.map((a) => {

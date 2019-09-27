@@ -4,14 +4,15 @@ import { TestService3 } from './TestService3';
 
 @Service()
 export class TestService extends TestService2 {
-    @Autowired()
-    private testService2: TestService2;
-    @Autowired()
-    private testService3: TestService3;
-    public constructor() {
-        super();
-    }
+    app: any;
+    // @Autowired()
+    // private testService2: TestService2;
+    // @Autowired()
+    // private testService3: TestService3;
+
     public sayHello() {
-        console.log('test2.sayHello!');
+        console.log(this.app.app_debug);
+
+        console.log('TestService.sayHello!');
     }
 }

@@ -3,7 +3,9 @@ import { TestService } from '../service/TestService';
 
 interface PlainObj {
     aa: string;
-    bb: string;
+    bb: {
+        cc: string;
+    };
 }
 
 @Controller('/test')
@@ -14,8 +16,9 @@ export class TestController extends BaseController {
     private test: string;
     @Autowired()
     private testService: TestService;
+    num = 0;
 
-    @Get('/say')
+    @Get('/sayHello')
     public sayHello(@Query('aa') aa: number, @Query('bb') bb: string) {
         console.log('info', typeof aa, typeof bb);
         console.log('test', this.test);
@@ -24,11 +27,21 @@ export class TestController extends BaseController {
         console.log('options', this.options.scope);
         console.log('test.sayHello!');
         // this.testService.sayHello();
+        this.testCount();
+        this.testService.sayHello();
         return this.json({ aa: 'test.sayHello!' });
     }
 
-    @All('/hello')
-    public helloWorld(@Query() info: PlainObj) {
-        return this.ctx.body = 'test.helloWorld!';
+    private testCount() {
+        this.num++;
+        console.log(this.num);
+    }
+
+    @All('/helloWorld')
+    public helloWorld(@Param() info: PlainObj) {
+        console.log(Reflect.getPrototypeOf(TestController) === BaseController);
+
+        this.testCount();
+        return this.json(info);
     }
 }

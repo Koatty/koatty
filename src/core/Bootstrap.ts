@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-26 11:35:06
+ * @ version: 2019-09-27 19:49:24
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -11,7 +11,6 @@ import { saveClassMetadata, getClassMetadata, listModule } from './Injectable';
 import { INJECT_TAG, COMPONENT_SCAN, CONFIGUATION_SCAN, CONTROLLER_KEY } from './Constants';
 import { Container } from './Container';
 import { Loader } from '../util/Loader';
-import { RequestContainer } from './RequestContainer';
 const debug = require('debug')('bootstrap');
 
 export function Bootstrap(): ClassDecorator {
@@ -52,10 +51,8 @@ export function Bootstrap(): ClassDecorator {
             const container = new Container(app);
             Loader.loadCmponents(app, container);
 
-
-            const requestContainer = new RequestContainer(app);
-            helper.define(app, 'Container', requestContainer);
-            Loader.loadControllers(app, requestContainer);
+            helper.define(app, 'Container', container);
+            Loader.loadControllers(app, container);
             Loader.loadMiddlewares(app);
 
             // start app

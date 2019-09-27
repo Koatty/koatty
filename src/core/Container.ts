@@ -2,12 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-27 10:34:10
+ * @ version: 2019-09-27 20:19:13
  */
 import * as helper from "think_lib";
+import * as logger from "think_logger";
 import { COMPONENT_KEY } from './Constants';
 import { IContainer, ObjectDefinitionOptions } from './IContainer';
-import { getModule, getIdentifier, injectAutowired, injectValue } from './Injectable';
+import { getModule, getIdentifier, injectAutowired, injectValue, injectRouter, injectParam } from './Injectable';
+import { BaseController } from '../controller/BaseController';
 
 export class Container implements IContainer {
     public app: any;
@@ -37,7 +39,7 @@ export class Container implements IContainer {
 
             if (!this.handlerMap.has(target)) {
                 if (helper.isClass(target)) {
-                    instance = new target(this.app);
+                    instance = target.prototype;
                     // inject options
                     helper.define(instance, 'options', options);
                     // inject autowired
@@ -45,6 +47,14 @@ export class Container implements IContainer {
                     // inject value
                     injectValue(target, instance, this.app);
 
+                    //Controller instance
+                    if (Reflect.getPrototypeOf(target) === BaseController) {
+                        // inject router
+                        injectRouter(target, instance);
+                        // inject param
+                        injectParam(target, instance);
+                    }
+                    instance = new target(this.app);
                     this.handlerMap.set(target, instance);
                 } else {
                     instance = target;
@@ -53,7 +63,7 @@ export class Container implements IContainer {
             return instance;
 
         } catch (error) {
-            console.error(error);
+            logger.error(error);
         }
 
     }
@@ -68,7 +78,11 @@ export class Container implements IContainer {
         if (!this.handlerMap.has(ref)) {
             target = this.reg(identifier, ref);
         }
-        return target;
+        if (target.options && target.options.scope === 'Singleton') {
+            return target;
+        }
+        const instance = new ref(this.app);
+        return instance;
     }
 }
 

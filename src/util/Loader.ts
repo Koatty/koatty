@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-27 10:12:48
+ * @ version: 2019-09-27 20:28:08
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -11,6 +11,7 @@ import * as logger from "think_logger";
 import { Container } from '../core/Container';
 import { listModule } from '../core/Injectable';
 import { COMPONENT_KEY, CONTROLLER_KEY, MIDDLEWARE_KEY } from '../core/Constants';
+import { Base } from '../core/Base';
 import { BaseController } from '../controller/BaseController';
 
 /**
@@ -65,8 +66,15 @@ export class Loader {
     public static loadCmponents(app: any, container: Container) {
         const componentList = listModule(COMPONENT_KEY);
         console.log('componentList', JSON.stringify(componentList));
+
+        let id: string;
         componentList.map((item: any) => {
-            container.reg(item.target);
+            id = (item.id || '').replace(`${COMPONENT_KEY}:`, '');
+            const ctl = container.reg(item.target);
+            if (!(ctl instanceof Base)) {
+                logger.error(`class ${id} does not inherit the class Base`);
+                process.exit();
+            }
         });
     }
 
@@ -87,8 +95,12 @@ export class Loader {
         controllerList.map((item: any) => {
             id = (item.id || '').replace(`${CONTROLLER_KEY}:`, '');
             if (id && !controllers[id]) {
+                const ctl = container.reg(item.target, { scope: 'Request' });
+                if (!(ctl instanceof BaseController)) {
+                    logger.error(`class ${id} does not inherit the class BaseController`);
+                    process.exit();
+                }
                 controllers[id] = item.target;
-                container.reg(item.target);
             }
         });
         helper.define(app._caches, 'controllers', controllers);
@@ -102,7 +114,7 @@ export class Loader {
      * @param {boolean} [run=true]
      * @memberof Loader
      */
-    public static loadMiddlewares(app: any, run = true) {
+    public static loadMiddlewares(app: any) {
         const configs = app._caches.configs || {};
         //default middleware list
         const defaultList = ['Static', 'Payload'];
@@ -138,22 +150,20 @@ export class Loader {
         console.log('appMList', appMList);
 
         //Automatically call middleware 
-        if (run) {
-            appMList.forEach((key) => {
-                if (!key || !helper.isFunction(middlewares[key])) {
-                    logger.error(`middleware ${key} load error, please check the middleware`);
-                    return;
-                }
-                if (configs.middleware.config[key] === false) {
-                    return;
-                }
-                if (middlewares[key].length < 3) {
-                    app.use(middlewares[key](configs.middleware.config[key] || {}, app));
-                } else {
-                    app.useExp(middlewares[key](configs.middleware.config[key] || {}, app));
-                }
-            });
-        }
+        appMList.forEach((key) => {
+            if (!key || !helper.isFunction(middlewares[key])) {
+                logger.error(`middleware ${key} load error, please check the middleware`);
+                return;
+            }
+            if (configs.middleware.config[key] === false) {
+                return;
+            }
+            if (middlewares[key].length < 3) {
+                app.use(middlewares[key](configs.middleware.config[key] || {}, app));
+            } else {
+                app.useExp(middlewares[key](configs.middleware.config[key] || {}, app));
+            }
+        });
         helper.define(app._caches, 'middlewares', middlewares);
     }
 

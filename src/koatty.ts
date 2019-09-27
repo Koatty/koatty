@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-27 10:06:49
+ * @ version: 2019-09-27 17:15:13
  */
 
 import * as path from "path";
@@ -64,11 +64,11 @@ interface InitOptions {
 }
 
 class Application extends Koa {
-    public app_debug: boolean;
+    public root_path: string;
     public app_path: string;
     public think_path: string;
+    public app_debug: boolean;
     public options: InitOptions;
-    public root_path: string;
     private _caches: any;
 
     public constructor(options: InitOptions) {
@@ -94,11 +94,10 @@ class Application extends Koa {
         // define path        
         this.root_path = this.root_path || options.root_path || process.env.root_path || process.cwd();
         this.app_path = this.app_path || path.resolve(this.root_path, options.app_path || process.env.app_path || 'app');
-        const think_path = path.dirname(__dirname);
-        this.root_path = this.app_path = this.think_path = '';
+        this.think_path = path.dirname(__dirname);
         helper.define(this, 'root_path', this.root_path);
         helper.define(this, 'app_path', this.app_path);
-        helper.define(this, 'think_path', think_path);
+        helper.define(this, 'think_path', this.think_path);
 
         process.env.ROOT_PATH = this.root_path;
         process.env.APP_PATH = this.app_path;

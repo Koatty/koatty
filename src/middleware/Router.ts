@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-27 10:43:14
+ * @ version: 2019-09-27 19:55:11
  */
 
 import Router from 'koa-router';
@@ -30,24 +30,22 @@ module.exports = function (options: any, app: any) {
             let ctl: any, ctlRouters: [], ctlParams: any;
             // tslint:disable-next-line: forin
             for (const n in controllers) {
-                ctl = app.Container.get(n, CONTROLLER_KEY);
-                if (!(ctl instanceof BaseController)) {
-                    logger.error(`class ${n} does not inherit the BaseController`);
-                    continue;
-                } else {
-                    ctlRouters = ctl.options.router || [];
-                    ctlParams = ctl.options.params || {};
-                    ctlRouters.map((it: any) => {
-                        debug(`register ${it.requestMethod} - ${it.method} -${it.path}`);
-                        app.Router[it.requestMethod](it.path, (ctx: Koa.Context) => {
-                            // inject ctx 
-                            ctl.ctx = ctx;
-                            // inject param
-                            const args = ctlParams[it.method].sort((a: any, b: any) => a.index - b.index).map((i: any) => i.fn(ctx, i.type));
-                            ctl[it.method](...args);
-                        });
+                ctlRouters = controllers[n].prototype.options.router || [];
+                ctlParams = controllers[n].prototype.options.params || {};
+                ctlRouters.map((it: any) => {
+                    debug(`register ${it.requestMethod} - ${it.method} -${it.path}`);
+                    app.Router[it.requestMethod](it.path, (ctx: Koa.Context) => {
+                        ctl = app.Container.get(n, CONTROLLER_KEY);
+                        // inject ctx 
+                        ctl.ctx = ctx;
+                        // inject param
+                        let args = [];
+                        if (ctlParams[it.method]) {
+                            args = ctlParams[it.method].sort((a: any, b: any) => a.index - b.index).map((i: any) => i.fn(ctx, i.type));
+                        }
+                        ctl[it.method](...args);
                     });
-                }
+                });
             }
 
             app.use(app.Router.routes()).use(app.Router.allowedMethods());
