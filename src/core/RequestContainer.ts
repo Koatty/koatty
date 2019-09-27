@@ -2,12 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-26 12:52:30
+ * @ version: 2019-09-27 10:46:58
  */
 import * as helper from "think_lib";
 import { Container } from './Container';
 import { getModule, injectAutowired, injectValue, injectRouter, getIdentifier, injectParam } from './Injectable';
 import { COMPONENT_KEY } from './Constants';
+import { BaseController } from '../controller/BaseController';
 
 
 export class RequestContainer extends Container {
@@ -36,7 +37,8 @@ export class RequestContainer extends Container {
 
             if (!instance) {
                 if (helper.isClass(target)) {
-                    instance = new target(this.app);
+                    instance = target.prototype;
+
                     // inject options
                     helper.define(instance, 'options', options);
                     // inject autowired
@@ -46,9 +48,10 @@ export class RequestContainer extends Container {
                     // inject router
                     injectRouter(target, instance);
                     // inject param
-                    injectParam(target, instance, this.app);
+                    injectParam(target, instance);
 
-                    this.handlerMap.set(target, instance);
+                    this.handlerMap.set(target, target);
+
                 } else {
                     instance = target;
                 }
@@ -64,12 +67,13 @@ export class RequestContainer extends Container {
      * 
      * @param identifier 
      */
-    public get<T>(identifier: string, type?: string): T {
+    public get<T>(identifier: string, type?: string): any {
         const ref = getModule(type || COMPONENT_KEY, identifier);
-        let dep = this.handlerMap.get(ref);
+        let target = this.handlerMap.get(ref);
         if (!this.handlerMap.has(ref)) {
-            dep = this.reg(identifier, ref);
+            target = this.reg(identifier, ref);
         }
-        return dep;
+        const instance = new target(this.app);
+        return instance;
     }
 }

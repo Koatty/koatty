@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-24 19:44:04
+ * @ version: 2019-09-27 10:06:49
  */
 
 import * as path from "path";
@@ -71,9 +71,9 @@ class Application extends Koa {
     public root_path: string;
     private _caches: any;
 
-    public constructor() {
+    public constructor(options: InitOptions) {
         super();
-        // 
+        this.options = options;
         this.init();
         // initialize
         this.initialize(this.options);
@@ -92,12 +92,12 @@ class Application extends Koa {
         // check env
         checkEnv();
         // define path        
-        const root_path = options.root_path || process.env.root_path || process.cwd();
-        const app_path = path.resolve(root_path, options.app_path || process.env.app_path || 'app');
+        this.root_path = this.root_path || options.root_path || process.env.root_path || process.cwd();
+        this.app_path = this.app_path || path.resolve(this.root_path, options.app_path || process.env.app_path || 'app');
         const think_path = path.dirname(__dirname);
         this.root_path = this.app_path = this.think_path = '';
-        helper.define(this, 'root_path', root_path);
-        helper.define(this, 'app_path', app_path);
+        helper.define(this, 'root_path', this.root_path);
+        helper.define(this, 'app_path', this.app_path);
         helper.define(this, 'think_path', think_path);
 
         process.env.ROOT_PATH = this.root_path;
@@ -111,7 +111,7 @@ class Application extends Koa {
         //     process.env.NODE_ENV = 'production';
         // }
         //debug mode: node --debug index.js
-        this.app_debug = options.app_debug || false;
+        this.app_debug = this.app_debug || options.app_debug || false;
         if (this.app_debug || process.execArgv.indexOf('--debug') > -1) {
             this.app_debug = true;
             process.env.NODE_ENV = 'development';
@@ -226,11 +226,9 @@ class Application extends Koa {
         const app_debug = this.app_debug || false;
 
         return super.listen(port, hostname, function () {
-            console.log('  ________    _       __   __ \n /_  __/ /_  (_)___  / /__/ /______  ____ _\n  / / / __ \\/ / __ \\/ //_/ //_/ __ \\/ __ `/\n / / / / / / / / / / ,< / /,</ /_/ / /_/ /\n/_/ /_/ /_/_/_/ /_/_/|_/_/ |_\\____/\\__,_/');
-            console.log(`                     https://ThinkKoa.org/`);
             logger.custom('think', '', '====================================');
             logger.custom('think', '', `Nodejs Version: ${process.version}`);
-            logger.custom('think', '', `ThinkKoa Version: v${pkg.version}`);
+            logger.custom('think', '', `${pkg.name} Version: v${pkg.version}`);
             logger.custom('think', '', `App Enviroment: ${app_debug ? 'debug mode' : 'production mode'}`);
             logger.custom('think', '', `Server running at http://${hostname}:${port}/`);
             logger.custom('think', '', '====================================');
@@ -287,7 +285,7 @@ class Application extends Koa {
 }
 
 
-const propertys = ['initialize', 'config', 'isPrevent', 'prevent', 'listen', 'use', 'useExp'];
+const propertys = ['constructor', 'init'];
 export const Koatty = new Proxy(Application, {
     set(target, key, value, receiver) {
         if (Reflect.get(target, key, receiver) === undefined) {
@@ -302,9 +300,9 @@ export const Koatty = new Proxy(Application, {
         throw Error('Cannot delete getter-only property');
     },
     construct(target, args, newTarget) {
-        propertys.map((n) => {
-            if (newTarget.prototype.hasOwnProperty(n)) {
-                throw Error(`Cannot override the final method '${n}'`);
+        Reflect.ownKeys(target.prototype).map((n) => {
+            if (newTarget.prototype.hasOwnProperty(n) && !propertys.includes(helper.toString(n))) {
+                throw Error(`Cannot override the final method '${helper.toString(n)}'`);
             }
         });
         return Reflect.construct(target, args, newTarget);

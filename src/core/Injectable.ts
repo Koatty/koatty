@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-26 12:53:42
+ * @ version: 2019-09-27 10:31:55
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -566,16 +566,15 @@ export function injectRouter(target: any, instance: any) {
  * @export
  * @param {*} target
  * @param {*} instance
- * @param {*} app
  */
-export function injectParam(target: any, instance: any, app: any) {
+export function injectParam(target: any, instance: any) {
     const metaDatas = recursiveGetMetadata(PARAM, target);
-    const methods = getMethodNames(instance);
+    const methods = Reflect.ownKeys(instance);
     const argsMetaObj: any = {};
     methods.map((m) => {
         metaDatas.map((a) => {
             if (a[m]) {
-                console.log(`=> register inject ${getIdentifier(target)} param key = ${m}`);
+                console.log(`=> register inject ${getIdentifier(target)} param key = ${helper.toString(m)}`);
                 console.log(`=> register inject ${getIdentifier(target)} param value = ${JSON.stringify(a[m])}`);
                 argsMetaObj[m] = a[m];
             }

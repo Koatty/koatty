@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-26 13:03:19
+ * @ version: 2019-09-27 10:12:48
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -11,6 +11,7 @@ import * as logger from "think_logger";
 import { Container } from '../core/Container';
 import { listModule } from '../core/Injectable';
 import { COMPONENT_KEY, CONTROLLER_KEY, MIDDLEWARE_KEY } from '../core/Constants';
+import { BaseController } from '../controller/BaseController';
 
 /**
  * 

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-20 19:27:02
+ * @ version: 2019-09-27 10:34:10
  */
 import * as helper from "think_lib";
 import { COMPONENT_KEY } from './Constants';
@@ -64,11 +64,11 @@ export class Container implements IContainer {
      */
     public get<T>(identifier: string, type?: string): T {
         const ref = getModule(type || COMPONENT_KEY, identifier);
-        let dep = this.handlerMap.get(ref);
+        let target = this.handlerMap.get(ref);
         if (!this.handlerMap.has(ref)) {
-            dep = this.reg(identifier, ref);
+            target = this.reg(identifier, ref);
         }
-        return dep;
+        return target;
     }
 }
 

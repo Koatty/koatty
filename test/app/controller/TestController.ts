@@ -1,4 +1,4 @@
-import { Component, Autowired, Controller, Value, Get, All, Param, Query } from '../../../src/index';
+import { Component, Autowired, Controller, Value, Get, All, Param, Query, BaseController } from '../../../src/index';
 import { TestService } from '../service/TestService';
 
 interface PlainObj {
@@ -7,9 +7,9 @@ interface PlainObj {
 }
 
 @Controller('/test')
-export class TestController {
+export class TestController extends BaseController {
     public ctx: any;
-    private options: any;
+    public options: any;
     @Value("test.aa")
     private test: string;
     @Autowired()
@@ -17,14 +17,14 @@ export class TestController {
 
     @Get('/say')
     public sayHello(@Query('aa') aa: number, @Query('bb') bb: string) {
-        console.log('info', aa, bb);
+        console.log('info', typeof aa, typeof bb);
         console.log('test', this.test);
         console.log('testService', this.testService instanceof TestService);
         console.log('ctx', this.ctx.url);
         console.log('options', this.options.scope);
         console.log('test.sayHello!');
         // this.testService.sayHello();
-        return this.ctx.body = 'test.sayHello!';
+        return this.json({ aa: 'test.sayHello!' });
     }
 
     @All('/hello')

@@ -1,8 +1,8 @@
-import { Component, Autowired, Controller, Value } from '../../../src/index';
+import { Component, Autowired, Controller, Value, BaseController } from '../../../src/index';
 import { TestService } from '../service/TestService';
 
 @Controller('/aa_controller')
-export class AaController {
+export class AaController extends BaseController {
     public ctx: any;
     @Value("logs_path")
     private test: string;

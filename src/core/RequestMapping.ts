@@ -2,11 +2,11 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-26 11:33:10
+ * @ version: 2019-09-26 17:09:50
  */
 import { PATH_METADATA, METHOD_METADATA, ROUTER_NAME_METADATA, ROUTER_KEY, PARAM } from "./Constants";
 import { attachClassMetadata } from "./Injectable";
-
+import * as helper from "think_lib";
 
 export interface RouterOption {
     path?: string;
@@ -117,15 +117,48 @@ export const All = createMappingDecorator(RequestMethod.ALL);
  * @param fn 
  */
 const Inject = (fn: Function) => {
-    return (target: any, name: string, descriptor: any) => {
-        attachClassMetadata(PARAM, name, {
-            name,
+    return (target: any, propertyKey: string, descriptor: any) => {
+        // 获取成员类型
+        // const type = Reflect.getMetadata('design:type', target, propertyKey);
+        // 获取成员参数类型
+        const paramtypes = Reflect.getMetadata('design:paramtypes', target, propertyKey);
+        // 获取成员返回类型
+        // const returntype = Reflect.getMetadata('design:returntype', target, propertyKey);
+        // 获取所有元数据 key (由 TypeScript 注入)
+        // const keys = Reflect.getMetadataKeys(target, propertyKey);
+
+        attachClassMetadata(PARAM, propertyKey, {
+            name: propertyKey,
             fn,
-            index: descriptor
+            index: descriptor,
+            type: (paramtypes[descriptor] && paramtypes[descriptor].name ? paramtypes[descriptor].name : '').toLowerCase()
         }, target);
         return descriptor;
     };
 
+};
+/**
+ * 
+ * @param param 
+ * @param type 
+ */
+const convertParamsType = (param: any, type: string) => {
+    switch (type) {
+        case 'object':
+        case 'enum':
+            return param;
+        case 'number':
+            return helper.toNumber(param);
+        case 'boolean':
+            return !!param;
+        case 'array':
+        case 'tuple':
+            return helper.toArray(param);
+        case 'string':
+        default:
+            return helper.toString(param);
+
+    }
 };
 
 /**
@@ -135,7 +168,7 @@ const Inject = (fn: Function) => {
  * @returns
  */
 export function Body() {
-    return Inject((ctx: any) => ctx.request.body);
+    return Inject((ctx: any) => convertParamsType(ctx.request.body, 'object'));
 }
 
 /**
@@ -147,9 +180,9 @@ export function Body() {
  */
 export function Param(arg?: string) {
     if (arg) {
-        return Inject((ctx: any) => ctx.param(arg));
+        return Inject((ctx: any, type: string) => convertParamsType(ctx.param(), type));
     } else {
-        return Inject((ctx: any) => ctx.param());
+        return Inject((ctx: any, type: string) => convertParamsType(ctx.param(), type));
     }
 }
 
@@ -162,9 +195,9 @@ export function Param(arg?: string) {
  */
 export function Query(arg?: string) {
     if (arg) {
-        return Inject((ctx: any) => ctx.querys(arg));
+        return Inject((ctx: any, type: string) => convertParamsType(ctx.querys(arg), type));
     } else {
-        return Inject((ctx: any) => ctx.querys());
+        return Inject((ctx: any, type: string) => convertParamsType(ctx.querys(), type));
     }
 }
 
@@ -177,8 +210,8 @@ export function Query(arg?: string) {
  */
 export function File(arg?: string) {
     if (arg) {
-        return Inject((ctx: any) => ctx.file(arg));
+        return Inject((ctx: any, type: string) => convertParamsType(ctx.file(arg), type));
     } else {
-        return Inject((ctx: any) => ctx.file());
+        return Inject((ctx: any, type: string) => convertParamsType(ctx.file(), type));
     }
 }
