@@ -2,17 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-27 19:55:11
+ * @ version: 2019-10-04 12:01:32
  */
 
 import Router from 'koa-router';
 import * as Koa from 'koa';
 import * as helper from "think_lib";
-import { CONTROLLER_KEY } from '../core/Constants';
-import { BaseController } from '../controller/BaseController';
 import * as logger from "think_logger";
-const debug = require('debug')('middleware:router');
-
+import { CONTROLLER_KEY } from '../core/Constants';
 
 const defaultOpt = {
     //默认配置项
@@ -33,7 +30,7 @@ module.exports = function (options: any, app: any) {
                 ctlRouters = controllers[n].prototype.options.router || [];
                 ctlParams = controllers[n].prototype.options.params || {};
                 ctlRouters.map((it: any) => {
-                    debug(`register ${it.requestMethod} - ${it.method} -${it.path}`);
+                    logger.custom('think', '', `register ${it.requestMethod} - ${it.method} -${it.path}`);
                     app.Router[it.requestMethod](it.path, (ctx: Koa.Context) => {
                         ctl = app.Container.get(n, CONTROLLER_KEY);
                         // inject ctx 

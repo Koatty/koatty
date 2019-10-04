@@ -34,13 +34,12 @@
     },
     "homepage": "https://github.com/thinkkoa/koatty",
     "devDependencies": {
-        "@types/co": "^4.6.2",
-        "@types/koa": "^2.0.49",
+        "@types/koa": "^2.0.50",
         "@types/koa-router": "^7.0.42",
-        "@types/lodash": "^4.14.138",
-        "@typescript-eslint/parser": "^2.3.0",
+        "@types/lodash": "^4.14.141",
+        "@typescript-eslint/parser": "^2.3.2",
         "debug": "^4.1.1",
-        "eslint": "^6.4.0",
+        "eslint": "^6.5.1",
         "eslint-config-alloy": "^3.0.0",
         "eslint-plugin-typescript": "^0.14.0",
         "reflect-metadata": "^0.1.13",
@@ -50,15 +49,14 @@
         "typescript": "^3.6.3"
     },
     "dependencies": {
-        "co": "^4.6.0",
         "globby": "^10.0.1",
-        "koa": "^2.8.1",
+        "koa": "^2.x.x",
         "koa-router": "^7.4.0",
-        "think_lib": "^2.2.4",
-        "think_logger": "^2.0.6",
-        "think_payload": "^2.0.5",
-        "think_static": "^2.1.1",
-        "think_trace": "^2.1.0"
+        "think_lib": "^2.x.x",
+        "think_logger": "^2.x.x",
+        "think_payload": "^2.x.x",
+        "think_static": "^2.x.x",
+        "think_trace": "^2.x.x"
     },
     "maintainers": [
         {

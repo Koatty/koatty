@@ -2,16 +2,17 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-23 17:02:38
+ * @ version: 2019-10-04 11:58:53
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
+import * as logger from "think_logger";
 import { saveModule, saveClassMetadata, savePropertyDataToClass, getIdentifier } from "./Injectable";
 import { CONTROLLER_KEY, COMPONENT_KEY, TAGGED_PROP, TAGGED_CLS, TAGGED_ARGS, MIDDLEWARE_KEY, NAMED_TAG } from './Constants';
 
 export function Component(identifier?: any): ClassDecorator {
-    console.log('Injectable: Component');
+    logger.custom('think', '', 'Injectable: Component');
 
     return (target: any) => {
         saveModule(COMPONENT_KEY, target, identifier);
@@ -19,7 +20,7 @@ export function Component(identifier?: any): ClassDecorator {
     };
 }
 export function Autowired(identifier?: any): PropertyDecorator {
-    console.log('Injectable: Autowired');
+    logger.custom('think', '', 'Injectable: Autowired');
 
     return (target: any, propertyKey: string) => {
         identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
@@ -27,7 +28,7 @@ export function Autowired(identifier?: any): PropertyDecorator {
     };
 }
 export function Controller(path?: any): ClassDecorator {
-    console.log('Injectable: Controller');
+    logger.custom('think', '', 'Injectable: Controller');
 
     return (target: any) => {
         saveModule(CONTROLLER_KEY, target);
@@ -37,7 +38,7 @@ export function Controller(path?: any): ClassDecorator {
     };
 }
 export function Middleware(identifier?: any): ClassDecorator {
-    console.log('Injectable: Middleware');
+    logger.custom('think', '', 'Injectable: Middleware');
 
     return (target: any) => {
         saveModule(MIDDLEWARE_KEY, target);
@@ -45,7 +46,7 @@ export function Middleware(identifier?: any): ClassDecorator {
     };
 }
 export function Service(identifier?: any): ClassDecorator {
-    console.log('Injectable: Service');
+    logger.custom('think', '', 'Injectable: Service');
 
     return (target: any) => {
         saveModule(COMPONENT_KEY, target, identifier);
@@ -53,14 +54,14 @@ export function Service(identifier?: any): ClassDecorator {
     };
 }
 export function Model(identifier?: any): ClassDecorator {
-    console.log('Injectable: Model');
+    logger.custom('think', '', 'Injectable: Model');
     return (target: any) => {
         saveModule(COMPONENT_KEY, target, identifier);
         saveClassMetadata(COMPONENT_KEY, TAGGED_CLS, identifier, target);
     };
 }
 export function Value(identifier: string, type?: string): PropertyDecorator {
-    console.log('Injectable: Value');
+    logger.custom('think', '', 'Injectable: Value');
     return (target: any, propertyKey: string) => {
         identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
         savePropertyDataToClass(TAGGED_ARGS, `${identifier || ''}|${type || 'config'}`, target, propertyKey);

@@ -2,19 +2,19 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-27 19:49:24
+ * @ version: 2019-10-04 11:58:01
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
-import { saveClassMetadata, getClassMetadata, listModule } from './Injectable';
-import { INJECT_TAG, COMPONENT_SCAN, CONFIGUATION_SCAN, CONTROLLER_KEY } from './Constants';
+import * as logger from "think_logger";
+import { saveClassMetadata, getClassMetadata } from './Injectable';
+import { INJECT_TAG, COMPONENT_SCAN, CONFIGUATION_SCAN } from './Constants';
 import { Container } from './Container';
 import { Loader } from '../util/Loader';
-const debug = require('debug')('bootstrap');
 
 export function Bootstrap(): ClassDecorator {
-    debug('Bootstrap');
+    logger.custom('think', '', 'Bootstrap');
 
     return (target: any) => {
         try {
@@ -41,8 +41,6 @@ export function Bootstrap(): ClassDecorator {
                     configuationMetas = configuationMeta;
                 }
             }
-            debug(configuationMetas);
-
 
             const app = new target();
 
@@ -65,7 +63,7 @@ export function Bootstrap(): ClassDecorator {
 }
 
 export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
-    debug('ComponentScan');
+    logger.custom('think', '', 'ComponentScan');
 
     return (target: any) => {
         scanPath = scanPath || '';
@@ -74,7 +72,7 @@ export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
 }
 
 export function ConfiguationScan(scanPath?: string | string[]): ClassDecorator {
-    debug("ConfiguationScan");
+    logger.custom('think', '', "ConfiguationScan");
 
     return (target: any) => {
         scanPath = scanPath || '';

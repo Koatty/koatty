@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-27 20:28:08
+ * @ version: 2019-10-04 12:23:32
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -65,7 +65,6 @@ export class Loader {
      */
     public static loadCmponents(app: any, container: Container) {
         const componentList = listModule(COMPONENT_KEY);
-        console.log('componentList', JSON.stringify(componentList));
 
         let id: string;
         componentList.map((item: any) => {
@@ -88,7 +87,6 @@ export class Loader {
      */
     public static loadControllers(app: any, container: Container) {
         const controllerList = listModule(CONTROLLER_KEY);
-        console.log('controllerList', controllerList);
 
         let id: string;
         const controllers: any = {};
@@ -132,7 +130,6 @@ export class Loader {
         Loader.loadDirectory('./src/middleware', app.think_path, function (name: string, exp: any) {
             middlewares[name] = exp.default ? exp.default : exp;
         });
-        console.log('middlewares', middlewares);
 
         const middlewareConfList = configs.middleware && configs.middleware.list ? configs.middleware.list || [] : [];
         middlewareConfList.map((item: any) => {
@@ -147,7 +144,6 @@ export class Loader {
         appMList.push('Router');
         //Mount the trace middleware on first
         appMList.unshift('Trace');
-        console.log('appMList', appMList);
 
         //Automatically call middleware 
         appMList.forEach((key) => {

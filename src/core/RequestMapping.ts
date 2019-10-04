@@ -2,11 +2,11 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-28 19:35:28
+ * @ version: 2019-10-04 12:00:33
  */
-import { PATH_METADATA, METHOD_METADATA, ROUTER_NAME_METADATA, ROUTER_KEY, PARAM } from "./Constants";
-import { attachClassMetadata } from "./Injectable";
 import * as helper from "think_lib";
+import { attachClassMetadata } from "./Injectable";
+import { PATH_METADATA, METHOD_METADATA, ROUTER_NAME_METADATA, ROUTER_KEY, PARAM } from "./Constants";
 
 export interface RouterOption {
     path?: string;
@@ -46,8 +46,6 @@ export const RequestMapping = (
     const routerName = metadata[ROUTER_NAME_METADATA] || '';
 
     return (target, key: string, descriptor: PropertyDescriptor) => {
-        // 获取成员类型
-        const types = Reflect.getMetadata('design:type', target, key);
         // tslint:disable-next-line: no-object-literal-type-assertion
         attachClassMetadata(ROUTER_KEY, key, {
             path,

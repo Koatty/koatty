@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-27 17:15:13
+ * @ version: 2019-10-04 11:48:04
  */
 
 import * as path from "path";
@@ -225,6 +225,8 @@ class Application extends Koa {
         const app_debug = this.app_debug || false;
 
         return super.listen(port, hostname, function () {
+            console.log('  ________    _       __   __ \n /_  __/ /_  (_)___  / /__/ /______  ____ _\n  / / / __ \\/ / __ \\/ //_/ //_/ __ \\/ __ `/\n / / / / / / / / / / ,< / /,</ /_/ / /_/ /\n/_/ /_/ /_/_/_/ /_/_/|_/_/ |_\\____/\\__,_/');
+            console.log(`                     https://ThinkKoa.org/`);
             logger.custom('think', '', '====================================');
             logger.custom('think', '', `Nodejs Version: ${process.version}`);
             logger.custom('think', '', `${pkg.name} Version: v${pkg.version}`);
