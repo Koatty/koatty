@@ -19,7 +19,7 @@ export class TestController extends BaseController {
     num = 0;
 
     @Get('/sayHello')
-    public sayHello(@Query('aa') aa: number, @Query('bb') bb: string) {
+    protected sayHello(@Query('aa') aa: number, @Query('bb') bb: string) {
         console.log('info', typeof aa, typeof bb);
         console.log('test', this.test);
         console.log('testService', this.testService instanceof TestService);
