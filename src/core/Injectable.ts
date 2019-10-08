@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-04 12:00:17
+ * @ version: 2019-10-08 11:41:56
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -479,8 +479,8 @@ export function injectAutowired(target: any, instance: any, container: Container
     for (const metaData of metaDatas) {
         // tslint:disable-next-line: forin
         for (const metaKey in metaData) {
-            logger.custom('think', '', `=> register inject ${getIdentifier(target)} properties key = ${metaKey}`);
-            logger.custom('think', '', `=> register inject ${getIdentifier(target)} properties value = ${metaData[metaKey]}`);
+            // logger.custom('think', '', `=> register inject ${getIdentifier(target)} properties key = ${metaKey}`);
+            // logger.custom('think', '', `=> register inject ${getIdentifier(target)} properties value = ${metaData[metaKey]}`);
             const ref = getModule(COMPONENT_KEY, metaData[metaKey]);
             let dep = container.handlerMap.get(ref);
             if (!container.handlerMap.has(ref)) {
@@ -516,8 +516,8 @@ export function injectValue(target: any, instance: any, app: any) {
     for (const metaData of metaDatas) {
         // tslint:disable-next-line: forin
         for (const metaKey in metaData) {
-            logger.custom('think', '', `=> register inject ${getIdentifier(target)} config key = ${metaKey}`);
-            logger.custom('think', '', `=> register inject ${getIdentifier(target)} config value = ${metaData[metaKey]}`);
+            // logger.custom('think', '', `=> register inject ${getIdentifier(target)} config key = ${metaKey}`);
+            // logger.custom('think', '', `=> register inject ${getIdentifier(target)} config value = ${metaData[metaKey]}`);
             const propKeys = metaData[metaKey].split('|');
             const [propKey, type] = propKeys;
             const prop = app.config(propKey, type);
@@ -552,8 +552,8 @@ export function injectRouter(target: any, instance: any) {
     for (const rmetaData of routerMetaDatas) {
         // tslint:disable-next-line: forin
         for (const metaKey in rmetaData) {
-            logger.custom('think', '', `=> register inject method Router key = ${metaKey}`);
-            logger.custom('think', '', `=> register inject method Router value = ${JSON.stringify(rmetaData[metaKey])}`);
+            // logger.custom('think', '', `=> register inject method Router key = ${metaKey}`);
+            // logger.custom('think', '', `=> register inject method Router value = ${JSON.stringify(rmetaData[metaKey])}`);
 
             if (instance.options) {
                 // tslint:disable-next-line: no-unused-expression
@@ -581,8 +581,8 @@ export function injectParam(target: any, instance: any) {
     methods.map((m) => {
         metaDatas.map((a) => {
             if (a[m]) {
-                logger.custom('think', '', `=> register inject ${getIdentifier(target)} param key = ${helper.toString(m)}`);
-                logger.custom('think', '', `=> register inject ${getIdentifier(target)} param value = ${JSON.stringify(a[m])}`);
+                // logger.custom('think', '', `=> register inject ${getIdentifier(target)} param key = ${helper.toString(m)}`);
+                // logger.custom('think', '', `=> register inject ${getIdentifier(target)} param value = ${JSON.stringify(a[m])}`);
                 argsMetaObj[m] = a[m];
             }
         });

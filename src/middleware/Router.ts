@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-08 10:07:39
+ * @ version: 2019-10-08 11:42:03
  */
 
 import Router from 'koa-router';
@@ -30,7 +30,7 @@ module.exports = function (options: any, app: any) {
                 ctlRouters = controllers[n].prototype.options.router || [];
                 ctlParams = controllers[n].prototype.options.params || {};
                 ctlRouters.map((it: any) => {
-                    logger.custom('think', '', `=> register ${it.requestMethod} - ${it.method} -${it.path}`);
+                    // logger.custom('think', '', `=> register request mapping = ${it.requestMethod} : ${it.path} -> ${n}.${it.method}`);
                     app.Router[it.requestMethod](it.path, (ctx: Koa.Context) => {
                         ctl = app.Container.get(n, CONTROLLER_KEY);
                         // inject ctx 

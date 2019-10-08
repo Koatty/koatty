@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-04 12:34:57
+ * @ version: 2019-10-08 11:42:42
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -18,6 +18,7 @@ export function Bootstrap(): ClassDecorator {
 
     return (target: any) => {
         try {
+            logger.custom('think', '', 'loadDirectory ...');
             let componentMetas = [];
             const componentMeta = getClassMetadata(INJECT_TAG, COMPONENT_SCAN, target);
             if (componentMeta) {
@@ -32,6 +33,7 @@ export function Bootstrap(): ClassDecorator {
             }
             Loader.loadDirectory(componentMetas);
 
+            logger.custom('think', '', 'loadConfiguation ...');
             const configuationMeta = getClassMetadata(INJECT_TAG, CONFIGUATION_SCAN, target);
             let configuationMetas = [];
             if (configuationMeta) {
@@ -47,13 +49,19 @@ export function Bootstrap(): ClassDecorator {
             Loader.loadConfigs(app, configuationMetas);
 
             const container = new Container(app);
+            helper.define(app, 'Container', container);
+
+            logger.custom('think', '', 'loadComponents ...');
             Loader.loadCmponents(app, container);
 
-            helper.define(app, 'Container', container);
+            logger.custom('think', '', 'loadControllers ...');
             Loader.loadControllers(app, container);
+
+            logger.custom('think', '', 'loadMiddlewares ...');
             Loader.loadMiddlewares(app);
 
             // start app
+            logger.custom('think', '', 'Listening ...');
             app.listen();
         } catch (error) {
             logger.error(error);
