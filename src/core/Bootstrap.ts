@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-04 11:58:01
+ * @ version: 2019-10-04 12:34:57
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -56,7 +56,7 @@ export function Bootstrap(): ClassDecorator {
             // start app
             app.listen();
         } catch (error) {
-            console.error(error);
+            logger.error(error);
             process.exit();
         }
     };

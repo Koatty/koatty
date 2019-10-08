@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-04 11:58:53
+ * @ version: 2019-10-08 10:06:06
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -48,13 +48,6 @@ export function Middleware(identifier?: any): ClassDecorator {
 export function Service(identifier?: any): ClassDecorator {
     logger.custom('think', '', 'Injectable: Service');
 
-    return (target: any) => {
-        saveModule(COMPONENT_KEY, target, identifier);
-        saveClassMetadata(COMPONENT_KEY, TAGGED_CLS, identifier, target);
-    };
-}
-export function Model(identifier?: any): ClassDecorator {
-    logger.custom('think', '', 'Injectable: Model');
     return (target: any) => {
         saveModule(COMPONENT_KEY, target, identifier);
         saveClassMetadata(COMPONENT_KEY, TAGGED_CLS, identifier, target);

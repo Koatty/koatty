@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-04 11:48:04
+ * @ version: 2019-10-04 12:40:24
  */
 
 import * as path from "path";
@@ -237,7 +237,7 @@ class Application extends Koa {
             app_debug && logger.warn(`Running in debug mode, please modify the app_debug value to false when production env.`);
         }).on('clientError', function (err: any, sock: any) {
             // logger.error('Bad request, HTTP parse error');
-            sock.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+            sock.end('400 Bad Request\r\n\r\n');
         });
     }
 
