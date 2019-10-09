@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-04 12:23:32
+ * @ version: 2019-10-09 16:16:58
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -88,17 +88,16 @@ export class Loader {
     public static loadControllers(app: any, container: Container) {
         const controllerList = listModule(CONTROLLER_KEY);
 
-        let id: string;
         const controllers: any = {};
         controllerList.map((item: any) => {
-            id = (item.id || '').replace(`${CONTROLLER_KEY}:`, '');
-            if (id && !controllers[id]) {
+            item.id = (item.id || '').replace(`${CONTROLLER_KEY}:`, '');
+            if (item.id && helper.isClass(item.target)) {
                 const ctl = container.reg(item.target, { scope: 'Request' });
                 if (!(ctl instanceof BaseController)) {
-                    logger.error(`class ${id} does not inherit the class BaseController`);
+                    logger.error(`class ${item.id} does not inherit the class BaseController`);
                     process.exit();
                 }
-                controllers[id] = item.target;
+                controllers[item.id] = item.target;
             }
         });
         helper.define(app._caches, 'controllers', controllers);
@@ -109,31 +108,32 @@ export class Loader {
      *
      * @static
      * @param {*} app
-     * @param {boolean} [run=true]
+     * @param {Container} container
      * @memberof Loader
      */
-    public static loadMiddlewares(app: any) {
+    public static loadMiddlewares(app: any, container: Container) {
         const configs = app._caches.configs || {};
         //default middleware list
         const defaultList = ['Static', 'Payload'];
+        //Mount default middleware
+        Loader.loadDirectory('./src/middleware', app.think_path);
         //Mount application middleware
         const middlewares: any = {};
         const appMeddlewares = listModule(MIDDLEWARE_KEY) || [];
 
         appMeddlewares.map((item) => {
             item.id = (item.id || '').replace(`${MIDDLEWARE_KEY}:`, '');
-            if (item.id) {
+            if (item.id && helper.isClass(item.target)) {
+                container.reg(item.target, { scope: 'Request' });
                 middlewares[item.id] = item.target;
             }
         });
-        //Mount default middleware
-        Loader.loadDirectory('./src/middleware', app.think_path, function (name: string, exp: any) {
-            middlewares[name] = exp.default ? exp.default : exp;
-        });
+
 
         const middlewareConfList = configs.middleware && configs.middleware.list ? configs.middleware.list || [] : [];
+        const bandList = ['Router', 'Trace', ...defaultList];
         middlewareConfList.map((item: any) => {
-            if (!defaultList.includes(item) && !['Router', 'Trace'].includes(item)) {
+            if (!bandList.includes(item)) {
                 defaultList.push(item);
             }
         });
@@ -146,18 +146,24 @@ export class Loader {
         appMList.unshift('Trace');
 
         //Automatically call middleware 
+        let handle: any;
         appMList.forEach((key) => {
-            if (!key || !helper.isFunction(middlewares[key])) {
-                logger.error(`middleware ${key} load error, please check the middleware`);
+            handle = container.get(key, MIDDLEWARE_KEY);
+            if (!handle) {
+                logger.error(`middleware ${key} load error.`);
+                return;
+            }
+            if (!helper.isFunction(handle.run)) {
+                logger.error(`middleware ${key} must be implements method 'run'.`);
                 return;
             }
             if (configs.middleware.config[key] === false) {
                 return;
             }
-            if (middlewares[key].length < 3) {
-                app.use(middlewares[key](configs.middleware.config[key] || {}, app));
+            if (handle.run.length < 3) {
+                app.use(handle.run(configs.middleware.config[key] || {}, app));
             } else {
-                app.useExp(middlewares[key](configs.middleware.config[key] || {}, app));
+                app.useExp(handle.run(configs.middleware.config[key] || {}, app));
             }
         });
         helper.define(app._caches, 'middlewares', middlewares);
@@ -201,6 +207,13 @@ export class Loader {
                     name = name.slice(name.lastIndexOf('/') + 1);
                 }
                 const fileName = name.slice(0, name.lastIndexOf('.ts'));
+                //
+                const tkeys = Object.keys(exports);
+                if (!exports[fileName] && (tkeys[0] && helper.isClass(exports[tkeys[0]]) && tkeys[0] !== fileName)) {
+                    logger.error(`The class name is not consistent with the file('${file}') name. Or you used 'export default'.`);
+                    continue;
+                }
+
                 if (fn) {
                     // console.log(fileName);
                     // console.log(exports); 

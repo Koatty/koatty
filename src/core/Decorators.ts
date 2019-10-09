@@ -2,10 +2,11 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-08 11:36:34
+ * @ version: 2019-10-08 14:46:22
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
+import { Context } from 'koa';
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { saveModule, saveClassMetadata, savePropertyDataToClass, getIdentifier } from "./Injectable";

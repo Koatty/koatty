@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-08 11:42:42
+ * @ version: 2019-10-09 15:27:22
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -18,6 +18,8 @@ export function Bootstrap(): ClassDecorator {
 
     return (target: any) => {
         try {
+            const app = new target();
+
             logger.custom('think', '', 'loadDirectory ...');
             let componentMetas = [];
             const componentMeta = getClassMetadata(INJECT_TAG, COMPONENT_SCAN, target);
@@ -29,7 +31,7 @@ export function Bootstrap(): ClassDecorator {
                 }
             }
             if (componentMetas.length < 1) {
-                componentMetas = ['./'];
+                componentMetas = [app.app_path];
             }
             Loader.loadDirectory(componentMetas);
 
@@ -44,8 +46,6 @@ export function Bootstrap(): ClassDecorator {
                 }
             }
 
-            const app = new target();
-
             Loader.loadConfigs(app, configuationMetas);
 
             const container = new Container(app);
@@ -58,7 +58,7 @@ export function Bootstrap(): ClassDecorator {
             Loader.loadControllers(app, container);
 
             logger.custom('think', '', 'loadMiddlewares ...');
-            Loader.loadMiddlewares(app);
+            Loader.loadMiddlewares(app, container);
 
             // start app
             logger.custom('think', '', 'Listening ...');

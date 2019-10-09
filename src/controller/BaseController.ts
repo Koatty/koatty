@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-27 15:59:42
+ * @ version: 2019-10-09 16:01:20
  */
 import * as helper from "think_lib";
 const url = require('url');
@@ -34,7 +34,7 @@ class Base {
     /**
      * init
      */
-    protected init() {
+    public init() {
 
     }
 

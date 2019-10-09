@@ -2,10 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-27 20:08:23
+ * @ version: 2019-10-09 16:12:56
  */
 
-export class Base {
+export interface BaseInterface {
+    init(...args: any[]): any;
+}
+
+export class Base implements BaseInterface {
     public app: any;
     public constructor(app: any) {
         try {
@@ -19,7 +23,7 @@ export class Base {
     /**
      * init
      */
-    protected init() {
+    public init() {
 
     }
 }

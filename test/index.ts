@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-04 12:24:40
+ * @ version: 2019-10-09 16:07:11
  */
 import { Bootstrap, ComponentScan, Autowired, Koatty, ConfiguationScan, logger, helper } from '../src/index';
 import * as path from "path";
