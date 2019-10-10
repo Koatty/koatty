@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-09 16:14:09
+ * @ version: 2019-10-09 16:20:05
  */
 
 const statics = require('think_static');

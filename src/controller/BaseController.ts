@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-09 16:01:20
+ * @ version: 2019-10-10 17:42:52
  */
 import * as helper from "think_lib";
 const url = require('url');
@@ -45,7 +45,7 @@ class Base {
      * @returns {*}
      * @memberof BaseController
      */
-    protected __empty(): any {
+    protected get __empty(): any {
         return this.ctx.throw('404');
     }
 
@@ -56,7 +56,7 @@ class Base {
      * @returns {boolean}
      * @memberof BaseController
      */
-    protected isGet(): boolean {
+    protected get isGet(): boolean {
         return this.ctx.method === 'GET';
     }
 
@@ -67,7 +67,7 @@ class Base {
      * @returns {boolean}
      * @memberof BaseController
      */
-    protected isPost(): boolean {
+    protected get isPost(): boolean {
         return this.ctx.method === 'POST';
     }
 
@@ -90,7 +90,7 @@ class Base {
      * @returns {boolean}
      * @memberof BaseController
      */
-    protected isAjax(): boolean {
+    protected get isAjax(): boolean {
         return this.ctx.headers['x-requested-with'] === 'XMLHttpRequest';
     }
 
@@ -101,7 +101,7 @@ class Base {
      * @returns {boolean}
      * @memberof BaseController
      */
-    protected isPjax(): boolean {
+    protected get isPjax(): boolean {
         return this.ctx.headers['x-pjax'] || this.ctx.headers['X-Pjax'] || false;
     }
 

@@ -33,9 +33,11 @@ export class TestController extends BaseController {
         return this.json({ 'TestController': 'test.sayHello!' });
     }
 
+    @Get('/test')
     private testCount() {
         this.num++;
         logger.info(helper.toString(this.num));
+        return this.json({ 'TestController': 'test.testCount!' });
     }
 
     @All('/helloWorld')

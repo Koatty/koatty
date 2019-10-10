@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-04 12:40:24
+ * @ version: 2019-10-10 18:03:30
  */
 
 import * as path from "path";
@@ -89,20 +89,6 @@ class Application extends Koa {
      * @param options 
      */
     public initialize(options: InitOptions = {}) {
-        // check env
-        checkEnv();
-        // define path        
-        this.root_path = this.root_path || options.root_path || process.env.root_path || process.cwd();
-        this.app_path = this.app_path || path.resolve(this.root_path, options.app_path || process.env.app_path || 'app');
-        this.think_path = path.dirname(__dirname);
-        helper.define(this, 'root_path', this.root_path);
-        helper.define(this, 'app_path', this.app_path);
-        helper.define(this, 'think_path', this.think_path);
-
-        process.env.ROOT_PATH = this.root_path;
-        process.env.APP_PATH = this.app_path;
-        process.env.THINK_PATH = this.think_path;
-
         //production env is default
         process.env.NODE_ENV = 'production';
         // if ((process.execArgv.indexOf('--production') > -1) || (process.env.NODE_ENV === 'production')) {
@@ -116,6 +102,24 @@ class Application extends Koa {
             process.env.NODE_ENV = 'development';
         }
         process.env.APP_DEBUG = helper.toString(this.app_debug);
+
+        // check env
+        checkEnv();
+        // define path        
+        this.root_path = this.root_path || options.root_path || process.env.root_path;
+        if (!this.root_path) {
+            logger.error('Please define the root directory(ps: this.root_path = __dirname) of the project');
+            process.exit();
+        }
+        this.app_path = this.app_path || path.resolve(this.root_path, options.app_path || process.env.app_path || 'app');
+        this.think_path = path.dirname(__dirname);
+        helper.define(this, 'root_path', this.root_path);
+        helper.define(this, 'app_path', this.app_path);
+        helper.define(this, 'think_path', this.think_path);
+
+        process.env.ROOT_PATH = this.root_path;
+        process.env.APP_PATH = this.app_path;
+        process.env.THINK_PATH = this.think_path;
 
         // caches handle
         Object.defineProperty(this, '_caches', {
@@ -246,7 +250,7 @@ class Application extends Koa {
      * 
      * @memberof ThinkKoa
      */
-    private captureError() {
+    private captureError(): void {
         //koa error
         this.removeAllListeners('error');
         this.on('error', (err: any) => {
