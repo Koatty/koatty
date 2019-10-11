@@ -6,6 +6,7 @@
         "test": "ts-node ./test/index.ts",
         "build": "tsc"
     },
+    "main": "./src/index.ts",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/thinkkoa/koatty.git"

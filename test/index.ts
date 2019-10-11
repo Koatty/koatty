@@ -2,11 +2,10 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-09 18:48:16
+ * @ version: 2019-10-11 13:43:51
  */
 import { Bootstrap, ComponentScan, Autowired, Koatty, ConfiguationScan, logger, helper } from '../src/index';
 import * as path from "path";
-import { TestController } from './app/controller/TestController';
 // import * as helper from "think_lib";
 
 @Bootstrap()
