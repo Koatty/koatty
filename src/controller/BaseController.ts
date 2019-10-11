@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-10 17:42:52
+ * @ version: 2019-10-11 09:45:03
  */
 import * as helper from "think_lib";
 const url = require('url');
@@ -22,7 +22,7 @@ class Base {
      * @param {*} app
      * @memberof BaseController
      */
-    public constructor(app: any) {
+    protected constructor(app: any) {
         try {
             this.app = app;
             this.init();
@@ -34,7 +34,7 @@ class Base {
     /**
      * init
      */
-    public init() {
+    protected init() {
 
     }
 
