@@ -42,7 +42,6 @@ export class TestController extends BaseController {
 
     @All('/helloWorld')
     public helloWorld(@Param() info: PlainObj) {
-
         this.testCount();
         return this.json(info);
     }

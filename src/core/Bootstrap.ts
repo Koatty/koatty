@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-10 15:54:32
+ * @ version: 2019-10-11 09:28:35
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -14,6 +14,7 @@ import { Container } from './Container';
 import { Loader } from '../util/Loader';
 
 export function Bootstrap(): ClassDecorator {
+    logger.custom('think', '', '====================================');
     logger.custom('think', '', 'Bootstrap');
 
     return (target: any) => {
