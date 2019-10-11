@@ -2,10 +2,9 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-11 09:45:03
+ * @ version: 2019-10-11 19:20:58
  */
 import * as helper from "think_lib";
-const url = require('url');
 
 interface BaseControllerOptions {
     router: [];
@@ -126,7 +125,7 @@ class Base {
      * @returns {*}
      * @memberof BaseController
      */
-    protected get(name: string, value?: any): any {
+    protected get(name?: string, value?: any): any {
         return this.ctx.querys(name, value);
     }
 
@@ -139,7 +138,7 @@ class Base {
      * @returns {*}
      * @memberof BaseController
      */
-    protected post(name: string, value?: any): any {
+    protected post(name?: string, value?: any): any {
         return this.ctx.post(name, value);
     }
 
@@ -151,7 +150,7 @@ class Base {
      * @returns {*}
      * @memberof BaseController
      */
-    protected param(name: string): any {
+    protected param(name?: string): any {
         return this.ctx.param(name);
     }
 
@@ -164,7 +163,7 @@ class Base {
      * @returns {*}
      * @memberof BaseController
      */
-    protected file(name: string, value?: any): any {
+    protected file(name?: string, value?: any): any {
         return this.ctx.file(name, value);
     }
 
@@ -190,7 +189,7 @@ class Base {
      * @returns {*}
      * @memberof BaseController
      */
-    protected header(name: string, value?: any): any {
+    protected header(name?: string, value?: any): any {
         if (name === undefined) {
             return this.ctx.headers;
         }
@@ -209,7 +208,7 @@ class Base {
      * @returns {void}
      * @memberof BaseController
      */
-    protected types(contentType: string, encoding?: string | boolean): void {
+    protected types(contentType?: string, encoding?: string | boolean): void {
         if (!contentType) {
             return (this.ctx.headers['content-type'] || '').split(';')[0].trim();
         }
@@ -224,16 +223,11 @@ class Base {
      * Get referrer
      *
      * @protected
-     * @param {string} host
      * @returns {string}
      * @memberof BaseController
      */
-    protected referer(host: string): string {
-        const ref = this.ctx.headers.referer || this.ctx.headers.referrer || '';
-        if (!ref || !host) {
-            return ref;
-        }
-        return url.parse(host).hostname || '';
+    protected referer(): string {
+        return this.ctx.headers.referer || this.ctx.headers.referrer || '';
     }
 
     /**
@@ -337,7 +331,7 @@ class Base {
      * @returns {*}
      * @memberof BaseController
      */
-    protected success(errmsg: string, data: any, code = 200): any {
+    protected success(errmsg?: string, data?: any, code = 200): any {
         const obj: any = {
             'status': 1,
             'code': code,
@@ -361,7 +355,7 @@ class Base {
      * @returns {*}
      * @memberof BaseController
      */
-    protected ok(errmsg: string, data: any, code = 200): any {
+    protected ok(errmsg?: string, data?: any, code = 200): any {
         return this.success(errmsg, data, code);
     }
 
@@ -375,7 +369,7 @@ class Base {
      * @returns {*}
      * @memberof BaseController
      */
-    protected error(errmsg: any, data: any, code = 500): any {
+    protected error(errmsg?: any, data?: any, code = 500): any {
         const obj: any = {
             'status': 0,
             'code': code,
@@ -399,7 +393,7 @@ class Base {
      * @returns {*}
      * @memberof BaseController
      */
-    protected fail(errmsg: any, data: any, code = 500): any {
+    protected fail(errmsg?: any, data?: any, code = 500): any {
         return this.error(errmsg, data, code);
     }
 
@@ -463,7 +457,7 @@ class Base {
      * @returns {*}
      * @memberof BaseController
      */
-    protected set(name: string, value: any): any {
+    protected set(name?: string, value?: any): any {
         return this.assign(name, value);
     }
 
@@ -476,7 +470,7 @@ class Base {
      * @returns {*}
      * @memberof BaseController
      */
-    protected assign(name: string, value: any): any {
+    protected assign(name?: string, value?: any): any {
         if (!this.ctx.assign) {
             return this.ctx.throw('500', 'The think_view middleware is not installed or configured incorrectly.');
         }
@@ -492,7 +486,7 @@ class Base {
      * @returns {*}
      * @memberof BaseController
      */
-    protected compile(templateFile: string, data: any): any {
+    protected compile(templateFile?: string, data?: any): any {
         if (!this.ctx.compile) {
             return this.ctx.throw('500', 'The think_view middleware is not installed or configured incorrectly.');
         }
@@ -509,7 +503,7 @@ class Base {
      * @returns {*}
      * @memberof BaseController
      */
-    protected display(templateFile: string, charset?: string, contentType?: string): any {
+    protected display(templateFile?: string, charset?: string, contentType?: string): any {
         return this.render(templateFile, charset, contentType);
     }
 
@@ -523,7 +517,7 @@ class Base {
      * @returns {*}
      * @memberof BaseController
      */
-    protected render(templateFile: string, charset?: string, contentType?: string): any {
+    protected render(templateFile?: string, charset?: string, contentType?: string): any {
         if (!this.ctx.render) {
             return this.ctx.throw('500', 'The think_view middleware is not installed or configured incorrectly.');
         }

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-11 17:20:31
+ * @ version: 2019-10-11 20:36:57
  */
 
 import * as path from "path";
@@ -96,7 +96,7 @@ class Application extends Koa {
             process.env.NODE_ENV = 'production';
         }
         //debug mode: node --debug index.js
-        if (this.app_debug || process.execArgv.indexOf('--debug') > -1) {
+        if (this.app_debug || process.execArgv.indexOf('--debug') > -1 || process.execArgv.indexOf('--inspect') > -1) {
             this.app_debug = true;
             process.env.NODE_ENV = 'development';
         }
@@ -107,7 +107,15 @@ class Application extends Koa {
         checkEnv();
         // define path        
         const root_path = (this.options && this.options.root_path) || this.root_path || process.cwd();
-        const app_path = this.app_path || path.resolve(root_path, (this.options && this.options.app_path) || (this.app_debug ? 'src' : 'dist'));
+        let app_path = this.app_path || (this.options && this.options.app_path) || '';
+        if (helper.isEmpty(app_path)) {
+            //ts source debug
+            if (process.execArgv.indexOf('ts-node/register') > -1) {
+                app_path = path.resolve(root_path, 'src');
+            } else {
+                app_path = path.resolve(root_path, 'dist');
+            }
+        }
         const think_path = path.dirname(__dirname);
         helper.define(this, 'root_path', root_path);
         helper.define(this, 'app_path', app_path);

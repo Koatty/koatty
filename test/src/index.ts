@@ -2,10 +2,11 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-11 17:22:29
+ * @ version: 2019-10-11 20:33:53
  */
-import { Bootstrap, ComponentScan, Autowired, Koatty, ConfiguationScan, logger, helper } from '../dist/index';
+import { Bootstrap, ComponentScan, Autowired, Koatty, ConfiguationScan, logger, helper } from '../../dist/index';
 // import * as helper from "think_lib";
+import * as path from "path";
 
 @Bootstrap()
 // @ComponentScan('./test')
@@ -13,8 +14,8 @@ import { Bootstrap, ComponentScan, Autowired, Koatty, ConfiguationScan, logger, 
 export class App extends Koatty {
 
     public init() {
-        this.root_path = __dirname;
-        // this.app_path = __dirname + path.sep + 'app';
+        this.root_path = path.dirname(__dirname);
+        // this.app_path = `${this.root_path}${path.sep}src`;
         // this.app_debug = true; //线上环境请将debug模式关闭，即：app_debug:false
     }
 

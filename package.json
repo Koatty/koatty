@@ -1,11 +1,11 @@
 {
     "name": "koatty",
-    "version": "0.0.2",
+    "version": "0.0.4",
     "description": "A lightweight, scalable for agile development TypeScript web framework, based on koa2.",
     "scripts": {
-        "test": "ts-node ./test/index.ts",
+        "test": "tslint 'src/**/*.ts'",
         "build": "tsc",
-        "prepublish": "npm run build"
+        "prepublish": "npm test && npm run build"
     },
     "main": "./dist/index.js",
     "repository": {
