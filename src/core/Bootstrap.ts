@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-11 09:28:35
+ * @ version: 2019-10-11 16:49:00
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -20,6 +20,8 @@ export function Bootstrap(): ClassDecorator {
     return (target: any) => {
         try {
             const app = new target();
+
+            logger.custom('think', '', 'ComponentScan ...');
             let componentMetas = [];
             const componentMeta = getClassMetadata(INJECT_TAG, COMPONENT_SCAN, target);
             if (componentMeta) {
@@ -34,7 +36,6 @@ export function Bootstrap(): ClassDecorator {
             }
             Loader.loadDirectory(componentMetas);
 
-            logger.custom('think', '', 'loadConfiguation ...');
             const configuationMeta = getClassMetadata(INJECT_TAG, CONFIGUATION_SCAN, target);
             let configuationMetas = [];
             if (configuationMeta) {
@@ -44,7 +45,7 @@ export function Bootstrap(): ClassDecorator {
                     configuationMetas = configuationMeta;
                 }
             }
-
+            logger.custom('think', '', 'loadConfiguation ...');
             Loader.loadConfigs(app, configuationMetas);
 
             const container = new Container(app);

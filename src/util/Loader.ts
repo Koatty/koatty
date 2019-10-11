@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-09 16:19:26
+ * @ version: 2019-10-11 16:30:50
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -41,7 +41,7 @@ export class Loader {
      */
     public static loadConfigs(app: any, loadPath?: string | string[]) {
         const config: any = {};
-        Loader.loadDirectory('./src/config', app.think_path, function (name: string, exp: any) {
+        Loader.loadDirectory('./dist/config', app.think_path, function (name: string, exp: any) {
             config[name] = exp.default ? exp.default : exp;
         });
         const appConfig: any = {};
@@ -116,7 +116,7 @@ export class Loader {
         //default middleware list
         const defaultList = ['Static', 'Payload'];
         //Mount default middleware
-        Loader.loadDirectory('./src/middleware', app.think_path);
+        Loader.loadDirectory('./dist/middleware', app.think_path);
         //Mount application middleware
         const middlewares: any = {};
         const appMeddlewares = listModule(MIDDLEWARE_KEY) || [];
@@ -147,6 +147,7 @@ export class Loader {
 
         //Automatically call middleware 
         let handle: any;
+        configs.middleware = configs.middleware || { config: {} };
         appMList.forEach((key) => {
             handle = container.get(key, MIDDLEWARE_KEY);
             if (!handle) {
@@ -191,7 +192,7 @@ export class Loader {
 
         for (let dir of loadDirs) {
             dir = buildLoadDir(baseDir, dir);
-            const fileResults = globby.sync(['**/**.ts', '!**/**.d.ts'].concat(pattern || []), {
+            const fileResults = globby.sync(['**/**.js', '**/**.ts', '!**/**.d.ts'].concat(pattern || []), {
                 cwd: dir,
                 ignore: [
                     '**/node_modules/**',
@@ -206,7 +207,14 @@ export class Loader {
                 if (name.indexOf('/') > -1) {
                     name = name.slice(name.lastIndexOf('/') + 1);
                 }
-                const fileName = name.slice(0, name.lastIndexOf('.ts'));
+                // let namePattern = '.ts';
+                // // tslint:disable-next-line: no-magic-numbers
+                // if (name.slice(-3) === '.js') {
+                //     namePattern = '.js';
+                // }
+                // const fileName = name.slice(0, name.lastIndexOf(namePattern));
+                // tslint:disable-next-line: no-magic-numbers
+                const fileName = name.slice(0, -3);
                 //
                 const tkeys = Object.keys(exports);
                 if (!exports[fileName] && (tkeys[0] && helper.isClass(exports[tkeys[0]]) && tkeys[0] !== fileName)) {

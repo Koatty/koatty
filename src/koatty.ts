@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-11 09:42:56
+ * @ version: 2019-10-11 17:20:31
  */
 
 import * as path from "path";
@@ -71,12 +71,12 @@ class Application extends Koa {
     public options: InitOptions;
     private _caches: any;
 
-    public constructor(options: InitOptions) {
+    protected constructor(options: InitOptions) {
         super();
-        this.options = options;
+        this.options = options || {};
         this.init();
         // initialize
-        this.initialize(this.options);
+        this.initialize();
     }
 
     /**
@@ -86,36 +86,32 @@ class Application extends Koa {
 
     /**
      * initialize env
-     * @param options 
      */
-    public initialize(options: InitOptions = {}) {
-        //production env is default
-        process.env.NODE_ENV = 'production';
-        // if ((process.execArgv.indexOf('--production') > -1) || (process.env.NODE_ENV === 'production')) {
-        //     this.app_debug = false;
-        //     process.env.NODE_ENV = 'production';
-        // }
+    public initialize() {
+        //development env is default
+        this.app_debug = (this.options && this.options.app_debug) || this.app_debug || true;
+        process.env.NODE_ENV = 'development';
+        if ((process.execArgv.indexOf('--production') > -1) || (process.env.NODE_ENV === 'production')) {
+            this.app_debug = false;
+            process.env.NODE_ENV = 'production';
+        }
         //debug mode: node --debug index.js
-        this.app_debug = this.app_debug || options.app_debug || false;
         if (this.app_debug || process.execArgv.indexOf('--debug') > -1) {
             this.app_debug = true;
             process.env.NODE_ENV = 'development';
         }
+
         process.env.APP_DEBUG = helper.toString(this.app_debug);
 
         // check env
         checkEnv();
         // define path        
-        this.root_path = this.root_path || options.root_path || process.env.root_path;
-        if (!this.root_path) {
-            logger.error('Please define the root directory(ps: this.root_path = __dirname) of the project');
-            process.exit();
-        }
-        this.app_path = this.app_path || path.resolve(this.root_path, options.app_path || process.env.app_path || 'app');
-        this.think_path = path.dirname(__dirname);
-        helper.define(this, 'root_path', this.root_path);
-        helper.define(this, 'app_path', this.app_path);
-        helper.define(this, 'think_path', this.think_path);
+        const root_path = (this.options && this.options.root_path) || this.root_path || process.cwd();
+        const app_path = this.app_path || path.resolve(root_path, (this.options && this.options.app_path) || (this.app_debug ? 'src' : 'dist'));
+        const think_path = path.dirname(__dirname);
+        helper.define(this, 'root_path', root_path);
+        helper.define(this, 'app_path', app_path);
+        helper.define(this, 'think_path', think_path);
 
         process.env.ROOT_PATH = this.root_path;
         process.env.APP_PATH = this.app_path;

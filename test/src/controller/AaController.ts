@@ -1,4 +1,4 @@
-import { Component, Autowired, Controller, Value, BaseController } from '../../../src/index';
+import { Component, Autowired, Controller, Value, BaseController } from '../../../dist/index';
 import { TestService } from '../service/TestService';
 
 @Controller('/aa_controller')

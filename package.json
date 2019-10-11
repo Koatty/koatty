@@ -1,12 +1,13 @@
 {
     "name": "koatty",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "A lightweight, scalable for agile development TypeScript web framework, based on koa2.",
     "scripts": {
         "test": "ts-node ./test/index.ts",
-        "build": "tsc"
+        "build": "tsc",
+        "prepublish": "npm run build"
     },
-    "main": "./src/index.ts",
+    "main": "./dist/index.js",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/thinkkoa/koatty.git"
@@ -38,6 +39,7 @@
         "@types/koa": "^2.0.50",
         "@types/koa-router": "^7.0.42",
         "@types/lodash": "^4.14.141",
+        "@types/node": "^12.7.12",
         "@typescript-eslint/parser": "^2.3.2",
         "debug": "^4.1.1",
         "eslint": "^6.5.1",

@@ -1,4 +1,4 @@
-import { Autowired, Component, Controller, Service } from '../../../src/index';
+import { Autowired, Component, Controller, Service } from '../../../dist/index';
 import { TestService2 } from './TestService2';
 import { TestService3 } from './TestService3';
 
