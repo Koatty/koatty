@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-10 18:03:30
+ * @ version: 2019-10-11 09:42:56
  */
 
 import * as path from "path";
@@ -137,7 +137,7 @@ class Application extends Koa {
      * @returns {any}
      * @memberof ThinkKoa
      */
-    public use(fn: any): any {
+    public use(fn: Function): any {
         if (helper.isGenerator(fn)) {
             fn = helper.generatorToPromise(fn);
         }
