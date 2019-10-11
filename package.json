@@ -1,6 +1,6 @@
 {
     "name": "koatty",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "A lightweight, scalable for agile development TypeScript web framework, based on koa2.",
     "scripts": {
         "test": "tslint 'src/**/*.ts'",
