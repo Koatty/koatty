@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-12 09:47:40
+ * @ version: 2019-10-12 12:35:11
  */
 
 import * as path from "path";
@@ -91,31 +91,23 @@ class Application extends Koa {
         //development env is default
         this.app_debug = (this.options && this.options.app_debug) || this.app_debug || true;
         process.env.NODE_ENV = 'development';
-        if ((process.execArgv.indexOf('--production') > -1) || (process.env.NODE_ENV === 'production')) {
+        const env = JSON.stringify(process.execArgv);
+        //production mode
+        if ((env.indexOf('--production') > -1) || (process.env.NODE_ENV === 'production')) {
             this.app_debug = false;
             process.env.NODE_ENV = 'production';
         }
-        //debug mode: node --debug index.js
-        if (this.app_debug || process.execArgv.indexOf('--debug') > -1 || process.execArgv.indexOf('--inspect') > -1) {
-            this.app_debug = true;
-            process.env.NODE_ENV = 'development';
+        if (env.indexOf('ts-node') < 0 && env.indexOf('--inspect') < 0) {
+            this.app_debug = false;
+            process.env.NODE_ENV = 'production';
         }
-
         process.env.APP_DEBUG = helper.toString(this.app_debug);
 
         // check env
         checkEnv();
         // define path        
         const root_path = (this.options && this.options.root_path) || this.root_path || process.cwd();
-        let app_path = this.app_path || (this.options && this.options.app_path) || '';
-        if (helper.isEmpty(app_path)) {
-            //ts source debug
-            if (process.execArgv.indexOf('ts-node/register') > -1) {
-                app_path = path.resolve(root_path, 'src');
-            } else {
-                app_path = path.resolve(root_path, 'dist');
-            }
-        }
+        const app_path = this.app_path || (this.options && this.options.app_path) || path.resolve(root_path, env.indexOf('ts-node') > -1 ? 'src' : 'dist');
         const think_path = __dirname;
         helper.define(this, 'root_path', root_path);
         helper.define(this, 'app_path', app_path);
