@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-11 20:36:57
+ * @ version: 2019-10-12 09:47:40
  */
 
 import * as path from "path";
@@ -116,7 +116,7 @@ class Application extends Koa {
                 app_path = path.resolve(root_path, 'dist');
             }
         }
-        const think_path = path.dirname(__dirname);
+        const think_path = __dirname;
         helper.define(this, 'root_path', root_path);
         helper.define(this, 'app_path', app_path);
         helper.define(this, 'think_path', think_path);
@@ -229,17 +229,14 @@ class Application extends Koa {
         //start server
         //port?: number, hostname?: string, listeningListener?: Function
         const port = this.config('app_port') || '3000';
-        const hostname = this.config('app_hostname') || '0.0.0.0';
+        const hostname = this.config('app_hostname') || '';
         const app_debug = this.app_debug || false;
 
         return super.listen(port, hostname, function () {
-            console.log('  ________    _       __   __ \n /_  __/ /_  (_)___  / /__/ /______  ____ _\n  / / / __ \\/ / __ \\/ //_/ //_/ __ \\/ __ `/\n / / / / / / / / / / ,< / /,</ /_/ / /_/ /\n/_/ /_/ /_/_/_/ /_/_/|_/_/ |_\\____/\\__,_/');
-            console.log(`                     https://ThinkKoa.org/`);
-            logger.custom('think', '', '====================================');
             logger.custom('think', '', `Nodejs Version: ${process.version}`);
             logger.custom('think', '', `${pkg.name} Version: v${pkg.version}`);
             logger.custom('think', '', `App Enviroment: ${app_debug ? 'debug mode' : 'production mode'}`);
-            logger.custom('think', '', `Server running at http://${hostname}:${port}/`);
+            logger.custom('think', '', `Server running at http://${hostname || 'localhost'}:${port}/`);
             logger.custom('think', '', '====================================');
             // tslint:disable-next-line: no-unused-expression
             app_debug && logger.warn(`Running in debug mode, please modify the app_debug value to false when production env.`);

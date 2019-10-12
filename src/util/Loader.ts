@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-11 16:30:50
+ * @ version: 2019-10-12 09:38:54
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -41,7 +41,7 @@ export class Loader {
      */
     public static loadConfigs(app: any, loadPath?: string | string[]) {
         const config: any = {};
-        Loader.loadDirectory('./dist/config', app.think_path, function (name: string, exp: any) {
+        Loader.loadDirectory('./config', app.think_path, function (name: string, exp: any) {
             config[name] = exp.default ? exp.default : exp;
         });
         const appConfig: any = {};
@@ -116,7 +116,7 @@ export class Loader {
         //default middleware list
         const defaultList = ['Static', 'Payload'];
         //Mount default middleware
-        Loader.loadDirectory('./dist/middleware', app.think_path);
+        Loader.loadDirectory('./middleware', app.think_path);
         //Mount application middleware
         const middlewares: any = {};
         const appMeddlewares = listModule(MIDDLEWARE_KEY) || [];

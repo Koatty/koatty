@@ -1,6 +1,6 @@
 {
     "name": "koatty",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "A lightweight, scalable for agile development TypeScript web framework, based on koa2.",
     "scripts": {
         "test": "tslint 'src/**/*.ts'",
@@ -41,7 +41,6 @@
         "@types/lodash": "^4.14.141",
         "@types/node": "^12.7.12",
         "@typescript-eslint/parser": "^2.3.2",
-        "debug": "^4.1.1",
         "eslint": "^6.5.1",
         "eslint-config-alloy": "^3.0.0",
         "eslint-plugin-typescript": "^0.14.0",

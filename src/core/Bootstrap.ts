@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-11 16:49:00
+ * @ version: 2019-10-12 09:28:34
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -14,6 +14,8 @@ import { Container } from './Container';
 import { Loader } from '../util/Loader';
 
 export function Bootstrap(): ClassDecorator {
+    console.log('  ________    _       __   __ \n /_  __/ /_  (_)___  / /__/ /______  ____ _\n  / / / __ \\/ / __ \\/ //_/ //_/ __ \\/ __ `/\n / / / / / / / / / / ,< / /,</ /_/ / /_/ /\n/_/ /_/ /_/_/_/ /_/_/|_/_/ |_\\____/\\__,_/');
+    console.log(`                     https://ThinkKoa.org/`);
     logger.custom('think', '', '====================================');
     logger.custom('think', '', 'Bootstrap');
 

@@ -1,18 +1,10 @@
-import { Component, Autowired, Controller, Value, BaseController } from '../../../dist/index';
-import { TestService } from '../service/TestService';
+import { Component, Autowired, Controller, Value, BaseController, Param, Get } from '../../../src/index';
 
-@Controller('/aa_controller')
+@Controller()
 export class AaController extends BaseController {
     public ctx: any;
-    @Value("logs_path")
-    private test: string;
-    // @Autowired()
-    // private testService: TestService;
-    public sayHello() {
-        console.log('test', this.test);
-        // console.log('testService', this.testService);
-        console.log('ctx', this.ctx);
-        console.log('aa.sayHello!');
-        // this.testService.sayHello();
+    @Get('/')
+    public sayHello(@Param() info: any) {
+        return this.json(info);
     }
 }

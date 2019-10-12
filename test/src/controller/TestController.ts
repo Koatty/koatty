@@ -1,4 +1,4 @@
-import { Component, Autowired, Controller, Value, Get, All, Param, Query, BaseController, logger, helper } from '../../../dist/index';
+import { Component, Autowired, Controller, Value, Get, All, Param, Query, BaseController, logger, helper } from '../../../src/index';
 import { TestService } from '../service/TestService';
 
 interface PlainObj {

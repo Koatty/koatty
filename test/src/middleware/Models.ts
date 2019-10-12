@@ -2,9 +2,9 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-11 17:30:33
+ * @ version: 2019-10-12 09:42:16
  */
-import { Middleware } from "../../../dist/index";
+import { Middleware } from "../../../src/index";
 
 const defaultOptions = {};
 
