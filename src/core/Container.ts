@@ -2,10 +2,9 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-27 20:19:13
+ * @ version: 2019-10-12 18:43:07
  */
 import * as helper from "think_lib";
-import * as logger from "think_logger";
 import { COMPONENT_KEY } from './Constants';
 import { IContainer, ObjectDefinitionOptions } from './IContainer';
 import { getModule, getIdentifier, injectAutowired, injectValue, injectRouter, injectParam } from './Injectable';
@@ -34,38 +33,32 @@ export class Container implements IContainer {
             router: "",
             ...options
         };
-        try {
-            let instance = this.handlerMap.get(target);
+        let instance = this.handlerMap.get(target);
 
-            if (!this.handlerMap.has(target)) {
-                if (helper.isClass(target)) {
-                    instance = target.prototype;
-                    // inject options
-                    helper.define(instance, 'options', options);
-                    // inject autowired
-                    injectAutowired(target, instance, this);
-                    // inject value
-                    injectValue(target, instance, this.app);
+        if (!this.handlerMap.has(target)) {
+            if (helper.isClass(target)) {
+                instance = target.prototype;
+                // inject options
+                helper.define(instance, 'options', options);
+                // inject autowired
+                injectAutowired(target, instance, this);
+                // inject value
+                injectValue(target, instance, this.app);
 
-                    //Controller instance
-                    if (Reflect.getPrototypeOf(target) === BaseController) {
-                        // inject router
-                        injectRouter(target, instance);
-                        // inject param
-                        injectParam(target, instance);
-                    }
-                    instance = new target(this.app);
-                    this.handlerMap.set(target, instance);
-                } else {
-                    instance = target;
+                //Controller instance
+                if (Reflect.getPrototypeOf(target) === BaseController) {
+                    // inject router
+                    injectRouter(target, instance);
+                    // inject param
+                    injectParam(target, instance);
                 }
+                instance = new target(this.app);
+                this.handlerMap.set(target, instance);
+            } else {
+                instance = target;
             }
-            return instance;
-
-        } catch (error) {
-            logger.error(error);
         }
-
+        return instance;
     }
 
     /**

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-12 09:28:34
+ * @ version: 2019-10-12 17:37:55
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -36,7 +36,8 @@ export function Bootstrap(): ClassDecorator {
             if (componentMetas.length < 1) {
                 componentMetas = [app.app_path];
             }
-            Loader.loadDirectory(componentMetas);
+            // tslint:disable-next-line: no-null-keyword
+            Loader.loadDirectory(componentMetas, '', null, `!${target.name || '.no'}.ts`);
 
             const configuationMeta = getClassMetadata(INJECT_TAG, CONFIGUATION_SCAN, target);
             let configuationMetas = [];

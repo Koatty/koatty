@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-11 21:08:36
+ * @ version: 2019-10-12 18:28:04
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -20,7 +20,8 @@ export function Component(identifier?: string): ClassDecorator {
 }
 export function Autowired(identifier?: string): PropertyDecorator {
     return (target: any, propertyKey: string) => {
-        identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
+        // identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
+        identifier = identifier || propertyKey;
         savePropertyDataToClass(TAGGED_PROP, identifier, target, propertyKey);
     };
 }
@@ -47,7 +48,8 @@ export function Service(identifier?: string): ClassDecorator {
 }
 export function Value(identifier: string, type?: string): PropertyDecorator {
     return (target: any, propertyKey: string) => {
-        identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
+        // identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
+        identifier = identifier || propertyKey;
         savePropertyDataToClass(TAGGED_ARGS, `${identifier || ''}|${type || 'config'}`, target, propertyKey);
     };
 }

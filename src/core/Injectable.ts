@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-11 16:34:32
+ * @ version: 2019-10-12 18:27:36
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -52,7 +52,8 @@ export class Injectable {
         if (metaData) {
             return metaData.id;
         } else {
-            return helper.camelCase(target.name, { pascalCase: true });
+            // return helper.camelCase(target.name, { pascalCase: true });
+            return target.name;
         }
     }
 
@@ -483,17 +484,21 @@ export function injectAutowired(target: any, instance: any, container: Container
             // logger.custom('think', '', `=> register inject ${getIdentifier(target)} properties value = ${metaData[metaKey]}`);
             const ref = getModule(COMPONENT_KEY, metaData[metaKey]);
             let dep = container.handlerMap.get(ref);
-            if (!container.handlerMap.has(ref)) {
+            if (ref && !container.handlerMap.has(ref)) {
                 //不能依赖注入控制器
                 if (Reflect.getPrototypeOf(ref) === BaseController) {
-                    throw new Error('Controller cannot be injected!');
+                    throw new Error(`Controller ${metaKey || ''} cannot be injected!`);
                 } else {
                     //依赖注入默认为单例模式
                     dep = container.reg(ref, { scope: 'Singleton' });
                 }
             }
+            if (dep) {
+                helper.define(instance, metaKey, dep);
+            } else {
+                throw new Error(`Component ${metaKey || ''} not found.`);
+            }
 
-            helper.define(instance, metaKey, dep);
             // Object.defineProperty(instance, metaKey, {
             //     enumerable: true,
             //     writable: false,
