@@ -2,10 +2,10 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-16 13:42:50
+ * @ version: 2019-10-16 18:09:48
  */
 import * as helper from "think_lib";
-import { COMPONENT_KEY } from './Constants';
+import { COMPONENT_KEY, Scope, CompomentType } from './Constants';
 import { IContainer, ObjectDefinitionOptions } from './IContainer';
 import { getModule, getIdentifier, injectAutowired, injectValue, injectRouter, injectParam } from './Injectable';
 import { BaseController } from '../controller/BaseController';
@@ -31,8 +31,10 @@ export class Container implements IContainer {
             destroyMethod: 'distructor',
             scope: 'Singleton',
             router: "",
+            args: [],
             ...options
         };
+
         let instance = this.handlerMap.get(target);
 
         if (!this.handlerMap.has(target)) {
@@ -52,7 +54,7 @@ export class Container implements IContainer {
                     // inject param
                     injectParam(target, instance);
                 }
-                instance = Reflect.construct(target, [this.app]);
+                instance = Reflect.construct(target, options.args && options.args.length ? options.args : [this.app]);
                 this.handlerMap.set(target, instance);
             } else {
                 instance = target;
@@ -65,8 +67,8 @@ export class Container implements IContainer {
      * 
      * @param identifier 
      */
-    public get<T>(identifier: string, type?: string): T {
-        const ref = getModule(type || COMPONENT_KEY, identifier);
+    public get<T>(identifier: string, type: CompomentType = 'SERVICE'): T {
+        const ref = getModule(type, identifier);
         let target = this.handlerMap.get(ref);
         if (!this.handlerMap.has(ref)) {
             target = this.reg(identifier, ref);
@@ -74,7 +76,7 @@ export class Container implements IContainer {
         if (target._options && target._options.scope === 'Singleton') {
             return target;
         }
-        const instance = Reflect.construct(ref, [this.app]);
+        const instance = Reflect.construct(ref, target._options.args && target._options.args.length ? target._options.args : [this.app]);
         return instance;
     }
 }

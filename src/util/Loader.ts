@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-14 11:35:18
+ * @ version: 2019-10-16 17:44:38
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -10,7 +10,7 @@ import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { Container } from '../core/Container';
 import { listModule } from '../core/Injectable';
-import { COMPONENT_KEY, CONTROLLER_KEY, MIDDLEWARE_KEY } from '../core/Constants';
+import { COMPONENT_KEY, CONTROLLER_KEY, MIDDLEWARE_KEY, SERVICE_KEY } from '../core/Constants';
 import { Base } from '../core/Base';
 import { BaseController } from '../controller/BaseController';
 
@@ -56,7 +56,7 @@ export class Loader {
     }
 
     /**
-     * Load the component
+     * Load components
      *
      * @static
      * @param {*} app
@@ -69,8 +69,26 @@ export class Loader {
         let id: string;
         componentList.map((item: any) => {
             id = (item.id || '').replace(`${COMPONENT_KEY}:`, '');
-            const ctl = container.reg(item.target);
-            if (!(ctl instanceof Base)) {
+            container.reg(item.target);
+        });
+    }
+
+    /**
+     * Load services
+     *
+     * @static
+     * @param {*} app
+     * @param {Container} container
+     * @memberof Loader
+     */
+    public static loadService(app: any, container: Container) {
+        const serviceList = listModule(SERVICE_KEY);
+
+        let id: string;
+        serviceList.map((item: any) => {
+            id = (item.id || '').replace(`${SERVICE_KEY}:`, '');
+            const cls = container.reg(item.target);
+            if (!(cls instanceof Base)) {
                 logger.error(`class ${id} does not inherit the class Base`);
                 process.exit();
             }
@@ -78,7 +96,7 @@ export class Loader {
     }
 
     /**
-     * Load the controller
+     * Load controllers
      *
      * @static
      * @param {*} app
@@ -104,7 +122,7 @@ export class Loader {
     }
 
     /**
-     * Load middleware
+     * Load middlewares
      *
      * @static
      * @param {*} app

@@ -2,10 +2,10 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-16 13:52:25
+ * @ version: 2019-10-16 17:12:40
  */
 import * as helper from "think_lib";
-import { Scope } from '../core/IContainer';
+import { Scope } from '../core/Constants';
 
 export interface BaseControllerOptions {
     isAsync?: boolean;

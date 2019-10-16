@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-09-25 09:40:05
+ * @ version: 2019-10-16 17:29:33
  */
 
 export const COMPONENT_KEY = 'COMPONENT';
@@ -10,9 +10,8 @@ export const COMPONENT_SCAN = 'COMPONENT_SCAN';
 export const CONFIGUATION_SCAN = 'CONFIGUATION_SCAN';
 export const CONTROLLER_KEY = 'CONTROLLER';
 export const MIDDLEWARE_KEY = 'MIDDLEWARE';
+export const SERVICE_KEY = 'SERVICE';
 export const PRIORITY_KEY = 'PRIORITY_KEY';
-export const CONFIG_KEY = 'CONFIG_KEY';
-export const LOGGER_KEY = 'LOGGER_KEY';
 
 export const PARAM = 'PARAM';
 export const NAMED_TAG = 'NAMED_TAG';
@@ -20,6 +19,9 @@ export const ROUTER_KEY = 'ROUTER_KEY';
 export const PATH_METADATA = 'PATH_METADATA';
 export const METHOD_METADATA = 'METHOD_METADATA';
 export const ROUTER_NAME_METADATA = 'ROUTER_NAME_METADATA';
+
+export type Scope = 'Singleton' | 'Request' | 'Prototype';
+export type CompomentType = 'COMPONENT' | 'CONTROLLER' | 'MIDDLEWARE' | 'SERVICE';
 
 
 // compoment scan bindings

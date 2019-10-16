@@ -2,30 +2,34 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-14 15:29:32
+ * @ version: 2019-10-16 18:22:27
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
-import { Context } from 'koa';
-import * as helper from "think_lib";
-import * as logger from "think_logger";
 import { saveModule, saveClassMetadata, savePropertyDataToClass, getIdentifier, getMethodNames } from "./Injectable";
-import { CONTROLLER_KEY, COMPONENT_KEY, TAGGED_PROP, TAGGED_CLS, TAGGED_ARGS, MIDDLEWARE_KEY, NAMED_TAG } from './Constants';
+import { CONTROLLER_KEY, COMPONENT_KEY, TAGGED_PROP, TAGGED_CLS, TAGGED_ARGS, MIDDLEWARE_KEY, NAMED_TAG, SERVICE_KEY, CompomentType } from './Constants';
 
+/**
+ *
+ *
+ * @export
+ * @param {string} [identifier]
+ * @returns {ClassDecorator}
+ */
 export function Component(identifier?: string): ClassDecorator {
     return (target: any) => {
         saveModule(COMPONENT_KEY, target, identifier);
         saveClassMetadata(COMPONENT_KEY, TAGGED_CLS, identifier, target);
     };
 }
-export function Autowired(identifier?: string): PropertyDecorator {
-    return (target: any, propertyKey: string) => {
-        const type = Reflect.getMetadata('design:type', target, propertyKey);
-        identifier = identifier || type.name;
-        savePropertyDataToClass(TAGGED_PROP, identifier, target, propertyKey);
-    };
-}
 
+/**
+ *
+ *
+ * @export
+ * @param {string} [path]
+ * @returns {ClassDecorator}
+ */
 export function Controller(path?: string): ClassDecorator {
     return (target: any) => {
         saveModule(CONTROLLER_KEY, target);
@@ -34,18 +38,60 @@ export function Controller(path?: string): ClassDecorator {
         savePropertyDataToClass(NAMED_TAG, path, target, identifier);
     };
 }
+
+/**
+ *
+ *
+ * @export
+ * @param {string} [identifier]
+ * @returns {ClassDecorator}
+ */
 export function Middleware(identifier?: string): ClassDecorator {
     return (target: any) => {
+        identifier = identifier || getIdentifier(target);
         saveModule(MIDDLEWARE_KEY, target);
         saveClassMetadata(MIDDLEWARE_KEY, TAGGED_CLS, identifier, target);
     };
 }
+
+/**
+ *
+ *
+ * @export
+ * @param {string} [identifier]
+ * @returns {ClassDecorator}
+ */
 export function Service(identifier?: string): ClassDecorator {
     return (target: any) => {
-        saveModule(COMPONENT_KEY, target, identifier);
-        saveClassMetadata(COMPONENT_KEY, TAGGED_CLS, identifier, target);
+        identifier = identifier || getIdentifier(target);
+        saveModule(SERVICE_KEY, target, identifier);
+        saveClassMetadata(SERVICE_KEY, TAGGED_CLS, identifier, target);
     };
 }
+
+/**
+ *
+ *
+ * @export
+ * @param {string} [identifier]
+ * @returns {PropertyDecorator}
+ */
+export function Autowired(identifier?: string, type: CompomentType = 'SERVICE'): PropertyDecorator {
+    return (target: any, propertyKey: string) => {
+        const designType = Reflect.getMetadata('design:type', target, propertyKey);
+        identifier = identifier || designType.name;
+        savePropertyDataToClass(TAGGED_PROP, `${type}:${identifier}`, target, propertyKey);
+    };
+}
+
+/**
+ *
+ *
+ * @export
+ * @param {string} identifier
+ * @param {string} [type]
+ * @returns {PropertyDecorator}
+ */
 export function Value(identifier: string, type?: string): PropertyDecorator {
     return (target: any, propertyKey: string) => {
         // identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });

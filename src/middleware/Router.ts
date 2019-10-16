@@ -2,14 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-16 13:44:18
+ * @ version: 2019-10-16 17:18:01
  */
 
 import KoaRouter from 'koa-router';
 import * as Koa from 'koa';
 import * as helper from "think_lib";
 import * as logger from "think_logger";
-import { CONTROLLER_KEY } from '../core/Constants';
 import { Middleware } from '../core/Decorators';
 
 const defaultOpt = {
@@ -35,7 +34,7 @@ export class Router {
                     ctlRouters.map((it: any) => {
                         // logger.custom('think', '', `=> register request mapping = ${it.requestMethod} : ${it.path} -> ${n}.${it.method}`);
                         app.Router[it.requestMethod](it.path, (ctx: Koa.Context) => {
-                            ctl = app.Container.get(n, CONTROLLER_KEY);
+                            ctl = app.Container.get(n, 'CONTROLLER');
                             // inject ctx 
                             ctl.ctx = ctx;
                             // inject param
@@ -43,7 +42,7 @@ export class Router {
                             if (ctlParams[it.method]) {
                                 args = ctlParams[it.method].sort((a: any, b: any) => a.index - b.index).map((i: any) => i.fn(ctx, i.type));
                             }
-                            ctl[it.method](...args);
+                            return ctl[it.method](...args);
                         });
                     });
                 }

@@ -2,9 +2,9 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-16 13:52:28
+ * @ version: 2019-10-16 17:13:07
  */
-import { Scope } from './IContainer';
+import { Scope } from './Constants';
 
 export interface BaseInterface {
     init(...args: any[]): any;

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-16 13:43:01
+ * @ version: 2019-10-16 17:58:43
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -482,21 +482,26 @@ export function injectAutowired(target: any, instance: any, container: Container
         for (const metaKey in metaData) {
             // logger.custom('think', '', `=> register inject ${getIdentifier(target)} properties key = ${metaKey}`);
             // logger.custom('think', '', `=> register inject ${getIdentifier(target)} properties value = ${metaData[metaKey]}`);
-            const ref = getModule(COMPONENT_KEY, metaData[metaKey]);
-            let dep = container.handlerMap.get(ref);
-            if (ref && !container.handlerMap.has(ref)) {
-                //不能依赖注入控制器
-                if (Reflect.getPrototypeOf(ref) === BaseController) {
-                    throw new Error(`Controller ${metaKey || ''} cannot be injected!`);
-                } else {
-                    //依赖注入默认为单例模式
-                    dep = container.reg(ref, { scope: 'Singleton' });
+            let dep;
+            const refArr = (metaData[metaKey]).split(':');
+            if (refArr[0] && refArr[1]) {
+                const ref = getModule(refArr[0], refArr[1]);
+                dep = container.handlerMap.get(ref);
+                if (ref && !container.handlerMap.has(ref)) {
+                    //不能依赖注入控制器
+                    if (Reflect.getPrototypeOf(ref) === BaseController) {
+                        throw new Error(`Controller ${metaKey || ''} cannot be injected!`);
+                    } else {
+                        //依赖注入默认为单例模式
+                        dep = container.reg(ref, { scope: 'Singleton' });
+                    }
                 }
             }
+
             if (dep) {
                 helper.define(instance, metaKey, dep);
             } else {
-                throw new Error(`Component ${metaKey || ''} not found.`);
+                throw new Error(`Component ${metaData[metaKey] || ''} not found. It's autowired in class ${target.name}`);
             }
 
             // Object.defineProperty(instance, metaKey, {
