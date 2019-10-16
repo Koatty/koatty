@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-12 12:35:11
+ * @ version: 2019-10-16 14:02:26
  */
 
 import * as path from "path";
@@ -87,7 +87,7 @@ class Application extends Koa {
     /**
      * initialize env
      */
-    public initialize() {
+    private initialize() {
         //development env is default
         this.app_debug = (this.options && this.options.app_debug) || this.app_debug || true;
         process.env.NODE_ENV = 'development';

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-12 17:37:55
+ * @ version: 2019-10-16 14:07:46
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -21,7 +21,7 @@ export function Bootstrap(): ClassDecorator {
 
     return (target: any) => {
         try {
-            const app = new target();
+            const app = Reflect.construct(target, []);
 
             logger.custom('think', '', 'ComponentScan ...');
             let componentMetas = [];
@@ -65,6 +65,7 @@ export function Bootstrap(): ClassDecorator {
 
             // start app
             logger.custom('think', '', 'Listening ...');
+            logger.custom('think', '', '====================================');
             app.listen();
         } catch (error) {
             logger.error(error);

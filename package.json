@@ -1,6 +1,6 @@
 {
     "name": "koatty",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "description": "A lightweight, scalable for agile development TypeScript web framework, based on koa2.",
     "scripts": {
         "test": "tslint 'src/**/*.ts'",
@@ -51,9 +51,9 @@
         "typescript": "^3.6.3"
     },
     "dependencies": {
-        "globby": "^10.0.1",
-        "koa": "^2.x.x",
-        "koa-router": "^7.4.0",
+        "globby": "^10.0.x",
+        "koa": "^2.10.x",
+        "koa-router": "^7.4.x",
         "think_lib": "^2.x.x",
         "think_logger": "^2.x.x",
         "think_payload": "^2.x.x",

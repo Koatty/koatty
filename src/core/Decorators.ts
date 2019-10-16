@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-12 18:28:04
+ * @ version: 2019-10-14 15:29:32
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -20,8 +20,8 @@ export function Component(identifier?: string): ClassDecorator {
 }
 export function Autowired(identifier?: string): PropertyDecorator {
     return (target: any, propertyKey: string) => {
-        // identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
-        identifier = identifier || propertyKey;
+        const type = Reflect.getMetadata('design:type', target, propertyKey);
+        identifier = identifier || type.name;
         savePropertyDataToClass(TAGGED_PROP, identifier, target, propertyKey);
     };
 }

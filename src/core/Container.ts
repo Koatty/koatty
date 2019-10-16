@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-12 18:43:07
+ * @ version: 2019-10-16 13:42:50
  */
 import * as helper from "think_lib";
 import { COMPONENT_KEY } from './Constants';
@@ -39,7 +39,7 @@ export class Container implements IContainer {
             if (helper.isClass(target)) {
                 instance = target.prototype;
                 // inject options
-                helper.define(instance, 'options', options);
+                helper.define(instance, '_options', options);
                 // inject autowired
                 injectAutowired(target, instance, this);
                 // inject value
@@ -52,7 +52,7 @@ export class Container implements IContainer {
                     // inject param
                     injectParam(target, instance);
                 }
-                instance = new target(this.app);
+                instance = Reflect.construct(target, [this.app]);
                 this.handlerMap.set(target, instance);
             } else {
                 instance = target;
@@ -71,10 +71,10 @@ export class Container implements IContainer {
         if (!this.handlerMap.has(ref)) {
             target = this.reg(identifier, ref);
         }
-        if (target.options && target.options.scope === 'Singleton') {
+        if (target._options && target._options.scope === 'Singleton') {
             return target;
         }
-        const instance = new ref(this.app);
+        const instance = Reflect.construct(ref, [this.app]);
         return instance;
     }
 }

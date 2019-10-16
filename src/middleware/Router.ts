@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-11 09:34:59
+ * @ version: 2019-10-16 13:44:18
  */
 
 import KoaRouter from 'koa-router';
@@ -23,15 +23,15 @@ export class Router {
         options = helper.extend(defaultOpt, options);
         app.once('appReady', () => {
             try {
-                const kRouter: any = new KoaRouter(options);
+                const kRouter: any = Reflect.construct(KoaRouter, options);
                 helper.define(app, 'Router', kRouter);
                 const controllers = app._caches.controllers || {};
                 // tslint:disable-next-line: one-variable-per-declaration
                 let ctl: any, ctlRouters: [], ctlParams: any;
                 // tslint:disable-next-line: forin
                 for (const n in controllers) {
-                    ctlRouters = controllers[n].prototype.options.router || [];
-                    ctlParams = controllers[n].prototype.options.params || {};
+                    ctlRouters = controllers[n].prototype._options.router || [];
+                    ctlParams = controllers[n].prototype._options.params || {};
                     ctlRouters.map((it: any) => {
                         // logger.custom('think', '', `=> register request mapping = ${it.requestMethod} : ${it.path} -> ${n}.${it.method}`);
                         app.Router[it.requestMethod](it.path, (ctx: Koa.Context) => {

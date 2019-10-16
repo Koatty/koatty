@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-12 10:46:42
+ * @ version: 2019-10-14 11:35:18
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -121,7 +121,10 @@ export class Loader {
         const middlewares: any = {};
         const appMeddlewares = listModule(MIDDLEWARE_KEY) || [];
 
-        appMeddlewares.map((item) => {
+        appMeddlewares.map((item: {
+            id: string;
+            target: any;
+        }) => {
             item.id = (item.id || '').replace(`${MIDDLEWARE_KEY}:`, '');
             if (item.id && helper.isClass(item.target)) {
                 container.reg(item.target, { scope: 'Request' });

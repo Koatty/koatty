@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-12 18:27:36
+ * @ version: 2019-10-16 13:43:01
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -206,7 +206,7 @@ export class Injectable {
 }
 
 
-const manager = new Injectable();
+const manager = Reflect.construct(Injectable, []);
 
 /**
  * save data to class
@@ -560,12 +560,12 @@ export function injectRouter(target: any, instance: any) {
             // logger.custom('think', '', `=> register inject method Router key = ${metaKey}`);
             // logger.custom('think', '', `=> register inject method Router value = ${JSON.stringify(rmetaData[metaKey])}`);
 
-            if (instance.options) {
+            if (instance._options) {
                 // tslint:disable-next-line: no-unused-expression
-                !instance.options.router && (instance.options.router = []);
+                !instance._options.router && (instance._options.router = []);
                 for (const val of rmetaData[metaKey]) {
                     val.path = `${path}${val.path}`;
-                    instance.options.router.push(val);
+                    instance._options.router.push(val);
                 }
             }
         }
@@ -593,8 +593,8 @@ export function injectParam(target: any, instance: any) {
         });
     });
     // tslint:disable-next-line: no-unused-expression
-    !instance.options.params && (instance.options.params = {});
-    helper.define(instance.options, 'params', argsMetaObj);
+    !instance._options.params && (instance._options.params = {});
+    helper.define(instance._options, 'params', argsMetaObj);
     // Object.defineProperty(instance, 'params', {
     //     enumerable: true,
     //     writable: false,

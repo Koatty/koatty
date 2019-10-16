@@ -1,5 +1,7 @@
-import { Component, Autowired, Controller, Value, Get, All, Param, Query, BaseController, logger, helper } from '../../../src/index';
+import { Component, Autowired, Controller, Value, Get, All, Param, Query, BaseController, logger, helper, BaseControllerOptions } from '../../../src/index';
 import { TestService } from '../service/TestService';
+import * as Koa from 'koa';
+import { App } from '../app';
 
 interface PlainObj {
     aa: string;
@@ -10,8 +12,9 @@ interface PlainObj {
 
 @Controller('/test')
 export class TestController extends BaseController {
-    public ctx: any;
-    public options: any;
+    public ctx: Koa.BaseContext;
+    public app: App;
+    protected _options: BaseControllerOptions;
     @Value("test.aa")
     private test: string;
     @Autowired()
@@ -24,7 +27,7 @@ export class TestController extends BaseController {
         console.log('test', this.test);
         console.log('testService', this.testService instanceof TestService);
         console.log('ctx', this.ctx.url);
-        console.log('options', this.options.scope);
+        console.log('options', this._options.scope);
         console.log('test.sayHello!');
         logger.info('TestController.sayHello');
         // this.testService.sayHello();

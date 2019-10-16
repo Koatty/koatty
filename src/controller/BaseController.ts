@@ -2,11 +2,16 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-11 19:20:58
+ * @ version: 2019-10-16 13:52:25
  */
 import * as helper from "think_lib";
+import { Scope } from '../core/IContainer';
 
-interface BaseControllerOptions {
+export interface BaseControllerOptions {
+    isAsync?: boolean;
+    initMethod?: string;
+    destroyMethod?: string;
+    scope?: Scope;
     router: [];
     params: {};
 }
@@ -14,7 +19,7 @@ interface BaseControllerOptions {
 class Base {
     public ctx: any;
     public app: any;
-    public options: BaseControllerOptions;
+    protected _options: BaseControllerOptions;
 
     /**
      * Creates an instance of BaseController.
