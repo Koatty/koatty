@@ -4,7 +4,6 @@ import { TestService3 } from './TestService3';
 
 @Service()
 export class TestService extends TestService2 {
-    app: any;
     // @Autowired()
     // private testService2: TestService2;
     // @Autowired()
@@ -12,7 +11,6 @@ export class TestService extends TestService2 {
 
     public sayHello() {
         console.log(this.app.app_debug);
-
         console.log('TestService.sayHello!');
     }
 }

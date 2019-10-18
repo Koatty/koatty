@@ -1,6 +1,5 @@
 import { Component, Autowired, Controller, Value, Get, All, BaseController, logger, helper, BaseControllerOptions, RequestMapping, RequestBody, PathVariable, GetMaping } from '../../../src/index';
 import { TestService } from '../service/TestService';
-import * as Koa from 'koa';
 import { App } from '../app';
 
 interface PlainObj {
@@ -12,16 +11,14 @@ interface PlainObj {
 
 @Controller()
 export class TestController extends BaseController {
-    public ctx: Koa.BaseContext;
-    public app: App;
-    protected _options: BaseControllerOptions;
+    app: App;
     @Value("test.aa")
     private test: string;
     @Autowired()
     private testService: TestService;
     num = 0;
 
-    @GetMaping('/sayHello')
+    @GetMaping('/test')
     public sayHello(@PathVariable('aa') aa: number, @PathVariable('bb') bb: string) {
         console.log('info', typeof aa, typeof bb);
         console.log('test', this.test);
@@ -29,6 +26,7 @@ export class TestController extends BaseController {
         console.log('ctx', this.ctx.url);
         console.log('options', this._options.scope);
         console.log('test.sayHello!');
+
         logger.info('TestController.sayHello');
         // this.testService.sayHello();
         this.testCount();
@@ -36,7 +34,7 @@ export class TestController extends BaseController {
         return this.json({ 'TestController': 'test.sayHello!' });
     }
 
-    @GetMaping('/test')
+    @GetMaping('/test1')
     private testCount() {
         this.num++;
         logger.info(helper.toString(this.num));

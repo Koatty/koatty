@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-16 14:07:46
+ * @ version: 2019-10-18 12:19:36
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -54,14 +54,18 @@ export function Bootstrap(): ClassDecorator {
             const container = new Container(app);
             helper.define(app, 'Container', container);
 
-            logger.custom('think', '', 'loadComponents ...');
-            Loader.loadCmponents(app, container);
 
             logger.custom('think', '', 'loadControllers ...');
             Loader.loadControllers(app, container);
 
             logger.custom('think', '', 'loadMiddlewares ...');
             Loader.loadMiddlewares(app, container);
+
+            logger.custom('think', '', 'loadServices ...');
+            Loader.loadServices(app, container);
+
+            logger.custom('think', '', 'loadComponents ...');
+            Loader.loadCmponents(app, container);
 
             // start app
             logger.custom('think', '', 'Listening ...');

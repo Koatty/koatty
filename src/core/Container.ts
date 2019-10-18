@@ -2,10 +2,10 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-16 18:09:48
+ * @ version: 2019-10-18 12:44:31
  */
 import * as helper from "think_lib";
-import { COMPONENT_KEY, Scope, CompomentType } from './Constants';
+import { CompomentType } from './Constants';
 import { IContainer, ObjectDefinitionOptions } from './IContainer';
 import { getModule, getIdentifier, injectAutowired, injectValue, injectRouter, injectParam } from './Injectable';
 import { BaseController } from '../controller/BaseController';

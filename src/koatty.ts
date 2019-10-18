@@ -2,15 +2,28 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-16 14:02:26
+ * @ version: 2019-10-18 14:29:54
  */
 
 import * as path from "path";
+import * as Koa from "koa";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { PREVENT_NEXT_PROCESS } from './core/Constants';
 const pkg = require('../package.json');
-const Koa = require("koa");
+
+// tslint:disable-next-line: no-empty-interface
+export interface BaseApp extends Koa {
+    readonly root_path: string;
+    readonly app_path: string;
+    readonly think_path: string;
+    readonly app_debug: boolean;
+    readonly options: InitOptions;
+    readonly config: Function;
+    readonly prevent: Function;
+    readonly isPrevent: Function;
+    readonly useExp: Function;
+}
 
 /**
  * check node version
@@ -63,7 +76,7 @@ interface InitOptions {
     app_debug?: boolean;
 }
 
-class Application extends Koa {
+export class Koatty extends Koa.default implements BaseApp {
     public root_path: string;
     public app_path: string;
     public think_path: string;
@@ -129,11 +142,11 @@ class Application extends Koa {
     /**
      * Use the given koa middleware `fn`.
      * support generator func
-     * @param {function} fn 
+     * @param {any} fn
      * @returns {any}
      * @memberof ThinkKoa
      */
-    public use(fn: Function): any {
+    public use(fn: any): any {
         if (helper.isGenerator(fn)) {
             fn = helper.generatorToPromise(fn);
         }
@@ -282,27 +295,26 @@ class Application extends Koa {
     }
 }
 
-
-const propertys = ['constructor', 'init'];
-export const Koatty = new Proxy(Application, {
-    set(target, key, value, receiver) {
-        if (Reflect.get(target, key, receiver) === undefined) {
-            return Reflect.set(target, key, value, receiver);
-        } else if (key === 'init') {
-            return Reflect.set(target, key, value, receiver);
-        } else {
-            throw Error('Cannot redefine getter-only property');
-        }
-    },
-    deleteProperty(target, key) {
-        throw Error('Cannot delete getter-only property');
-    },
-    construct(target, args, newTarget) {
-        Reflect.ownKeys(target.prototype).map((n) => {
-            if (newTarget.prototype.hasOwnProperty(n) && !propertys.includes(helper.toString(n))) {
-                throw Error(`Cannot override the final method '${helper.toString(n)}'`);
-            }
-        });
-        return Reflect.construct(target, args, newTarget);
-    }
-});
+// const propertys = ['constructor', 'init'];
+// export const Koatty = new Proxy(Application, {
+//     set(target, key, value, receiver) {
+//         if (Reflect.get(target, key, receiver) === undefined) {
+//             return Reflect.set(target, key, value, receiver);
+//         } else if (key === 'init') {
+//             return Reflect.set(target, key, value, receiver);
+//         } else {
+//             throw Error('Cannot redefine getter-only property');
+//         }
+//     },
+//     deleteProperty(target, key) {
+//         throw Error('Cannot delete getter-only property');
+//     },
+//     construct(target, args, newTarget) {
+//         Reflect.ownKeys(target.prototype).map((n) => {
+//             if (newTarget.prototype.hasOwnProperty(n) && !propertys.includes(helper.toString(n))) {
+//                 throw Error(`Cannot override the final method '${helper.toString(n)}'`);
+//             }
+//         });
+//         return Reflect.construct(target, args, newTarget);
+//     }
+// });

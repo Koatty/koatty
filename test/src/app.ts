@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-12 09:42:08
+ * @ version: 2019-10-18 14:32:27
  */
 import { Bootstrap, ComponentScan, Autowired, Koatty, ConfiguationScan, logger, helper } from '../../src/index';
 // import * as helper from "think_lib";

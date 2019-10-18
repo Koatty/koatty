@@ -2,13 +2,11 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-16 17:13:07
+ * @ version: 2019-10-18 14:22:13
  */
+// tslint:disable-next-line: no-implicit-dependencies
 import { Scope } from './Constants';
-
-export interface BaseInterface {
-    init(...args: any[]): any;
-}
+import { BaseApp } from '../Koatty';
 
 export interface BaseOptions {
     isAsync?: boolean;
@@ -17,11 +15,11 @@ export interface BaseOptions {
     scope?: Scope;
 }
 
-export class Base implements BaseInterface {
-    public app: any;
+export class Base {
+    public app: BaseApp;
     protected _options: BaseOptions;
 
-    protected constructor(app: any) {
+    protected constructor(app: BaseApp) {
         try {
             this.app = app;
             this.init();
@@ -33,7 +31,7 @@ export class Base implements BaseInterface {
     /**
      * init
      */
-    public init() {
+    protected init() {
 
     }
 }

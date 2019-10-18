@@ -2,12 +2,11 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-16 17:44:38
+ * @ version: 2019-10-18 12:24:21
  */
 import * as globby from 'globby';
 import * as path from 'path';
 import * as helper from "think_lib";
-import * as logger from "think_logger";
 import { Container } from '../core/Container';
 import { listModule } from '../core/Injectable';
 import { COMPONENT_KEY, CONTROLLER_KEY, MIDDLEWARE_KEY, SERVICE_KEY } from '../core/Constants';
@@ -81,7 +80,7 @@ export class Loader {
      * @param {Container} container
      * @memberof Loader
      */
-    public static loadService(app: any, container: Container) {
+    public static loadServices(app: any, container: Container) {
         const serviceList = listModule(SERVICE_KEY);
 
         let id: string;
@@ -89,8 +88,7 @@ export class Loader {
             id = (item.id || '').replace(`${SERVICE_KEY}:`, '');
             const cls = container.reg(item.target);
             if (!(cls instanceof Base)) {
-                logger.error(`class ${id} does not inherit the class Base`);
-                process.exit();
+                throw new Error(`class ${id} does not inherit the class Base`);
             }
         });
     }
@@ -112,8 +110,7 @@ export class Loader {
             if (item.id && helper.isClass(item.target)) {
                 const ctl = container.reg(item.target, { scope: 'Request' });
                 if (!(ctl instanceof BaseController)) {
-                    logger.error(`class ${item.id} does not inherit the class BaseController`);
-                    process.exit();
+                    throw new Error(`class ${item.id} does not inherit the class BaseController`);
                 }
                 controllers[item.id] = item.target;
             }
@@ -172,11 +169,11 @@ export class Loader {
         appMList.forEach((key) => {
             handle = container.get(key, MIDDLEWARE_KEY);
             if (!handle) {
-                logger.error(`middleware ${key} load error.`);
+                throw new Error(`middleware ${key} load error.`);
                 return;
             }
             if (!helper.isFunction(handle.run)) {
-                logger.error(`middleware ${key} must be implements method 'run'.`);
+                throw new Error(`middleware ${key} must be implements method 'run'.`);
                 return;
             }
             if (configs.middleware.config[key] === false) {
@@ -239,7 +236,7 @@ export class Loader {
                 //
                 const tkeys = Object.keys(exports);
                 if (!exports[fileName] && (tkeys[0] && helper.isClass(exports[tkeys[0]]) && tkeys[0] !== fileName)) {
-                    logger.error(`The class name is not consistent with the file('${file}') name. Or you used 'export default'`);
+                    throw new Error(`The class name is not consistent with the file('${file}') name. Or you used 'export default'`);
                     // continue;
                 }
 
