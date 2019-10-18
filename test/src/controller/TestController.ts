@@ -1,4 +1,4 @@
-import { Component, Autowired, Controller, Value, Get, All, Param, Query, BaseController, logger, helper, BaseControllerOptions } from '../../../src/index';
+import { Component, Autowired, Controller, Value, Get, All, BaseController, logger, helper, BaseControllerOptions, RequestMapping, RequestBody, PathVariable, GetMaping } from '../../../src/index';
 import { TestService } from '../service/TestService';
 import * as Koa from 'koa';
 import { App } from '../app';
@@ -10,7 +10,7 @@ interface PlainObj {
     };
 }
 
-@Controller('/test')
+@Controller()
 export class TestController extends BaseController {
     public ctx: Koa.BaseContext;
     public app: App;
@@ -21,8 +21,8 @@ export class TestController extends BaseController {
     private testService: TestService;
     num = 0;
 
-    @Get('/sayHello')
-    public sayHello(@Query('aa') aa: number, @Query('bb') bb: string) {
+    @GetMaping('/sayHello')
+    public sayHello(@PathVariable('aa') aa: number, @PathVariable('bb') bb: string) {
         console.log('info', typeof aa, typeof bb);
         console.log('test', this.test);
         console.log('testService', this.testService instanceof TestService);
@@ -36,15 +36,15 @@ export class TestController extends BaseController {
         return this.json({ 'TestController': 'test.sayHello!' });
     }
 
-    @Get('/test')
+    @GetMaping('/test')
     private testCount() {
         this.num++;
         logger.info(helper.toString(this.num));
         return this.json({ 'TestController': 'test.testCount!' });
     }
 
-    @All('/helloWorld')
-    public helloWorld(@Param() info: PlainObj) {
+    @RequestMapping()
+    public helloWorld(@RequestBody() info: PlainObj) {
         this.testCount();
         return this.json(info);
     }

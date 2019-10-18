@@ -2,11 +2,11 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-10 16:33:28
+ * @ version: 2019-10-18 10:51:14
  */
 import * as helper from "think_lib";
 import { attachClassMetadata } from "./Injectable";
-import { PATH_METADATA, METHOD_METADATA, ROUTER_NAME_METADATA, ROUTER_KEY, PARAM } from "./Constants";
+import { ROUTER_KEY, PARAM } from "./Constants";
 
 export interface RouterOption {
     path?: string;
@@ -26,24 +26,14 @@ export const RequestMethod = {
     HEAD: "head"
 };
 
-const defaultMetadata = {
-    [PATH_METADATA]: '/',
-    [METHOD_METADATA]: RequestMethod.GET,
-    [ROUTER_NAME_METADATA]: ''
-};
-
-export interface RequestMappingMetadata {
-    [PATH_METADATA]?: string;
-    [METHOD_METADATA]: string;
-    [ROUTER_NAME_METADATA]?: string;
-}
-
 export const RequestMapping = (
-    metadata: RequestMappingMetadata = defaultMetadata
+    path = "/",
+    requestMethod = RequestMethod.GET,
+    routerOptions: {
+        routerName?: string;
+    } = {}
 ): MethodDecorator => {
-    const path = metadata[PATH_METADATA] || '';
-    const requestMethod = metadata[METHOD_METADATA] || RequestMethod.GET;
-    const routerName = metadata[ROUTER_NAME_METADATA] || '';
+    const routerName = routerOptions.routerName || '';
 
     return (target, key: string, descriptor: PropertyDescriptor) => {
         // tslint:disable-next-line: no-object-literal-type-assertion
@@ -64,47 +54,50 @@ const createMappingDecorator = (method: string) => (
         routerName?: string;
     } = {}
 ): MethodDecorator => {
-    return RequestMapping({
-        [PATH_METADATA]: path,
-        [METHOD_METADATA]: method,
-        [ROUTER_NAME_METADATA]: routerOptions.routerName
-    });
+    return RequestMapping(path, method, routerOptions);
 };
 
 /**
  * Routes HTTP POST requests to the specified path.
  */
 export const Post = createMappingDecorator(RequestMethod.POST);
+export const PostMaping = createMappingDecorator(RequestMethod.POST);
 
 /**
  * Routes HTTP GET requests to the specified path.
  */
 export const Get = createMappingDecorator(RequestMethod.GET);
+export const GetMaping = createMappingDecorator(RequestMethod.GET);
 
 /**
  * Routes HTTP DELETE requests to the specified path.
  */
 export const Del = createMappingDecorator(RequestMethod.DELETE);
+export const DelMaping = createMappingDecorator(RequestMethod.DELETE);
 
 /**
  * Routes HTTP PUT requests to the specified path.
  */
 export const Put = createMappingDecorator(RequestMethod.PUT);
+export const PutMaping = createMappingDecorator(RequestMethod.PUT);
 
 /**
  * Routes HTTP PATCH requests to the specified path.
  */
 export const Patch = createMappingDecorator(RequestMethod.PATCH);
+export const PatchMaping = createMappingDecorator(RequestMethod.PATCH);
 
 /**
  * Routes HTTP OPTIONS requests to the specified path.
  */
 export const Options = createMappingDecorator(RequestMethod.OPTIONS);
+export const OptionsMaping = createMappingDecorator(RequestMethod.OPTIONS);
 
 /**
  * Routes HTTP HEAD requests to the specified path.
  */
 export const Head = createMappingDecorator(RequestMethod.HEAD);
+export const HeadMaping = createMappingDecorator(RequestMethod.HEAD);
 
 /**
  * Routes all HTTP requests to the specified path.
@@ -155,9 +148,9 @@ const convertParamsType = (param: any, type: string) => {
         case 'tuple':
             return helper.toArray(param);
         case 'string':
-        default:
             return helper.toString(param);
-
+        default: //any
+            return param;
     }
 };
 
@@ -167,51 +160,22 @@ const convertParamsType = (param: any, type: string) => {
  * @export
  * @returns
  */
-export function Body() {
-    return Inject((ctx: any) => convertParamsType(ctx.request.body, 'object'));
+export function RequestBody() {
+    return Inject((ctx: any) => ctx.request.body);
 }
 
 /**
- * get post body/querystring params
+ * get post querystring params
  *
  * @export
  * @param {string} [arg]
  * @returns
  */
-export function Param(arg?: string) {
-    if (arg) {
-        return Inject((ctx: any, type: string) => convertParamsType(ctx.param(), type));
-    } else {
-        return Inject((ctx: any, type: string) => convertParamsType(ctx.param(), type));
-    }
-}
-
-/**
- * get querystring params
- *
- * @export
- * @param {string} [arg]
- * @returns
- */
-export function Query(arg?: string) {
+export function PathVariable(arg?: string) {
     if (arg) {
         return Inject((ctx: any, type: string) => convertParamsType(ctx.querys(arg), type));
     } else {
-        return Inject((ctx: any, type: string) => convertParamsType(ctx.querys(), type));
+        return Inject((ctx: any, type: string) => ctx.querys());
     }
 }
 
-/**
- * get upload file object
- *
- * @export
- * @param {string} [arg]
- * @returns
- */
-export function File(arg?: string) {
-    if (arg) {
-        return Inject((ctx: any, type: string) => convertParamsType(ctx.file(arg), type));
-    } else {
-        return Inject((ctx: any, type: string) => convertParamsType(ctx.file(), type));
-    }
-}
