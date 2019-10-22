@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-18 14:29:54
+ * @ version: 2019-10-21 11:24:12
  */
 
 import * as path from "path";
@@ -19,10 +19,10 @@ export interface BaseApp extends Koa {
     readonly think_path: string;
     readonly app_debug: boolean;
     readonly options: InitOptions;
-    readonly config: Function;
-    readonly prevent: Function;
-    readonly isPrevent: Function;
-    readonly useExp: Function;
+    readonly config: (name: string, type?: string) => any;
+    readonly prevent: () => Promise<never>;
+    readonly isPrevent: (err: any) => boolean;
+    readonly useExp: (fn: Function) => any;
 }
 
 /**
@@ -257,6 +257,14 @@ export class Koatty extends Koa.default implements BaseApp {
      * @memberof ThinkKoa
      */
     private captureError(): void {
+        const configs = this._caches.configs || {};
+        //日志
+        if (configs.config) {
+            process.env.LOGS = configs.config.logs || false;
+            process.env.LOGS_PATH = configs.config.logs_path || this.root_path + '/logs';
+            process.env.LOGS_LEVEL = configs.config.logs_level || [];
+        }
+
         //koa error
         this.removeAllListeners('error');
         this.on('error', (err: any) => {
