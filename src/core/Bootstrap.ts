@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-18 12:19:36
+ * @ version: 2019-10-22 18:30:16
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';

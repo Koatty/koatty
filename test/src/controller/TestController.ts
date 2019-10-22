@@ -1,6 +1,6 @@
-import { Component, Autowired, Controller, Value, Get, All, BaseController, logger, helper, BaseControllerOptions, RequestMapping, RequestBody, PathVariable, GetMaping } from '../../../src/index';
+import { Component, Autowired, Controller, Value, BaseController, logger, helper, BaseControllerOptions, RequestMapping, RequestBody, PathVariable, GetMaping } from '../../../src/index';
 import { TestService } from '../service/TestService';
-import { App } from '../app';
+import { App } from '../App';
 
 interface PlainObj {
     aa: string;
@@ -18,14 +18,14 @@ export class TestController extends BaseController {
     private testService: TestService;
     num = 0;
 
-    @GetMaping('/test')
+    @GetMaping('/')
     public sayHello(@PathVariable('aa') aa: number, @PathVariable('bb') bb: string) {
         console.log('info', typeof aa, typeof bb);
         console.log('test', this.test);
         console.log('testService', this.testService instanceof TestService);
         console.log('ctx', this.ctx.url);
         console.log('options', this._options.scope);
-        console.log('test.sayHello!');
+        console.log('test.sayHello!', this.isPost());
 
         logger.info('TestController.sayHello');
         // this.testService.sayHello();
@@ -39,11 +39,5 @@ export class TestController extends BaseController {
         this.num++;
         logger.info(helper.toString(this.num));
         return this.json({ 'TestController': 'test.testCount!' });
-    }
-
-    @RequestMapping()
-    public helloWorld(@RequestBody() info: PlainObj) {
-        this.testCount();
-        return this.json(info);
     }
 }

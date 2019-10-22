@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-18 12:24:21
+ * @ version: 2019-10-18 21:23:28
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -226,12 +226,10 @@ export class Loader {
                     name = name.slice(name.lastIndexOf('/') + 1);
                 }
                 // let namePattern = '.ts';
-                // // tslint:disable-next-line: no-magic-numbers
                 // if (name.slice(-3) === '.js') {
                 //     namePattern = '.js';
                 // }
                 // const fileName = name.slice(0, name.lastIndexOf(namePattern));
-                // tslint:disable-next-line: no-magic-numbers
                 const fileName = name.slice(0, -3);
                 //
                 const tkeys = Object.keys(exports);

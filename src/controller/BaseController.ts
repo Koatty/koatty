@@ -2,13 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-18 16:07:15
+ * @ version: 2019-10-22 17:46:33
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "Koa";
 import * as helper from "think_lib";
 import { Scope } from '../core/Constants';
-import { Base } from '../core/Base';
 import { BaseApp } from '../Koatty';
 
 export interface BaseControllerOptions {
@@ -20,35 +19,57 @@ export interface BaseControllerOptions {
     params: {};
 }
 
-export interface BaseControllerInterface extends Base {
+export interface BaseControllerInterface {
     app: BaseApp;
     ctx: Koa.Context;
-    readonly assign: Function;
-    readonly config: Function;
-    readonly deny: Function;
-    readonly expires: Function;
-    readonly fail: Function;
-    readonly file: Function;
-    readonly get: Function;
-    readonly header: Function;
-    readonly isJsonp: Function;
-    readonly isMethod: Function;
-    readonly json: Function;
-    readonly jsonp: Function;
-    readonly ok: Function;
-    readonly param: Function;
-    readonly post: Function;
-    readonly redirect: Function;
-    readonly referer: Function;
-    readonly render: Function;
-    readonly types: Function;
-    readonly write: Function;
+    readonly __empty: () => Promise<any>;
+    readonly assign: (name?: string, value?: any) => Promise<any>;
+    readonly config: (name: string, type?: string) => any;
+    readonly deny: (code?: number) => Promise<any>;
+    readonly expires: (timeout: number) => void;
+    readonly fail: (errmsg?: Error | string, data?: any, code?: number) => Promise<any>;
+    readonly file: (name?: string, value?: any) => any;
+    readonly get: (name?: string, value?: any) => any;
+    readonly header: (name?: string, value?: any) => any;
+    readonly isAjax: () => boolean;
+    readonly isGet: () => boolean;
+    readonly isJsonp: () => boolean;
+    readonly isMethod: (method: string) => boolean;
+    readonly isPjax: () => boolean;
+    readonly isPost: () => boolean;
+    readonly json: (data: any) => Promise<any>;
+    readonly jsonp: (data: any) => Promise<any>;
+    readonly ok: (errmsg?: Error | string, data?: any, code?: number) => Promise<any>;
+    readonly param: (name?: string) => any;
+    readonly post: (name?: string, value?: any) => any;
+    readonly redirect: (urls: string, alt?: string) => Promise<any>;
+    readonly referer: () => string;
+    readonly render: (templateFile?: string, charset?: string, contentType?: string) => Promise<any>;
+    readonly types: (contentType?: string, encoding?: string | boolean) => string;
+    readonly write: (data: any, contentType?: string, encoding?: string) => Promise<any>;
 }
 
-export class BaseController extends Base implements BaseControllerInterface {
+export class BaseController implements BaseControllerInterface {
     public app: BaseApp;
     public ctx: Koa.Context;
     protected _options: BaseControllerOptions;
+
+    protected constructor(app: BaseApp, ctx: Koa.Context) {
+        try {
+            this.app = app;
+            this.ctx = ctx;
+            this.init();
+        } catch (e) {
+            throw Error(e.stack);
+        }
+    }
+
+    /**
+     * init
+     */
+    public init() {
+
+    }
 
     /**
      * Call if the action is not found
@@ -57,7 +78,7 @@ export class BaseController extends Base implements BaseControllerInterface {
      * @returns {*}
      * @memberof BaseController
      */
-    public get __empty(): any {
+    public __empty(): any {
         return this.ctx.throw('404');
     }
 
@@ -68,7 +89,7 @@ export class BaseController extends Base implements BaseControllerInterface {
      * @returns {boolean}
      * @memberof BaseController
      */
-    public get isGet(): boolean {
+    public isGet(): boolean {
         return this.ctx.method === 'GET';
     }
 
@@ -79,7 +100,7 @@ export class BaseController extends Base implements BaseControllerInterface {
      * @returns {boolean}
      * @memberof BaseController
      */
-    public get isPost(): boolean {
+    public isPost(): boolean {
         return this.ctx.method === 'POST';
     }
 
@@ -102,7 +123,7 @@ export class BaseController extends Base implements BaseControllerInterface {
      * @returns {boolean}
      * @memberof BaseController
      */
-    public get isAjax(): boolean {
+    public isAjax(): boolean {
         return this.ctx.headers['x-requested-with'] === 'XMLHttpRequest';
     }
 
@@ -113,7 +134,7 @@ export class BaseController extends Base implements BaseControllerInterface {
      * @returns {boolean}
      * @memberof BaseController
      */
-    public get isPjax(): boolean {
+    public isPjax(): boolean {
         return this.ctx.headers['x-pjax'] || this.ctx.headers['X-Pjax'] || false;
     }
 
@@ -186,10 +207,10 @@ export class BaseController extends Base implements BaseControllerInterface {
      * @public
      * @param {string} name
      * @param {string} [type='config']
-     * @returns
+     * @returns {*}
      * @memberof BaseController
      */
-    public config(name: string, type = 'config') {
+    public config(name: string, type = 'config'): any {
         return this.app.config(name, type);
     }
 
@@ -218,18 +239,17 @@ export class BaseController extends Base implements BaseControllerInterface {
      * @public
      * @param {string} contentType
      * @param {(string | boolean)} [encoding]
-     * @returns {void}
+     * @returns {string}
      * @memberof BaseController
      */
-    public types(contentType?: string, encoding?: string | boolean): void {
+    public types(contentType?: string, encoding?: string | boolean): string {
         if (!contentType) {
             return (this.ctx.headers['content-type'] || '').split(';')[0].trim();
         }
         if (encoding !== false && contentType.toLowerCase().indexOf('charset=') === -1) {
             contentType += '; charset=' + (encoding || this.app.config('encoding'));
         }
-        this.ctx.type = contentType;
-        return;
+        return this.ctx.type = contentType;
     }
 
     /**
@@ -255,20 +275,18 @@ export class BaseController extends Base implements BaseControllerInterface {
         timeout = helper.toNumber(timeout) * 1000;
         const date = new Date(Date.now() + timeout);
         this.ctx.set('Cache-Control', `max-age=${timeout}`);
-        this.ctx.set('Expires', date.toUTCString());
-        return;
+        return this.ctx.set('Expires', date.toUTCString());
     }
 
     /**
      * Url redirect
      *
-     * @public
      * @param {string} urls
      * @param {string} [alt]
-     * @returns {*}
+     * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public redirect(urls: string, alt?: string): any {
+    public redirect(urls: string, alt?: string): Promise<any> {
         this.ctx.redirect(urls, alt);
         return this.app.prevent();
     }
@@ -276,12 +294,11 @@ export class BaseController extends Base implements BaseControllerInterface {
     /**
      * Block access
      *
-     * @public
      * @param {number} [code=403]
-     * @returns {*}
+     * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public deny(code = 403): any {
+    public deny(code = 403): Promise<any> {
         this.ctx.throw(code);
         return this.app.prevent();
     }
@@ -289,14 +306,13 @@ export class BaseController extends Base implements BaseControllerInterface {
     /**
      * Set response Body content
      *
-     * @public
      * @param {*} data
      * @param {string} [contentType]
      * @param {string} [encoding]
-     * @returns {*}
+     * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public write(data: any, contentType?: string, encoding?: string): any {
+    public write(data: any, contentType?: string, encoding?: string): Promise<any> {
         contentType = contentType || 'text/plain';
         encoding = encoding || this.app.config('encoding');
         this.types(contentType, encoding);
@@ -307,24 +323,22 @@ export class BaseController extends Base implements BaseControllerInterface {
     /**
      * Respond to json formatted content
      *
-     * @public
      * @param {*} data
-     * @returns {*}
+     * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public json(data: any): any {
+    public json(data: any): Promise<any> {
         return this.write(data, 'application/json');
     }
 
     /**
      * Respond to jsonp formatted content
      *
-     * @public
      * @param {*} data
-     * @returns {*}
+     * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public jsonp(data: any): any {
+    public jsonp(data: any): Promise<any> {
         let callback = this.ctx.querys('callback') || 'callback';
         //过滤callback值里的非法字符
         callback = callback.replace(/[^\w\.]/g, '');
@@ -337,14 +351,13 @@ export class BaseController extends Base implements BaseControllerInterface {
     /**
      * Response to normalize json format content for success
      *
-     * @public
-     * @param {string} errmsg
-     * @param {*} data
+     * @param {string} [errmsg]
+     * @param {*} [data]
      * @param {number} [code=200]
-     * @returns {*}
+     * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public ok(errmsg?: string, data?: any, code = 200): any {
+    public ok(errmsg?: string, data?: any, code = 200): Promise<any> {
         const obj: any = {
             'status': 1,
             'code': code,
@@ -361,14 +374,13 @@ export class BaseController extends Base implements BaseControllerInterface {
     /**
      * Response to normalize json format content for fail
      *
-     * @public
-     * @param {*} errmsg
-     * @param {*} data
+     * @param {*} [errmsg]
+     * @param {*} [data]
      * @param {number} [code=500]
-     * @returns {*}
+     * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public fail(errmsg?: any, data?: any, code = 500): any {
+    public fail(errmsg?: any, data?: any, code = 500): Promise<any> {
         const obj: any = {
             'status': 0,
             'code': code,
@@ -385,13 +397,12 @@ export class BaseController extends Base implements BaseControllerInterface {
     /**
      * Template assignment, dependent on middleware `think_view`
      *
-     * @public
-     * @param {string} name
-     * @param {*} value
-     * @returns {*}
+     * @param {string} [name]
+     * @param {*} [value]
+     * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public assign(name?: string, value?: any): any {
+    public assign(name?: string, value?: any): Promise<any> {
         if (!this.ctx.assign) {
             return this.ctx.throw('500', 'The think_view middleware is not installed or configured incorrectly.');
         }
@@ -401,14 +412,13 @@ export class BaseController extends Base implements BaseControllerInterface {
     /**
      * Positioning, rendering, output templates, dependent on middleware `think_view`
      *
-     * @public
-     * @param {string} templateFile
+     * @param {string} [templateFile]
      * @param {string} [charset]
      * @param {string} [contentType]
-     * @returns {*}
+     * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public render(templateFile?: string, charset?: string, contentType?: string): any {
+    public render(templateFile?: string, charset?: string, contentType?: string): Promise<any> {
         if (!this.ctx.render) {
             return this.ctx.throw('500', 'The think_view middleware is not installed or configured incorrectly.');
         }

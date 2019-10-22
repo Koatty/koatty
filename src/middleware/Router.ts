@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-16 17:18:01
+ * @ version: 2019-10-22 18:31:22
  */
 
 import KoaRouter from 'koa-router';
@@ -34,11 +34,16 @@ export class Router {
                     ctlRouters.map((it: any) => {
                         // logger.custom('think', '', `=> register request mapping = ${it.requestMethod} : ${it.path} -> ${n}.${it.method}`);
                         app.Router[it.requestMethod](it.path, (ctx: Koa.Context) => {
-                            ctl = app.Container.get(n, 'CONTROLLER');
-                            // inject ctx 
-                            ctl.ctx = ctx;
+                            ctl = app.Container.get(n, 'CONTROLLER', [app, ctx]);
+                            if (!ctx || !ctl.init) {
+                                ctx.throw(404, `Controller ${n} not found.`);
+                            }
+                            if (!ctl[it.method]) {
+                                ctx.throw(404, `Action ${it.method} not found.`);
+                            }
                             // inject param
                             let args = [];
+                            ctlParams = ctl._options.params || {};
                             if (ctlParams[it.method]) {
                                 args = ctlParams[it.method].sort((a: any, b: any) => a.index - b.index).map((i: any) => i.fn(ctx, i.type));
                             }

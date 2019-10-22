@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-09 16:08:10
+ * @ version: 2019-10-18 19:21:32
  */
 
 const payload = require('think_payload');
