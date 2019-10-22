@@ -36,19 +36,19 @@
     },
     "homepage": "https://github.com/thinkkoa/koatty",
     "devDependencies": {
-        "@types/koa": "^2.0.50",
+        "@types/koa": "^2.0.51",
         "@types/koa-router": "^7.0.42",
-        "@types/lodash": "^4.14.141",
-        "@types/node": "^12.7.12",
-        "@typescript-eslint/parser": "^2.3.2",
+        "@types/lodash": "^4.14.144",
+        "@types/node": "^12.11.2",
+        "@typescript-eslint/parser": "^2.5.0",
+        "@typescript-eslint/eslint-plugin": "^2.5.0",
         "eslint": "^6.5.1",
         "eslint-config-alloy": "^3.0.0",
-        "eslint-plugin-typescript": "^0.14.0",
         "reflect-metadata": "^0.1.13",
         "ts-node": "^8.4.1",
         "tslint": "^5.20.0",
         "tslint-config-alloy": "^0.2.1",
-        "typescript": "^3.6.3"
+        "typescript": "^3.6.4"
     },
     "dependencies": {
         "globby": "^10.0.x",
