@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-22 18:37:27
+ * @ version: 2019-10-22 18:38:03
  */
 import { Bootstrap, ComponentScan, Autowired, Koatty, ConfiguationScan, logger, helper } from '../../src/index';
 // import * as helper from "think_lib";
@@ -12,6 +12,7 @@ import * as path from "path";
 // @ComponentScan('./test')
 // @ConfiguationScan('./test/config')
 export class App extends Koatty {
+    root_path: string;
 
     public init() {
         this.root_path = path.dirname(__dirname);
