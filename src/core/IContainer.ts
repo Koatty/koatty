@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-16 17:16:50
+ * @ version: 2019-10-22 16:44:08
  */
 import { Scope, CompomentType } from './Constants';
 
@@ -22,6 +22,8 @@ export interface ObjectDefinitionOptions {
     initMethod?: string;
     destroyMethod?: string;
     scope?: Scope;
+    router: string;
+    args: any[];
 }
 
 export interface TagClsMetadata {

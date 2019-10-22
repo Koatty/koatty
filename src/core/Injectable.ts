@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-16 17:58:43
+ * @ version: 2019-10-22 17:40:58
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -481,35 +481,23 @@ export function injectAutowired(target: any, instance: any, container: Container
         // tslint:disable-next-line: forin
         for (const metaKey in metaData) {
             // logger.custom('think', '', `=> register inject ${getIdentifier(target)} properties key = ${metaKey}`);
-            // logger.custom('think', '', `=> register inject ${getIdentifier(target)} properties value = ${metaData[metaKey]}`);
+            // logger.custom('think', '', `=> register inject ${getIdentifier(target)} properties value = ${JSON.stringify(metaData[metaKey])}`);
             let dep;
-            const refArr = (metaData[metaKey]).split(':');
-            if (refArr[0] && refArr[1]) {
-                const ref = getModule(refArr[0], refArr[1]);
-                dep = container.handlerMap.get(ref);
-                if (ref && !container.handlerMap.has(ref)) {
-                    //不能依赖注入控制器
-                    if (Reflect.getPrototypeOf(ref) === BaseController) {
-                        throw new Error(`Controller ${metaKey || ''} cannot be injected!`);
-                    } else {
-                        //依赖注入默认为单例模式
-                        dep = container.reg(ref, { scope: 'Singleton' });
-                    }
+            const { type, identifier, args } = metaData[metaKey] || { type: '', identifier: '', args: [] };
+            if (type && identifier) {
+                const ref = getModule(type, identifier);
+                //不能依赖注入控制器
+                if (Reflect.getPrototypeOf(ref) === BaseController) {
+                    throw new Error(`Controller ${metaKey || ''} cannot be injected!`);
+                }
+
+                dep = container.get(identifier, type, args);
+                if (dep) {
+                    helper.define(instance, metaKey, dep);
+                } else {
+                    throw new Error(`Component ${metaData[metaKey] || ''} not found. It's autowired in class ${target.name}`);
                 }
             }
-
-            if (dep) {
-                helper.define(instance, metaKey, dep);
-            } else {
-                throw new Error(`Component ${metaData[metaKey] || ''} not found. It's autowired in class ${target.name}`);
-            }
-
-            // Object.defineProperty(instance, metaKey, {
-            //     enumerable: true,
-            //     writable: false,
-            //     configurable: false,
-            //     value: dep
-            // });
         }
     }
 }
@@ -532,12 +520,6 @@ export function injectValue(target: any, instance: any, app: any) {
             const [propKey, type] = propKeys;
             const prop = app.config(propKey, type);
             helper.define(instance, metaKey, prop);
-            // Object.defineProperty(instance, metaKey, {
-            //     enumerable: true,
-            //     writable: false,
-            //     configurable: false,
-            //     value: prop
-            // });
         }
     }
 }
@@ -600,10 +582,4 @@ export function injectParam(target: any, instance: any) {
     // tslint:disable-next-line: no-unused-expression
     !instance._options.params && (instance._options.params = {});
     helper.define(instance._options, 'params', argsMetaObj);
-    // Object.defineProperty(instance, 'params', {
-    //     enumerable: true,
-    //     writable: false,
-    //     configurable: false,
-    //     value: argsMetaObj
-    // });
 }

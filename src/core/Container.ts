@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-18 12:44:31
+ * @ version: 2019-10-22 18:29:48
  */
 import * as helper from "think_lib";
 import { CompomentType } from './Constants';
@@ -19,7 +19,7 @@ export class Container implements IContainer {
     }
     public reg<T>(target: T, options?: ObjectDefinitionOptions): T;
     public reg<T>(identifier: string, target: T, options?: ObjectDefinitionOptions): T;
-    public reg(identifier: any, target?: any, options?: any) {
+    public reg(identifier: any, target?: any, options?: ObjectDefinitionOptions) {
         if (helper.isClass(identifier) || helper.isFunction(identifier)) {
             options = target;
             target = (identifier as any);
@@ -67,16 +67,35 @@ export class Container implements IContainer {
      * 
      * @param identifier 
      */
-    public get<T>(identifier: string, type: CompomentType = 'SERVICE'): T {
+    public get<T>(identifier: string, type: CompomentType = 'SERVICE', args?: any[]): T {
         const ref = getModule(type, identifier);
-        let target = this.handlerMap.get(ref);
-        if (!this.handlerMap.has(ref)) {
+        // 
+        let target;
+        if (args && args.length > 0) {
+            // target = this.reg(identifier, ref, {
+            //     isAsync: false,
+            //     initMethod: 'constructor',
+            //     destroyMethod: 'distructor',
+            //     scope: 'Request',
+            //     router: "",
+            //     args
+            // });
+            return Reflect.construct(ref, args);
+        }
+
+        target = this.handlerMap.get(ref);
+        if (!target) {
             target = this.reg(identifier, ref);
         }
         if (target._options && target._options.scope === 'Singleton') {
             return target;
         }
-        const instance = Reflect.construct(ref, target._options.args && target._options.args.length ? target._options.args : [this.app]);
+        // if (type === 'COMPONENT') {
+        //     args = [];
+        // } else {
+        args = target._options && target._options.args && target._options.args.length ? target._options.args : [this.app];
+        // }
+        const instance = Reflect.construct(ref, args);
         return instance;
     }
 }

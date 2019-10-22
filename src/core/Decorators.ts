@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-17 14:22:24
+ * @ version: 2019-10-22 18:16:01
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -10,24 +10,25 @@ import { saveModule, saveClassMetadata, savePropertyDataToClass, getIdentifier, 
 import { CONTROLLER_KEY, COMPONENT_KEY, TAGGED_PROP, TAGGED_CLS, TAGGED_ARGS, MIDDLEWARE_KEY, NAMED_TAG, SERVICE_KEY, CompomentType } from './Constants';
 
 /**
- *
+ * Indicates that an decorated class is a "component".
  *
  * @export
- * @param {string} [identifier]
+ * @param {string} [identifier] component name
  * @returns {ClassDecorator}
  */
 export function Component(identifier?: string): ClassDecorator {
     return (target: any) => {
+        identifier = identifier || getIdentifier(target);
         saveModule(COMPONENT_KEY, target, identifier);
         saveClassMetadata(COMPONENT_KEY, TAGGED_CLS, identifier, target);
     };
 }
 
 /**
- *
+ * Indicates that an decorated class is a "controller".
  *
  * @export
- * @param {string} [path]
+ * @param {string} [path] controller router path
  * @returns {ClassDecorator}
  */
 export function Controller(path?: string): ClassDecorator {
@@ -40,10 +41,10 @@ export function Controller(path?: string): ClassDecorator {
 }
 
 /**
- *
+ * Indicates that an decorated class is a "middleware".
  *
  * @export
- * @param {string} [identifier]
+ * @param {string} [identifier] middleware name
  * @returns {ClassDecorator}
  */
 export function Middleware(identifier?: string): ClassDecorator {
@@ -55,10 +56,10 @@ export function Middleware(identifier?: string): ClassDecorator {
 }
 
 /**
- *
+ * Indicates that an decorated class is a "middleware".
  *
  * @export
- * @param {string} [identifier]
+ * @param {string} [identifier] middleware name
  * @returns {ClassDecorator}
  */
 export function Service(identifier?: string): ClassDecorator {
@@ -70,14 +71,15 @@ export function Service(identifier?: string): ClassDecorator {
 }
 
 /**
- *
+ * Marks a constructor method as to be autowired by Koatty's dependency injection facilities.
  *
  * @export
- * @param {string} [identifier]
- * @param {CompomentType} [type]
+ * @param {string} [identifier] injection name
+ * @param {(CompomentType | any[])} [type] compomentType
+ * @param {any[]} [constructArgs] constructor args
  * @returns {PropertyDecorator}
  */
-export function Autowired(identifier?: string, type?: CompomentType): PropertyDecorator {
+export function Autowired(identifier?: string, type?: CompomentType, constructArgs?: any[]): PropertyDecorator {
     return (target: any, propertyKey: string) => {
         const designType = Reflect.getMetadata('design:type', target, propertyKey);
         identifier = identifier || designType.name;
@@ -90,16 +92,20 @@ export function Autowired(identifier?: string, type?: CompomentType): PropertyDe
                 type = 'SERVICE';
             }
         }
-        savePropertyDataToClass(TAGGED_PROP, `${type}:${identifier}`, target, propertyKey);
+        savePropertyDataToClass(TAGGED_PROP, {
+            type,
+            identifier,
+            args: constructArgs || []
+        }, target, propertyKey);
     };
 }
 
 /**
- *
+ * Indicates that an decorated configuations as a property.
  *
  * @export
- * @param {string} identifier
- * @param {string} [type]
+ * @param {string} identifier configuations key
+ * @param {string} [type] configuations type
  * @returns {PropertyDecorator}
  */
 export function Value(identifier: string, type?: string): PropertyDecorator {
