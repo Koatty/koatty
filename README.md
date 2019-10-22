@@ -95,9 +95,6 @@ export class IndexController extends BaseController {
 if you use vscode , edit the `.vscode/launch.json` , like this: 
 ```
 {
-    // 使用 IntelliSense 了解相关属性。 
-    // 悬停以查看现有属性的描述。
-    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
@@ -105,7 +102,7 @@ if you use vscode , edit the `.vscode/launch.json` , like this:
             "request": "launch",
             "name": "TS Program",
             "args": [
-                "${workspaceRoot}/src/App.ts" // 入口文件
+                "${workspaceRoot}/src/App.ts" 
             ],
             "runtimeArgs": [
                 "--nolazy",
