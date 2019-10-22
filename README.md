@@ -105,7 +105,7 @@ if you use vscode , edit the `.vscode/launch.json` , like this:
             "request": "launch",
             "name": "TS Program",
             "args": [
-                "${workspaceRoot}/src/app.ts" // 入口文件
+                "${workspaceRoot}/src/App.ts" // 入口文件
             ],
             "runtimeArgs": [
                 "--nolazy",
