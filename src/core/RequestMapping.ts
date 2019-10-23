@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-22 18:15:16
+ * @ version: 2019-10-22 19:37:11
  */
 import * as helper from "think_lib";
 import { attachClassMetadata } from "./Injectable";
@@ -245,10 +245,10 @@ export function RequestBody() {
 }
 
 /**
- * get post querystring params
+ * get querystring params
  *
  * @export
- * @param {string} [arg]
+ * @param {string} [arg] params name
  * @returns
  */
 export function PathVariable(arg?: string) {
