@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-23 20:59:23
+ * @ version: 2019-10-21 11:24:12
  */
 
 import * as path from "path";

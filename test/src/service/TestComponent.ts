@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-22 13:26:52
+ * @ version: 2019-10-23 21:11:29
  */
 import { Autowired, Component, Service, Base } from '../../../src/index';
 

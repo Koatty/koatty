@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-22 19:37:11
+ * @ version: 2019-10-22 18:15:16
  */
 import * as helper from "think_lib";
 import { attachClassMetadata } from "./Injectable";
