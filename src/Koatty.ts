@@ -12,8 +12,12 @@ import * as logger from "think_logger";
 import { PREVENT_NEXT_PROCESS } from './core/Constants';
 const pkg = require('../package.json');
 
-// tslint:disable-next-line: no-empty-interface
-export interface BaseApp extends Koa {
+/**
+ *
+ * @interface BaseApp
+ * @extends {Koa}
+ */
+interface BaseApp extends Koa {
     readonly root_path: string;
     readonly app_path: string;
     readonly think_path: string;
@@ -70,12 +74,23 @@ const parseExp = function (fn: Function) {
     };
 };
 
+/**
+ *
+ * @interface InitOptions
+ */
 interface InitOptions {
     root_path?: string;
     app_path?: string;
     app_debug?: boolean;
 }
 
+/**
+ * Application
+ * @export
+ * @class Koatty
+ * @extends {Koa}
+ * @implements {BaseApp}
+ */
 export class Koatty extends Koa.default implements BaseApp {
     public root_path: string;
     public app_path: string;
