@@ -4,22 +4,8 @@
  * @ license: MIT
  * @ version: 2019-10-30 18:16:57
  */
-// tslint:disable-next-line: no-implicit-dependencies
-import { Scope } from './Constants';
 import { Koatty } from '../Koatty';
-
-
-/**
- * base options
- *
- * @interface BaseOptions
- */
-interface BaseOptions {
-    isAsync?: boolean;
-    initMethod?: string;
-    destroyMethod?: string;
-    scope?: Scope;
-}
+import { ObjectDefinitionOptions } from '../core/IContainer';
 
 /**
  * base class
@@ -29,7 +15,7 @@ interface BaseOptions {
  */
 export class Base {
     public app: Koatty;
-    protected _options: BaseOptions;
+    protected _options: ObjectDefinitionOptions;
 
     /**
      * instance of Base.
