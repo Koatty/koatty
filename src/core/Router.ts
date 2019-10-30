@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-30 14:32:20
+ * @ version: 2019-10-30 16:58:24
  */
 import KoaRouter from 'koa-router';
 import * as Koa from 'koa';
@@ -41,6 +41,11 @@ export class Router {
         };
     }
 
+    /**
+     *
+     *
+     * @memberof Router
+     */
     loadRouter() {
         try {
             const kRouter: any = Reflect.construct(KoaRouter, this.options);
@@ -69,7 +74,6 @@ export class Router {
                         }
                         // inject param
                         let args = [];
-                        ctlParams = ctl._options.params || {};
                         if (ctlParams[it.method]) {
                             args = ctlParams[it.method].sort((a: any, b: any) => a.index - b.index).map((i: any) => i.fn(ctx, i.type));
                         }

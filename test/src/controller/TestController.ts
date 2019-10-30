@@ -1,4 +1,4 @@
-import { Component, Autowired, Controller, Value, BaseController, logger, helper, BaseControllerOptions, RequestMapping, RequestBody, PathVariable, GetMaping } from '../../../src/index';
+import { Component, Autowired, Controller, Value, BaseController, logger, helper, BaseControllerOptions, RequestMapping, RequestBody, PathVariable, GetMaping, PostMaping } from '../../../src/index';
 import { TestService } from '../service/TestService';
 import { App } from '../App';
 import { AppBaseController } from "./AppBaseController";
@@ -31,6 +31,7 @@ export class TestController extends AppBaseController {
     @GetMaping('/')
     public sayHello(@PathVariable('aa') aa: number, @PathVariable('bb') bb: string) {
         console.log('info', typeof aa, typeof bb);
+        console.log('info', aa, bb);
         console.log('test', this.test);
         console.log('testService', this.testService instanceof TestService);
         console.log('ctx', this.ctx.url);
@@ -41,6 +42,11 @@ export class TestController extends AppBaseController {
         this.testCount();
         this.testService.sayHello();
         return this.json({ 'TestController': 'test.sayHello!' });
+    }
+
+    @PostMaping("/test")
+    testHello(@RequestBody() body: any) {
+        this.json(body);
     }
 
     @GetMaping('/test')
