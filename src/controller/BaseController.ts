@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-29 20:12:30
+ * @ version: 2019-10-30 18:16:42
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "Koa";
@@ -22,6 +22,7 @@ export interface BaseControllerOptions {
 export interface BaseControllerInterface {
     app: BaseApp;
     ctx: Koa.Context;
+    init: () => void;
     readonly __empty: () => Promise<any>;
     readonly assign: (name?: string, value?: any) => Promise<any>;
     readonly config: (name: string, type?: string) => any;

@@ -2,11 +2,11 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-22 18:16:01
+ * @ version: 2019-10-30 18:04:23
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
-import { saveModule, saveClassMetadata, savePropertyDataToClass, getIdentifier, getMethodNames } from "./Injectable";
+import { saveModule, saveClassMetadata, savePropertyDataToClass, getIdentifier } from "./Injectable";
 import { CONTROLLER_KEY, COMPONENT_KEY, TAGGED_PROP, TAGGED_CLS, TAGGED_ARGS, MIDDLEWARE_KEY, NAMED_TAG, SERVICE_KEY, CompomentType } from './Constants';
 
 /**

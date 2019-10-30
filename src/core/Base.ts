@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-18 14:22:13
+ * @ version: 2019-10-30 18:16:57
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import { Scope } from './Constants';
@@ -31,7 +31,7 @@ export class Base {
     /**
      * init
      */
-    protected init() {
+    protected init(): void {
 
     }
 }

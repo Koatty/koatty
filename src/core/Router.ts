@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-30 17:25:44
+ * @ version: 2019-10-30 18:20:23
  */
 import KoaRouter from 'koa-router';
 import * as Koa from 'koa';
@@ -67,6 +67,9 @@ export class Router {
                     app.Router[it.requestMethod](it.path, (ctx: Koa.Context) => {
                         // ctl = app.Container.get(n, 'CONTROLLER', [app, ctx]);
                         ctl = app.Container.get(n, 'CONTROLLER');
+                        ctl.app = app;
+                        ctl.ctx = ctx;
+
                         if (!ctx || !ctl.init) {
                             ctx.throw(404, `Controller ${n} not found.`);
                         }

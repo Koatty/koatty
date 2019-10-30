@@ -2,12 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-30 17:27:04
+ * @ version: 2019-10-30 18:06:40
  */
 import * as helper from "think_lib";
 import { CompomentType } from './Constants';
 import { IContainer, ObjectDefinitionOptions } from './IContainer';
-import { getModule, getIdentifier, injectAutowired, injectValue } from './Injectable';
+import { getModule, getIdentifier, injectAutowired, injectValue, saveModule } from './Injectable';
 
 export class Container implements IContainer {
     public app: any;
@@ -37,6 +37,11 @@ export class Container implements IContainer {
         let instance = this.handlerMap.get(target);
         if (!this.handlerMap.has(target) || options.scope !== 'Singleton') {
             if (helper.isClass(target)) {
+                const ref = getModule(options.type, identifier);
+                if (!ref) {
+                    saveModule(options.type, target, identifier);
+                }
+
                 instance = target.prototype;
                 // inject options
                 if (!instance._options) {
