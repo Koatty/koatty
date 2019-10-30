@@ -7,20 +7,15 @@
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "Koa";
 import * as helper from "think_lib";
-import { Scope } from '../core/Constants';
-import { BaseApp } from '../Koatty';
+import { Koatty } from '../Koatty';
+import { ObjectDefinitionOptions } from '../core/IContainer';
 
-export interface BaseControllerOptions {
-    isAsync?: boolean;
-    initMethod?: string;
-    destroyMethod?: string;
-    scope?: Scope;
-    router: [];
-    params: {};
-}
-
-export interface BaseControllerInterface {
-    app: BaseApp;
+/**
+ *
+ * @interface BaseControllerInterface
+ */
+interface BaseControllerInterface {
+    app: Koatty;
     ctx: Koa.Context;
     init: () => void;
     readonly __empty: () => Promise<any>;
@@ -50,12 +45,25 @@ export interface BaseControllerInterface {
     readonly write: (data: any, contentType?: string, encoding?: string) => Promise<any>;
 }
 
+/**
+ * base controller
+ *
+ * @export
+ * @class BaseController
+ * @implements {BaseControllerInterface}
+ */
 export class BaseController implements BaseControllerInterface {
-    public app: BaseApp;
+    public app: Koatty;
     public ctx: Koa.Context;
-    protected _options: BaseControllerOptions;
+    protected _options: ObjectDefinitionOptions;
 
-    protected constructor(app: BaseApp, ctx: Koa.Context) {
+    /**
+     * instance of BaseController.
+     * @param {Koatty} app
+     * @param {Koa.Context} ctx
+     * @memberof BaseController
+     */
+    protected constructor(app: Koatty, ctx: Koa.Context) {
         try {
             this.app = app;
             this.ctx = ctx;
