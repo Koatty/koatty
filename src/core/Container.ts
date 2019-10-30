@@ -2,12 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-30 14:34:26
+ * @ version: 2019-10-30 17:27:04
  */
 import * as helper from "think_lib";
 import { CompomentType } from './Constants';
 import { IContainer, ObjectDefinitionOptions } from './IContainer';
-import { getModule, getIdentifier, injectAutowired, injectValue, injectRouter, injectParam } from './Injectable';
+import { getModule, getIdentifier, injectAutowired, injectValue } from './Injectable';
 
 export class Container implements IContainer {
     public app: any;
@@ -84,7 +84,7 @@ export class Container implements IContainer {
                 target = this.reg(ref, { scope: 'Request', type, args });
             }
             // tslint:disable-next-line: no-unused-expression
-            target.app && (target.app = this.app);
+            // target.app && (target.app = this.app);
         }
 
         return target;

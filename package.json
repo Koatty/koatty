@@ -1,6 +1,6 @@
 {
     "name": "koatty",
-    "version": "1.3.12",
+    "version": "1.3.13",
     "description": "Koa2 + Typescript = koatty. Use Typescript's decorator implement auto injection just like SpringBoot.",
     "scripts": {
         "test": "tslint 'src/**/*.ts'",
@@ -40,25 +40,26 @@
         "@types/koa-router": "^7.x.x",
         "@types/lodash": "^4.x.x",
         "@types/node": "^12.x.x",
-        "@typescript-eslint/parser": "^2.5.0",
-        "@typescript-eslint/eslint-plugin": "^2.5.0",
-        "eslint": "^6.5.1",
+        "@typescript-eslint/eslint-plugin": "^2.6.0",
+        "@typescript-eslint/parser": "^2.6.0",
+        "eslint": "^6.6.0",
         "eslint-config-alloy": "^3.0.0",
         "reflect-metadata": "^0.1.13",
         "ts-node": "^8.4.1",
+        "tslib": "^1.10.0",
         "tslint": "^5.20.0",
         "tslint-config-alloy": "^0.2.1",
         "typescript": "^3.6.4"
     },
     "dependencies": {
-        "globby": "^10.0.x",
-        "koa": "^2.10.x",
-        "koa-router": "^7.4.x",
-        "think_lib": "^2.x.x",
-        "think_logger": "^2.x.x",
-        "think_payload": "^2.x.x",
-        "think_static": "^2.x.x",
-        "think_trace": "^2.x.x"
+        "globby": "^10.0.1",
+        "koa": "^2.11.0",
+        "koa-router": "^7.4.0",
+        "think_lib": "^2.2.4",
+        "think_logger": "^2.1.0",
+        "think_payload": "^2.1.1",
+        "think_static": "^2.1.2",
+        "think_trace": "^2.1.2"
     },
     "maintainers": [
         {
