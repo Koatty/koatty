@@ -6,20 +6,37 @@
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import { Scope } from './Constants';
-import { BaseApp } from '../Koatty';
+import { Koatty } from '../Koatty';
 
-export interface BaseOptions {
+
+/**
+ * base options
+ *
+ * @interface BaseOptions
+ */
+interface BaseOptions {
     isAsync?: boolean;
     initMethod?: string;
     destroyMethod?: string;
     scope?: Scope;
 }
 
+/**
+ * base class
+ *
+ * @export
+ * @class Base
+ */
 export class Base {
-    public app: BaseApp;
+    public app: Koatty;
     protected _options: BaseOptions;
 
-    protected constructor(app: BaseApp) {
+    /**
+     * instance of Base.
+     * @param {Koatty} app
+     * @memberof Base
+     */
+    protected constructor(app: Koatty) {
         try {
             this.app = app;
             this.init();
