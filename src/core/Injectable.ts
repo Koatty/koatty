@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-22 17:40:58
+ * @ version: 2019-10-30 14:25:22
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -10,7 +10,6 @@ import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { TAGGED_CLS, TAGGED_PROP, COMPONENT_KEY, TAGGED_ARGS, NAMED_TAG, ROUTER_KEY, PARAM } from "./Constants";
 import { Container } from './Container';
-import { BaseController } from '../controller/BaseController';
 
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
@@ -485,15 +484,18 @@ export function injectAutowired(target: any, instance: any, container: Container
             let dep;
             const { type, identifier, args } = metaData[metaKey] || { type: '', identifier: '', args: [] };
             if (type && identifier) {
-                const ref = getModule(type, identifier);
                 //不能依赖注入控制器
-                if (Reflect.getPrototypeOf(ref) === BaseController) {
+                if (type === 'CONTROLLER') {
                     throw new Error(`Controller ${metaKey || ''} cannot be injected!`);
                 }
-
                 dep = container.get(identifier, type, args);
                 if (dep) {
-                    helper.define(instance, metaKey, dep);
+                    Reflect.defineProperty(instance, metaKey, {
+                        enumerable: false,
+                        configurable: false,
+                        writable: true,
+                        value: dep
+                    });
                 } else {
                     throw new Error(`Component ${metaData[metaKey] || ''} not found. It's autowired in class ${target.name}`);
                 }
@@ -519,7 +521,12 @@ export function injectValue(target: any, instance: any, app: any) {
             const propKeys = metaData[metaKey].split('|');
             const [propKey, type] = propKeys;
             const prop = app.config(propKey, type);
-            helper.define(instance, metaKey, prop);
+            Reflect.defineProperty(instance, metaKey, {
+                enumerable: false,
+                configurable: false,
+                writable: true,
+                value: prop
+            });
         }
     }
 }
@@ -529,9 +536,9 @@ export function injectValue(target: any, instance: any, app: any) {
  *
  * @export
  * @param {*} target
- * @param {*} instance
+ * @param {*} [instance]
  */
-export function injectRouter(target: any, instance: any) {
+export function injectRouter(target: any, instance?: any) {
     // Controller router path
     const metaDatas = recursiveGetMetadata(NAMED_TAG, target);
     let path = '';
@@ -541,22 +548,25 @@ export function injectRouter(target: any, instance: any) {
     }
 
     const routerMetaDatas = recursiveGetMetadata(ROUTER_KEY, target);
+    const router = [];
     for (const rmetaData of routerMetaDatas) {
         // tslint:disable-next-line: forin
         for (const metaKey in rmetaData) {
             // logger.custom('think', '', `=> register inject method Router key = ${metaKey}`);
             // logger.custom('think', '', `=> register inject method Router value = ${JSON.stringify(rmetaData[metaKey])}`);
 
-            if (instance._options) {
-                // tslint:disable-next-line: no-unused-expression
-                !instance._options.router && (instance._options.router = []);
-                for (const val of rmetaData[metaKey]) {
-                    val.path = `${path}${val.path}`;
-                    instance._options.router.push(val);
-                }
+            // if (instance._options) {
+            // tslint:disable-next-line: no-unused-expression
+            // !instance._options.router && (instance._options.router = []);
+            for (const val of rmetaData[metaKey]) {
+                val.path = `${path}${val.path}`;
+                // instance._options.router.push(val);
+                router.push(val);
             }
+            // }
         }
     }
+    return router;
 }
 
 /**
@@ -564,9 +574,9 @@ export function injectRouter(target: any, instance: any) {
  *
  * @export
  * @param {*} target
- * @param {*} instance
+ * @param {*} [instance]
  */
-export function injectParam(target: any, instance: any) {
+export function injectParam(target: any, instance?: any) {
     const metaDatas = recursiveGetMetadata(PARAM, target);
     const methods = Reflect.ownKeys(target.prototype);
     const argsMetaObj: any = {};
@@ -580,6 +590,12 @@ export function injectParam(target: any, instance: any) {
         });
     });
     // tslint:disable-next-line: no-unused-expression
-    !instance._options.params && (instance._options.params = {});
-    helper.define(instance._options, 'params', argsMetaObj);
+    // !instance._options.params && (instance._options.params = {});
+    // Reflect.defineProperty(instance._options, 'params', {
+    //     enumerable: false,
+    //     configurable: false,
+    //     writable: true,
+    //     value: argsMetaObj
+    // });
+    return argsMetaObj;
 }

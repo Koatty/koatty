@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-22 16:44:08
+ * @ version: 2019-10-30 14:23:36
  */
 import { Scope, CompomentType } from './Constants';
 
@@ -14,7 +14,7 @@ export interface IContainer {
     reg<T>(identifier: string, target: T, options?: ObjectDefinitionOptions): T;
     get<T>(identifier: string): T;
     // tslint:disable-next-line: unified-signatures
-    get<T>(identifier: string, type?: CompomentType): T;
+    get<T>(identifier: string, type?: CompomentType, args?: any[]): T;
 }
 
 export interface ObjectDefinitionOptions {
@@ -22,7 +22,7 @@ export interface ObjectDefinitionOptions {
     initMethod?: string;
     destroyMethod?: string;
     scope?: Scope;
-    router: string;
+    type: CompomentType;
     args: any[];
 }
 

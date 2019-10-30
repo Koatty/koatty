@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-21 11:24:12
+ * @ version: 2019-10-29 20:12:38
  */
 
 import * as path from "path";
@@ -216,7 +216,6 @@ export class Koatty extends Koa.default implements BaseApp {
             }
         } catch (err) {
             logger.error(err);
-            // tslint:disable-next-line: no-null-keyword
             return null;
         }
     }
@@ -228,8 +227,6 @@ export class Koatty extends Koa.default implements BaseApp {
     public listen() {
         //catch error
         this.captureError();
-        //emit app ready
-        this.emit('appReady');
 
         //start server
         //port?: number, hostname?: string, listeningListener?: Function

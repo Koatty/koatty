@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-22 18:30:16
+ * @ version: 2019-10-30 14:01:12
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -12,6 +12,7 @@ import { saveClassMetadata, getClassMetadata } from './Injectable';
 import { INJECT_TAG, COMPONENT_SCAN, CONFIGUATION_SCAN } from './Constants';
 import { Container } from './Container';
 import { Loader } from '../util/Loader';
+import { Router } from './Router';
 
 export function Bootstrap(): ClassDecorator {
     console.log('  ________    _       __   __ \n /_  __/ /_  (_)___  / /__/ /______  ____ _\n  / / / __ \\/ / __ \\/ //_/ //_/ __ \\/ __ `/\n / / / / / / / / / / ,< / /,</ /_/ / /_/ /\n/_/ /_/ /_/_/_/ /_/_/|_/_/ |_\\____/\\__,_/');
@@ -36,7 +37,6 @@ export function Bootstrap(): ClassDecorator {
             if (componentMetas.length < 1) {
                 componentMetas = [app.app_path];
             }
-            // tslint:disable-next-line: no-null-keyword
             Loader.loadDirectory(componentMetas, '', null, `!${target.name || '.no'}.ts`);
 
             const configuationMeta = getClassMetadata(INJECT_TAG, CONFIGUATION_SCAN, target);
@@ -54,10 +54,6 @@ export function Bootstrap(): ClassDecorator {
             const container = new Container(app);
             helper.define(app, 'Container', container);
 
-
-            logger.custom('think', '', 'loadControllers ...');
-            Loader.loadControllers(app, container);
-
             logger.custom('think', '', 'loadMiddlewares ...');
             Loader.loadMiddlewares(app, container);
 
@@ -66,6 +62,13 @@ export function Bootstrap(): ClassDecorator {
 
             logger.custom('think', '', 'loadComponents ...');
             Loader.loadCmponents(app, container);
+
+            logger.custom('think', '', 'loadControllers ...');
+            Loader.loadControllers(app, container);
+
+            logger.custom('think', '', 'loadRouters ...');
+            const router = new Router(app, container);
+            router.loadRouter();
 
             // start app
             logger.custom('think', '', 'Listening ...');

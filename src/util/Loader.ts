@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-18 21:23:28
+ * @ version: 2019-10-30 14:42:18
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -68,7 +68,7 @@ export class Loader {
         let id: string;
         componentList.map((item: any) => {
             id = (item.id || '').replace(`${COMPONENT_KEY}:`, '');
-            container.reg(item.target);
+            container.reg(item.target, { scope: 'Singleton', type: 'COMPONENT' });
         });
     }
 
@@ -86,7 +86,7 @@ export class Loader {
         let id: string;
         serviceList.map((item: any) => {
             id = (item.id || '').replace(`${SERVICE_KEY}:`, '');
-            const cls = container.reg(item.target);
+            const cls = container.reg(item.target, { scope: 'Singleton', type: 'SERVICE' });
             if (!(cls instanceof Base)) {
                 throw new Error(`class ${id} does not inherit the class Base`);
             }
@@ -108,7 +108,7 @@ export class Loader {
         controllerList.map((item: any) => {
             item.id = (item.id || '').replace(`${CONTROLLER_KEY}:`, '');
             if (item.id && helper.isClass(item.target)) {
-                const ctl = container.reg(item.target, { scope: 'Request' });
+                const ctl = container.reg(item.target, { scope: 'Request', type: 'CONTROLLER' });
                 if (!(ctl instanceof BaseController)) {
                     throw new Error(`class ${item.id} does not inherit the class BaseController`);
                 }
@@ -133,7 +133,7 @@ export class Loader {
         //Mount default middleware
         Loader.loadDirectory('./middleware', app.think_path);
         //Mount application middleware
-        const middlewares: any = {};
+        // const middlewares: any = {};
         const appMeddlewares = listModule(MIDDLEWARE_KEY) || [];
 
         appMeddlewares.map((item: {
@@ -142,14 +142,14 @@ export class Loader {
         }) => {
             item.id = (item.id || '').replace(`${MIDDLEWARE_KEY}:`, '');
             if (item.id && helper.isClass(item.target)) {
-                container.reg(item.target, { scope: 'Request' });
-                middlewares[item.id] = item.target;
+                container.reg(item.target, { scope: 'Request', type: 'MIDDLEWARE' });
+                // middlewares[item.id] = item.target;
             }
         });
 
 
         const middlewareConfList = configs.middleware && configs.middleware.list ? configs.middleware.list || [] : [];
-        const bandList = ['Router', 'Trace', ...defaultList];
+        const bandList = ['Trace', ...defaultList];
         middlewareConfList.map((item: any) => {
             if (!bandList.includes(item)) {
                 defaultList.push(item);
@@ -158,8 +158,6 @@ export class Loader {
 
         //de-duplication
         const appMList = [...new Set(defaultList)];
-        //Mount the Router middleware
-        appMList.push('Router');
         //Mount the trace middleware on first
         appMList.unshift('Trace');
 
@@ -185,7 +183,11 @@ export class Loader {
                 app.useExp(handle.run(configs.middleware.config[key] || {}, app));
             }
         });
-        helper.define(app._caches, 'middlewares', middlewares);
+        //emit app ready
+        app.emit('appReady');
+        container.app = app;
+
+        // helper.define(app._caches, 'middlewares', middlewares);
     }
 
     /**

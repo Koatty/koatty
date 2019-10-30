@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-22 17:46:33
+ * @ version: 2019-10-29 20:12:30
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "Koa";
@@ -423,7 +423,6 @@ export class BaseController implements BaseControllerInterface {
             return this.ctx.throw('500', 'The think_view middleware is not installed or configured incorrectly.');
         }
         charset = charset || this.config("encoding") || "utf-8";
-        // tslint:disable-next-line: no-null-keyword
         return this.ctx.render(templateFile, null, charset, contentType);
     }
 
