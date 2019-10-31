@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-31 10:04:42
+ * @ version: 2019-10-31 19:51:17
  */
 import * as helper from "think_lib";
 import { CompomentType } from './Constants';
@@ -91,10 +91,10 @@ export class Container implements IContainer {
             if (!target) {
                 target = this.reg(identifier, ref);
             }
-            if (target._options && target._options.scope !== 'Singleton') {
-                args = target._options && target._options.args && target._options.args.length ? target._options.args : [this.app];
-                target = this.reg(ref, { scope: 'Request', type, args });
-            }
+            // if (target._options && target._options.scope !== 'Singleton') {
+            //     args = target._options && target._options.args && target._options.args.length ? target._options.args : [this.app];
+            //     target = this.reg(ref, { scope: 'Request', type, args });
+            // }
             // tslint:disable-next-line: no-unused-expression
             // target.app && (target.app = this.app);
         }
