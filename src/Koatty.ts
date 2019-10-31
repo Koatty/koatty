@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-29 20:12:38
+ * @ version: 2019-10-31 09:59:10
  */
 
 import * as path from "path";
@@ -10,6 +10,7 @@ import * as Koa from "koa";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { PREVENT_NEXT_PROCESS } from './core/Constants';
+import { Container } from './core/Container';
 const pkg = require('../package.json');
 
 /**
@@ -27,6 +28,7 @@ interface BaseApp extends Koa {
     readonly prevent: () => Promise<never>;
     readonly isPrevent: (err: any) => boolean;
     readonly useExp: (fn: Function) => any;
+    readonly Container: Container;
 }
 
 /**
@@ -97,6 +99,7 @@ export class Koatty extends Koa.default implements BaseApp {
     public think_path: string;
     public app_debug: boolean;
     public options: InitOptions;
+    public Container: Container;
     private _caches: any;
 
     protected constructor(options: InitOptions) {

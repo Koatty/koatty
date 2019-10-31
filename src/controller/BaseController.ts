@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-30 18:16:42
+ * @ version: 2019-10-31 18:28:45
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "Koa";
@@ -18,6 +18,7 @@ interface BaseControllerInterface {
     app: Koatty;
     ctx: Koa.Context;
     init: () => void;
+    readonly __before: () => Promise<any>;
     readonly __empty: () => Promise<any>;
     readonly assign: (name?: string, value?: any) => Promise<any>;
     readonly config: (name: string, type?: string) => any;
@@ -81,13 +82,22 @@ export class BaseController implements BaseControllerInterface {
     }
 
     /**
+     * Class pre-method, which is executed before all class member methods are execute
+     *
+     * @memberof BaseController
+     */
+    public __before(): Promise<any> {
+        return Promise.resolve();
+    }
+
+    /**
      * Call if the action is not found
      *
      * @public
      * @returns {*}
      * @memberof BaseController
      */
-    public __empty(): any {
+    public __empty(): Promise<any> {
         return this.ctx.throw('404');
     }
 
