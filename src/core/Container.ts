@@ -2,13 +2,20 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-30 18:06:40
+ * @ version: 2019-10-31 10:04:42
  */
 import * as helper from "think_lib";
 import { CompomentType } from './Constants';
 import { IContainer, ObjectDefinitionOptions } from './IContainer';
 import { getModule, getIdentifier, injectAutowired, injectValue, saveModule } from './Injectable';
 
+/**
+ * IOC Container
+ *
+ * @export
+ * @class Container
+ * @implements {IContainer}
+ */
 export class Container implements IContainer {
     public app: any;
     public handlerMap: WeakMap<any, any>;

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-30 18:20:23
+ * @ version: 2019-10-31 18:44:57
  */
 import KoaRouter from 'koa-router';
 import * as Koa from 'koa';
@@ -48,45 +48,51 @@ export class Router {
      */
     loadRouter() {
         try {
-            const kRouter: any = Reflect.construct(KoaRouter, this.options);
-            helper.define(this.app, 'Router', kRouter);
+            const kRouter: any = new KoaRouter(this.options);
+
             const controllers = this.app._caches.controllers || {};
-            // tslint:disable-next-line: one-variable-per-declaration
-            let ctl: any, ctlRouters: any[], ctlParams: any;
             const app = this.app;
             // tslint:disable-next-line: forin
             for (const n in controllers) {
                 // inject router
-                ctlRouters = injectRouter(controllers[n]);
+                const ctlRouters = injectRouter(controllers[n]);
                 // inject param
-                ctlParams = injectParam(controllers[n]);
-                // ctlRouters = controllers[n].prototype._options.router || [];
-                // ctlParams = controllers[n].prototype._options.params || {};
-                ctlRouters.map((it: any) => {
-                    // logger.custom('think', '', `=> register request mapping = ${it.requestMethod} : ${it.path} -> ${n}.${it.method}`);
-                    app.Router[it.requestMethod](it.path, (ctx: Koa.Context) => {
+                const ctlParams = injectParam(controllers[n]);
+                // tslint:disable-next-line: forin
+                for (const it in ctlRouters) {
+                    // tslint:disable-next-line: no-unused-expression
+                    app.app_debug && logger.custom('think', '', `register request mapping: [${ctlRouters[it].requestMethod}] : ["${ctlRouters[it].path}" => ${n}.${ctlRouters[it].method}]`);
+                    kRouter[ctlRouters[it].requestMethod](ctlRouters[it].path, async function (ctx: Koa.Context) {
+                        const tmp = ctlRouters[it];
                         // ctl = app.Container.get(n, 'CONTROLLER', [app, ctx]);
-                        ctl = app.Container.get(n, 'CONTROLLER');
-                        ctl.app = app;
-                        ctl.ctx = ctx;
-
+                        const ctl = app.Container.get(n, 'CONTROLLER');
                         if (!ctx || !ctl.init) {
                             ctx.throw(404, `Controller ${n} not found.`);
                         }
-                        if (!ctl[it.method]) {
-                            ctx.throw(404, `Action ${it.method} not found.`);
+                        // inject properties
+                        ctl.app = app;
+                        ctl.ctx = ctx;
+                        // empty-method
+                        if (!ctl[tmp.method]) {
+                            // ctx.throw(404, `Action ${tmp.method} not found.`);
+                            return ctl.__empty();
+                        }
+                        // pre-method
+                        if (ctl.__before) {
+                            await ctl.__before();
                         }
                         // inject param
                         let args = [];
-                        if (ctlParams[it.method]) {
-                            args = ctlParams[it.method].sort((a: any, b: any) => a.index - b.index).map((i: any) => i.fn(ctx, i.type));
+                        if (ctlParams[tmp.method]) {
+                            args = ctlParams[tmp.method].sort((a: any, b: any) => a.index - b.index).map((i: any) => i.fn(ctx, i.type));
                         }
-                        return ctl[it.method](...args);
+                        return ctl[tmp.method](...args);
                     });
-                });
+                }
             }
 
-            app.use(app.Router.routes()).use(app.Router.allowedMethods());
+            app.use(kRouter.routes()).use(kRouter.allowedMethods());
+            helper.define(this.app, 'Router', kRouter);
         } catch (err) {
             logger.error(err);
         }

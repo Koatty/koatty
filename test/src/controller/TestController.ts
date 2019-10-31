@@ -1,4 +1,4 @@
-import { Component, Autowired, Controller, Value, BaseController, logger, helper, BaseControllerOptions, RequestMapping, RequestBody, PathVariable, GetMaping, PostMaping } from '../../../src/index';
+import { Component, Autowired, Controller, Value, BaseController, logger, helper, RequestMapping, RequestBody, PathVariable, GetMaping, PostMaping } from '../../../src/index';
 import { TestService } from '../service/TestService';
 import { App } from '../App';
 import { AppBaseController } from "./AppBaseController";

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-30 14:01:12
+ * @ version: 2019-10-31 10:04:24
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -14,6 +14,12 @@ import { Container } from './Container';
 import { Loader } from '../util/Loader';
 import { Router } from './Router';
 
+/**
+ * bootstrap appliction
+ *
+ * @export
+ * @returns {ClassDecorator}
+ */
 export function Bootstrap(): ClassDecorator {
     console.log('  ________    _       __   __ \n /_  __/ /_  (_)___  / /__/ /______  ____ _\n  / / / __ \\/ / __ \\/ //_/ //_/ __ \\/ __ `/\n / / / / / / / / / / ,< / /,</ /_/ / /_/ /\n/_/ /_/ /_/_/_/ /_/_/|_/_/ |_\\____/\\__,_/');
     console.log(`                     https://ThinkKoa.org/`);
@@ -81,6 +87,13 @@ export function Bootstrap(): ClassDecorator {
     };
 }
 
+/**
+ * define project scan path
+ *
+ * @export
+ * @param {(string | string[])} [scanPath]
+ * @returns {ClassDecorator}
+ */
 export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
     logger.custom('think', '', 'ComponentScan');
 
@@ -90,6 +103,13 @@ export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
     };
 }
 
+/**
+ * define project configuration scan path
+ *
+ * @export
+ * @param {(string | string[])} [scanPath]
+ * @returns {ClassDecorator}
+ */
 export function ConfiguationScan(scanPath?: string | string[]): ClassDecorator {
     logger.custom('think', '', "ConfiguationScan");
 

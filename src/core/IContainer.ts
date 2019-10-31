@@ -2,12 +2,16 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-30 14:23:36
+ * @ version: 2019-10-31 10:05:46
  */
 import { Scope, CompomentType } from './Constants';
 
+
 /**
- * 对象定义存储容器
+ * Container interface
+ *
+ * @export
+ * @interface IContainer
  */
 export interface IContainer {
     reg<T>(target: T, options?: ObjectDefinitionOptions): T;
@@ -17,6 +21,13 @@ export interface IContainer {
     get<T>(identifier: string, type?: CompomentType, args?: any[]): T;
 }
 
+
+/**
+ * IOC object interface
+ *
+ * @export
+ * @interface ObjectDefinitionOptions
+ */
 export interface ObjectDefinitionOptions {
     isAsync?: boolean;
     initMethod?: string;
@@ -26,16 +37,34 @@ export interface ObjectDefinitionOptions {
     args: any[];
 }
 
+/**
+ *
+ *
+ * @export
+ * @interface TagClsMetadata
+ */
 export interface TagClsMetadata {
     id: string;
     originName: string;
 }
 
+/**
+ *
+ *
+ * @export
+ * @interface TagPropsMetadata
+ */
 export interface TagPropsMetadata {
     key: string | number | symbol;
     value: any;
 }
 
+/**
+ *
+ *
+ * @export
+ * @interface ReflectResult
+ */
 export interface ReflectResult {
     [key: string]: TagPropsMetadata[];
 }

@@ -2,13 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-30 14:25:22
+ * @ version: 2019-10-31 19:36:44
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
 import * as logger from "think_logger";
-import { TAGGED_CLS, TAGGED_PROP, COMPONENT_KEY, TAGGED_ARGS, NAMED_TAG, ROUTER_KEY, PARAM } from "./Constants";
+import { TAGGED_CLS, TAGGED_PROP, TAGGED_ARGS, NAMED_TAG, ROUTER_KEY, PARAM_KEY } from "./Constants";
 import { Container } from './Container';
 
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
@@ -175,7 +175,18 @@ export class Injectable {
         if (!originMap.has(propertyName)) {
             originMap.set(propertyName, []);
         }
-        originMap.get(propertyName).push(data);
+        const map: any[] = originMap.get(propertyName);
+        let flag = true;
+        if (map.length > 0) {
+            for (const n of map) {
+                if (JSON.stringify(n) === JSON.stringify(data)) {
+                    flag = false;
+                }
+            }
+        }
+        if (flag) {
+            originMap.get(propertyName).push(data);
+        }
     }
 
     /**
@@ -196,7 +207,7 @@ export class Injectable {
      */
     public listPropertyDataFromClass(decoratorNameKey: string | symbol, target: any) {
         const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
-        const res = [];
+        const res: any[] = [];
         for (const [key, value] of originMap) {
             res.push({ [key]: value });
         }
@@ -205,7 +216,7 @@ export class Injectable {
 }
 
 
-const manager = Reflect.construct(Injectable, []);
+const manager = new Injectable();
 
 /**
  * save data to class
@@ -412,58 +423,63 @@ function ordinaryGetPrototypeOf(obj: any): any {
  * @param target the target of metadataKey
  */
 export function recursiveGetMetadata(metadataKey: any, target: any, propertyKey?: string | symbol): any[] {
-    const metadatas: any[] = [];
+    const metadatas = new Set();
 
     // get metadata value of a metadata key on the prototype
     // let metadata = Reflect.getOwnMetadata(metadataKey, target, propertyKey);
-    let metadata = listPropertyDataFromClass(metadataKey, target);
+    const metadata = listPropertyDataFromClass(metadataKey, target);
     if (metadata) {
-        metadatas.push(...metadata);
+        metadata.map((it: any) => {
+            metadatas.add(it);
+        });
     }
 
     // get metadata value of a metadata key on the prototype chain
     let parent = ordinaryGetPrototypeOf(target);
     while (parent !== null) {
         // metadata = Reflect.getOwnMetadata(metadataKey, parent, propertyKey);
-        metadata = listPropertyDataFromClass(metadataKey, parent);
-        if (metadata) {
-            metadatas.push(...metadata);
+        const pmetadata = listPropertyDataFromClass(metadataKey, parent);
+        if (pmetadata) {
+            pmetadata.map((it: any) => {
+                metadatas.add(it);
+            });
         }
         parent = ordinaryGetPrototypeOf(parent);
     }
-    return metadatas;
+    return Array.from(metadatas);
 }
 
 /**
  * Find methods on a given object
  *
- * @param {*} obj - object to enumerate on
+ * @param {*} target - object to enumerate on
  * @returns {string[]} - method names
  */
-export function getMethodNames(obj: any): string[] {
-    const enumerableOwnKeys: string[] = Object.keys(obj);
-    const ownKeysOnObjectPrototype = Object.getOwnPropertyNames(Object.getPrototypeOf({}));
-    // methods on obj itself should be always included
-    const result = enumerableOwnKeys.filter((k) => typeof obj[k] === 'function');
-
+export function getMethodNames(target: any): string[] {
+    const result: any[] = [];
+    let enumerableOwnKeys: any[] = Reflect.ownKeys(target.prototype);
+    // get methods from es6 class
+    enumerableOwnKeys = enumerableOwnKeys.filter((k) => typeof target.prototype[k] === 'function' && k !== 'constructor');
     // searching prototype chain for methods
-    let proto = obj;
-    do {
-        proto = Object.getPrototypeOf(proto);
-        const allOwnKeysOnPrototype: string[] = Object.getOwnPropertyNames(proto);
+    let parent = ordinaryGetPrototypeOf(target);
+    while (parent && parent.prototype) {
+        const allOwnKeysOnPrototype: any[] = Reflect.ownKeys(parent.prototype);
         // get methods from es6 class
         allOwnKeysOnPrototype.forEach((k) => {
-            if (typeof obj[k] === 'function' && k !== 'constructor') {
+            if (typeof target.prototype[k] === 'function' && k !== 'constructor' && !result.includes(k)) {
                 result.push(k);
             }
         });
+        parent = ordinaryGetPrototypeOf(parent);
     }
-    while (proto && proto !== Object.prototype);
 
     // leave out those methods on Object's prototype
-    return result.filter((k) => {
-        return ownKeysOnObjectPrototype.indexOf(k) === -1;
+    enumerableOwnKeys.map((k) => {
+        if (!result.includes(k)) {
+            result.push(k);
+        }
     });
+    return result;
 }
 
 /**
@@ -479,8 +495,8 @@ export function injectAutowired(target: any, instance: any, container: Container
     for (const metaData of metaDatas) {
         // tslint:disable-next-line: forin
         for (const metaKey in metaData) {
-            // logger.custom('think', '', `=> register inject ${getIdentifier(target)} properties key = ${metaKey}`);
-            // logger.custom('think', '', `=> register inject ${getIdentifier(target)} properties value = ${JSON.stringify(metaData[metaKey])}`);
+            // tslint:disable-next-line: no-unused-expression
+            process.env.NODE_ENV === 'development' && logger.custom('think', '', `register inject ${getIdentifier(target)} properties key: ${metaKey} => value: ${JSON.stringify(metaData[metaKey])}`);
             let dep;
             const { type, identifier, args } = metaData[metaKey] || { type: '', identifier: '', args: [] };
             if (type && identifier) {
@@ -516,8 +532,8 @@ export function injectValue(target: any, instance: any, app: any) {
     for (const metaData of metaDatas) {
         // tslint:disable-next-line: forin
         for (const metaKey in metaData) {
-            // logger.custom('think', '', `=> register inject ${getIdentifier(target)} config key = ${metaKey}`);
-            // logger.custom('think', '', `=> register inject ${getIdentifier(target)} config value = ${metaData[metaKey]}`);
+            // tslint:disable-next-line: no-unused-expression
+            process.env.NODE_ENV === 'development' && logger.custom('think', '', `register inject ${getIdentifier(target)} config key: ${metaKey} => value: ${metaData[metaKey]}`);
             const propKeys = metaData[metaKey].split('|');
             const [propKey, type] = propKeys;
             const prop = app.config(propKey, type);
@@ -540,28 +556,31 @@ export function injectValue(target: any, instance: any, app: any) {
  */
 export function injectRouter(target: any, instance?: any) {
     // Controller router path
-    const metaDatas = recursiveGetMetadata(NAMED_TAG, target);
+    const metaDatas = listPropertyDataFromClass(NAMED_TAG, target);
     let path = '';
     if (metaDatas.length > 0 && metaDatas[0]) {
         const identifier = getIdentifier(target);
         path = metaDatas[0][identifier] || '';
     }
 
-    const routerMetaDatas = recursiveGetMetadata(ROUTER_KEY, target);
-    const router = [];
+    const routerMetaDatas = listPropertyDataFromClass(ROUTER_KEY, target);
+    const router: any = {};
     for (const rmetaData of routerMetaDatas) {
         // tslint:disable-next-line: forin
         for (const metaKey in rmetaData) {
-            // logger.custom('think', '', `=> register inject method Router key = ${metaKey}`);
-            // logger.custom('think', '', `=> register inject method Router value = ${JSON.stringify(rmetaData[metaKey])}`);
+            // tslint:disable-next-line: no-unused-expression
+            process.env.NODE_ENV === 'development' && logger.custom('think', '', `register inject method Router key: ${metaKey} => value: ${JSON.stringify(rmetaData[metaKey])}`);
 
             // if (instance._options) {
             // tslint:disable-next-line: no-unused-expression
             // !instance._options.router && (instance._options.router = []);
             for (const val of rmetaData[metaKey]) {
-                val.path = `${path}${val.path}`;
-                // instance._options.router.push(val);
-                router.push(val);
+                const tmp = {
+                    ...val,
+                    path: `${path.startsWith("/") || path === "" ? path : '/' + path}${val.path}`
+                };
+                // instance._options.router.push(tmp);
+                router[`${tmp.path}-${tmp.requestMethod}`] = tmp;
             }
             // }
         }
@@ -577,18 +596,21 @@ export function injectRouter(target: any, instance?: any) {
  * @param {*} [instance]
  */
 export function injectParam(target: any, instance?: any) {
-    const metaDatas = recursiveGetMetadata(PARAM, target);
-    const methods = Reflect.ownKeys(target.prototype);
+    instance = instance || target.prototype;
+    const methods = getMethodNames(target);
+    const metaDatas = listPropertyDataFromClass(PARAM_KEY, target);
     const argsMetaObj: any = {};
-    methods.map((m) => {
-        metaDatas.map((a) => {
-            if (a[m]) {
-                // logger.custom('think', '', `=> register inject ${getIdentifier(target)} param key = ${helper.toString(m)}`);
-                // logger.custom('think', '', `=> register inject ${getIdentifier(target)} param value = ${JSON.stringify(a[m])}`);
-                argsMetaObj[m] = a[m];
+    for (const m of methods) {
+        for (const meta of metaDatas) {
+            if (meta && meta[m] && instance[m].length <= meta[m].length) {
+                // if (meta && meta[m]) {
+                // tslint:disable-next-line: no-unused-expression
+                process.env.NODE_ENV === 'development' && logger.custom('think', '', `register inject ${getIdentifier(target)} param key: ${helper.toString(m)} => value: ${JSON.stringify(meta[m])}`);
+                argsMetaObj[m] = meta[m];
+                break;
             }
-        });
-    });
+        }
+    }
     // tslint:disable-next-line: no-unused-expression
     // !instance._options.params && (instance._options.params = {});
     // Reflect.defineProperty(instance._options, 'params', {

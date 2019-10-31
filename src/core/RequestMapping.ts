@@ -2,12 +2,18 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-22 18:15:16
+ * @ version: 2019-10-31 18:00:08
  */
 import * as helper from "think_lib";
-import { attachClassMetadata } from "./Injectable";
-import { ROUTER_KEY, PARAM } from "./Constants";
+import { attachPropertyDataToClass } from "./Injectable";
+import { ROUTER_KEY, PARAM_KEY } from "./Constants";
 
+/**
+ *
+ *
+ * @export
+ * @interface RouterOption
+ */
 export interface RouterOption {
     path?: string;
     requestMethod: string;
@@ -15,6 +21,12 @@ export interface RouterOption {
     method: string;
 }
 
+/**
+ * http request methods
+ *
+ * @export
+ * @var RequestMethod
+ */
 export const RequestMethod = {
     GET: "get",
     POST: "post",
@@ -47,12 +59,12 @@ export const RequestMapping = (
 
     return (target, key: string, descriptor: PropertyDescriptor) => {
         // tslint:disable-next-line: no-object-literal-type-assertion
-        attachClassMetadata(ROUTER_KEY, key, {
+        attachPropertyDataToClass(ROUTER_KEY, {
             path,
             requestMethod,
             routerName,
             method: key
-        } as RouterOption, target);
+        } as RouterOption, target, key);
 
         return descriptor;
     };
@@ -103,7 +115,7 @@ export const GetMaping = (
  *     }} [routerOptions={}]
  * @returns {MethodDecorator}
  */
-export const DelMaping = (
+export const DeleteMaping = (
     path: string,
     routerOptions: {
         routerName?: string;
@@ -200,12 +212,12 @@ const Inject = (fn: Function) => {
         // 获取所有元数据 key (由 TypeScript 注入)
         // const keys = Reflect.getMetadataKeys(target, propertyKey);
 
-        attachClassMetadata(PARAM, propertyKey, {
+        attachPropertyDataToClass(PARAM_KEY, {
             name: propertyKey,
             fn,
             index: descriptor,
             type: (paramtypes[descriptor] && paramtypes[descriptor].name ? paramtypes[descriptor].name : '').toLowerCase()
-        }, target);
+        }, target, propertyKey);
         return descriptor;
     };
 
@@ -253,9 +265,27 @@ export function RequestBody() {
  */
 export function PathVariable(arg?: string) {
     if (arg) {
-        return Inject((ctx: any, type: string) => convertParamsType(ctx.querys(arg), type));
+        return Inject((ctx: any, type: string) => {
+            let data;
+            if (ctx.params) {
+                data = ctx.params[arg];
+            }
+            if (helper.isEmpty(data)) {
+                data = ctx.querys(arg);
+            }
+            return convertParamsType(data, type);
+        });
     } else {
-        return Inject((ctx: any, type: string) => ctx.querys());
+        return Inject((ctx: any, type: string) => {
+            let data;
+            if (ctx.params) {
+                data = ctx.params;
+            }
+            if (helper.isEmpty(data)) {
+                data = ctx.querys();
+            }
+            return data;
+        });
     }
 }
 
