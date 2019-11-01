@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-01 12:13:50
+ * @ version: 2019-11-01 19:24:28
  */
 
 import * as path from "path";
@@ -13,12 +13,15 @@ import { PREVENT_NEXT_PROCESS } from './core/Constants';
 import { Container } from './core/Container';
 const pkg = require('../package.json');
 
+
 /**
+ * Base Application interface
  *
+ * @export
  * @interface BaseApp
  * @extends {Koa}
  */
-interface BaseApp extends Koa {
+export interface BaseApp extends Koa {
     readonly root_path: string;
     readonly app_path: string;
     readonly think_path: string;
