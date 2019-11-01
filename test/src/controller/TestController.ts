@@ -28,7 +28,7 @@ export class TestController extends AppBaseController {
         console.log('TestController.mm2', this.mm2);
     }
 
-    @GetMaping('/')
+    @GetMaping()
     public sayHello(@PathVariable('aa') aa: number, @PathVariable('bb') bb: string) {
         console.log('info', typeof aa, typeof bb);
         console.log('info', aa, bb);

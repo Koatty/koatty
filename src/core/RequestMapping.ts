@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-31 18:00:08
+ * @ version: 2019-11-01 10:24:30
  */
 import * as helper from "think_lib";
 import { attachPropertyDataToClass } from "./Injectable";
@@ -80,7 +80,7 @@ export const RequestMapping = (
  * @returns {MethodDecorator}
  */
 export const PostMaping = (
-    path: string,
+    path = "/",
     routerOptions: {
         routerName?: string;
     } = {}
@@ -98,7 +98,7 @@ export const PostMaping = (
  * @returns {MethodDecorator}
  */
 export const GetMaping = (
-    path: string,
+    path = "/",
     routerOptions: {
         routerName?: string;
     } = {}
@@ -116,7 +116,7 @@ export const GetMaping = (
  * @returns {MethodDecorator}
  */
 export const DeleteMaping = (
-    path: string,
+    path = "/",
     routerOptions: {
         routerName?: string;
     } = {}
@@ -134,7 +134,7 @@ export const DeleteMaping = (
  * @returns {MethodDecorator}
  */
 export const PutMaping = (
-    path: string,
+    path = "/",
     routerOptions: {
         routerName?: string;
     } = {}
@@ -152,7 +152,7 @@ export const PutMaping = (
  * @returns {MethodDecorator}
  */
 export const PatchMaping = (
-    path: string,
+    path = "/",
     routerOptions: {
         routerName?: string;
     } = {}
@@ -170,7 +170,7 @@ export const PatchMaping = (
  * @returns {MethodDecorator}
  */
 export const OptionsMaping = (
-    path: string,
+    path = "/",
     routerOptions: {
         routerName?: string;
     } = {}
@@ -188,7 +188,7 @@ export const OptionsMaping = (
  * @returns {MethodDecorator}
  */
 export const HeadMaping = (
-    path: string,
+    path = "/",
     routerOptions: {
         routerName?: string;
     } = {}
