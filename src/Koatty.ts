@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-31 09:59:10
+ * @ version: 2019-11-01 12:13:50
  */
 
 import * as path from "path";
@@ -100,7 +100,7 @@ export class Koatty extends Koa.default implements BaseApp {
     public app_debug: boolean;
     public options: InitOptions;
     public Container: Container;
-    private _caches: any;
+    public _caches: any;
 
     protected constructor(options: InitOptions) {
         super();

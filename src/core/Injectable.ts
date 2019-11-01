@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-31 19:36:44
+ * @ version: 2019-11-01 10:33:22
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -496,7 +496,7 @@ export function injectAutowired(target: any, instance: any, container: Container
         // tslint:disable-next-line: forin
         for (const metaKey in metaData) {
             // tslint:disable-next-line: no-unused-expression
-            process.env.NODE_ENV === 'development' && logger.custom('think', '', `register inject ${getIdentifier(target)} properties key: ${metaKey} => value: ${JSON.stringify(metaData[metaKey])}`);
+            process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${getIdentifier(target)} properties key: ${metaKey} => value: ${JSON.stringify(metaData[metaKey])}`);
             let dep;
             const { type, identifier, args } = metaData[metaKey] || { type: '', identifier: '', args: [] };
             if (type && identifier) {
@@ -533,7 +533,7 @@ export function injectValue(target: any, instance: any, app: any) {
         // tslint:disable-next-line: forin
         for (const metaKey in metaData) {
             // tslint:disable-next-line: no-unused-expression
-            process.env.NODE_ENV === 'development' && logger.custom('think', '', `register inject ${getIdentifier(target)} config key: ${metaKey} => value: ${metaData[metaKey]}`);
+            process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${getIdentifier(target)} config key: ${metaKey} => value: ${metaData[metaKey]}`);
             const propKeys = metaData[metaKey].split('|');
             const [propKey, type] = propKeys;
             const prop = app.config(propKey, type);
@@ -569,7 +569,7 @@ export function injectRouter(target: any, instance?: any) {
         // tslint:disable-next-line: forin
         for (const metaKey in rmetaData) {
             // tslint:disable-next-line: no-unused-expression
-            process.env.NODE_ENV === 'development' && logger.custom('think', '', `register inject method Router key: ${metaKey} => value: ${JSON.stringify(rmetaData[metaKey])}`);
+            process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject method Router key: ${metaKey} => value: ${JSON.stringify(rmetaData[metaKey])}`);
 
             // if (instance._options) {
             // tslint:disable-next-line: no-unused-expression
@@ -605,7 +605,7 @@ export function injectParam(target: any, instance?: any) {
             if (meta && meta[m] && instance[m].length <= meta[m].length) {
                 // if (meta && meta[m]) {
                 // tslint:disable-next-line: no-unused-expression
-                process.env.NODE_ENV === 'development' && logger.custom('think', '', `register inject ${getIdentifier(target)} param key: ${helper.toString(m)} => value: ${JSON.stringify(meta[m])}`);
+                process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${getIdentifier(target)} param key: ${helper.toString(m)} => value: ${JSON.stringify(meta[m])}`);
                 argsMetaObj[m] = meta[m];
                 break;
             }

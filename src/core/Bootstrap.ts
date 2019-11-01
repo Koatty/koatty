@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-31 10:04:24
+ * @ version: 2019-11-01 18:35:50
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -54,26 +54,33 @@ export function Bootstrap(): ClassDecorator {
                     configuationMetas = configuationMeta;
                 }
             }
-            logger.custom('think', '', 'loadConfiguation ...');
+            logger.custom('think', '', 'LoadConfiguation ...');
             Loader.loadConfigs(app, configuationMetas);
 
             const container = new Container(app);
             helper.define(app, 'Container', container);
 
-            logger.custom('think', '', 'loadMiddlewares ...');
+            logger.custom('think', '', 'LoadMiddlewares ...');
             Loader.loadMiddlewares(app, container);
 
-            logger.custom('think', '', 'loadServices ...');
-            Loader.loadServices(app, container);
+            //emit app ready
+            app.emit('appReady');
+            container.app = app;
 
-            logger.custom('think', '', 'loadComponents ...');
+            logger.custom('think', '', 'LoadComponents ...');
             Loader.loadCmponents(app, container);
 
-            logger.custom('think', '', 'loadControllers ...');
+            logger.custom('think', '', 'LoadServices ...');
+            Loader.loadServices(app, container);
+
+            logger.custom('think', '', 'LoadControllers ...');
             Loader.loadControllers(app, container);
 
-            logger.custom('think', '', 'loadRouters ...');
-            const router = new Router(app, container);
+            // //emit app start
+            // app.emit('appStart');
+            logger.custom('think', '', 'LoadRouters ...');
+            const routerConf = app.config(undefined, 'router') || {};
+            const router = new Router(app, container, routerConf);
             router.loadRouter();
 
             // start app

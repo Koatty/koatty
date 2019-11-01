@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-30 14:42:18
+ * @ version: 2019-11-01 18:32:20
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -158,10 +158,10 @@ export class Loader {
 
         //de-duplication
         const appMList = [...new Set(defaultList)];
-        //Mount the trace middleware on first
+        //Mount the middleware on first
         appMList.unshift('Trace');
 
-        //Automatically call middleware 
+        //Automatically call middleware
         let handle: any;
         configs.middleware = configs.middleware || { config: {} };
         appMList.forEach((key) => {
@@ -183,9 +183,6 @@ export class Loader {
                 app.useExp(handle.run(configs.middleware.config[key] || {}, app));
             }
         });
-        //emit app ready
-        app.emit('appReady');
-        container.app = app;
 
         // helper.define(app._caches, 'middlewares', middlewares);
     }

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-31 18:44:57
+ * @ version: 2019-11-01 19:02:51
  */
 import KoaRouter from 'koa-router';
 import * as Koa from 'koa';
@@ -10,6 +10,21 @@ import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { Container } from './Container';
 import { injectRouter, injectParam } from './Injectable';
+
+/**
+ * http timeout timer
+ * @param tmr 
+ * @param timeout 
+ */
+// const timer = function (tmr: any, timeout: number) {
+//     return new Promise((resolve, reject) => {
+//         tmr = setTimeout(function () {
+//             const err: any = new Error('Request timeout');
+//             err.status = 408;
+//             reject(err);
+//         }, timeout);
+//     });
+// };
 
 export class Router {
     app: any;
@@ -37,21 +52,24 @@ export class Router {
         //  */
         // strict ?: boolean;
         this.options = {
-            prefix: '', ...options
+            ...options
         };
     }
 
     /**
-     *
+     * loading router
      *
      * @memberof Router
      */
     loadRouter() {
         try {
-            const kRouter: any = new KoaRouter(this.options);
-
-            const controllers = this.app._caches.controllers || {};
             const app = this.app;
+            const options = this.options;
+            const execRouter = this.execRouter;
+            const container = this.container;
+
+            const controllers = app._caches.controllers || {};
+            const kRouter: any = new KoaRouter(options);
             // tslint:disable-next-line: forin
             for (const n in controllers) {
                 // inject router
@@ -61,40 +79,69 @@ export class Router {
                 // tslint:disable-next-line: forin
                 for (const it in ctlRouters) {
                     // tslint:disable-next-line: no-unused-expression
-                    app.app_debug && logger.custom('think', '', `register request mapping: [${ctlRouters[it].requestMethod}] : ["${ctlRouters[it].path}" => ${n}.${ctlRouters[it].method}]`);
-                    kRouter[ctlRouters[it].requestMethod](ctlRouters[it].path, async function (ctx: Koa.Context) {
-                        const tmp = ctlRouters[it];
-                        // ctl = app.Container.get(n, 'CONTROLLER', [app, ctx]);
-                        const ctl = app.Container.get(n, 'CONTROLLER');
-                        if (!ctx || !ctl.init) {
-                            ctx.throw(404, `Controller ${n} not found.`);
-                        }
-                        // inject properties
-                        ctl.app = app;
-                        ctl.ctx = ctx;
-                        // empty-method
-                        if (!ctl[tmp.method]) {
-                            // ctx.throw(404, `Action ${tmp.method} not found.`);
-                            return ctl.__empty();
-                        }
-                        // pre-method
-                        if (ctl.__before) {
-                            await ctl.__before();
-                        }
-                        // inject param
-                        let args = [];
-                        if (ctlParams[tmp.method]) {
-                            args = ctlParams[tmp.method].sort((a: any, b: any) => a.index - b.index).map((i: any) => i.fn(ctx, i.type));
-                        }
-                        return ctl[tmp.method](...args);
+                    app.app_debug && logger.custom('think', '', `Register request mapping: [${ctlRouters[it].requestMethod}] : ["${ctlRouters[it].path}" => ${n}.${ctlRouters[it].method}]`);
+                    kRouter[ctlRouters[it].requestMethod](ctlRouters[it].path, async function (ctx: Koa.Context): Promise<any> {
+                        // tslint:disable-next-line: prefer-const
+                        // let tmr = null;
+                        // // try /catch
+                        // try {
+                        //     const router = ctlRouters[it];
+                        //     const startTime = ctx.startTime || Date.now();
+                        //     const timeout = ((options.timeout || 30) * 1000) - (Date.now() - startTime);
+                        //     // promise.race
+                        //     return Promise.race([timer(tmr, timeout), execRouter(n, router, app, ctx, container, ctlParams)]);
+                        // } finally {
+                        //     // tslint:disable-next-line: no-unused-expression
+                        //     tmr && clearTimeout(tmr);
+                        // }
+                        const router = ctlRouters[it];
+                        return execRouter(n, router, app, ctx, container, ctlParams);
                     });
                 }
             }
 
             app.use(kRouter.routes()).use(kRouter.allowedMethods());
-            helper.define(this.app, 'Router', kRouter);
+            helper.define(app, 'Router', kRouter);
         } catch (err) {
             logger.error(err);
         }
+    }
+
+    /**
+     * execute controller
+     *
+     * @param {string} identifier
+     * @param {*} router
+     * @param {*} app
+     * @param {Koa.Context} ctx
+     * @param {Container} container
+     * @param {*} [params]
+     * @returns
+     * @memberof Router
+     */
+    async execRouter(identifier: string, router: any, app: any, ctx: Koa.Context, container: Container, params?: any) {
+        // const ctl: any = container.get(identifier, 'CONTROLLER', [app, ctx]);
+        const ctl: any = container.get(identifier, 'CONTROLLER');
+        if (!ctx || !ctl.init) {
+            return ctx.throw(404, `Controller ${identifier} not found.`);
+        }
+        // inject properties
+        ctl.app = app;
+        ctl.ctx = ctx;
+        // empty-method
+        if (!ctl[router.method]) {
+            //return ctx.throw(404, `Action ${router.method} not found.`);
+            return ctl.__empty();
+        }
+        // pre-method
+        if (ctl.__before) {
+            await ctl.__before();
+        }
+        // inject param
+        let args = [];
+        if (params[router.method]) {
+            args = params[router.method].sort((a: any, b: any) => a.index - b.index).map((i: any) => i.fn(ctx, i.type));
+        }
+        return ctl[router.method](...args);
     }
 }
