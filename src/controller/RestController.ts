@@ -5,6 +5,7 @@
  * @ version: 2019-10-31 18:20:46
  */
 import * as helper from "think_lib";
+import { Container } from '../core/Container';
 import { BaseController } from "./BaseController";
 import { GetMaping, PathVariable, PostMaping, DeleteMaping, PutMaping, RequestBody } from "../core/RequestMapping";
 
@@ -17,6 +18,11 @@ import { GetMaping, PathVariable, PostMaping, DeleteMaping, PutMaping, RequestBo
  */
 export class RestController extends BaseController {
     private model: any;
+    private container: Container;
+
+    init() {
+        this.container = this.app.Container;
+    }
 
     /**
      *
@@ -46,7 +52,7 @@ export class RestController extends BaseController {
         }
         if (!this.model) {
             const resourceName = helper.camelCase(resource, { pascalCase: true });
-            this.model = this.app.Container.get(resourceName, "COMPONENT");
+            this.model = this.container.get(resourceName, "COMPONENT");
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
             }
@@ -88,7 +94,7 @@ export class RestController extends BaseController {
         }
         if (!this.model) {
             const resourceName = helper.camelCase(resource, { pascalCase: true });
-            this.model = this.app.Container.get(resourceName, "COMPONENT");
+            this.model = this.container.get(resourceName, "COMPONENT");
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
             }
@@ -120,7 +126,7 @@ export class RestController extends BaseController {
         }
         if (!this.model) {
             const resourceName = helper.camelCase(resource, { pascalCase: true });
-            this.model = this.app.Container.get(resourceName, "COMPONENT");
+            this.model = this.container.get(resourceName, "COMPONENT");
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
             }
@@ -157,7 +163,7 @@ export class RestController extends BaseController {
         }
         if (!this.model) {
             const resourceName = helper.camelCase(resource, { pascalCase: true });
-            this.model = this.app.Container.get(resourceName, "COMPONENT");
+            this.model = this.container.get(resourceName, "COMPONENT");
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
             }

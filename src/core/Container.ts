@@ -18,7 +18,8 @@ import { getModule, getIdentifier, injectAutowired, injectValue, saveModule } fr
  */
 export class Container implements IContainer {
     public app: any;
-    public handlerMap: WeakMap<any, any>;
+    private handlerMap: WeakMap<any, any>;
+
     public constructor(app: any) {
         this.app = app;
         this.handlerMap = new WeakMap<any, any>();

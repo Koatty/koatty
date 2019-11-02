@@ -73,6 +73,10 @@
         "only-arrow-functions": false,
         "no-parameter-reassignment": false,
         "member-access": false,
-        "member-ordering": false
+        "member-ordering": false,
+        "linebreak-style": [
+            false,
+            "windows"
+        ]
     }
 }

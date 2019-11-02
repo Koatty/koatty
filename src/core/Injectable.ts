@@ -16,6 +16,16 @@ const ARGUMENT_NAMES = /([^\s,]+)/g;
 
 export class Injectable {
 
+    /**
+     *
+     *
+     * @static
+     * @param {(string | symbol)} metaKey
+     * @param {Object} target
+     * @param {(string | symbol)} [method]
+     * @returns
+     * @memberof Injectable
+     */
     public static getOriginMetadata(metaKey: string | symbol, target: Object, method?: string | symbol) {
         if (method) {
             // for property or method
@@ -36,15 +46,32 @@ export class Injectable {
         }
     }
 
-    public handlerMap: Map<any, any>;
+    private handlerMap: Map<any, any>;
 
+    /**
+     * Creates an instance of Injectable.
+     * @memberof Injectable
+     */
     public constructor() {
         this.handlerMap = new Map();
     }
 
     /**
-     * 
-     * @param target 
+     *
+     *
+     * @returns
+     * @memberof Injectable
+     */
+    public clear() {
+        return this.handlerMap.clear();
+    }
+
+    /**
+     *
+     *
+     * @param {*} target
+     * @returns
+     * @memberof Injectable
      */
     public getIdentifier(target: any) {
         const metaData = Reflect.getOwnMetadata(TAGGED_CLS, target);
@@ -57,10 +84,12 @@ export class Injectable {
     }
 
     /**
-     * 
-     * @param key 
-     * @param module 
-     * @param identifier 
+     *
+     *
+     * @param {string} key
+     * @param {*} module
+     * @param {string} [identifier]
+     * @memberof Injectable
      */
     public saveModule(key: string, module: any, identifier?: string) {
         identifier = identifier || this.getIdentifier(module);
@@ -70,8 +99,11 @@ export class Injectable {
     }
 
     /**
-     * 
-     * @param key 
+     *
+     *
+     * @param {string} key
+     * @returns
+     * @memberof Injectable
      */
     public listModule(key: string) {
         const modules: any[] = [];
@@ -87,9 +119,12 @@ export class Injectable {
     }
 
     /**
-     * 
-     * @param key 
-     * @param identifier 
+     *
+     *
+     * @param {string} key
+     * @param {string} identifier
+     * @returns
+     * @memberof Injectable
      */
     public getModule(key: string, identifier: string) {
         return this.handlerMap.get(`${key}:${identifier}`);
@@ -97,11 +132,13 @@ export class Injectable {
 
     /**
      * save meta data to class or property
-     * @param type the type name for components
-     * @param decoratorNameKey the alias name for decorator
-     * @param data the data you want to store
-     * @param target target class
-     * @param propertyName
+     *
+     * @param {string} type
+     * @param {(string | symbol)} decoratorNameKey
+     * @param {*} data
+     * @param {*} target
+     * @param {undefined} [propertyName]
+     * @memberof Injectable
      */
     public saveMetadata(type: string, decoratorNameKey: string | symbol, data: any, target: any, propertyName?: undefined) {
         if (propertyName) {
@@ -115,11 +152,13 @@ export class Injectable {
 
     /**
      * attach data to class or property
-     * @param type the type name for components
-     * @param decoratorNameKey
-     * @param data
-     * @param target
-     * @param propertyName
+     *
+     * @param {string} type
+     * @param {(string | symbol)} decoratorNameKey
+     * @param {*} data
+     * @param {*} target
+     * @param {undefined} [propertyName]
+     * @memberof Injectable
      */
     public attachMetadata(type: string, decoratorNameKey: string | symbol, data: any, target: any, propertyName?: undefined) {
         let originMap;
@@ -136,10 +175,13 @@ export class Injectable {
 
     /**
      * get single data from class or property
-     * @param type the type name for components
-     * @param decoratorNameKey
-     * @param target
-     * @param propertyName
+     *
+     * @param {string} type
+     * @param {(string | symbol)} decoratorNameKey
+     * @param {*} target
+     * @param {undefined} [propertyName]
+     * @returns
+     * @memberof Injectable
      */
     public getMetadata(type: string, decoratorNameKey: string | symbol, target: any, propertyName?: undefined) {
         if (propertyName) {
@@ -153,10 +195,12 @@ export class Injectable {
 
     /**
      * save property data to class
-     * @param decoratorNameKey
-     * @param data
-     * @param target
-     * @param propertyName
+     *
+     * @param {(string | symbol)} decoratorNameKey
+     * @param {*} data
+     * @param {*} target
+     * @param {(string | symbol)} propertyName
+     * @memberof Injectable
      */
     public savePropertyDataToClass(decoratorNameKey: string | symbol, data: any, target: any, propertyName: string | symbol) {
         const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
@@ -165,10 +209,12 @@ export class Injectable {
 
     /**
      * attach property data to class
-     * @param decoratorNameKey
-     * @param data
-     * @param target
-     * @param propertyName
+     *
+     * @param {(string | symbol)} decoratorNameKey
+     * @param {*} data
+     * @param {*} target
+     * @param {(string | symbol)} propertyName
+     * @memberof Injectable
      */
     public attachPropertyDataToClass(decoratorNameKey: string | symbol, data: any, target: any, propertyName: string | symbol) {
         const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
@@ -190,10 +236,13 @@ export class Injectable {
     }
 
     /**
-     * get property data from class
-     * @param decoratorNameKey
-     * @param target
-     * @param propertyName
+     *  get property data from class
+     *
+     * @param {(string | symbol)} decoratorNameKey
+     * @param {*} target
+     * @param {(string | symbol)} propertyName
+     * @returns
+     * @memberof Injectable
      */
     public getPropertyDataFromClass(decoratorNameKey: string | symbol, target: any, propertyName: string | symbol) {
         const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
@@ -202,8 +251,11 @@ export class Injectable {
 
     /**
      * list property data from class
-     * @param decoratorNameKey
-     * @param target
+     *
+     * @param {(string | symbol)} decoratorNameKey
+     * @param {*} target
+     * @returns
+     * @memberof Injectable
      */
     public listPropertyDataFromClass(decoratorNameKey: string | symbol, target: any) {
         const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
@@ -327,7 +379,7 @@ export function getPropertyMetadata(decoratorNameKey: string, target: any, prope
  * clear all module
  */
 export function clearAllModule() {
-    return manager.handlerMap.clear();
+    return manager.clear();
 }
 
 /**

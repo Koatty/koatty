@@ -9,6 +9,7 @@ import * as Koa from "Koa";
 import * as helper from "think_lib";
 import { Koatty } from '../Koatty';
 import { ObjectDefinitionOptions } from '../core/IContainer';
+import { Value } from '../core/Decorators';
 
 /**
  *
@@ -17,16 +18,14 @@ import { ObjectDefinitionOptions } from '../core/IContainer';
 interface BaseControllerInterface {
     app: Koatty;
     ctx: Koa.Context;
+    encoding: string;
     init: () => void;
     __before: () => Promise<any>;
     __empty: () => Promise<any>;
     readonly assign: (name?: string, value?: any) => Promise<any>;
-    readonly config: (name: string, type?: string) => any;
     readonly deny: (code?: number) => Promise<any>;
     readonly expires: (timeout: number) => void;
     readonly fail: (errmsg?: Error | string, data?: any, code?: number) => Promise<any>;
-    readonly file: (name?: string, value?: any) => any;
-    readonly get: (name?: string, value?: any) => any;
     readonly header: (name?: string, value?: any) => any;
     readonly isAjax: () => boolean;
     readonly isGet: () => boolean;
@@ -38,11 +37,10 @@ interface BaseControllerInterface {
     readonly jsonp: (data: any) => Promise<any>;
     readonly ok: (errmsg?: Error | string, data?: any, code?: number) => Promise<any>;
     readonly param: (name?: string) => any;
-    readonly post: (name?: string, value?: any) => any;
     readonly redirect: (urls: string, alt?: string) => Promise<any>;
     readonly referer: () => string;
     readonly render: (templateFile?: string, charset?: string, contentType?: string) => Promise<any>;
-    readonly types: (contentType?: string, encoding?: string | boolean) => string;
+    readonly resType: (contentType?: string, encoding?: string | boolean) => string;
     readonly write: (data: any, contentType?: string, encoding?: string) => Promise<any>;
 }
 
@@ -56,7 +54,10 @@ interface BaseControllerInterface {
 export class BaseController implements BaseControllerInterface {
     public app: Koatty;
     public ctx: Koa.Context;
+    @Value("encoding")
+    public encoding: string;
     protected _options: ObjectDefinitionOptions;
+
 
     /**
      * instance of BaseController.
@@ -170,32 +171,6 @@ export class BaseController implements BaseControllerInterface {
     }
 
     /**
-     * Get and construct querystring parameters
-     *
-     * @public
-     * @param {string} name
-     * @param {*} [value]
-     * @returns {*}
-     * @memberof BaseController
-     */
-    public get(name?: string, value?: any): any {
-        return this.ctx.querys(name, value);
-    }
-
-    /**
-     * Get and construct POST parameters
-     *
-     * @public
-     * @param {string} name
-     * @param {*} [value]
-     * @returns {*}
-     * @memberof BaseController
-     */
-    public post(name?: string, value?: any): any {
-        return this.ctx.post(name, value);
-    }
-
-    /**
      * Get post or get parameters, post priority
      *
      * @public
@@ -205,32 +180,6 @@ export class BaseController implements BaseControllerInterface {
      */
     public param(name?: string): any {
         return this.ctx.param(name);
-    }
-
-    /**
-     * Obtain and construct uploaded files
-     *
-     * @public
-     * @param {string} name
-     * @param {*} [value]
-     * @returns {*}
-     * @memberof BaseController
-     */
-    public file(name?: string, value?: any): any {
-        return this.ctx.file(name, value);
-    }
-
-    /**
-     * Read app configuration
-     *
-     * @public
-     * @param {string} name
-     * @param {string} [type='config']
-     * @returns {*}
-     * @memberof BaseController
-     */
-    public config(name: string, type = 'config'): any {
-        return this.app.config(name, type);
     }
 
     /**
@@ -253,7 +202,7 @@ export class BaseController implements BaseControllerInterface {
     }
 
     /**
-     * Content-type operation
+     * Set response content-type
      *
      * @public
      * @param {string} contentType
@@ -261,7 +210,7 @@ export class BaseController implements BaseControllerInterface {
      * @returns {string}
      * @memberof BaseController
      */
-    public types(contentType?: string, encoding?: string | boolean): string {
+    public resType(contentType?: string, encoding?: string | boolean): string {
         if (!contentType) {
             return (this.ctx.headers['content-type'] || '').split(';')[0].trim();
         }
@@ -333,8 +282,8 @@ export class BaseController implements BaseControllerInterface {
      */
     public write(data: any, contentType?: string, encoding?: string): Promise<any> {
         contentType = contentType || 'text/plain';
-        encoding = encoding || this.app.config('encoding');
-        this.types(contentType, encoding);
+        encoding = encoding || this.encoding || 'utf-8';
+        this.resType(contentType, encoding);
         this.ctx.body = data;
         return this.app.prevent();
     }
@@ -441,7 +390,7 @@ export class BaseController implements BaseControllerInterface {
         if (!this.ctx.render) {
             return this.ctx.throw('500', 'The think_view middleware is not installed or configured incorrectly.');
         }
-        charset = charset || this.config("encoding") || "utf-8";
+        charset = charset || this.encoding || "utf-8";
         return this.ctx.render(templateFile, null, charset, contentType);
     }
 

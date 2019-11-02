@@ -4,6 +4,8 @@
  * @ license: MIT
  * @ version: 2019-11-01 10:24:30
  */
+// tslint:disable-next-line: no-import-side-effect
+import 'reflect-metadata';
 import * as helper from "think_lib";
 import { attachPropertyDataToClass } from "./Injectable";
 import { ROUTER_KEY, PARAM_KEY } from "./Constants";
@@ -201,7 +203,7 @@ export const HeadMaping = (
  * 
  * @param fn 
  */
-const Inject = (fn: Function) => {
+const Inject = (fn: Function): ParameterDecorator => {
     return (target: any, propertyKey: string, descriptor: any) => {
         // 获取成员类型
         // const type = Reflect.getMetadata('design:type', target, propertyKey);
@@ -222,7 +224,9 @@ const Inject = (fn: Function) => {
     };
 
 };
+
 /**
+ * 
  * 
  * @param param 
  * @param type 
@@ -247,7 +251,7 @@ const convertParamsType = (param: any, type: string) => {
 };
 
 /**
- * get request.body
+ * Get parsed request body.
  *
  * @export
  * @returns
@@ -257,34 +261,111 @@ export function RequestBody() {
 }
 
 /**
- * get querystring params
+ * Get parsed query-string.
  *
  * @export
- * @param {string} [arg] params name
+ * @param {string} [name] params name
  * @returns
  */
-export function PathVariable(arg?: string) {
-    if (arg) {
+export function PathVariable(name?: string) {
+    if (name) {
         return Inject((ctx: any, type: string) => {
-            let data;
-            if (ctx.params) {
-                data = ctx.params[arg];
-            }
-            if (helper.isEmpty(data)) {
-                data = ctx.querys(arg);
-            }
-            return convertParamsType(data, type);
+            const data: any = helper.extend(ctx.params || {}, ctx.query);
+            return convertParamsType(data[name], type);
         });
     } else {
         return Inject((ctx: any, type: string) => {
-            let data;
-            if (ctx.params) {
-                data = ctx.params;
-            }
-            if (helper.isEmpty(data)) {
-                data = ctx.querys();
-            }
+            const data: any = helper.extend(ctx.params || {}, ctx.query);
             return data;
+        });
+    }
+}
+
+
+/**
+ * Get parsed request body.
+ *
+ * @export
+ * @returns
+ */
+export function Body() {
+    return Inject((ctx: any) => ctx.request.body);
+}
+
+/**
+ * Get parsed query-string.
+ *
+ * @export
+ * @param {string} [name]
+ * @returns
+ */
+export function Get(name?: string) {
+    if (name) {
+        return Inject((ctx: any, type: string) => {
+            const data: any = helper.extend(ctx.params || {}, ctx.query);
+            return convertParamsType(data[name], type);
+        });
+    } else {
+        return Inject((ctx: any, type: string) => {
+            const data: any = helper.extend(ctx.params || {}, ctx.query);
+            return data;
+        });
+    }
+}
+
+/**
+ * Get parsed POST/PUT... body.
+ *
+ * @export
+ * @param {string} [name]
+ * @returns
+ */
+export function Post(name?: string) {
+    if (name) {
+        return Inject((ctx: any, type: string) => {
+            return convertParamsType(ctx.post(name), type);
+        });
+    } else {
+        return Inject((ctx: any, type: string) => {
+            return ctx.post();
+        });
+    }
+}
+
+/**
+ * Get parsed upload file object.
+ *
+ * @export
+ * @param {string} [name]
+ * @returns
+ */
+export function File(name?: string) {
+    if (name) {
+        return Inject((ctx: any, type: string) => {
+            return convertParamsType(ctx.file(name), type);
+        });
+    } else {
+        return Inject((ctx: any, type: string) => {
+            return ctx.file();
+        });
+    }
+}
+
+/**
+ * Get parsed upload file object.
+ *
+ * @export
+ * @param {string} [name]
+ * @returns
+ */
+export function Header(name?: string) {
+    if (name) {
+        return Inject((ctx: any, type: string) => {
+            return convertParamsType(ctx.get(name), type);
+        });
+    } else {
+        return Inject((ctx: any, type: string) => {
+            return ctx.headers;
         });
     }
 }
