@@ -2,12 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-30 18:04:23
+ * @ version: 2019-11-04 15:26:58
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import { saveModule, saveClassMetadata, savePropertyDataToClass, getIdentifier } from "./Injectable";
 import { CONTROLLER_KEY, COMPONENT_KEY, TAGGED_PROP, TAGGED_CLS, TAGGED_ARGS, MIDDLEWARE_KEY, NAMED_TAG, SERVICE_KEY, CompomentType } from './Constants';
+import { helper } from '..';
 
 /**
  * Indicates that an decorated class is a "component".
@@ -82,7 +83,12 @@ export function Service(identifier?: string): ClassDecorator {
 export function Autowired(identifier?: string, type?: CompomentType, constructArgs?: any[]): PropertyDecorator {
     return (target: any, propertyKey: string) => {
         const designType = Reflect.getMetadata('design:type', target, propertyKey);
-        identifier = identifier || designType.name;
+        if (!designType && !identifier) {
+            // throw Error("identifier cannot be empty when circular dependency exists");
+            identifier = helper.camelCase(propertyKey, { pascalCase: true });
+        } else {
+            identifier = identifier || designType.name;
+        }
         if (type === undefined) {
             if (identifier.indexOf('Controller') > -1) {
                 type = 'CONTROLLER';
@@ -92,11 +98,22 @@ export function Autowired(identifier?: string, type?: CompomentType, constructAr
                 type = 'SERVICE';
             }
         }
-        savePropertyDataToClass(TAGGED_PROP, {
-            type,
-            identifier,
-            args: constructArgs || []
-        }, target, propertyKey);
+
+        if (!designType) {
+            savePropertyDataToClass(TAGGED_PROP, {
+                type,
+                identifier,
+                delay: true,
+                args: constructArgs || []
+            }, target, propertyKey);
+        } else {
+            savePropertyDataToClass(TAGGED_PROP, {
+                type,
+                identifier,
+                delay: false,
+                args: constructArgs || []
+            }, target, propertyKey);
+        }
     };
 }
 

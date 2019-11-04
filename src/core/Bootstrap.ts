@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-01 18:35:50
+ * @ version: 2019-11-04 15:35:20
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -76,8 +76,9 @@ export function Bootstrap(): ClassDecorator {
             logger.custom('think', '', 'LoadControllers ...');
             Loader.loadControllers(app, container);
 
-            // //emit app start
-            // app.emit('appStart');
+            //emit app lazy loading
+            app.emit('appLazy');
+
             logger.custom('think', '', 'LoadRouters ...');
             const routerConf = app.config(undefined, 'router') || {};
             const router = new Router(app, container, routerConf);

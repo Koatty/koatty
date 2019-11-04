@@ -2,13 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-01 18:32:20
+ * @ version: 2019-11-04 15:35:31
  */
 import * as globby from 'globby';
 import * as path from 'path';
 import * as helper from "think_lib";
 import { Container } from '../core/Container';
-import { listModule } from '../core/Injectable';
+import { listModule, injectAutowired, injectValue } from '../core/Injectable';
 import { COMPONENT_KEY, CONTROLLER_KEY, MIDDLEWARE_KEY, SERVICE_KEY } from '../core/Constants';
 import { Base } from '../core/Base';
 import { BaseController } from '../controller/BaseController';
@@ -68,7 +68,19 @@ export class Loader {
         let id: string;
         componentList.map((item: any) => {
             id = (item.id || '').replace(`${COMPONENT_KEY}:`, '');
-            container.reg(item.target, { scope: 'Singleton', type: 'COMPONENT' });
+            if (item.id && helper.isClass(item.target)) {
+                // inject autowired
+                injectAutowired(item.target, item.target.prototype, container);
+                if (item.target._delay) {
+                    app.once("appLazy", () => {
+                        // lazy inject autowired
+                        injectAutowired(item.target, item.target.prototype, container, true);
+                    });
+                }
+                // inject value
+                injectValue(item.target, item.target.prototype, app);
+                container.reg(item.target, { scope: 'Singleton', type: 'COMPONENT' });
+            }
         });
     }
 
@@ -86,9 +98,22 @@ export class Loader {
         let id: string;
         serviceList.map((item: any) => {
             id = (item.id || '').replace(`${SERVICE_KEY}:`, '');
-            const cls = container.reg(item.target, { scope: 'Singleton', type: 'SERVICE' });
-            if (!(cls instanceof Base)) {
-                throw new Error(`class ${id} does not inherit the class Base`);
+            if (item.id && helper.isClass(item.target)) {
+                // inject autowired
+                injectAutowired(item.target, item.target.prototype, container);
+                if (item.target.prototype && item.target.prototype._delay) {
+                    app.once("appLazy", () => {
+                        // lazy inject autowired
+                        injectAutowired(item.target, item.target.prototype, container, true);
+                    });
+                }
+                // inject value
+                injectValue(item.target, item.target.prototype, app);
+
+                const cls = container.reg(item.target, { scope: 'Singleton', type: 'SERVICE' });
+                if (!(cls instanceof Base)) {
+                    throw new Error(`class ${id} does not inherit the class Base`);
+                }
             }
         });
     }
@@ -108,6 +133,17 @@ export class Loader {
         controllerList.map((item: any) => {
             item.id = (item.id || '').replace(`${CONTROLLER_KEY}:`, '');
             if (item.id && helper.isClass(item.target)) {
+                // inject autowired
+                injectAutowired(item.target, item.target.prototype, container);
+                if (item.target.prototype && item.target.prototype._delay) {
+                    app.once("appLazy", () => {
+                        // lazy inject autowired
+                        injectAutowired(item.target, item.target.prototype, container, true);
+                    });
+                }
+                // inject value
+                injectValue(item.target, item.target.prototype, app);
+
                 const ctl = container.reg(item.target, { scope: 'Request', type: 'CONTROLLER' });
                 if (!(ctl instanceof BaseController)) {
                     throw new Error(`class ${item.id} does not inherit the class BaseController`);
@@ -142,6 +178,17 @@ export class Loader {
         }) => {
             item.id = (item.id || '').replace(`${MIDDLEWARE_KEY}:`, '');
             if (item.id && helper.isClass(item.target)) {
+                // inject autowired
+                injectAutowired(item.target, item.target.prototype, container);
+                if (item.target.prototype && item.target.prototype._delay) {
+                    app.once("appLazy", () => {
+                        // lazy inject autowired
+                        injectAutowired(item.target, item.target.prototype, container, true);
+                    });
+                }
+                // inject value
+                injectValue(item.target, item.target.prototype, app);
+
                 container.reg(item.target, { scope: 'Request', type: 'MIDDLEWARE' });
                 // middlewares[item.id] = item.target;
             }

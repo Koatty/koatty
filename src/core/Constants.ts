@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-31 18:00:16
+ * @ version: 2019-11-04 15:25:04
  */
 
 export const COMPONENT_KEY = 'COMPONENT';

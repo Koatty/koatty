@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-01 10:33:22
+ * @ version: 2019-11-04 15:26:41
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -541,31 +541,36 @@ export function getMethodNames(target: any): string[] {
  * @param {*} target
  * @param {*} instance
  * @param {Container} container
+ * @param {boolean} isLazy
  */
-export function injectAutowired(target: any, instance: any, container: Container) {
+export function injectAutowired(target: any, instance: any, container: Container, isLazy = false) {
     const metaDatas = recursiveGetMetadata(TAGGED_PROP, target);
     for (const metaData of metaDatas) {
         // tslint:disable-next-line: forin
         for (const metaKey in metaData) {
-            // tslint:disable-next-line: no-unused-expression
-            process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${getIdentifier(target)} properties key: ${metaKey} => value: ${JSON.stringify(metaData[metaKey])}`);
             let dep;
-            const { type, identifier, args } = metaData[metaKey] || { type: '', identifier: '', args: [] };
+            const { type, identifier, delay, args } = metaData[metaKey] || { type: '', identifier: '', delay: false, args: [] };
             if (type && identifier) {
-                //不能依赖注入控制器
-                if (type === 'CONTROLLER') {
-                    throw new Error(`Controller ${metaKey || ''} cannot be injected!`);
-                }
-                dep = container.get(identifier, type, args);
-                if (dep) {
-                    Reflect.defineProperty(instance, metaKey, {
-                        enumerable: false,
-                        configurable: false,
-                        writable: true,
-                        value: dep
-                    });
+                if (!delay || isLazy) {
+                    //不能依赖注入控制器
+                    if (type === 'CONTROLLER') {
+                        throw new Error(`Controller ${metaKey || ''} cannot be injected!`);
+                    }
+                    dep = container.get(identifier, type, args);
+                    if (dep) {
+                        // tslint:disable-next-line: no-unused-expression
+                        process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${target.name} properties key: ${metaKey} => value: ${JSON.stringify(metaData[metaKey])}`);
+                        Reflect.defineProperty(instance, metaKey, {
+                            enumerable: false,
+                            configurable: false,
+                            writable: true,
+                            value: dep
+                        });
+                    } else {
+                        throw new Error(`Component ${metaData[metaKey].identifier || ''} not found. It's autowired in class ${target.name}`);
+                    }
                 } else {
-                    throw new Error(`Component ${metaData[metaKey] || ''} not found. It's autowired in class ${target.name}`);
+                    target.prototype._delay = true;
                 }
             }
         }
