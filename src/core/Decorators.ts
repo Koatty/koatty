@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-04 15:26:58
+ * @ version: 2019-11-04 18:40:57
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -92,12 +92,22 @@ export function Autowired(identifier?: string, type?: CompomentType, constructAr
         if (type === undefined) {
             if (identifier.indexOf('Controller') > -1) {
                 type = 'CONTROLLER';
+            } else if (identifier.indexOf('Middleware') > -1) {
+                type = 'MIDDLEWARE';
             } else if (identifier.indexOf('Model') > -1) {
                 type = 'COMPONENT';
             } else {
                 type = 'SERVICE';
             }
         }
+        //Cannot rely on injection controller
+        if (type === 'CONTROLLER' && constructArgs.length < 2) {
+            throw new Error(`The dependency injection controller ${identifier || ''} must have a construction arguments(etc: app, ctx)!`);
+        }
+        //Cannot rely on injection middleware
+        // if (type === 'MIDDLEWARE') {
+        //     throw new Error(`Middleware ${identifier || ''} cannot be injected!`);
+        // }
 
         if (!designType) {
             savePropertyDataToClass(TAGGED_PROP, {

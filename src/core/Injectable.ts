@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-04 15:26:41
+ * @ version: 2019-11-04 18:31:22
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -552,10 +552,6 @@ export function injectAutowired(target: any, instance: any, container: Container
             const { type, identifier, delay, args } = metaData[metaKey] || { type: '', identifier: '', delay: false, args: [] };
             if (type && identifier) {
                 if (!delay || isLazy) {
-                    //不能依赖注入控制器
-                    if (type === 'CONTROLLER') {
-                        throw new Error(`Controller ${metaKey || ''} cannot be injected!`);
-                    }
                     dep = container.get(identifier, type, args);
                     if (dep) {
                         // tslint:disable-next-line: no-unused-expression
