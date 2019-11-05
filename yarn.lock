@@ -153,7 +153,7 @@
   dependencies:
     "@types/koa" "*"
 
-"@types/koa-router@^7.x.x":
+"@types/koa-router@^7.0.42":
   version "7.0.42"
   resolved "https://registry.yarnpkg.com/@types/koa-router/-/koa-router-7.0.42.tgz#0e5c01d4d0a2873d402d432114f08372d7c50eb1"
   integrity sha512-mggrNY7Ywwjt7QjaMAlbb1ixE+v7AFskOeyKdmZT/NvPVEAo48gYUxIcF8ILlMc3eg1bo6SxNoUcbxhTv7edrA==
@@ -172,7 +172,7 @@
     "@types/koa-compose" "*"
     "@types/node" "*"
 
-"@types/koa@^2.x.x":
+"@types/koa@^2.0.51":
   version "2.0.51"
   resolved "https://registry.yarnpkg.com/@types/koa/-/koa-2.0.51.tgz#b08a57dc49e34aaf6b5cc004b5fef4b16ebe32e1"
   integrity sha512-L5e/l6Z+SR9Jk6HM0wNYdkvWhSUBOvi+7Q5Uwn7kE/VmBXX7NIxARMigARWAyXAtXiv5Ry1P2HmebolFdvuIVg==
@@ -184,7 +184,7 @@
     "@types/koa-compose" "*"
     "@types/node" "*"
 
-"@types/lodash@^4.x.x":
+"@types/lodash@^4.14.144":
   version "4.14.144"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.144.tgz#12e57fc99064bce45e5ab3c8bc4783feb75eab8e"
   integrity sha512-ogI4g9W5qIQQUhXAclq6zhqgqNUr7UlFaqDHbch7WLSLeeM/7d3CRaw7GLajxvyFvhJqw4Rpcz5bhoaYtIx6Tg==
@@ -204,10 +204,10 @@
   resolved "https://registry.npm.taobao.org/@types/node/download/@types/node-12.7.12.tgz#7c6c571cc2f3f3ac4a59a5f2bd48f5bdbc8653cc"
   integrity sha1-fGxXHMLz86xKWaXyvUj1vbyGU8w=
 
-"@types/node@^12.x.x":
-  version "12.12.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.0.tgz#ff3201972d6dc851a9275308a17b9b5094e68057"
-  integrity sha512-6N8Sa5AaENRtJnpKXZgvc119PKxT1Lk9VPy4kfT8JF23tIe1qDfaGkBR2DRKJFIA7NptMz+fps//C6aLi1Uoug==
+"@types/node@^12.7.12":
+  version "12.12.5"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.5.tgz#66103d2eddc543d44a04394abb7be52506d7f290"
+  integrity sha512-KEjODidV4XYUlJBF3XdjSH5FWoMCtO0utnhtdLf1AgeuZLOrRbvmU/gaRCVg7ZaQDjVf3l84egiY0mRNe5xE4A==
 
 "@types/range-parser@*":
   version "1.2.3"
@@ -2456,7 +2456,7 @@ text-table@^0.2.0:
   resolved "https://registry.npm.taobao.org/text-table/download/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
-think_lib@^2.2.4, think_lib@^2.x.x:
+think_lib@^2.x.x:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/think_lib/-/think_lib-2.2.4.tgz#d9db570cf9f8679ebf99a9b8986ca4c41e62e5f6"
   integrity sha512-f5YQ1REQP28o6mKi5PShTfjNFkxmBrk5jhp8UeWcAoYp0xTJWHSS73wiGmooh34B4KuiuN5qJO3Y7Fn5Wmp4mA==
@@ -2466,13 +2466,6 @@ think_lib@^2.2.4, think_lib@^2.x.x:
     lodash "^4.17.15"
     typescript "^3.5.3"
 
-think_logger@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/think_logger/-/think_logger-2.1.0.tgz#74c9383dc2d590bd11303d0c94e29bdc5321d332"
-  integrity sha512-JrFv4fqxnnQL8TnPNp9EZUPGOEhD/s2fUA4Gq8ABYhZK6KaTSgTNS4fNLGQx7E/yCCmFh5e9n3HJmgAPIdwDSQ==
-  dependencies:
-    think_lib "^2.x.x"
-
 think_logger@^2.x.x:
   version "2.0.6"
   resolved "https://registry.npm.taobao.org/think_logger/download/think_logger-2.0.6.tgz#b575fdc36ffec9fbf480c2b4264bc204880ce615"
@@ -2480,7 +2473,7 @@ think_logger@^2.x.x:
   dependencies:
     think_lib "^2.x.x"
 
-think_payload@^2.1.1:
+think_payload@^2.x.x:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/think_payload/-/think_payload-2.1.1.tgz#03d8238d8221cbd870be9a5810bdae6487accff0"
   integrity sha512-1dWTbeXt30/SspN/r823OroQhW7ZbQ/IEqxbHW7+zsKUPnCCxZPdDj4O/MbR+22Z5YpCx7QuNjNH6jDDIGsCYg==
@@ -2492,7 +2485,7 @@ think_payload@^2.1.1:
     think_lib "^2.x.x"
     xml2js "^0.4.22"
 
-think_static@^2.1.2:
+think_static@^2.x.x:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/think_static/-/think_static-2.1.2.tgz#2473ee661d71be4e6aefff1c1edc3e56167aece4"
   integrity sha512-jZj3U6iy0Ip0pMFoxcSuRiq5deimU3OPuKMye7D2A0cnO/boxLbGmIQ2R72qQTSISat49M9MHMOOHLT08AwQQg==
@@ -2501,7 +2494,7 @@ think_static@^2.1.2:
     mime-types "^2.1.24"
     think_lib "^2.x.x"
 
-think_trace@^2.1.2:
+think_trace@^2.x.x:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/think_trace/-/think_trace-2.1.2.tgz#f92ba4ae3381fe6173810b47d84509b852c9abde"
   integrity sha512-L89HQtSo6rBCHsImPbwnK6FEF8yGbD4s/gd86P/BEU82gfIdWrTYeNV/9H9l4Y1Rf4hWXz+1A4le5j0FGK1dvw==
