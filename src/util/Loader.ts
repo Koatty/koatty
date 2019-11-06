@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-04 16:51:35
+ * @ version: 2019-11-05 20:40:56
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -51,7 +51,7 @@ export class Loader {
             appConfig[name] = exp.default ? exp.default : exp;
         });
 
-        app._caches.configs = helper.extend(config, appConfig, true);
+        app.setMap("configs", helper.extend(config, appConfig, true));
     }
 
     /**
@@ -151,7 +151,8 @@ export class Loader {
                 controllers[item.id] = item.target;
             }
         });
-        helper.define(app._caches, 'controllers', controllers);
+
+        app.setMap("controllers", controllers);
     }
 
     /**
@@ -163,7 +164,7 @@ export class Loader {
      * @memberof Loader
      */
     public static loadMiddlewares(app: any, container: Container) {
-        const configs = app._caches.configs || {};
+        const configs = app.getMap("configs") || {};
         //default middleware list
         const defaultList = ['Static', 'Payload'];
         //Mount default middleware
@@ -231,7 +232,7 @@ export class Loader {
             }
         });
 
-        // helper.define(app._caches, 'middlewares', middlewares);
+        // app.setMap("middlewares", middlewares);
     }
 
     /**

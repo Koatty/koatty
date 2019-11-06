@@ -2,12 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-01 19:02:51
+ * @ version: 2019-11-05 20:55:24
  */
 import KoaRouter from 'koa-router';
 import * as Koa from 'koa';
 import * as helper from "think_lib";
 import * as logger from "think_logger";
+import { Koatty } from '../Koatty';
 import { Container } from './Container';
 import { injectRouter, injectParam } from './Injectable';
 
@@ -27,11 +28,11 @@ import { injectRouter, injectParam } from './Injectable';
 // };
 
 export class Router {
-    app: any;
+    app: Koatty;
     container: Container;
     options: any;
 
-    constructor(app: any, container: Container, options?: any) {
+    constructor(app: Koatty, container: Container, options?: any) {
         this.app = app;
         this.container = container;
         // prefix: string;
@@ -68,7 +69,7 @@ export class Router {
             const execRouter = this.execRouter;
             const container = this.container;
 
-            const controllers = app._caches.controllers || {};
+            const controllers = app.getMap("controllers") || {};
             const kRouter: any = new KoaRouter(options);
             // tslint:disable-next-line: forin
             for (const n in controllers) {

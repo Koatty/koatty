@@ -2,37 +2,17 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-01 19:24:28
+ * @ version: 2019-11-05 21:17:31
  */
 
 import * as path from "path";
-import * as Koa from "koa";
+import Koa from "koa";
+import KoaRouter from 'koa-router';
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { PREVENT_NEXT_PROCESS } from './core/Constants';
 import { Container } from './core/Container';
 const pkg = require('../package.json');
-
-
-/**
- * Base Application interface
- *
- * @export
- * @interface BaseApp
- * @extends {Koa}
- */
-export interface BaseApp extends Koa {
-    readonly root_path: string;
-    readonly app_path: string;
-    readonly think_path: string;
-    readonly app_debug: boolean;
-    readonly options: InitOptions;
-    readonly config: (name: string, type?: string) => any;
-    readonly prevent: () => Promise<never>;
-    readonly isPrevent: (err: any) => boolean;
-    readonly useExp: (fn: Function) => any;
-    readonly Container: Container;
-}
 
 /**
  * check node version
@@ -96,19 +76,21 @@ interface InitOptions {
  * @extends {Koa}
  * @implements {BaseApp}
  */
-export class Koatty extends Koa.default implements BaseApp {
+export class Koatty extends Koa {
     public root_path: string;
     public app_path: string;
     public think_path: string;
     public app_debug: boolean;
     public options: InitOptions;
     public Container: Container;
-    public _caches: any;
+    public Router: KoaRouter;
+    private handelMap: Map<string, any>;
 
     protected constructor(options: InitOptions) {
         super();
         this.options = options || {};
         this.init();
+        this.handelMap = new Map<string, any>();
         // initialize
         this.initialize();
     }
@@ -117,6 +99,7 @@ export class Koatty extends Koa.default implements BaseApp {
      * app custom init, must be defined options
      */
     public init() { }
+
 
     /**
      * initialize env
@@ -151,13 +134,34 @@ export class Koatty extends Koa.default implements BaseApp {
         process.env.APP_PATH = this.app_path;
         process.env.THINK_PATH = this.think_path;
 
-        // caches handle
+        // Compatible with old version
         Object.defineProperty(this, '_caches', {
             value: {},
             writable: true,
             configurable: false,
             enumerable: false
         });
+    }
+
+    /**
+     * Set application cache
+     *
+     * @param {string} key
+     * @param {*} value
+     * @memberof Koatty
+     */
+    setMap(key: string, value: any) {
+        return this.handelMap.set(key, value);
+    }
+
+    /**
+     * Get application cache by key
+     *
+     * @param {string} key
+     * @memberof Koatty
+     */
+    getMap(key: string) {
+        return this.handelMap.get(key);
     }
 
     /**
@@ -217,7 +221,7 @@ export class Koatty extends Koa.default implements BaseApp {
      */
     public config(name: string, type = 'config') {
         try {
-            const caches = this._caches.configs || {};
+            const caches = this.getMap("configs") || {};
             // tslint:disable-next-line: no-unused-expression
             caches[type] || (caches[type] = {});
             if (name === undefined) {
@@ -275,7 +279,7 @@ export class Koatty extends Koa.default implements BaseApp {
      * @memberof ThinkKoa
      */
     private captureError(): void {
-        const configs = this._caches.configs || {};
+        const configs = this.getMap("configs") || {};
         //日志
         if (configs.config) {
             process.env.LOGS = configs.config.logs || false;
