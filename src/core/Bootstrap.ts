@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-04 16:51:48
+ * @ version: 2019-11-08 10:56:21
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -69,7 +69,7 @@ export function Bootstrap(): ClassDecorator {
             container.app = app;
 
             logger.custom('think', '', 'LoadComponents ...');
-            Loader.loadCmponents(app, container);
+            Loader.loadComponents(app, container);
 
             logger.custom('think', '', 'LoadServices ...');
             Loader.loadServices(app, container);

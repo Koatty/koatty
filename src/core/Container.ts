@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-04 14:17:06
+ * @ version: 2019-11-08 09:57:22
  */
 import * as helper from "think_lib";
 import { CompomentType } from './Constants';
@@ -108,6 +108,8 @@ export class Container implements IContainer {
                 instance = this.reg(identifier, target);
             }
         }
+        // tslint:disable-next-line: no-unused-expression
+        instance && !instance.app && (instance.app = this.app);
 
         return instance;
     }

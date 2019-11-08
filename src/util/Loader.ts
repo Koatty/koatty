@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-05 20:40:56
+ * @ version: 2019-11-08 10:56:16
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -62,7 +62,7 @@ export class Loader {
      * @param {Container} container
      * @memberof Loader
      */
-    public static loadCmponents(app: any, container: Container) {
+    public static loadComponents(app: any, container: Container) {
         const componentList = listModule(COMPONENT_KEY);
 
         let id: string;
