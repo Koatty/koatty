@@ -50,16 +50,25 @@ koatty service test
 koatty middleware test
 
 ```
+### 4.Create a Model
 
-### 4.Define TestController
+Supports [thinkorm](https://github.com/thinkkoa/thinkorm) and [typeorm](https://github.com/typeorm/typeorm). Please expand other ORM by yourself.
+
+```shell
+//thinkorm
+koatty middleware test
+
+//typeorm
+koatty middleware -o typeorm test
+
+```
+
+### 5.Define TestController
 
 ```javascript
 import { Controller, BaseController, Autowired, GetMaping, RequestBody, PathVariable, PostMaping, BaseApp, RequestMapping, RequestMethod } from "koatty";
 import { TestService } from "../service/TestService";
-
-interface App extends BaseApp {
-    cache: any;
-}
+import { App } from "../App";
 
 @Controller()
 export class IndexController extends BaseController {
