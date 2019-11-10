@@ -78,7 +78,6 @@ export class IndexController extends BaseController {
     private testService: TestService;
 
     init() {
-        //...
         this.app.cache = {};
         console.log('IndexController.init()', this.app.cache);
     }
