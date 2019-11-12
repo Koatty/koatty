@@ -22,8 +22,8 @@ export class TestController extends AppBaseController {
     private test: string;
     @Autowired()
     private testService: TestService;
-    @Autowired()
-    Model: TestService;
+    // @Autowired()
+    // Model: TestService;
     private num = 0;
 
     init() {
@@ -35,7 +35,7 @@ export class TestController extends AppBaseController {
         console.log('info', typeof aa, typeof bb);
         console.log('info', aa, bb);
         console.log('test', this.test);
-        console.log('testService', this.Model instanceof TestService);
+        console.log('testService', this.testService instanceof TestService);
         console.log('ctx', this.ctx.url);
         console.log('options', this._options.scope);
         console.log('test.sayHello!', this.isGet());

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-12 20:34:21
+ * @ version: 2019-11-12 21:06:02
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -151,6 +151,29 @@ export class Injectable {
     }
 
     /**
+     * attach data to class or property
+     *
+     * @param {string} type
+     * @param {(string | symbol)} decoratorNameKey
+     * @param {*} data
+     * @param {*} target
+     * @param {undefined} [propertyName]
+     * @memberof Injectable
+     */
+    public attachMetadata(type: string, decoratorNameKey: string | symbol, data: any, target: any, propertyName?: undefined) {
+        let originMap;
+        if (propertyName) {
+            originMap = Injectable.getOriginMetadata(type, target, propertyName);
+        } else {
+            originMap = Injectable.getOriginMetadata(type, target);
+        }
+        if (!originMap.has(decoratorNameKey)) {
+            originMap.set(decoratorNameKey, []);
+        }
+        originMap.get(decoratorNameKey).push(data);
+    }
+
+    /**
      * get single data from class or property
      *
      * @param {string} type
@@ -196,10 +219,20 @@ export class Injectable {
     public attachPropertyData(decoratorNameKey: string | symbol, data: any, target: any, propertyName: string | symbol) {
         const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
         if (!originMap.has(propertyName)) {
-            originMap.set(propertyName, {});
+            originMap.set(propertyName, []);
         }
-        const map: any = originMap.get(propertyName);
-        originMap.set(propertyName, { ...map, ...data });
+        const map: any[] = originMap.get(propertyName);
+        // let flag = true;
+        // if (map.length > 0) {
+        //     for (const n of map) {
+        //         if (JSON.stringify(n) === JSON.stringify(data)) {
+        //             flag = false;
+        //         }
+        //     }
+        // }
+        // if (flag) {
+        originMap.get(propertyName).push(data);
+        // }
     }
 
     /**
@@ -575,14 +608,15 @@ export function injectRouter(target: any, instance?: any) {
         // tslint:disable-next-line: no-unused-expression
         process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject method Router key: ${metaKey} => value: ${JSON.stringify(rmetaData[metaKey])}`);
 
-        if (rmetaData[metaKey]) {
+        for (const val of rmetaData[metaKey]) {
             const tmp = {
-                ...rmetaData[metaKey],
-                path: `${path}${rmetaData[metaKey].path}`.replace("//", "/")
+                ...val,
+                path: `${path}${val.path}`.replace("//", "/")
             };
             router[`${tmp.path}-${tmp.requestMethod}`] = tmp;
         }
     }
+
     return router;
 }
 
@@ -595,18 +629,14 @@ export function injectRouter(target: any, instance?: any) {
  */
 export function injectParam(target: any, instance?: any) {
     instance = instance || target.prototype;
-    const methods = getMethodNames(target);
+    // const methods = getMethodNames(target);
     const metaDatas = listPropertyDataFromClass(PARAM_KEY, target);
     const argsMetaObj: any = {};
     for (const meta in metaDatas) {
-        console.log(metaDatas[meta].length);
-        console.log(instance[meta].length);
-        if (metaDatas[meta] && instance[meta].length <= metaDatas[meta].length) {
-            // if (meta && meta[m]) {
+        if (instance[meta] && instance[meta].length <= metaDatas[meta].length) {
             // tslint:disable-next-line: no-unused-expression
             process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${getIdentifier(target)} param key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
             argsMetaObj[meta] = metaDatas[meta];
-            break;
         }
     }
     return argsMetaObj;
