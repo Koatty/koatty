@@ -71,6 +71,7 @@
         "no-var-requires": false,
         "no-magic-numbers": false,
         "only-arrow-functions": false,
+        "type-literal-delimiter": false,
         "no-parameter-reassignment": false,
         "member-access": false,
         "member-ordering": false,

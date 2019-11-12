@@ -22,15 +22,12 @@ export class TestController extends AppBaseController {
     private test: string;
     @Autowired()
     private testService: TestService;
+    @Autowired()
+    Model: TestService;
     private num = 0;
-    private mm1: any;
-    private mm2: any;
 
     init() {
-        this.mm1 = this.app.mm1;
-        this.mm2 = this.app.mm2;
-        console.log('TestController.mm1', this.mm1);
-        console.log('TestController.mm2', this.mm2);
+        // this.Model = this.testService;
     }
 
     @GetMaping()
@@ -38,7 +35,7 @@ export class TestController extends AppBaseController {
         console.log('info', typeof aa, typeof bb);
         console.log('info', aa, bb);
         console.log('test', this.test);
-        console.log('testService', this.testService instanceof TestService);
+        console.log('testService', this.Model instanceof TestService);
         console.log('ctx', this.ctx.url);
         console.log('options', this._options.scope);
         console.log('test.sayHello!', this.isGet());
