@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-04 18:31:22
+ * @ version: 2019-11-12 09:16:50
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -611,10 +611,15 @@ export function injectRouter(target: any, instance?: any) {
     // Controller router path
     const metaDatas = listPropertyDataFromClass(NAMED_TAG, target);
     let path = '';
-    if (metaDatas.length > 0 && metaDatas[0]) {
+    if (metaDatas.length > 0) {
         const identifier = getIdentifier(target);
-        path = metaDatas[0][identifier] || '';
+        metaDatas.map((item: any) => {
+            if (item[identifier]) {
+                path = item[identifier] || "";
+            }
+        });
     }
+    path = path.startsWith("/") || path === "" ? path : '/' + path;
 
     const routerMetaDatas = listPropertyDataFromClass(ROUTER_KEY, target);
     const router: any = {};
@@ -630,7 +635,7 @@ export function injectRouter(target: any, instance?: any) {
             for (const val of rmetaData[metaKey]) {
                 const tmp = {
                     ...val,
-                    path: `${path.startsWith("/") || path === "" ? path : '/' + path}${val.path}`
+                    path: `${path}${val.path}`.replace("//", "/")
                 };
                 // instance._options.router.push(tmp);
                 router[`${tmp.path}-${tmp.requestMethod}`] = tmp;
