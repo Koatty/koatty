@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-30 18:16:57
+ * @ version: 2019-11-12 21:25:13
  */
 import { Koatty } from '../Koatty';
 import { ObjectDefinitionOptions } from '../core/IContainer';
@@ -23,12 +23,7 @@ export class Base {
      * @memberof Base
      */
     protected constructor(app: Koatty) {
-        try {
-            this.app = app;
-            this.init();
-        } catch (e) {
-            throw Error(e.stack);
-        }
+        this.app = app;
     }
 
     /**

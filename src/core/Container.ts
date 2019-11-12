@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-12 19:44:15
+ * @ version: 2019-11-12 21:35:23
  */
 import * as helper from "think_lib";
 import { CompomentType } from './Constants';
@@ -65,28 +65,30 @@ export class Container implements IContainer {
                 if (!ref) {
                     saveModule(options.type, target, identifier);
                 }
-                // inject options
-                if (!target.prototype._options) {
-                    Reflect.defineProperty(target.prototype, '_options', {
-                        enumerable: false,
-                        configurable: false,
-                        writable: true,
-                        value: options
-                    });
-                }
+                // instantiation
                 instance = Reflect.construct(target, options.args && options.args.length ? options.args : [this.app]);
+                // inject options once
+                Reflect.defineProperty(instance, '_options', {
+                    enumerable: false,
+                    configurable: false,
+                    writable: true,
+                    value: options
+                });
                 // inject autowired
-                injectAutowired(target, instance, this);
+                injectAutowired(target, target.prototype, this);
                 if (target.prototype && target.prototype._delay) {
                     // tslint:disable-next-line: no-unused-expression
                     this.app.once && this.app.once("appLazy", () => {
                         // lazy inject autowired
-                        injectAutowired(target, instance, this, true);
+                        injectAutowired(target, target.prototype, this, true);
                     });
                 }
                 // inject value
-                injectValue(target, instance, this.app);
+                injectValue(target, target.prototype, this.app);
 
+                //invoke init
+                // tslint:disable-next-line: no-unused-expression
+                instance.init && instance.init();
                 this.handlerMap.set(target, instance);
             } else {
                 instance = target;
