@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-08 09:57:22
+ * @ version: 2019-11-12 19:44:15
  */
 import * as helper from "think_lib";
 import { CompomentType } from './Constants';
@@ -75,6 +75,18 @@ export class Container implements IContainer {
                     });
                 }
                 instance = Reflect.construct(target, options.args && options.args.length ? options.args : [this.app]);
+                // inject autowired
+                injectAutowired(target, instance, this);
+                if (target.prototype && target.prototype._delay) {
+                    // tslint:disable-next-line: no-unused-expression
+                    this.app.once && this.app.once("appLazy", () => {
+                        // lazy inject autowired
+                        injectAutowired(target, instance, this, true);
+                    });
+                }
+                // inject value
+                injectValue(target, instance, this.app);
+
                 this.handlerMap.set(target, instance);
             } else {
                 instance = target;

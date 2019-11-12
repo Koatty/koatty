@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-12 09:16:50
+ * @ version: 2019-11-12 20:34:21
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -88,11 +88,11 @@ export class Injectable {
      *
      * @param {string} key
      * @param {*} module
-     * @param {string} [identifier]
+     * @param {string} identifier
      * @memberof Injectable
      */
-    public saveModule(key: string, module: any, identifier?: string) {
-        identifier = identifier || this.getIdentifier(module);
+    public saveModule(key: string, module: any, identifier: string) {
+        Reflect.defineMetadata(TAGGED_CLS, { id: identifier }, module);
         if (!this.handlerMap.has(module)) {
             this.handlerMap.set(`${key}:${identifier}`, module);
         }
@@ -151,29 +151,6 @@ export class Injectable {
     }
 
     /**
-     * attach data to class or property
-     *
-     * @param {string} type
-     * @param {(string | symbol)} decoratorNameKey
-     * @param {*} data
-     * @param {*} target
-     * @param {undefined} [propertyName]
-     * @memberof Injectable
-     */
-    public attachMetadata(type: string, decoratorNameKey: string | symbol, data: any, target: any, propertyName?: undefined) {
-        let originMap;
-        if (propertyName) {
-            originMap = Injectable.getOriginMetadata(type, target, propertyName);
-        } else {
-            originMap = Injectable.getOriginMetadata(type, target);
-        }
-        if (!originMap.has(decoratorNameKey)) {
-            originMap.set(decoratorNameKey, []);
-        }
-        originMap.get(decoratorNameKey).push(data);
-    }
-
-    /**
      * get single data from class or property
      *
      * @param {string} type
@@ -202,7 +179,7 @@ export class Injectable {
      * @param {(string | symbol)} propertyName
      * @memberof Injectable
      */
-    public savePropertyDataToClass(decoratorNameKey: string | symbol, data: any, target: any, propertyName: string | symbol) {
+    public savePropertyData(decoratorNameKey: string | symbol, data: any, target: any, propertyName: string | symbol) {
         const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
         originMap.set(propertyName, data);
     }
@@ -216,23 +193,13 @@ export class Injectable {
      * @param {(string | symbol)} propertyName
      * @memberof Injectable
      */
-    public attachPropertyDataToClass(decoratorNameKey: string | symbol, data: any, target: any, propertyName: string | symbol) {
+    public attachPropertyData(decoratorNameKey: string | symbol, data: any, target: any, propertyName: string | symbol) {
         const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
         if (!originMap.has(propertyName)) {
-            originMap.set(propertyName, []);
+            originMap.set(propertyName, {});
         }
-        const map: any[] = originMap.get(propertyName);
-        let flag = true;
-        if (map.length > 0) {
-            for (const n of map) {
-                if (JSON.stringify(n) === JSON.stringify(data)) {
-                    flag = false;
-                }
-            }
-        }
-        if (flag) {
-            originMap.get(propertyName).push(data);
-        }
+        const map: any = originMap.get(propertyName);
+        originMap.set(propertyName, { ...map, ...data });
     }
 
     /**
@@ -244,7 +211,7 @@ export class Injectable {
      * @returns
      * @memberof Injectable
      */
-    public getPropertyDataFromClass(decoratorNameKey: string | symbol, target: any, propertyName: string | symbol) {
+    public getPropertyData(decoratorNameKey: string | symbol, target: any, propertyName: string | symbol) {
         const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
         return originMap.get(propertyName);
     }
@@ -257,13 +224,13 @@ export class Injectable {
      * @returns
      * @memberof Injectable
      */
-    public listPropertyDataFromClass(decoratorNameKey: string | symbol, target: any) {
+    public listPropertyData(decoratorNameKey: string | symbol, target: any) {
         const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
-        const res: any[] = [];
+        const datas: any = {};
         for (const [key, value] of originMap) {
-            res.push({ [key]: value });
+            datas[key] = value;
         }
-        return res;
+        return datas;
     }
 }
 
@@ -279,17 +246,6 @@ const manager = new Injectable();
  */
 export function saveClassMetadata(type: string, decoratorNameKey: string, data: any, target: any) {
     return manager.saveMetadata(type, decoratorNameKey, data, target);
-}
-
-/**
- * attach data to class
- * @param type
- * @param decoratorNameKey
- * @param data
- * @param target
- */
-export function attachClassMetadata(type: string, decoratorNameKey: string | symbol, data: any, target: any) {
-    return manager.attachMetadata(type, decoratorNameKey, data, target);
 }
 
 /**
@@ -310,7 +266,7 @@ export function getClassMetadata(type: string, decoratorNameKey: string, target:
  * @param propertyName
  */
 export function savePropertyDataToClass(decoratorNameKey: string, data: any, target: any, propertyName: any) {
-    return manager.savePropertyDataToClass(decoratorNameKey, data, target, propertyName);
+    return manager.savePropertyData(decoratorNameKey, data, target, propertyName);
 }
 
 /**
@@ -321,7 +277,7 @@ export function savePropertyDataToClass(decoratorNameKey: string, data: any, tar
  * @param propertyName
  */
 export function attachPropertyDataToClass(decoratorNameKey: string, data: any, target: any, propertyName: any) {
-    return manager.attachPropertyDataToClass(decoratorNameKey, data, target, propertyName);
+    return manager.attachPropertyData(decoratorNameKey, data, target, propertyName);
 }
 
 /**
@@ -331,7 +287,7 @@ export function attachPropertyDataToClass(decoratorNameKey: string, data: any, t
  * @param propertyName
  */
 export function getPropertyDataFromClass(decoratorNameKey: string, target: any, propertyName: any) {
-    return manager.getPropertyDataFromClass(decoratorNameKey, target, propertyName);
+    return manager.getPropertyData(decoratorNameKey, target, propertyName);
 }
 
 /**
@@ -340,7 +296,7 @@ export function getPropertyDataFromClass(decoratorNameKey: string, target: any, 
  * @param target
  */
 export function listPropertyDataFromClass(decoratorNameKey: string, target: any) {
-    return manager.listPropertyDataFromClass(decoratorNameKey, target);
+    return manager.listPropertyData(decoratorNameKey, target);
 }
 
 /**
@@ -362,7 +318,7 @@ export function savePropertyMetadata(decoratorNameKey: string, data: any, target
  * @param propertyName
  */
 export function attachPropertyMetadata(decoratorNameKey: string, data: any, target: any, propertyName: any) {
-    return manager.attachMetadata(decoratorNameKey, data, target, propertyName);
+    return manager.attachPropertyData(decoratorNameKey, data, target, propertyName);
 }
 
 /**
@@ -393,7 +349,7 @@ export function listModule(key: string) {
 /**
  * save module
  */
-export function saveModule(key: string, module: any, identifier?: string) {
+export function saveModule(key: string, module: any, identifier: string) {
     return manager.saveModule(key, module, identifier);
 }
 
@@ -475,16 +431,9 @@ function ordinaryGetPrototypeOf(obj: any): any {
  * @param target the target of metadataKey
  */
 export function recursiveGetMetadata(metadataKey: any, target: any, propertyKey?: string | symbol): any[] {
-    const metadatas = new Set();
-
     // get metadata value of a metadata key on the prototype
     // let metadata = Reflect.getOwnMetadata(metadataKey, target, propertyKey);
-    const metadata = listPropertyDataFromClass(metadataKey, target);
-    if (metadata) {
-        metadata.map((it: any) => {
-            metadatas.add(it);
-        });
-    }
+    const metadata = listPropertyDataFromClass(metadataKey, target) || {};
 
     // get metadata value of a metadata key on the prototype chain
     let parent = ordinaryGetPrototypeOf(target);
@@ -492,13 +441,15 @@ export function recursiveGetMetadata(metadataKey: any, target: any, propertyKey?
         // metadata = Reflect.getOwnMetadata(metadataKey, parent, propertyKey);
         const pmetadata = listPropertyDataFromClass(metadataKey, parent);
         if (pmetadata) {
-            pmetadata.map((it: any) => {
-                metadatas.add(it);
-            });
+            for (const n in pmetadata) {
+                if (!metadata[n]) {
+                    metadata[n] = pmetadata[n];
+                }
+            }
         }
         parent = ordinaryGetPrototypeOf(parent);
     }
-    return Array.from(metadatas);
+    return metadata;
 }
 
 /**
@@ -544,30 +495,28 @@ export function getMethodNames(target: any): string[] {
  * @param {boolean} isLazy
  */
 export function injectAutowired(target: any, instance: any, container: Container, isLazy = false) {
-    const metaDatas = recursiveGetMetadata(TAGGED_PROP, target);
-    for (const metaData of metaDatas) {
-        // tslint:disable-next-line: forin
-        for (const metaKey in metaData) {
-            let dep;
-            const { type, identifier, delay, args } = metaData[metaKey] || { type: '', identifier: '', delay: false, args: [] };
-            if (type && identifier) {
-                if (!delay || isLazy) {
-                    dep = container.get(identifier, type, args);
-                    if (dep) {
-                        // tslint:disable-next-line: no-unused-expression
-                        process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${target.name} properties key: ${metaKey} => value: ${JSON.stringify(metaData[metaKey])}`);
-                        Reflect.defineProperty(instance, metaKey, {
-                            enumerable: false,
-                            configurable: false,
-                            writable: true,
-                            value: dep
-                        });
-                    } else {
-                        throw new Error(`Component ${metaData[metaKey].identifier || ''} not found. It's autowired in class ${target.name}`);
-                    }
+    const metaData = recursiveGetMetadata(TAGGED_PROP, target);
+    // tslint:disable-next-line: forin
+    for (const metaKey in metaData) {
+        let dep;
+        const { type, identifier, delay, args } = metaData[metaKey] || { type: '', identifier: '', delay: false, args: [] };
+        if (type && identifier) {
+            if (!delay || isLazy) {
+                dep = container.get(identifier, type, args);
+                if (dep) {
+                    // tslint:disable-next-line: no-unused-expression
+                    process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${target.name} properties key: ${metaKey} => value: ${JSON.stringify(metaData[metaKey])}`);
+                    Reflect.defineProperty(instance, metaKey, {
+                        enumerable: false,
+                        configurable: false,
+                        writable: true,
+                        value: dep
+                    });
                 } else {
-                    target.prototype._delay = true;
+                    throw new Error(`Component ${metaData[metaKey].identifier || ''} not found. It's autowired in class ${target.name}`);
                 }
+            } else {
+                target.prototype._delay = true;
             }
         }
     }
@@ -581,22 +530,20 @@ export function injectAutowired(target: any, instance: any, container: Container
  * @param {*} app
  */
 export function injectValue(target: any, instance: any, app: any) {
-    const metaDatas = recursiveGetMetadata(TAGGED_ARGS, target);
-    for (const metaData of metaDatas) {
-        // tslint:disable-next-line: forin
-        for (const metaKey in metaData) {
-            // tslint:disable-next-line: no-unused-expression
-            process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${getIdentifier(target)} config key: ${metaKey} => value: ${metaData[metaKey]}`);
-            const propKeys = metaData[metaKey].split('|');
-            const [propKey, type] = propKeys;
-            const prop = app.config(propKey, type);
-            Reflect.defineProperty(instance, metaKey, {
-                enumerable: false,
-                configurable: false,
-                writable: true,
-                value: prop
-            });
-        }
+    const metaData = recursiveGetMetadata(TAGGED_ARGS, target);
+    // tslint:disable-next-line: forin
+    for (const metaKey in metaData) {
+        // tslint:disable-next-line: no-unused-expression
+        process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${getIdentifier(target)} config key: ${metaKey} => value: ${metaData[metaKey]}`);
+        const propKeys = metaData[metaKey].split('|');
+        const [propKey, type] = propKeys;
+        const prop = app.config(propKey, type);
+        Reflect.defineProperty(instance, metaKey, {
+            enumerable: false,
+            configurable: false,
+            writable: true,
+            value: prop
+        });
     }
 }
 
@@ -621,26 +568,19 @@ export function injectRouter(target: any, instance?: any) {
     }
     path = path.startsWith("/") || path === "" ? path : '/' + path;
 
-    const routerMetaDatas = listPropertyDataFromClass(ROUTER_KEY, target);
+    const rmetaData = listPropertyDataFromClass(ROUTER_KEY, target);
     const router: any = {};
-    for (const rmetaData of routerMetaDatas) {
-        // tslint:disable-next-line: forin
-        for (const metaKey in rmetaData) {
-            // tslint:disable-next-line: no-unused-expression
-            process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject method Router key: ${metaKey} => value: ${JSON.stringify(rmetaData[metaKey])}`);
+    // tslint:disable-next-line: forin
+    for (const metaKey in rmetaData) {
+        // tslint:disable-next-line: no-unused-expression
+        process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject method Router key: ${metaKey} => value: ${JSON.stringify(rmetaData[metaKey])}`);
 
-            // if (instance._options) {
-            // tslint:disable-next-line: no-unused-expression
-            // !instance._options.router && (instance._options.router = []);
-            for (const val of rmetaData[metaKey]) {
-                const tmp = {
-                    ...val,
-                    path: `${path}${val.path}`.replace("//", "/")
-                };
-                // instance._options.router.push(tmp);
-                router[`${tmp.path}-${tmp.requestMethod}`] = tmp;
-            }
-            // }
+        if (rmetaData[metaKey]) {
+            const tmp = {
+                ...rmetaData[metaKey],
+                path: `${path}${rmetaData[metaKey].path}`.replace("//", "/")
+            };
+            router[`${tmp.path}-${tmp.requestMethod}`] = tmp;
         }
     }
     return router;
@@ -658,24 +598,16 @@ export function injectParam(target: any, instance?: any) {
     const methods = getMethodNames(target);
     const metaDatas = listPropertyDataFromClass(PARAM_KEY, target);
     const argsMetaObj: any = {};
-    for (const m of methods) {
-        for (const meta of metaDatas) {
-            if (meta && meta[m] && instance[m].length <= meta[m].length) {
-                // if (meta && meta[m]) {
-                // tslint:disable-next-line: no-unused-expression
-                process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${getIdentifier(target)} param key: ${helper.toString(m)} => value: ${JSON.stringify(meta[m])}`);
-                argsMetaObj[m] = meta[m];
-                break;
-            }
+    for (const meta in metaDatas) {
+        console.log(metaDatas[meta].length);
+        console.log(instance[meta].length);
+        if (metaDatas[meta] && instance[meta].length <= metaDatas[meta].length) {
+            // if (meta && meta[m]) {
+            // tslint:disable-next-line: no-unused-expression
+            process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${getIdentifier(target)} param key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
+            argsMetaObj[meta] = metaDatas[meta];
+            break;
         }
     }
-    // tslint:disable-next-line: no-unused-expression
-    // !instance._options.params && (instance._options.params = {});
-    // Reflect.defineProperty(instance._options, 'params', {
-    //     enumerable: false,
-    //     configurable: false,
-    //     writable: true,
-    //     value: argsMetaObj
-    // });
     return argsMetaObj;
 }

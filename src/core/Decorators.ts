@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-04 18:40:57
+ * @ version: 2019-11-12 17:40:13
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -34,8 +34,8 @@ export function Component(identifier?: string): ClassDecorator {
  */
 export function Controller(path?: string): ClassDecorator {
     return (target: any) => {
-        saveModule(CONTROLLER_KEY, target);
         const identifier = getIdentifier(target);
+        saveModule(CONTROLLER_KEY, target, identifier);
         saveClassMetadata(CONTROLLER_KEY, TAGGED_CLS, identifier, target);
         savePropertyDataToClass(NAMED_TAG, path, target, identifier);
     };
@@ -51,7 +51,7 @@ export function Controller(path?: string): ClassDecorator {
 export function Middleware(identifier?: string): ClassDecorator {
     return (target: any) => {
         identifier = identifier || getIdentifier(target);
-        saveModule(MIDDLEWARE_KEY, target);
+        saveModule(MIDDLEWARE_KEY, target, identifier);
         saveClassMetadata(MIDDLEWARE_KEY, TAGGED_CLS, identifier, target);
     };
 }
@@ -83,11 +83,16 @@ export function Service(identifier?: string): ClassDecorator {
 export function Autowired(identifier?: string, type?: CompomentType, constructArgs?: any[]): PropertyDecorator {
     return (target: any, propertyKey: string) => {
         const designType = Reflect.getMetadata('design:type', target, propertyKey);
-        if (!designType && !identifier) {
-            // throw Error("identifier cannot be empty when circular dependency exists");
-            identifier = helper.camelCase(propertyKey, { pascalCase: true });
-        } else {
-            identifier = identifier || designType.name;
+        if (!identifier) {
+            if (!designType || designType.name === "Object") {
+                // throw Error("identifier cannot be empty when circular dependency exists");
+                identifier = helper.camelCase(propertyKey, { pascalCase: true });
+            } else {
+                identifier = designType.name;
+            }
+        }
+        if (!identifier) {
+            throw Error("identifier cannot be empty when circular dependency exists");
         }
         if (type === undefined) {
             if (identifier.indexOf('Controller') > -1) {
@@ -109,7 +114,7 @@ export function Autowired(identifier?: string, type?: CompomentType, constructAr
         //     throw new Error(`Middleware ${identifier || ''} cannot be injected!`);
         // }
 
-        if (!designType) {
+        if (!designType || designType.name === "Object") {
             savePropertyDataToClass(TAGGED_PROP, {
                 type,
                 identifier,
