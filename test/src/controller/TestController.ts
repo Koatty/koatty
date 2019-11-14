@@ -1,4 +1,4 @@
-import { Component, Autowired, Controller, Value, BaseController, logger, helper, RequestMapping, RequestBody, PathVariable, GetMaping, PostMaping } from '../../../src/index';
+import { Component, Autowired, Controller, Value, BaseController, Logger, Helper, RequestMapping, RequestBody, PathVariable, GetMaping, PostMaping } from '../../../src/index';
 import { TestService } from '../service/TestService';
 import { TestModel } from '../model/TestModel';
 import { App } from '../App';
@@ -44,13 +44,13 @@ export class TestController extends AppBaseController {
         console.log('options', this._options.scope);
         console.log('isGet!', this.isGet());
 
-        logger.info('TestModel.config');
+        Logger.info('TestModel.config');
         console.log(this.Model.config);
 
-        logger.info('this.testCount');
+        Logger.info('this.testCount');
         this.testCount();
 
-        logger.info('TestController.sayHello');
+        Logger.info('TestController.sayHello');
         this.testService.sayHello();
 
         // await myTimeout();
@@ -64,6 +64,6 @@ export class TestController extends AppBaseController {
 
     private testCount() {
         this.num++;
-        console.log(helper.toString(this.num));
+        console.log(Helper.toString(this.num));
     }
 }
