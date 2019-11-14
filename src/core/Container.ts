@@ -2,12 +2,36 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-12 21:35:23
+ * @ version: 2019-11-14 14:15:02
  */
 import * as helper from "think_lib";
 import { CompomentType } from './Constants';
 import { IContainer, ObjectDefinitionOptions } from './IContainer';
 import { getModule, getIdentifier, injectAutowired, injectValue, saveModule } from './Injectable';
+
+/**
+ * auto injection
+ *
+ * @param {*} target
+ * @param {*} instance
+ * @param {ObjectDefinitionOptions} options
+ * @param {Container} container
+ * @returns
+ */
+const buildInject = function (target: any, instance: any, options: ObjectDefinitionOptions, container: Container) {
+    // inject options once
+    Reflect.defineProperty(instance, '_options', {
+        enumerable: false,
+        configurable: false,
+        writable: true,
+        value: options
+    });
+    // inject autowired
+    injectAutowired(target, instance, container);
+    // inject value
+    // injectValue(target, instance, container);
+    return instance;
+};
 
 /**
  * IOC Container
@@ -65,30 +89,29 @@ export class Container implements IContainer {
                 if (!ref) {
                     saveModule(options.type, target, identifier);
                 }
+
+                // inject configuation. may be used by constructor
+                injectValue(target, target.prototype, this);
                 // instantiation
                 instance = Reflect.construct(target, options.args && options.args.length ? options.args : [this.app]);
-                // inject options once
-                Reflect.defineProperty(instance, '_options', {
-                    enumerable: false,
-                    configurable: false,
-                    writable: true,
-                    value: options
-                });
-                // inject autowired
-                injectAutowired(target, target.prototype, this);
-                if (target.prototype && target.prototype._delay) {
-                    // tslint:disable-next-line: no-unused-expression
-                    this.app.once && this.app.once("appLazy", () => {
-                        // lazy inject autowired
-                        injectAutowired(target, target.prototype, this, true);
-                    });
-                }
-                // inject value
-                injectValue(target, target.prototype, this.app);
+                // inject dependency
+                buildInject(target, instance, options, this);
 
-                //invoke init
-                // tslint:disable-next-line: no-unused-expression
-                instance.init && instance.init();
+                // // tslint:disable-next-line: no-this-assignment
+                // const container = this;
+                // instance = Reflect.construct(new Proxy(target, {
+                //     construct(tgt, args, newTarget) {
+                //         const cls: any = Reflect.construct(tgt, args, newTarget);
+                //         // injection dependency
+                //         buildInject(tgt, cls, options, container);
+                //         // custom construct method
+                //         // tslint:disable-next-line: no-unused-expression
+                //         cls.init && cls.init(...args);
+                //         return cls;
+                //     }
+                // }), options.args && options.args.length ? options.args : [this.app]);
+
+                // registration
                 this.handlerMap.set(target, instance);
             } else {
                 instance = target;
@@ -127,5 +150,6 @@ export class Container implements IContainer {
 
         return instance;
     }
+
 }
 
