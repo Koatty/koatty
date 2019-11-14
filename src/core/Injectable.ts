@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-12 21:15:23
+ * @ version: 2019-11-14 14:24:30
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -540,7 +540,7 @@ export function injectAutowired(target: any, instance: any, container: Container
                     // tslint:disable-next-line: no-unused-expression
                     process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${target.name} properties key: ${metaKey} => value: ${JSON.stringify(metaData[metaKey])}`);
                     Reflect.defineProperty(instance, metaKey, {
-                        enumerable: false,
+                        enumerable: true,
                         configurable: false,
                         writable: true,
                         value: dep
@@ -549,7 +549,12 @@ export function injectAutowired(target: any, instance: any, container: Container
                     throw new Error(`Component ${metaData[metaKey].identifier || ''} not found. It's autowired in class ${target.name}`);
                 }
             } else {
-                target.prototype._delay = true;
+                // Delay loading solves the problem of cyclic dependency
+                // tslint:disable-next-line: no-unused-expression
+                container.app.once && container.app.once("appLazy", () => {
+                    // lazy inject autowired
+                    injectAutowired(target, instance, container, true);
+                });
             }
         }
     }
@@ -562,7 +567,7 @@ export function injectAutowired(target: any, instance: any, container: Container
  * @param {*} instance
  * @param {*} app
  */
-export function injectValue(target: any, instance: any, app: any) {
+export function injectValue(target: any, instance: any, container: Container) {
     const metaData = recursiveGetMetadata(TAGGED_ARGS, target);
     // tslint:disable-next-line: forin
     for (const metaKey in metaData) {
@@ -570,9 +575,9 @@ export function injectValue(target: any, instance: any, app: any) {
         process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${getIdentifier(target)} config key: ${metaKey} => value: ${metaData[metaKey]}`);
         const propKeys = metaData[metaKey].split('|');
         const [propKey, type] = propKeys;
-        const prop = app.config(propKey, type);
+        const prop = container.app.config(propKey, type);
         Reflect.defineProperty(instance, metaKey, {
-            enumerable: false,
+            enumerable: true,
             configurable: false,
             writable: true,
             value: prop
