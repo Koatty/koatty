@@ -1,5 +1,6 @@
 import { Component, Autowired, Controller, Value, BaseController, logger, helper, RequestMapping, RequestBody, PathVariable, GetMaping, PostMaping } from '../../../src/index';
 import { TestService } from '../service/TestService';
+import { TestModel } from '../model/TestModel';
 import { App } from '../App';
 import { AppBaseController } from "./AppBaseController";
 function myTimeout(ms = 3000) {
@@ -22,12 +23,15 @@ export class TestController extends AppBaseController {
     private test: string;
     @Autowired()
     private testService: TestService;
-    // @Autowired()
-    // Model: TestService;
+
+    @Autowired()
+    Model: TestModel;
+    // testModel: TestModel;
     private num = 0;
 
     init() {
-        // this.Model = this.testService;
+        // this.Model = this.testModel;
+        console.log(this.Model);
     }
 
     @GetMaping()
@@ -38,11 +42,17 @@ export class TestController extends AppBaseController {
         console.log('testService', this.testService instanceof TestService);
         console.log('ctx', this.ctx.url);
         console.log('options', this._options.scope);
-        console.log('test.sayHello!', this.isGet());
+        console.log('isGet!', this.isGet());
+
+        logger.info('TestModel.config');
+        console.log(this.Model.config);
+
+        logger.info('this.testCount');
+        this.testCount();
 
         logger.info('TestController.sayHello');
-        this.testCount();
         this.testService.sayHello();
+
         // await myTimeout();
         return this.json({ 'TestController': 'test.sayHello!' });
     }
@@ -52,10 +62,8 @@ export class TestController extends AppBaseController {
         this.json(body);
     }
 
-    @GetMaping('/test')
     private testCount() {
         this.num++;
-        logger.info(helper.toString(this.num));
-        return this.json({ 'TestController': 'test.testCount!' });
+        console.log(helper.toString(this.num));
     }
 }
