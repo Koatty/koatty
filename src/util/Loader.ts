@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-13 10:55:35
+ * @ version: 2019-11-14 15:39:52
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -238,7 +238,7 @@ export class Loader {
                 //
                 const tkeys = Object.keys(exports);
                 if (!exports[fileName] && (tkeys[0] && helper.isClass(exports[tkeys[0]]) && tkeys[0] !== fileName)) {
-                    throw new Error(`The class name is not consistent with the file('${file}') name. Or you used 'export default'`);
+                    throw new Error(`The class name is not consistent with the file('${file}') name. Or you used 'export default'?`);
                     // continue;
                 }
 

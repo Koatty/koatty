@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-01 10:24:30
+ * @ version: 2019-11-14 16:47:55
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -227,24 +227,54 @@ const Inject = (fn: Function): ParameterDecorator => {
 
 /**
  * 
- * 
- * @param param 
- * @param type 
+ *
+ * @param {*} param
+ * @param {string} type
+ * @param {*} ctx
+ * @param {boolean} [isConvert=false]
+ * @returns
  */
-const convertParamsType = (param: any, type: string) => {
+const convertParamsType = (param: any, type: string, ctx: any, isConvert = false) => {
     switch (type) {
-        case 'object':
-        case 'enum':
-            return param;
         case 'number':
-            return helper.toNumber(param);
+            if (isConvert) {
+                return helper.toNumber(param);
+            } else {
+                if (!helper.isNumber(param)) {
+                    return ctx.throw(400, `The parameter type is wrong, the typeof '${param}' is not ${type}`);
+                }
+                return param;
+            }
         case 'boolean':
-            return !!param;
+            if (isConvert) {
+                return !!param;
+            } else {
+                if (!helper.isBoolean(param)) {
+                    return ctx.throw(400, `The parameter type is wrong, the typeof '${param}' is not ${type}`);
+                }
+                return param;
+            }
         case 'array':
         case 'tuple':
-            return helper.toArray(param);
+            if (isConvert) {
+                return helper.toArray(param);
+            } else {
+                if (!helper.isArray(param)) {
+                    return ctx.throw(400, `The parameter type is wrong, the typeof '${param}' is not ${type}`);
+                }
+                return param;
+            }
         case 'string':
-            return helper.toString(param);
+            if (isConvert) {
+                return helper.toString(param);
+            } else {
+                if (!helper.isString(param)) {
+                    return ctx.throw(400, `The parameter type is wrong, the typeof '${param}' is not ${type}`);
+                }
+                return param;
+            }
+        case 'object':
+        case 'enum':
         default: //any
             return param;
     }
@@ -271,7 +301,7 @@ export function PathVariable(name?: string) {
     if (name) {
         return Inject((ctx: any, type: string) => {
             const data: any = helper.extend(ctx.params || {}, ctx.query);
-            return convertParamsType(data[name], type);
+            return convertParamsType(data[name], type, ctx, true);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -303,7 +333,7 @@ export function Get(name?: string) {
     if (name) {
         return Inject((ctx: any, type: string) => {
             const data: any = helper.extend(ctx.params || {}, ctx.query);
-            return convertParamsType(data[name], type);
+            return convertParamsType(data[name], type, ctx, true);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -323,7 +353,7 @@ export function Get(name?: string) {
 export function Post(name?: string) {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            return convertParamsType(ctx.post(name), type);
+            return convertParamsType(ctx.post(name), type, ctx);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -342,7 +372,7 @@ export function Post(name?: string) {
 export function File(name?: string) {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            return convertParamsType(ctx.file(name), type);
+            return convertParamsType(ctx.file(name), type, ctx);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -361,7 +391,7 @@ export function File(name?: string) {
 export function Header(name?: string) {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            return convertParamsType(ctx.get(name), type);
+            return convertParamsType(ctx.get(name), type, ctx);
         });
     } else {
         return Inject((ctx: any, type: string) => {

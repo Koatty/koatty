@@ -2,13 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-12 17:40:13
+ * @ version: 2019-11-14 17:29:57
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import { saveModule, saveClassMetadata, savePropertyDataToClass, getIdentifier } from "./Injectable";
 import { CONTROLLER_KEY, COMPONENT_KEY, TAGGED_PROP, TAGGED_CLS, TAGGED_ARGS, MIDDLEWARE_KEY, NAMED_TAG, SERVICE_KEY, CompomentType } from './Constants';
-import { helper } from '..';
+import * as helper from 'think_lib';
 
 /**
  * Indicates that an decorated class is a "component".
@@ -75,12 +75,13 @@ export function Service(identifier?: string): ClassDecorator {
  * Marks a constructor method as to be autowired by Koatty's dependency injection facilities.
  *
  * @export
- * @param {string} [identifier] injection name
- * @param {(CompomentType | any[])} [type] compomentType
- * @param {any[]} [constructArgs] constructor args
+ * @param {string} [identifier]
+ * @param {CompomentType} [type]
+ * @param {any[]} [constructArgs]
+ * @param {boolean} [isDelay=false]
  * @returns {PropertyDecorator}
  */
-export function Autowired(identifier?: string, type?: CompomentType, constructArgs?: any[]): PropertyDecorator {
+export function Autowired(identifier?: string, type?: CompomentType, constructArgs?: any[], isDelay = false): PropertyDecorator {
     return (target: any, propertyKey: string) => {
         const designType = Reflect.getMetadata('design:type', target, propertyKey);
         if (!identifier) {
@@ -99,10 +100,10 @@ export function Autowired(identifier?: string, type?: CompomentType, constructAr
                 type = 'CONTROLLER';
             } else if (identifier.indexOf('Middleware') > -1) {
                 type = 'MIDDLEWARE';
-            } else if (identifier.indexOf('Model') > -1) {
-                type = 'COMPONENT';
-            } else {
+            } else if (identifier.indexOf('Service') > -1) {
                 type = 'SERVICE';
+            } else {
+                type = 'COMPONENT';
             }
         }
         //Cannot rely on injection controller
@@ -115,20 +116,14 @@ export function Autowired(identifier?: string, type?: CompomentType, constructAr
         // }
 
         if (!designType || designType.name === "Object") {
-            savePropertyDataToClass(TAGGED_PROP, {
-                type,
-                identifier,
-                delay: true,
-                args: constructArgs || []
-            }, target, propertyKey);
-        } else {
-            savePropertyDataToClass(TAGGED_PROP, {
-                type,
-                identifier,
-                delay: false,
-                args: constructArgs || []
-            }, target, propertyKey);
+            isDelay = true;
         }
+        savePropertyDataToClass(TAGGED_PROP, {
+            type,
+            identifier,
+            delay: isDelay,
+            args: constructArgs || []
+        }, target, propertyKey);
     };
 }
 
