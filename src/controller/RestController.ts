@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-31 18:20:46
+ * @ version: 2019-11-15 15:11:34
  */
 import * as helper from "think_lib";
 import { Container } from '../core/Container';
@@ -52,7 +52,7 @@ export class RestController extends BaseController {
         }
         if (!this.model) {
             const resourceName = helper.camelCase(resource, { pascalCase: true });
-            this.model = this.container.get(resourceName, "COMPONENT");
+            this.model = this.container.get(`${resourceName}Model`, "COMPONENT");
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
             }
@@ -94,7 +94,7 @@ export class RestController extends BaseController {
         }
         if (!this.model) {
             const resourceName = helper.camelCase(resource, { pascalCase: true });
-            this.model = this.container.get(resourceName, "COMPONENT");
+            this.model = this.container.get(`${resourceName}Model`, "COMPONENT");
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
             }
@@ -126,7 +126,7 @@ export class RestController extends BaseController {
         }
         if (!this.model) {
             const resourceName = helper.camelCase(resource, { pascalCase: true });
-            this.model = this.container.get(resourceName, "COMPONENT");
+            this.model = this.container.get(`${resourceName}Model`, "COMPONENT");
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
             }
@@ -163,7 +163,7 @@ export class RestController extends BaseController {
         }
         if (!this.model) {
             const resourceName = helper.camelCase(resource, { pascalCase: true });
-            this.model = this.container.get(resourceName, "COMPONENT");
+            this.model = this.container.get(`${resourceName}Model`, "COMPONENT");
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
             }
