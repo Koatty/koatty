@@ -2429,9 +2429,9 @@ text-table@^0.2.0:
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
 think_lib@^2.x.x:
-  version "2.2.7"
-  resolved "https://registry.npm.taobao.org/think_lib/download/think_lib-2.2.7.tgz#f8a1cca80000acb2d10dbb013da73f2b98a00352"
-  integrity sha1-+KHMqAAArLLRDbsBPac/K5igA1I=
+  version "2.2.8"
+  resolved "https://registry.yarnpkg.com/think_lib/-/think_lib-2.2.8.tgz#e7c902378319dbd4b6df48364b6e22c4f14b3067"
+  integrity sha512-skFpsNCfKTsdI55GuJi6uI7BuFOaIiUMD0fCUlkMYBw1kTPpXeKuzEvQllYCMsEm/mtGkkXTeLmxfe8K1fAvMg==
   dependencies:
     bluebird "^3.5.5"
     co "^4.6.0"
