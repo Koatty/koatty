@@ -2,15 +2,15 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-08 10:06:21
+ * @ version: 2019-11-15 14:45:15
  */
 import { Middleware } from '../core/Decorators';
 import { Koatty } from '../Koatty';
-const trace = require('think_trace');
+const traces = require('think_trace');
 
 @Middleware()
 export class Trace {
     run(options: any, app: Koatty) {
-        return trace(options, app);
+        return traces(options, app);
     }
 }
