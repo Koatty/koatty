@@ -73,6 +73,7 @@
         "only-arrow-functions": false,
         "type-literal-delimiter": false,
         "no-parameter-reassignment": false,
+        "no-angle-bracket-type-assertion": false,
         "member-access": false,
         "member-ordering": false,
         "linebreak-style": [
