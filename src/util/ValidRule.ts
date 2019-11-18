@@ -1,5 +1,5 @@
 /**
- * 是否MD5串
+ * Checks if value is a md5 string.
  *
  * @param {string} value
  * @returns {boolean}
@@ -9,7 +9,7 @@ export function md5(value: string): boolean {
 }
 
 /**
- * 是否邮箱
+ * Checks if value is a email.
  *
  * @param {string} value
  * @returns
@@ -20,7 +20,7 @@ export function email(value: string): boolean {
 }
 
 /**
- * 是否中文姓名
+ * Checks if value is a chinese name.
  *
  * @param {string} value
  * @returns {boolean}
@@ -31,7 +31,7 @@ export function cnname(value: string): boolean {
 }
 
 /**
- * 是否身份证号码
+ * Checks if value is a idcard number.
  *
  * @param {string} value
  * @returns
@@ -55,7 +55,7 @@ export function idnumber(value: string): boolean {
 }
 
 /**
- * 是否手机号
+ * Checks if value is a mobile phone number.
  *
  * @param {string} value
  * @returns {boolean}
@@ -66,7 +66,7 @@ export function mobile(value: string): boolean {
 }
 
 /**
- * 邮编
+ * Checks if value is a zipcode.
  *
  * @param {string} value
  * @returns {boolean}
@@ -77,7 +77,7 @@ export function zipcode(value: string): boolean {
 }
 
 /**
- * url
+ * Checks if value is a url.
  *
  * @param {string} value
  * @returns

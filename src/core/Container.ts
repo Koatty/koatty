@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-14 14:15:02
+ * @ version: 2019-11-19 00:58:18
  */
 import * as helper from "think_lib";
 import { CompomentType } from './Constants';
@@ -10,7 +10,7 @@ import { IContainer, ObjectDefinitionOptions } from './IContainer';
 import { getModule, getIdentifier, injectAutowired, injectValue, saveModule } from './Injectable';
 
 /**
- * auto injection
+ * Auto injection
  *
  * @param {*} target
  * @param {*} instance
@@ -56,7 +56,7 @@ export class Container implements IContainer {
 
 
     /**
-     *
+     * Registering an instance of a class to an IOC container.
      *
      * @template T
      * @param {T} target
@@ -121,7 +121,7 @@ export class Container implements IContainer {
     }
 
     /**
-     * 
+     * Get instance from IOC container.
      *
      * @template T
      * @param {string} identifier

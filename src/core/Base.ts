@@ -2,13 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-14 14:06:18
+ * @ version: 2019-11-19 01:00:36
  */
 import { Koatty } from '../Koatty';
 import { ObjectDefinitionOptions } from '../core/IContainer';
 
 /**
- * base class
+ * Base class
  *
  * @export
  * @class Base

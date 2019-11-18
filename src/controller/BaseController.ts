@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-14 14:06:34
+ * @ version: 2019-11-19 01:00:23
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "Koa";
@@ -45,7 +45,7 @@ interface BaseControllerInterface {
 }
 
 /**
- * base controller
+ * Base controller
  *
  * @export
  * @class BaseController

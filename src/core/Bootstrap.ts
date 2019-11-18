@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-12 18:42:14
+ * @ version: 2019-11-19 00:55:18
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -15,7 +15,7 @@ import { Loader } from '../util/Loader';
 import { Router } from './Router';
 
 /**
- * bootstrap appliction
+ * Bootstrap appliction
  *
  * @export
  * @returns {ClassDecorator}
@@ -98,7 +98,7 @@ export function Bootstrap(): ClassDecorator {
 }
 
 /**
- * define project scan path
+ * Define project scan path
  *
  * @export
  * @param {(string | string[])} [scanPath]
@@ -114,7 +114,7 @@ export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
 }
 
 /**
- * define project configuration scan path
+ * Define project configuration scan path
  *
  * @export
  * @param {(string | string[])} [scanPath]

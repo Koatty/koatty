@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-14 16:27:22
+ * @ version: 2019-11-19 01:00:06
  */
 import KoaRouter from 'koa-router';
 import * as Koa from 'koa';
@@ -13,7 +13,7 @@ import { Container } from './Container';
 import { injectRouter, injectParam } from './Injectable';
 
 /**
- * http timeout timer
+ * Http timeout timer
  * @param tmr 
  * @param timeout 
  */
@@ -58,7 +58,7 @@ export class Router {
     }
 
     /**
-     * loading router
+     * Loading router
      *
      * @memberof Router
      */
@@ -109,7 +109,7 @@ export class Router {
     }
 
     /**
-     * execute controller
+     * Execute controller
      *
      * @param {string} identifier
      * @param {*} router
