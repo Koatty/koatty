@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-18 21:18:19
+ * @ version: 2019-11-19 00:52:56
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -396,7 +396,7 @@ export function File(name?: string) {
 }
 
 /**
- * Get parsed upload file object.
+ * Get request header.
  *
  * @export
  * @param {string} [name]
@@ -473,7 +473,7 @@ export function Valid(rule: ValidRules | ValidRules[] | Function, message?: stri
 }
 
 /**
- *
+ * Invoke valid rules.
  *
  * @param {*} ctx
  * @param {*} value
