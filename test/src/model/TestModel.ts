@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-14 14:06:27
+ * @ version: 2019-11-18 21:04:23
  */
 import { Autowired, Component, Service, Base, Value } from '../../../src/index';
 import { BaseModel } from './BaseModel';
@@ -10,7 +10,7 @@ import { BaseModel } from './BaseModel';
 @Component()
 export class TestModel extends BaseModel {
     @Value("test")
-    dbConf: any;
+    config: any;
     aa: string;
 
     init() {

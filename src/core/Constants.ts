@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-04 15:25:04
+ * @ version: 2019-11-18 11:42:52
  */
 
 export const COMPONENT_KEY = 'COMPONENT';
@@ -14,6 +14,7 @@ export const SERVICE_KEY = 'SERVICE';
 export const PRIORITY_KEY = 'PRIORITY_KEY';
 
 export const PARAM_KEY = 'PARAM_KEY';
+export const PARAM_RULE_KEY = 'PARAM_RULE_KEY';
 export const NAMED_TAG = 'NAMED_TAG';
 export const ROUTER_KEY = 'ROUTER_KEY';
 

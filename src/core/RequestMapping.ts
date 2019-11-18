@@ -2,13 +2,15 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-15 19:12:48
+ * @ version: 2019-11-18 21:08:26
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
 import { attachPropertyDataToClass } from "./Injectable";
-import { ROUTER_KEY, PARAM_KEY } from "./Constants";
+import { ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY } from "./Constants";
+import * as Rules from "../util/ValidRule";
+import { Value } from './Decorators';
 
 /**
  *
@@ -203,7 +205,7 @@ export const HeadMaping = (
  * 
  * @param fn 
  */
-const Inject = (fn: Function): ParameterDecorator => {
+const Inject = (fn: Function, vaildRule?: any[] | Function, message?: string): ParameterDecorator => {
     return (target: any, propertyKey: string, descriptor: any) => {
         // 获取成员类型
         // const type = Reflect.getMetadata('design:type', target, propertyKey);
@@ -214,33 +216,46 @@ const Inject = (fn: Function): ParameterDecorator => {
         // 获取所有元数据 key (由 TypeScript 注入)
         // const keys = Reflect.getMetadataKeys(target, propertyKey);
 
-        attachPropertyDataToClass(PARAM_KEY, {
-            name: propertyKey,
-            fn,
-            index: descriptor,
-            type: (paramtypes[descriptor] && paramtypes[descriptor].name ? paramtypes[descriptor].name : '').toLowerCase()
-        }, target, propertyKey);
-        return descriptor;
+        if (vaildRule) {
+            attachPropertyDataToClass(PARAM_RULE_KEY, {
+                name: propertyKey,
+                fn,
+                rule: vaildRule,
+                msg: message,
+                index: descriptor,
+                type: (paramtypes[descriptor] && paramtypes[descriptor].name ? paramtypes[descriptor].name : '').toLowerCase()
+            }, target, propertyKey);
+            return descriptor;
+        } else {
+            attachPropertyDataToClass(PARAM_KEY, {
+                name: propertyKey,
+                fn,
+                index: descriptor,
+                type: (paramtypes[descriptor] && paramtypes[descriptor].name ? paramtypes[descriptor].name : '').toLowerCase()
+            }, target, propertyKey);
+            return descriptor;
+        }
     };
 
 };
 
 /**
- * 
+ *
  *
  * @param {*} param
  * @param {string} type
  * @param {*} ctx
  * @param {boolean} [isConvert=false]
+ * @param {boolean} [isCheck=false]
  * @returns
  */
-const convertParamsType = (param: any, type: string, ctx: any, isConvert = false) => {
+const convertParamsType = (param: any, type: string, ctx: any, isConvert = false, isCheck = false) => {
     switch (type) {
         case 'number':
             if (isConvert) {
                 return helper.toNumber(param);
             } else {
-                if (!helper.isNumber(param)) {
+                if (isCheck && !helper.isNumber(param)) {
                     return ctx.throw(400, `The parameter type is wrong, the typeof '${param}' is not ${type}`);
                 }
                 return param;
@@ -249,7 +264,7 @@ const convertParamsType = (param: any, type: string, ctx: any, isConvert = false
             if (isConvert) {
                 return !!param;
             } else {
-                if (!helper.isBoolean(param)) {
+                if (isCheck && !helper.isBoolean(param)) {
                     return ctx.throw(400, `The parameter type is wrong, the typeof '${param}' is not ${type}`);
                 }
                 return param;
@@ -259,7 +274,7 @@ const convertParamsType = (param: any, type: string, ctx: any, isConvert = false
             if (isConvert) {
                 return helper.toArray(param);
             } else {
-                if (!helper.isArray(param)) {
+                if (isCheck && !helper.isArray(param)) {
                     return ctx.throw(400, `The parameter type is wrong, the typeof '${param}' is not ${type}`);
                 }
                 return param;
@@ -268,7 +283,7 @@ const convertParamsType = (param: any, type: string, ctx: any, isConvert = false
             if (isConvert) {
                 return helper.toString(param);
             } else {
-                if (!helper.isString(param)) {
+                if (isCheck && !helper.isString(param)) {
                     return ctx.throw(400, `The parameter type is wrong, the typeof '${param}' is not ${type}`);
                 }
                 return param;
@@ -400,3 +415,91 @@ export function Header(name?: string) {
     }
 }
 
+/**
+ * type checked rules
+ *
+ * @export
+ * @type {number}
+ */
+export type ValidRules = "notEmpty" | "isMd5" | "isEmail" | "isCname" | "isIdnumber" | "isMobile" | "isZipcode" | "isUrl";
+
+/**
+ * rule map
+ */
+const ruleObj: any = {
+    notEmpty: {
+        fn(val: any) {
+            return helper.isEmpty(val) ? false : true;
+        }, msg: `Invalid parameter value: parameter is empty.`
+    },
+    isMd5: {
+        fn: Rules.md5, msg: `Invalid parameter value: parameter is not a md5 string.`
+    },
+    isEmail: {
+        fn: Rules.email, msg: `Invalid parameter value: parameter is not a email.`
+    },
+    isCname: {
+        fn: Rules.cnname, msg: `Invalid parameter value: parameter is not a chinese name.`
+    },
+    isIdnumber: {
+        fn: Rules.idnumber, msg: `Invalid parameter value: parameter is not a idcard number.`
+    },
+    isMobile: {
+        fn: Rules.mobile, msg: `Invalid parameter value: parameter is not a mobile phone number.`
+    },
+    isZipcode: {
+        fn: Rules.zipcode, msg: `Invalid parameter value: parameter is not a zipcode.`
+    },
+    isUrl: {
+        fn: Rules.url, msg: `Invalid parameter value: parameter is not a url.`
+    }
+};
+
+/**
+ * Validtion paramer's type.
+ *
+ * @export
+ * @param {(ValidRules | ValidRules[] | Function)} rule
+ * @param {string} [message] 
+ * @returns
+ */
+export function Valid(rule: ValidRules | ValidRules[] | Function, message?: string) {
+    let rules: any = [];
+    if (helper.isString(rule)) {
+        rules = (<string>rule).split(",");
+    } else {
+        rules = rule;
+    }
+    return Inject(ValidCheck, rules, message);
+}
+
+/**
+ *
+ *
+ * @param {*} ctx
+ * @param {*} value
+ * @param {string} type
+ * @param {(ValidRules | ValidRules[] | Function)} rule
+ * @param {string} [message=""]
+ * @returns
+ */
+function ValidCheck(ctx: any, value: any, type: string, rule: ValidRules | ValidRules[] | Function, message = "") {
+    // check type
+    value = convertParamsType(value, type, ctx, false, true);
+    if (helper.isFunction(rule)) {
+        if (!rule(value)) {
+            return ctx.throw(400, message || `Invalid parameter value: '${value}', typeof ${typeof value}.`);
+        }
+        return value;
+    } else if (helper.isArray(rule)) {
+        for (const it of <any[]>rule) {
+            if (ruleObj[it]) {
+                if (!ruleObj[it].fn(value)) {
+                    return ctx.throw(400, message || ruleObj[it].msg);
+                }
+                continue;
+            }
+        }
+    }
+    return value;
+}

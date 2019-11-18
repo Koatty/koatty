@@ -1,4 +1,4 @@
-import { Component, Autowired, Controller, Value, BaseController, Logger, Helper, RequestMapping, RequestBody, PathVariable, GetMaping, PostMaping } from '../../../src/index';
+import { Component, Autowired, Controller, Value, BaseController, Logger, Helper, RequestMapping, RequestBody, PathVariable, GetMaping, PostMaping, Valid } from '../../../src/index';
 import { TestService } from '../service/TestService';
 import { TestModel } from '../model/TestModel';
 import { App } from '../App';
@@ -35,7 +35,7 @@ export class TestController extends AppBaseController {
     }
 
     @GetMaping()
-    async sayHello(@PathVariable('aa') aa: number, @PathVariable('bb') bb: string) {
+    async sayHello(@PathVariable('aa') @Valid((val: any) => val === '111', "") aa: number | string, @PathVariable('bb') bb: string) {
         console.log('info', typeof aa, typeof bb);
         console.log('info', aa, bb);
         console.log('test', this.test);

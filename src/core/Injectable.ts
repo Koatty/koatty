@@ -2,13 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-14 14:24:30
+ * @ version: 2019-11-18 20:49:44
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
 import * as logger from "think_logger";
-import { TAGGED_CLS, TAGGED_PROP, TAGGED_ARGS, NAMED_TAG, ROUTER_KEY, PARAM_KEY } from "./Constants";
+import { TAGGED_CLS, TAGGED_PROP, TAGGED_ARGS, NAMED_TAG, ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY } from "./Constants";
 import { Container } from './Container';
 
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
@@ -638,6 +638,30 @@ export function injectParam(target: any, instance?: any) {
             // tslint:disable-next-line: no-unused-expression
             process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${getIdentifier(target)} param key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
             argsMetaObj[meta] = metaDatas[meta];
+        }
+    }
+    // vaild 
+    const vaildMetaDatas = listPropertyDataFromClass(PARAM_RULE_KEY, target);
+    for (const vmeta in vaildMetaDatas) {
+        if (vaildMetaDatas[vmeta] && vaildMetaDatas[vmeta].length > 0 && argsMetaObj[vmeta]) {
+            for (const vn of vaildMetaDatas[vmeta]) {
+                argsMetaObj[vmeta] = argsMetaObj[vmeta].map((it: any) => {
+                    if (it.index === vn.index && vn.fn && vn.rule) {
+                        const fn = (ctx: any, type: string) => {
+                            const value = it.fn(ctx, type);
+                            return vn.fn(ctx, value, type, vn.rule, vn.msg);
+                        };
+                        return {
+                            name: it.name,
+                            fn,
+                            index: it.index,
+                            type: it.type
+                        };
+                    } else {
+                        return it;
+                    }
+                });
+            }
         }
     }
     return argsMetaObj;
