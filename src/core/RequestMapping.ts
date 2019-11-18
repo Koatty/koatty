@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-19 00:52:56
+ * @ version: 2019-11-19 01:44:14
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -248,6 +248,7 @@ const Inject = (fn: Function, vaildRule?: any[] | Function, message?: string): P
  * @param {boolean} [isCheck=false]
  * @returns
  */
+// tslint:disable-next-line: cyclomatic-complexity
 const convertParamsType = (param: any, type: string, ctx: any, isConvert = false, isCheck = false) => {
     switch (type) {
         case 'number':
@@ -255,7 +256,7 @@ const convertParamsType = (param: any, type: string, ctx: any, isConvert = false
                 return helper.toNumber(param);
             } else {
                 if (isCheck && !helper.isNumber(param)) {
-                    return ctx.throw(400, `The parameter type is wrong, the typeof '${param}' is not ${type}`);
+                    return ctx.throw(400, `Invalid parameter type, the typeof ${param} is not ${type}`);
                 }
                 return param;
             }
@@ -264,7 +265,7 @@ const convertParamsType = (param: any, type: string, ctx: any, isConvert = false
                 return !!param;
             } else {
                 if (isCheck && !helper.isBoolean(param)) {
-                    return ctx.throw(400, `The parameter type is wrong, the typeof '${param}' is not ${type}`);
+                    return ctx.throw(400, `Invalid parameter type, the typeof ${param} is not ${type}`);
                 }
                 return param;
             }
@@ -274,7 +275,7 @@ const convertParamsType = (param: any, type: string, ctx: any, isConvert = false
                 return helper.toArray(param);
             } else {
                 if (isCheck && !helper.isArray(param)) {
-                    return ctx.throw(400, `The parameter type is wrong, the typeof '${param}' is not ${type}`);
+                    return ctx.throw(400, `Invalid parameter type, the typeof ${param} is not ${type}`);
                 }
                 return param;
             }
@@ -283,12 +284,16 @@ const convertParamsType = (param: any, type: string, ctx: any, isConvert = false
                 return helper.toString(param);
             } else {
                 if (isCheck && !helper.isString(param)) {
-                    return ctx.throw(400, `The parameter type is wrong, the typeof '${param}' is not ${type}`);
+                    return ctx.throw(400, `Invalid parameter type, the typeof ${param} is not ${type}`);
                 }
                 return param;
             }
         case 'object':
         case 'enum':
+            if (isCheck && helper.isUndefined(param)) {
+                return ctx.throw(400, `Invalid parameter type, the typeof ${param} is not ${type}`);
+            }
+            return param;
         default: //any
             return param;
     }
@@ -484,10 +489,10 @@ export function Valid(rule: ValidRules | ValidRules[] | Function, message?: stri
  */
 function ValidCheck(ctx: any, value: any, type: string, rule: ValidRules | ValidRules[] | Function, message = "") {
     // check type
-    // value = convertParamsType(value, type, ctx, false, true);
+    value = convertParamsType(value, type, ctx, false, true);
     if (helper.isFunction(rule)) {
         if (!rule(value)) {
-            return ctx.throw(400, message || `Invalid parameter value: '${value}', typeof ${typeof value}.`);
+            return ctx.throw(400, message || `Invalid parameter value: ${value}, typeof ${typeof value}.`);
         }
         return value;
     } else if (helper.isArray(rule)) {

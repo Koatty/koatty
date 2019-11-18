@@ -3,7 +3,7 @@ import { TestService } from '../service/TestService';
 import { TestModel } from '../model/TestModel';
 import { App } from '../App';
 import { AppBaseController } from "./AppBaseController";
-function myTimeout(ms = 3000) {
+function myTimeout(ms = 35000) {
     return new Promise((resolve, reject) => {
         setTimeout(resolve, ms, 'done');
     });
@@ -35,7 +35,7 @@ export class TestController extends AppBaseController {
     }
 
     @GetMaping()
-    async sayHello(@PathVariable('aa') @Valid((val: any) => val === '111', "") aa: number | string, @PathVariable('bb') bb: string) {
+    async sayHello(@PathVariable('aa') @Valid("notEmpty") aa: PlainObj, @PathVariable('bb') bb: string) {
         console.log('info', typeof aa, typeof bb);
         console.log('info', aa, bb);
         console.log('test', this.test);
