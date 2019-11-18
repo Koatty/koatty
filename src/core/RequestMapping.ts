@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-18 21:08:26
+ * @ version: 2019-11-18 21:18:19
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -10,7 +10,6 @@ import * as helper from "think_lib";
 import { attachPropertyDataToClass } from "./Injectable";
 import { ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY } from "./Constants";
 import * as Rules from "../util/ValidRule";
-import { Value } from './Decorators';
 
 /**
  *
@@ -368,7 +367,7 @@ export function Get(name?: string) {
 export function Post(name?: string) {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            return convertParamsType(ctx.post(name), type, ctx);
+            return convertParamsType(ctx.post(name), type, ctx, true);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -387,7 +386,7 @@ export function Post(name?: string) {
 export function File(name?: string) {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            return convertParamsType(ctx.file(name), type, ctx);
+            return convertParamsType(ctx.file(name), type, ctx, true);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -406,7 +405,7 @@ export function File(name?: string) {
 export function Header(name?: string) {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            return convertParamsType(ctx.get(name), type, ctx);
+            return convertParamsType(ctx.get(name), type, ctx, true);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -485,7 +484,7 @@ export function Valid(rule: ValidRules | ValidRules[] | Function, message?: stri
  */
 function ValidCheck(ctx: any, value: any, type: string, rule: ValidRules | ValidRules[] | Function, message = "") {
     // check type
-    value = convertParamsType(value, type, ctx, false, true);
+    // value = convertParamsType(value, type, ctx, false, true);
     if (helper.isFunction(rule)) {
         if (!rule(value)) {
             return ctx.throw(400, message || `Invalid parameter value: '${value}', typeof ${typeof value}.`);
