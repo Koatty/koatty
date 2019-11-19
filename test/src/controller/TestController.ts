@@ -9,13 +9,6 @@ function myTimeout(ms = 35000) {
     });
 }
 
-interface PlainObj {
-    aa: string;
-    bb: {
-        cc: string;
-    };
-}
-
 @Controller()
 export class TestController extends AppBaseController {
     app: App;
@@ -35,7 +28,7 @@ export class TestController extends AppBaseController {
     }
 
     @GetMaping()
-    async sayHello(@PathVariable('aa') @Valid("notEmpty") aa: PlainObj, @PathVariable('bb') bb: string) {
+    async sayHello(@PathVariable('aa') @Valid("notEmpty", "aa不能为空") aa: any, @PathVariable('bb') bb: string) {
         console.log('info', typeof aa, typeof bb);
         console.log('info', aa, bb);
         console.log('test', this.test);

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-19 01:44:14
+ * @ version: 2019-11-19 16:09:53
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -253,10 +253,14 @@ const convertParamsType = (param: any, type: string, ctx: any, isConvert = false
     switch (type) {
         case 'number':
             if (isConvert) {
-                return helper.toNumber(param);
+                if (helper.isEmpty(param)) {
+                    return param;
+                }
+                const tmp = helper.toNumber(param);
+                return helper.isNaN(tmp) ? param : tmp;
             } else {
                 if (isCheck && !helper.isNumber(param)) {
-                    return ctx.throw(400, `Invalid parameter type, the typeof ${param} is not ${type}`);
+                    return ctx.throw(400, `Invalid parameter type, the value \`${param}\` is not ${type}`);
                 }
                 return param;
             }
@@ -265,7 +269,7 @@ const convertParamsType = (param: any, type: string, ctx: any, isConvert = false
                 return !!param;
             } else {
                 if (isCheck && !helper.isBoolean(param)) {
-                    return ctx.throw(400, `Invalid parameter type, the typeof ${param} is not ${type}`);
+                    return ctx.throw(400, `Invalid parameter type, the value \`${param}\` is not ${type}`);
                 }
                 return param;
             }
@@ -275,7 +279,7 @@ const convertParamsType = (param: any, type: string, ctx: any, isConvert = false
                 return helper.toArray(param);
             } else {
                 if (isCheck && !helper.isArray(param)) {
-                    return ctx.throw(400, `Invalid parameter type, the typeof ${param} is not ${type}`);
+                    return ctx.throw(400, `Invalid parameter type, the value \`${param}\` is not ${type}`);
                 }
                 return param;
             }
@@ -284,14 +288,14 @@ const convertParamsType = (param: any, type: string, ctx: any, isConvert = false
                 return helper.toString(param);
             } else {
                 if (isCheck && !helper.isString(param)) {
-                    return ctx.throw(400, `Invalid parameter type, the typeof ${param} is not ${type}`);
+                    return ctx.throw(400, `Invalid parameter type, the value \`${param}\` is not ${type}`);
                 }
                 return param;
             }
         case 'object':
         case 'enum':
             if (isCheck && helper.isUndefined(param)) {
-                return ctx.throw(400, `Invalid parameter type, the typeof ${param} is not ${type}`);
+                return ctx.throw(400, `Invalid parameter type, the value \`${param}\` is not ${type}`);
             }
             return param;
         default: //any
@@ -431,32 +435,16 @@ export type ValidRules = "notEmpty" | "isMd5" | "isEmail" | "isCname" | "isIdnum
  * rule map
  */
 const ruleObj: any = {
-    notEmpty: {
-        fn(val: any) {
-            return helper.isEmpty(val) ? false : true;
-        }, msg: `Invalid parameter value: parameter is empty.`
+    notEmpty(val: any) {
+        return helper.isEmpty(val) ? false : true;
     },
-    isMd5: {
-        fn: Rules.md5, msg: `Invalid parameter value: parameter is not a md5 string.`
-    },
-    isEmail: {
-        fn: Rules.email, msg: `Invalid parameter value: parameter is not a email.`
-    },
-    isCname: {
-        fn: Rules.cnname, msg: `Invalid parameter value: parameter is not a chinese name.`
-    },
-    isIdnumber: {
-        fn: Rules.idnumber, msg: `Invalid parameter value: parameter is not a idcard number.`
-    },
-    isMobile: {
-        fn: Rules.mobile, msg: `Invalid parameter value: parameter is not a mobile phone number.`
-    },
-    isZipcode: {
-        fn: Rules.zipcode, msg: `Invalid parameter value: parameter is not a zipcode.`
-    },
-    isUrl: {
-        fn: Rules.url, msg: `Invalid parameter value: parameter is not a url.`
-    }
+    isMd5: Rules.md5,
+    isEmail: Rules.email,
+    isCname: Rules.cnname,
+    isIdnumber: Rules.idnumber,
+    isMobile: Rules.mobile,
+    isZipcode: Rules.zipcode,
+    isUrl: Rules.url
 };
 
 /**
@@ -487,7 +475,7 @@ export function Valid(rule: ValidRules | ValidRules[] | Function, message?: stri
  * @param {string} [message=""]
  * @returns
  */
-function ValidCheck(ctx: any, value: any, type: string, rule: ValidRules | ValidRules[] | Function, message = "") {
+function ValidCheck(ctx: any, value: any, type: string, rule: any, message = "") {
     // check type
     value = convertParamsType(value, type, ctx, false, true);
     if (helper.isFunction(rule)) {
@@ -496,13 +484,8 @@ function ValidCheck(ctx: any, value: any, type: string, rule: ValidRules | Valid
         }
         return value;
     } else if (helper.isArray(rule)) {
-        for (const it of <any[]>rule) {
-            if (ruleObj[it]) {
-                if (!ruleObj[it].fn(value)) {
-                    return ctx.throw(400, message || ruleObj[it].msg);
-                }
-                continue;
-            }
+        if (<any[]>rule.some((it: string) => ruleObj[it] && !ruleObj[it](value))) {
+            return ctx.throw(400, message || 'Invalid parameter value.');
         }
     }
     return value;
