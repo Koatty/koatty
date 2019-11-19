@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-19 16:09:53
+ * @ version: 2019-11-19 16:29:01
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -252,46 +252,40 @@ const Inject = (fn: Function, vaildRule?: any[] | Function, message?: string): P
 const convertParamsType = (param: any, type: string, ctx: any, isConvert = false, isCheck = false) => {
     switch (type) {
         case 'number':
-            if (isConvert) {
-                if (helper.isEmpty(param)) {
-                    return param;
-                }
+            if (isConvert && !helper.isEmpty(param)) {
                 const tmp = helper.toNumber(param);
-                return helper.isNaN(tmp) ? param : tmp;
-            } else {
-                if (isCheck && !helper.isNumber(param)) {
-                    return ctx.throw(400, `Invalid parameter type, the value \`${param}\` is not ${type}`);
-                }
-                return param;
+                param = helper.isNaN(tmp) ? param : tmp;
             }
+            if (isCheck && !helper.isNumber(param)) {
+                return ctx.throw(400, `Invalid parameter type, the value \`${param}\` is not ${type}`);
+            }
+            return param;
         case 'boolean':
             if (isConvert) {
-                return !!param;
-            } else {
-                if (isCheck && !helper.isBoolean(param)) {
-                    return ctx.throw(400, `Invalid parameter type, the value \`${param}\` is not ${type}`);
-                }
-                return param;
+                param = !!param;
             }
+            if (isCheck && !helper.isBoolean(param)) {
+                return ctx.throw(400, `Invalid parameter type, the value \`${param}\` is not ${type}`);
+            }
+            return param;
         case 'array':
         case 'tuple':
             if (isConvert) {
-                return helper.toArray(param);
-            } else {
-                if (isCheck && !helper.isArray(param)) {
-                    return ctx.throw(400, `Invalid parameter type, the value \`${param}\` is not ${type}`);
-                }
-                return param;
+                param = helper.toArray(param);
             }
+            if (isCheck && !helper.isArray(param)) {
+                return ctx.throw(400, `Invalid parameter type, the value \`${param}\` is not ${type}`);
+            }
+            return param;
         case 'string':
             if (isConvert) {
+                // Almost all types can be converted to strings, so returning directly.
                 return helper.toString(param);
-            } else {
-                if (isCheck && !helper.isString(param)) {
-                    return ctx.throw(400, `Invalid parameter type, the value \`${param}\` is not ${type}`);
-                }
-                return param;
             }
+            if (isCheck && !helper.isString(param)) {
+                return ctx.throw(400, `Invalid parameter type, the value \`${param}\` is not ${type}`);
+            }
+            return param;
         case 'object':
         case 'enum':
             if (isCheck && helper.isUndefined(param)) {
@@ -324,7 +318,7 @@ export function PathVariable(name?: string) {
     if (name) {
         return Inject((ctx: any, type: string) => {
             const data: any = helper.extend(ctx.params || {}, ctx.query);
-            return convertParamsType(data[name], type, ctx, true);
+            return convertParamsType(data[name], type, ctx, true, true);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -356,7 +350,7 @@ export function Get(name?: string) {
     if (name) {
         return Inject((ctx: any, type: string) => {
             const data: any = helper.extend(ctx.params || {}, ctx.query);
-            return convertParamsType(data[name], type, ctx, true);
+            return convertParamsType(data[name], type, ctx, true, true);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -376,7 +370,7 @@ export function Get(name?: string) {
 export function Post(name?: string) {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            return convertParamsType(ctx.post(name), type, ctx, true);
+            return convertParamsType(ctx.post(name), type, ctx, true, true);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -395,7 +389,7 @@ export function Post(name?: string) {
 export function File(name?: string) {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            return convertParamsType(ctx.file(name), type, ctx, true);
+            return convertParamsType(ctx.file(name), type, ctx, true, true);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -414,7 +408,7 @@ export function File(name?: string) {
 export function Header(name?: string) {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            return convertParamsType(ctx.get(name), type, ctx, true);
+            return convertParamsType(ctx.get(name), type, ctx, true, true);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -477,7 +471,7 @@ export function Valid(rule: ValidRules | ValidRules[] | Function, message?: stri
  */
 function ValidCheck(ctx: any, value: any, type: string, rule: any, message = "") {
     // check type
-    value = convertParamsType(value, type, ctx, false, true);
+    // value = convertParamsType(value, type, ctx, false, true);
     if (helper.isFunction(rule)) {
         if (!rule(value)) {
             return ctx.throw(400, message || `Invalid parameter value: ${value}, typeof ${typeof value}.`);
