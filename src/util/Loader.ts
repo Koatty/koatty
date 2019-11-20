@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-20 09:29:12
+ * @ version: 2019-11-20 14:25:05
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -243,6 +243,7 @@ export class Loader {
                     throw new Error(`The class name is not consistent with the file('${file}') name. Or you used 'export default'?`);
                     // continue;
                 }
+                // callback
                 if (fn) {
                     // console.log(fileName);
                     // console.log(exports); 
