@@ -2,10 +2,11 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-19 00:55:18
+ * @ version: 2019-11-20 10:14:13
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
+import * as path from "path";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { saveClassMetadata, getClassMetadata } from './Injectable';
@@ -43,7 +44,13 @@ export function Bootstrap(): ClassDecorator {
             if (componentMetas.length < 1) {
                 componentMetas = [app.app_path];
             }
-            Loader.loadDirectory(componentMetas, '', null, `!${target.name || '.no'}.ts`);
+            const exSet = new Set();
+            Loader.loadDirectory(componentMetas, '', function (fileName: string, target: any, fpath: string) {
+                if (exSet.has(fileName)) {
+                    throw new Error(`A same name class already exists. Please modify the \`${fpath.replace(`${app.app_path}${path.sep}`, "")}\`'s name.`);
+                }
+                exSet.add(fileName);
+            }, `!${target.name || '.no'}.ts`);
 
             const configuationMeta = getClassMetadata(INJECT_TAG, CONFIGUATION_SCAN, target);
             let configuationMetas = [];

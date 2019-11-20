@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-14 15:39:52
+ * @ version: 2019-11-20 09:29:12
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -225,7 +225,7 @@ export class Loader {
             });
             for (let name of fileResults) {
                 const file = path.join(dir, name);
-                const exports = require(file);
+
                 if (name.indexOf('/') > -1) {
                     name = name.slice(name.lastIndexOf('/') + 1);
                 }
@@ -236,16 +236,17 @@ export class Loader {
                 // const fileName = name.slice(0, name.lastIndexOf(namePattern));
                 const fileName = name.slice(0, -3);
                 //
+                const exports = require(file);
+
                 const tkeys = Object.keys(exports);
                 if (!exports[fileName] && (tkeys[0] && helper.isClass(exports[tkeys[0]]) && tkeys[0] !== fileName)) {
                     throw new Error(`The class name is not consistent with the file('${file}') name. Or you used 'export default'?`);
                     // continue;
                 }
-
                 if (fn) {
                     // console.log(fileName);
                     // console.log(exports); 
-                    fn(fileName, exports);
+                    fn(fileName, exports, file);
                 }
             }
         }
