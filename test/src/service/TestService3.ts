@@ -4,8 +4,8 @@ import { TestService } from './TestService';
 
 @Service()
 export class TestService3 extends Base {
-    // @Autowired()
-    // private testService: TestService;
+    @Autowired()
+    private testService: TestService;
 
     public sayHello() {
         console.log('test3.sayHello!');

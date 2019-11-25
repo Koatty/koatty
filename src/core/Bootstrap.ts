@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-20 14:31:18
+ * @ version: 2019-11-25 09:54:59
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -21,7 +21,7 @@ import { Router } from './Router';
  * @export
  * @returns {ClassDecorator}
  */
-export function Bootstrap(): ClassDecorator {
+export function Bootstrap(bootFunc?: Function): ClassDecorator {
     console.log('  ________    _       __   __ \n /_  __/ /_  (_)___  / /__/ /______  ____ _\n  / / / __ \\/ / __ \\/ //_/ //_/ __ \\/ __ `/\n / / / / / / / / / / ,< / /,</ /_/ / /_/ /\n/_/ /_/ /_/_/_/ /_/_/|_/_/ |_\\____/\\__,_/');
     console.log(`                     https://ThinkKoa.org/`);
     logger.custom('think', '', '====================================');
@@ -66,15 +66,21 @@ export function Bootstrap(): ClassDecorator {
             }
             logger.custom('think', '', 'LoadConfiguation ...');
             Loader.loadConfigs(app, configuationMetas);
-
+            //Contriner
             const container = new Container(app);
             helper.define(app, 'Container', container);
 
             logger.custom('think', '', 'LoadMiddlewares ...');
             Loader.loadMiddlewares(app, container);
 
-            //emit app ready
+            //Emit app ready
             logger.custom('think', '', 'Emit App Ready ...');
+            //Boot function
+            if (helper.isFunction(bootFunc)) {
+                app.once('appReady', () => {
+                    bootFunc(app);
+                });
+            }
             app.emit('appReady');
             container.app = app;
 
@@ -87,7 +93,7 @@ export function Bootstrap(): ClassDecorator {
             logger.custom('think', '', 'LoadControllers ...');
             Loader.loadControllers(app, container);
 
-            //emit app lazy loading
+            //Emit app lazy loading
             logger.custom('think', '', 'Emit App LazyLoading ...');
             app.emit('appLazy');
 
@@ -96,7 +102,7 @@ export function Bootstrap(): ClassDecorator {
             const router = new Router(app, container, routerConf);
             router.loadRouter();
 
-            // start app
+            //Start app
             logger.custom('think', '', 'Listening ...');
             logger.custom('think', '', '====================================');
             app.listen();
