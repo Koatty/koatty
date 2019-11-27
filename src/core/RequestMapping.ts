@@ -2,12 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-19 16:29:01
+ * @ version: 2019-11-25 20:22:06
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
-import { attachPropertyDataToClass } from "./Injectable";
+import { attachPropertyData } from "./Injectable";
 import { ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY } from "./Constants";
 import * as Rules from "../util/ValidRule";
 
@@ -62,7 +62,7 @@ export const RequestMapping = (
 
     return (target, key: string, descriptor: PropertyDescriptor) => {
         // tslint:disable-next-line: no-object-literal-type-assertion
-        attachPropertyDataToClass(ROUTER_KEY, {
+        attachPropertyData(ROUTER_KEY, {
             path,
             requestMethod,
             routerName,
@@ -216,7 +216,7 @@ const Inject = (fn: Function, vaildRule?: any[] | Function, message?: string): P
         // const keys = Reflect.getMetadataKeys(target, propertyKey);
 
         if (vaildRule) {
-            attachPropertyDataToClass(PARAM_RULE_KEY, {
+            attachPropertyData(PARAM_RULE_KEY, {
                 name: propertyKey,
                 fn,
                 rule: vaildRule,
@@ -226,7 +226,7 @@ const Inject = (fn: Function, vaildRule?: any[] | Function, message?: string): P
             }, target, propertyKey);
             return descriptor;
         } else {
-            attachPropertyDataToClass(PARAM_KEY, {
+            attachPropertyData(PARAM_KEY, {
                 name: propertyKey,
                 fn,
                 index: descriptor,

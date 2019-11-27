@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-18 20:49:44
+ * @ version: 2019-11-27 09:57:35
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -20,33 +20,70 @@ export class Injectable {
      *
      *
      * @static
-     * @param {(string | symbol)} metaKey
-     * @param {Object} target
-     * @param {(string | symbol)} [method]
+     * @param {(string | symbol)} metadataKey
+     * @param {any} target
+     * @param {(string | symbol)} [propertyKey]
      * @returns
      * @memberof Injectable
      */
-    public static getOriginMetadata(metaKey: string | symbol, target: Object, method?: string | symbol) {
-        if (method) {
+    public static getOriginMetadata(metadataKey: string | symbol, target: any, propertyKey?: string | symbol) {
+        // filter Object.create(null)
+        if (typeof target === 'object' && target.constructor) {
+            target = target.constructor;
+        }
+        if (propertyKey) {
             // for property or method
-            if (!Reflect.hasMetadata(metaKey, target, method)) {
-                Reflect.defineMetadata(metaKey, new Map(), target, method);
+            if (!Reflect.hasMetadata(metadataKey, target, propertyKey)) {
+                Reflect.defineMetadata(metadataKey, new Map(), target, propertyKey);
             }
-            return Reflect.getMetadata(metaKey, target, method);
+            return Reflect.getMetadata(metadataKey, target, propertyKey);
         } else {
-            // filter Object.create(null)
-            if (typeof target === 'object' && target.constructor) {
-                target = target.constructor;
-            }
             // for class
-            if (!Reflect.hasMetadata(metaKey, target)) {
-                Reflect.defineMetadata(metaKey, new Map(), target);
+            if (!Reflect.hasMetadata(metadataKey, target)) {
+                Reflect.defineMetadata(metadataKey, new Map(), target);
             }
-            return Reflect.getMetadata(metaKey, target);
+            return Reflect.getMetadata(metadataKey, target);
+        }
+    }
+
+    /**
+     *
+     *
+     * @static
+     * @param {(string | symbol)} metadataKey
+     * @param {*} target
+     * @param {(string | symbol)} [propertyKey]
+     * @returns
+     * @memberof Injectable
+     */
+    public getMetadataMap(metadataKey: string | symbol, target: any, propertyKey?: string | symbol) {
+        // filter Object.create(null)
+        if (typeof target === 'object' && target.constructor) {
+            target = target.constructor;
+        }
+        if (!this.metadataMap.has(target)) {
+            this.metadataMap.set(target, new Map());
+        }
+        if (propertyKey) {
+            // for property or method
+            const key = `${helper.toString(metadataKey)}:${helper.toString(propertyKey)}`;
+            const map = this.metadataMap.get(target);
+            if (!map.has(key)) {
+                map.set(key, new Map());
+            }
+            return map.get(key);
+        } else {
+            // for class
+            const map = this.metadataMap.get(target);
+            if (!map.has(metadataKey)) {
+                map.set(metadataKey, new Map());
+            }
+            return map.get(metadataKey);
         }
     }
 
     private handlerMap: Map<any, any>;
+    private metadataMap: WeakMap<any, any>;
 
     /**
      * Creates an instance of Injectable.
@@ -54,6 +91,7 @@ export class Injectable {
      */
     public constructor() {
         this.handlerMap = new Map();
+        this.metadataMap = new WeakMap();
     }
 
     /**
@@ -140,12 +178,12 @@ export class Injectable {
      * @param {undefined} [propertyName]
      * @memberof Injectable
      */
-    public saveMetadata(type: string, decoratorNameKey: string | symbol, data: any, target: any, propertyName?: undefined) {
+    public saveClassMetadata(type: string, decoratorNameKey: string | symbol, data: any, target: any, propertyName?: undefined) {
         if (propertyName) {
-            const originMap = Injectable.getOriginMetadata(type, target, propertyName);
+            const originMap = this.getMetadataMap(type, target, propertyName);
             originMap.set(decoratorNameKey, data);
         } else {
-            const originMap = Injectable.getOriginMetadata(type, target);
+            const originMap = this.getMetadataMap(type, target);
             originMap.set(decoratorNameKey, data);
         }
     }
@@ -157,15 +195,15 @@ export class Injectable {
      * @param {(string | symbol)} decoratorNameKey
      * @param {*} data
      * @param {*} target
-     * @param {undefined} [propertyName]
+     * @param {string} [propertyName]
      * @memberof Injectable
      */
-    public attachMetadata(type: string, decoratorNameKey: string | symbol, data: any, target: any, propertyName?: undefined) {
+    public attachClassMetadata(type: string, decoratorNameKey: string | symbol, data: any, target: any, propertyName?: string) {
         let originMap;
         if (propertyName) {
-            originMap = Injectable.getOriginMetadata(type, target, propertyName);
+            originMap = this.getMetadataMap(type, target, propertyName);
         } else {
-            originMap = Injectable.getOriginMetadata(type, target);
+            originMap = this.getMetadataMap(type, target);
         }
         if (!originMap.has(decoratorNameKey)) {
             originMap.set(decoratorNameKey, []);
@@ -183,12 +221,12 @@ export class Injectable {
      * @returns
      * @memberof Injectable
      */
-    public getMetadata(type: string, decoratorNameKey: string | symbol, target: any, propertyName?: undefined) {
+    public getClassMetadata(type: string, decoratorNameKey: string | symbol, target: any, propertyName?: undefined) {
         if (propertyName) {
-            const originMap = Injectable.getOriginMetadata(type, target, propertyName);
+            const originMap = this.getMetadataMap(type, target, propertyName);
             return originMap.get(decoratorNameKey);
         } else {
-            const originMap = Injectable.getOriginMetadata(type, target);
+            const originMap = this.getMetadataMap(type, target);
             return originMap.get(decoratorNameKey);
         }
     }
@@ -203,7 +241,7 @@ export class Injectable {
      * @memberof Injectable
      */
     public savePropertyData(decoratorNameKey: string | symbol, data: any, target: any, propertyName: string | symbol) {
-        const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
+        const originMap = this.getMetadataMap(decoratorNameKey, target);
         originMap.set(propertyName, data);
     }
 
@@ -217,11 +255,11 @@ export class Injectable {
      * @memberof Injectable
      */
     public attachPropertyData(decoratorNameKey: string | symbol, data: any, target: any, propertyName: string | symbol) {
-        const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
+        const originMap = this.getMetadataMap(decoratorNameKey, target);
         if (!originMap.has(propertyName)) {
             originMap.set(propertyName, []);
         }
-        const map: any[] = originMap.get(propertyName);
+        // const map: any[] = originMap.get(propertyName);
         // let flag = true;
         // if (map.length > 0) {
         //     for (const n of map) {
@@ -245,7 +283,7 @@ export class Injectable {
      * @memberof Injectable
      */
     public getPropertyData(decoratorNameKey: string | symbol, target: any, propertyName: string | symbol) {
-        const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
+        const originMap = this.getMetadataMap(decoratorNameKey, target);
         return originMap.get(propertyName);
     }
 
@@ -258,7 +296,7 @@ export class Injectable {
      * @memberof Injectable
      */
     public listPropertyData(decoratorNameKey: string | symbol, target: any) {
-        const originMap = Injectable.getOriginMetadata(decoratorNameKey, target);
+        const originMap = this.getMetadataMap(decoratorNameKey, target);
         const datas: any = {};
         for (const [key, value] of originMap) {
             datas[key] = value;
@@ -278,7 +316,7 @@ const manager = new Injectable();
  * @param target
  */
 export function saveClassMetadata(type: string, decoratorNameKey: string, data: any, target: any) {
-    return manager.saveMetadata(type, decoratorNameKey, data, target);
+    return manager.saveClassMetadata(type, decoratorNameKey, data, target);
 }
 
 /**
@@ -288,7 +326,22 @@ export function saveClassMetadata(type: string, decoratorNameKey: string, data: 
  * @param target
  */
 export function getClassMetadata(type: string, decoratorNameKey: string, target: any) {
-    return manager.getMetadata(type, decoratorNameKey, target);
+    return manager.getClassMetadata(type, decoratorNameKey, target);
+}
+
+/**
+ * attach data from class
+ *
+ * @export
+ * @param {string} type
+ * @param {string} decoratorNameKey
+ * @param {*} data
+ * @param {*} target
+ * @param {string} [propertyName]
+ * @returns
+ */
+export function attachClassMetadata(type: string, decoratorNameKey: string, data: any, target: any, propertyName?: string) {
+    return manager.attachClassMetadata(type, decoratorNameKey, data, target, propertyName);
 }
 
 /**
@@ -298,7 +351,7 @@ export function getClassMetadata(type: string, decoratorNameKey: string, target:
  * @param target
  * @param propertyName
  */
-export function savePropertyDataToClass(decoratorNameKey: string, data: any, target: any, propertyName: any) {
+export function savePropertyData(decoratorNameKey: string, data: any, target: any, propertyName: any) {
     return manager.savePropertyData(decoratorNameKey, data, target, propertyName);
 }
 
@@ -309,7 +362,7 @@ export function savePropertyDataToClass(decoratorNameKey: string, data: any, tar
  * @param target
  * @param propertyName
  */
-export function attachPropertyDataToClass(decoratorNameKey: string, data: any, target: any, propertyName: any) {
+export function attachPropertyData(decoratorNameKey: string, data: any, target: any, propertyName: any) {
     return manager.attachPropertyData(decoratorNameKey, data, target, propertyName);
 }
 
@@ -319,7 +372,7 @@ export function attachPropertyDataToClass(decoratorNameKey: string, data: any, t
  * @param target
  * @param propertyName
  */
-export function getPropertyDataFromClass(decoratorNameKey: string, target: any, propertyName: any) {
+export function getPropertyData(decoratorNameKey: string, target: any, propertyName: any) {
     return manager.getPropertyData(decoratorNameKey, target, propertyName);
 }
 
@@ -328,7 +381,7 @@ export function getPropertyDataFromClass(decoratorNameKey: string, target: any, 
  * @param decoratorNameKey
  * @param target
  */
-export function listPropertyDataFromClass(decoratorNameKey: string, target: any) {
+export function listPropertyData(decoratorNameKey: string, target: any) {
     return manager.listPropertyData(decoratorNameKey, target);
 }
 
@@ -340,7 +393,7 @@ export function listPropertyDataFromClass(decoratorNameKey: string, target: any)
  * @param propertyName
  */
 export function savePropertyMetadata(decoratorNameKey: string, data: any, target: any, propertyName: any) {
-    return manager.saveMetadata(decoratorNameKey, data, target, propertyName);
+    return manager.savePropertyData(decoratorNameKey, data, target, propertyName);
 }
 
 /**
@@ -361,7 +414,7 @@ export function attachPropertyMetadata(decoratorNameKey: string, data: any, targ
  * @param propertyName
  */
 export function getPropertyMetadata(decoratorNameKey: string, target: any, propertyName: any) {
-    return manager.getMetadata(decoratorNameKey, target, propertyName);
+    return manager.getPropertyData(decoratorNameKey, target, propertyName);
 }
 
 /**
@@ -466,16 +519,16 @@ function ordinaryGetPrototypeOf(obj: any): any {
 export function recursiveGetMetadata(metadataKey: any, target: any, propertyKey?: string | symbol): any[] {
     // get metadata value of a metadata key on the prototype
     // let metadata = Reflect.getOwnMetadata(metadataKey, target, propertyKey);
-    const metadata = listPropertyDataFromClass(metadataKey, target) || {};
+    const metadata = listPropertyData(metadataKey, target) || {};
 
     // get metadata value of a metadata key on the prototype chain
     let parent = ordinaryGetPrototypeOf(target);
     while (parent !== null) {
         // metadata = Reflect.getOwnMetadata(metadataKey, parent, propertyKey);
-        const pmetadata = listPropertyDataFromClass(metadataKey, parent);
+        const pmetadata = listPropertyData(metadataKey, parent);
         if (pmetadata) {
             for (const n in pmetadata) {
-                if (!metadata[n]) {
+                if (!metadata.hasOwnProperty(n)) {
                     metadata[n] = pmetadata[n];
                 }
             }
@@ -486,23 +539,53 @@ export function recursiveGetMetadata(metadataKey: any, target: any, propertyKey?
 }
 
 /**
- * Find methods on a given object
+ * Find all methods on a given object
  *
  * @param {*} target - object to enumerate on
  * @returns {string[]} - method names
  */
 export function getMethodNames(target: any): string[] {
     const result: any[] = [];
-    let enumerableOwnKeys: any[] = Reflect.ownKeys(target.prototype);
-    // get methods from es6 class
-    enumerableOwnKeys = enumerableOwnKeys.filter((k) => typeof target.prototype[k] === 'function' && k !== 'constructor');
+    const enumerableOwnKeys: any[] = Object.getOwnPropertyNames(new target());
     // searching prototype chain for methods
     let parent = ordinaryGetPrototypeOf(target);
-    while (parent && parent.prototype) {
-        const allOwnKeysOnPrototype: any[] = Reflect.ownKeys(parent.prototype);
+    while (parent && parent.constructor) {
+        const allOwnKeysOnPrototype: any[] = Object.getOwnPropertyNames(new parent());
         // get methods from es6 class
         allOwnKeysOnPrototype.forEach((k) => {
-            if (typeof target.prototype[k] === 'function' && k !== 'constructor' && !result.includes(k)) {
+            if (!result.includes(k)) {
+                result.push(k);
+            }
+        });
+        parent = ordinaryGetPrototypeOf(parent);
+    }
+
+    // leave out those methods on Object's prototype
+    enumerableOwnKeys.map((k) => {
+        if (!result.includes(k)) {
+            result.push(k);
+        }
+    });
+    return result;
+}
+
+/**
+ * Find all property on a given object
+ *
+ * @export
+ * @param {*} target
+ * @returns {string[]}
+ */
+export function getPropertyNames(target: any): string[] {
+    const result: any[] = [];
+    const enumerableOwnKeys: any[] = Object.getOwnPropertyNames(target);
+    // searching prototype chain for methods
+    let parent = ordinaryGetPrototypeOf(target);
+    while (parent) {
+        const allOwnKeysOnPrototype: any[] = Object.getOwnPropertyNames(parent);
+        // get methods from es6 class
+        allOwnKeysOnPrototype.forEach((k) => {
+            if (!result.includes(k)) {
                 result.push(k);
             }
         });
@@ -529,6 +612,7 @@ export function getMethodNames(target: any): string[] {
  */
 export function injectAutowired(target: any, instance: any, container: Container, isLazy = false) {
     const metaData = recursiveGetMetadata(TAGGED_PROP, target);
+
     // tslint:disable-next-line: forin
     for (const metaKey in metaData) {
         let dep;
@@ -594,7 +678,7 @@ export function injectValue(target: any, instance: any, container: Container) {
  */
 export function injectRouter(target: any, instance?: any) {
     // Controller router path
-    const metaDatas = listPropertyDataFromClass(NAMED_TAG, target);
+    const metaDatas = listPropertyData(NAMED_TAG, target);
     let path = '';
     const identifier = getIdentifier(target);
     if (metaDatas) {
@@ -602,7 +686,7 @@ export function injectRouter(target: any, instance?: any) {
     }
     path = path.startsWith("/") || path === "" ? path : '/' + path;
 
-    const rmetaData = listPropertyDataFromClass(ROUTER_KEY, target);
+    const rmetaData = listPropertyData(ROUTER_KEY, target);
     const router: any = {};
     // tslint:disable-next-line: forin
     for (const metaKey in rmetaData) {
@@ -631,7 +715,7 @@ export function injectRouter(target: any, instance?: any) {
 export function injectParam(target: any, instance?: any) {
     instance = instance || target.prototype;
     // const methods = getMethodNames(target);
-    const metaDatas = listPropertyDataFromClass(PARAM_KEY, target);
+    const metaDatas = listPropertyData(PARAM_KEY, target);
     const argsMetaObj: any = {};
     for (const meta in metaDatas) {
         if (instance[meta] && instance[meta].length <= metaDatas[meta].length) {
@@ -641,7 +725,7 @@ export function injectParam(target: any, instance?: any) {
         }
     }
     // vaild 
-    const vaildMetaDatas = listPropertyDataFromClass(PARAM_RULE_KEY, target);
+    const vaildMetaDatas = listPropertyData(PARAM_RULE_KEY, target);
     for (const vmeta in vaildMetaDatas) {
         if (vaildMetaDatas[vmeta] && vaildMetaDatas[vmeta].length > 0 && argsMetaObj[vmeta]) {
             for (const vn of vaildMetaDatas[vmeta]) {

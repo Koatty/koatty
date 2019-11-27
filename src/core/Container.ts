@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-19 00:58:18
+ * @ version: 2019-11-26 17:50:09
  */
 import * as helper from "think_lib";
 import { CompomentType } from './Constants';
@@ -92,10 +92,12 @@ export class Container implements IContainer {
 
                 // inject configuation. may be used by constructor
                 injectValue(target, target.prototype, this);
+
                 // instantiation
                 instance = Reflect.construct(target, options.args && options.args.length ? options.args : [this.app]);
+
                 // inject dependency
-                buildInject(target, instance, options, this);
+                instance = buildInject(target, instance, options, this);
 
                 // // tslint:disable-next-line: no-this-assignment
                 // const container = this;
