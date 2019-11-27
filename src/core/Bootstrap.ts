@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-25 09:54:59
+ * @ version: 2019-11-26 21:53:27
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -19,6 +19,7 @@ import { Router } from './Router';
  * Bootstrap appliction
  *
  * @export
+ * @param {Function} [bootFunc] 
  * @returns {ClassDecorator}
  */
 export function Bootstrap(bootFunc?: Function): ClassDecorator {
