@@ -128,3 +128,13 @@ if you use vscode , edit the `.vscode/launch.json` , like this:
 }
 ```
 Select `TS Program` to debug run. Try to call `http://localhost:3000/` .
+
+## Features
+
+- **New:** SSR 
+- **New:** GraphQL 
+- **New:** @EnableScheduling and @Scheduled(cron="0 0/1 * * * ?")
+- **New:** @Transactional
+
+
+
