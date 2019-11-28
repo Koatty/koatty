@@ -7,6 +7,15 @@ Koatty是基于Koa2实现的一个具备IOC自动依赖注入、AOP切面编程�
 
 [![Version npm](https://img.shields.io/npm/v/koatty.svg?style=flat-square)](https://www.npmjs.com/package/koatty)[![npm Downloads](https://img.shields.io/npm/dm/koatty.svg?style=flat-square)](https://npmcharts.com/compare/koatty?minimal=true)
 
+
+## Features
+
+- **New:** SSR 
+- **New:** GraphQL 
+- **New:** @EnableScheduling and @Scheduled(cron="0 0/1 * * * ?")
+- **New:** @Transactional
+
+
 ## Installation
 
 ```shell
@@ -129,12 +138,6 @@ if you use vscode , edit the `.vscode/launch.json` , like this:
 ```
 Select `TS Program` to debug run. Try to call `http://localhost:3000/` .
 
-## Features
-
-- **New:** SSR 
-- **New:** GraphQL 
-- **New:** @EnableScheduling and @Scheduled(cron="0 0/1 * * * ?")
-- **New:** @Transactional
 
 
 
