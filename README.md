@@ -10,7 +10,7 @@ Koatty是基于Koa2实现的一个具备IOC自动依赖注入、AOP切面编程�
 
 ## Features
  
-- **New:** @EnableScheduling and @Scheduled(cron="0 0/1 * * * ?")
+- **New:** @EnableScheduling and @Scheduled("0 0/1 * * * ?")
 - **New:** @Transactional
 - **New:** GraphQL
 - **New:** SSR 
