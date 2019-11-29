@@ -2,13 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-27 09:57:35
+ * @ version: 2019-11-29 15:00:03
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
 import * as logger from "think_logger";
-import { TAGGED_CLS, TAGGED_PROP, TAGGED_ARGS, NAMED_TAG, ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY } from "./Constants";
+import { scheduleJob } from "node-schedule";
+import { TAGGED_CLS, TAGGED_PROP, TAGGED_ARGS, NAMED_TAG, ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY, SCHEDULE_KEY } from "./Constants";
 import { Container } from './Container';
 
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
@@ -608,7 +609,7 @@ export function getPropertyNames(target: any): string[] {
  * @param {*} target
  * @param {*} instance
  * @param {Container} container
- * @param {boolean} isLazy
+ * @param {boolean} [isLazy=false]
  */
 export function injectAutowired(target: any, instance: any, container: Container, isLazy = false) {
     const metaData = recursiveGetMetadata(TAGGED_PROP, target);
@@ -643,13 +644,14 @@ export function injectAutowired(target: any, instance: any, container: Container
         }
     }
 }
+
 /**
  *
  *
  * @export
  * @param {*} target
  * @param {*} instance
- * @param {*} app
+ * @param {Container} container
  */
 export function injectValue(target: any, instance: any, container: Container) {
     const metaData = recursiveGetMetadata(TAGGED_ARGS, target);
@@ -675,6 +677,7 @@ export function injectValue(target: any, instance: any, container: Container) {
  * @export
  * @param {*} target
  * @param {*} [instance]
+ * @returns
  */
 export function injectRouter(target: any, instance?: any) {
     // Controller router path
@@ -711,6 +714,7 @@ export function injectRouter(target: any, instance?: any) {
  * @export
  * @param {*} target
  * @param {*} [instance]
+ * @returns
  */
 export function injectParam(target: any, instance?: any) {
     instance = instance || target.prototype;
@@ -749,4 +753,28 @@ export function injectParam(target: any, instance?: any) {
         }
     }
     return argsMetaObj;
+}
+
+/**
+ *
+ *
+ * @export
+ * @param {*} target
+ * @param {*} instance
+ * @param {Container} container
+ */
+export function injectSchedule(target: any, instance: any, container: Container) {
+    const metaDatas = listPropertyData(SCHEDULE_KEY, target);
+    // tslint:disable-next-line: forin
+    for (const meta in metaDatas) {
+        for (const val of metaDatas[meta]) {
+            if (val.cron && helper.isFunction(instance[meta])) {
+                // tslint:disable-next-line: no-unused-expression
+                process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${getIdentifier(target)} schedule key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
+                scheduleJob(val.cron, function () {
+                    instance[meta]();
+                });
+            }
+        }
+    }
 }

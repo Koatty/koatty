@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-18 11:42:52
+ * @ version: 2019-11-29 14:24:25
  */
 
 export const COMPONENT_KEY = 'COMPONENT';
@@ -17,6 +17,7 @@ export const PARAM_KEY = 'PARAM_KEY';
 export const PARAM_RULE_KEY = 'PARAM_RULE_KEY';
 export const NAMED_TAG = 'NAMED_TAG';
 export const ROUTER_KEY = 'ROUTER_KEY';
+export const SCHEDULE_KEY = 'SCHEDULE_KEY';
 
 export type Scope = 'Singleton' | 'Request' | 'Prototype';
 export type CompomentType = 'COMPONENT' | 'CONTROLLER' | 'MIDDLEWARE' | 'SERVICE';
