@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-25 20:22:06
+ * @ version: 2019-11-28 17:41:54
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -318,7 +318,7 @@ export function PathVariable(name?: string) {
     if (name) {
         return Inject((ctx: any, type: string) => {
             const data: any = helper.extend(ctx.params || {}, ctx.query);
-            return convertParamsType(data[name], type, ctx, true, true);
+            return convertParamsType(data[name], type, ctx, true, false);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -350,7 +350,7 @@ export function Get(name?: string) {
     if (name) {
         return Inject((ctx: any, type: string) => {
             const data: any = helper.extend(ctx.params || {}, ctx.query);
-            return convertParamsType(data[name], type, ctx, true, true);
+            return convertParamsType(data[name], type, ctx, true, false);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -370,7 +370,7 @@ export function Get(name?: string) {
 export function Post(name?: string) {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            return convertParamsType(ctx.post(name), type, ctx, true, true);
+            return convertParamsType(ctx.post(name), type, ctx, true, false);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -389,7 +389,7 @@ export function Post(name?: string) {
 export function File(name?: string) {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            return convertParamsType(ctx.file(name), type, ctx, true, true);
+            return convertParamsType(ctx.file(name), type, ctx, true, false);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -408,7 +408,7 @@ export function File(name?: string) {
 export function Header(name?: string) {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            return convertParamsType(ctx.get(name), type, ctx, true, true);
+            return convertParamsType(ctx.get(name), type, ctx, true, false);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -471,7 +471,7 @@ export function Valid(rule: ValidRules | ValidRules[] | Function, message?: stri
  */
 function ValidCheck(ctx: any, value: any, type: string, rule: any, message = "") {
     // check type
-    // value = convertParamsType(value, type, ctx, false, true);
+    value = convertParamsType(value, type, ctx, false, true);
     if (helper.isFunction(rule)) {
         if (!rule(value)) {
             return ctx.throw(400, message || `Invalid parameter value: ${value}, typeof ${typeof value}.`);
