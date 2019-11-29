@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-29 15:00:03
+ * @ version: 2019-11-29 17:25:52
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -771,8 +771,13 @@ export function injectSchedule(target: any, instance: any, container: Container)
             if (val.cron && helper.isFunction(instance[meta])) {
                 // tslint:disable-next-line: no-unused-expression
                 process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${getIdentifier(target)} schedule key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
-                scheduleJob(val.cron, function () {
-                    instance[meta]();
+                scheduleJob(val.cron, async function () {
+                    try {
+                        const res = await instance[meta]();
+                        return res;
+                    } catch (e) {
+                        logger.error(e);
+                    }
                 });
             }
         }
