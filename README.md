@@ -28,12 +28,6 @@ npm i -g koatty_cli
 
 ## Quick Start
 
-Check out the [quick start example][quick-example].
-
-[quick-example]: https://github.com/thinkkoa/koatty_demo/
-
-## Usage
-
 ### 1.Create Project
 
 ```shell
@@ -81,7 +75,7 @@ koatty middleware -o typeorm test
 ### 5.Define TestController
 
 ```javascript
-import { Controller, BaseController, Autowired, GetMaping, RequestBody, PathVariable, PostMaping, BaseApp, RequestMapping, RequestMethod } from "koatty";
+import { Controller, BaseController, Autowired, GetMaping, RequestBody, PathVariable, PostMaping, RequestMapping, RequestMethod, Valid } from "koatty";
 import { TestService } from "../service/TestService";
 import { App } from "../App";
 
@@ -93,25 +87,21 @@ export class IndexController extends BaseController {
     private testService: TestService;
 
     init() {
-        this.app.cache = {};
-        console.log('IndexController.init()', this.app.cache);
+        this.cache = {};
     }
 
     @RequestMapping("/", RequestMethod.ALL)
-    async default(@PathVariable("test") test: string) {
+    async default(@PathVariable("test") @Valid("notEmpty") test: string) {
         const info = await this.testService.sayHello();
         return this.ok(test, info);
     }
 
     @PostMaping("/test")
     test(@RequestBody() body: any) {
-        // return this.default('aaa');
         return this.ok("test", body);
     }
 }
 ```
-
-
 
 ## How to debug
 
@@ -141,6 +131,12 @@ if you use vscode , edit the `.vscode/launch.json` , like this:
 }
 ```
 Select `TS Program` to debug run. Try to call `http://localhost:3000/` .
+
+## Example
+
+Check out the [quick start example][quick-example].
+
+[quick-example]: https://github.com/thinkkoa/koatty_demo/
 
 
 
