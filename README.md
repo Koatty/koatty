@@ -17,7 +17,7 @@ Koatty是基于Koa2实现的一个具备IOC自动依赖注入、AOP切面编程�
 
 ## Documentation
 
-[koatty_doc](https://thinkkoa.github.io/koatty_doc/)
+[koatty_doc](https://thinkkoa.github.io/koatty_doc/) （In progress💪）
 
 
 ## Installation
