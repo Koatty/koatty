@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-29 17:25:52
+ * @ version: 2019-12-13 11:03:39
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -689,7 +689,7 @@ export function injectRouter(target: any, instance?: any) {
     }
     path = path.startsWith("/") || path === "" ? path : '/' + path;
 
-    const rmetaData = listPropertyData(ROUTER_KEY, target);
+    const rmetaData = recursiveGetMetadata(ROUTER_KEY, target);
     const router: any = {};
     // tslint:disable-next-line: forin
     for (const metaKey in rmetaData) {
@@ -719,7 +719,7 @@ export function injectRouter(target: any, instance?: any) {
 export function injectParam(target: any, instance?: any) {
     instance = instance || target.prototype;
     // const methods = getMethodNames(target);
-    const metaDatas = listPropertyData(PARAM_KEY, target);
+    const metaDatas = recursiveGetMetadata(PARAM_KEY, target);
     const argsMetaObj: any = {};
     for (const meta in metaDatas) {
         if (instance[meta] && instance[meta].length <= metaDatas[meta].length) {
@@ -729,7 +729,7 @@ export function injectParam(target: any, instance?: any) {
         }
     }
     // vaild 
-    const vaildMetaDatas = listPropertyData(PARAM_RULE_KEY, target);
+    const vaildMetaDatas = recursiveGetMetadata(PARAM_RULE_KEY, target);
     for (const vmeta in vaildMetaDatas) {
         if (vaildMetaDatas[vmeta] && vaildMetaDatas[vmeta].length > 0 && argsMetaObj[vmeta]) {
             for (const vn of vaildMetaDatas[vmeta]) {
@@ -764,7 +764,7 @@ export function injectParam(target: any, instance?: any) {
  * @param {Container} container
  */
 export function injectSchedule(target: any, instance: any, container: Container) {
-    const metaDatas = listPropertyData(SCHEDULE_KEY, target);
+    const metaDatas = recursiveGetMetadata(SCHEDULE_KEY, target);
     // tslint:disable-next-line: forin
     for (const meta in metaDatas) {
         for (const val of metaDatas[meta]) {
