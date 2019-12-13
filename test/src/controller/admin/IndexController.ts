@@ -2,9 +2,9 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-12-02 14:50:01
+ * @ version: 2019-12-13 11:10:16
  */
-import { Controller, GetMaping, Autowired, RequestMapping, RequestMethod, PathVariable, PostMaping, RequestBody, Valid } from "../../../../src/index";
+import { Controller, GetMaping, Autowired, RequestMapping, RequestMethod, PathVariable, PostMaping, RequestBody, Valid, Get } from "../../../../src/index";
 import { App } from '../../App';
 import { AdminController } from "../AdminController";
 import { TestService } from "../../service/TestService";
@@ -28,8 +28,4 @@ export class IndexController extends AdminController {
         return this.ok(test, info);
     }
 
-    @PostMaping("/test")
-    test(@RequestBody() body: any) {
-        return this.ok("test", body);
-    }
 }

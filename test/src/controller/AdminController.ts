@@ -2,9 +2,9 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-11-26 17:38:16
+ * @ version: 2019-12-13 11:04:53
  */
-import { Controller, BaseController, Autowired, Logger, Helper } from "../../../src/index";
+import { Controller, BaseController, Autowired, Logger, Helper, RequestBody } from "../../../src/index";
 import { App } from '../App';
 import { CommonService } from '../service/CommonService';
 
@@ -28,6 +28,10 @@ export class AdminController extends BaseController {
 
     __empty() {
         return this.fail('没有权限访问', {}, 404);
+    }
+
+    test(@RequestBody() body: any) {
+        return this.ok("test", body);
     }
 
 }

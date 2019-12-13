@@ -2,9 +2,9 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-19 01:00:06
+ * @ version: 2019-12-13 11:48:30
  */
-import KoaRouter from 'koa-router';
+import KoaRouter from '@koa/router';
 import * as Koa from 'koa';
 import * as helper from "think_lib";
 import * as logger from "think_logger";

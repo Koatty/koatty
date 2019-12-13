@@ -2,12 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-05 21:17:31
+ * @ version: 2019-12-13 11:54:33
  */
 
 import * as path from "path";
 import Koa from "koa";
-import KoaRouter from 'koa-router';
+import KoaRouter from '@koa/router';
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { PREVENT_NEXT_PROCESS } from './core/Constants';
