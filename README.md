@@ -18,6 +18,7 @@ Use Typescript's decorator implement auto injection just like SpringBoot.
 ## Documentation
 
 [koatty_doc_CN](https://thinkkoa.github.io/koatty_doc/) （In progress💪）
+
 [koatty_doc_EN] come soon...
 
 ## Installation
