@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-26 10:23:51
+ * @ version: 2019-12-26 18:22:47
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -132,8 +132,9 @@ export class Injectable {
      */
     public saveModule(key: string, module: any, identifier: string) {
         Reflect.defineMetadata(TAGGED_CLS, { id: identifier }, module);
-        if (!this.handlerMap.has(module)) {
-            this.handlerMap.set(`${key}:${identifier}`, module);
+        key = `${key}:${identifier}`;
+        if (!this.handlerMap.has(key)) {
+            this.handlerMap.set(key, module);
         }
     }
 
