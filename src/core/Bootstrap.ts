@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-26 21:53:27
+ * @ version: 2019-12-26 10:45:03
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -45,6 +45,17 @@ export function Bootstrap(bootFunc?: Function): ClassDecorator {
             if (componentMetas.length < 1) {
                 componentMetas = [app.app_path];
             }
+            // configuationMetas
+            const configuationMeta = getClassMetadata(INJECT_TAG, CONFIGUATION_SCAN, target);
+            let configuationMetas = [];
+            if (configuationMeta) {
+                if (helper.isArray(configuationMeta)) {
+                    configuationMetas = configuationMeta;
+                } else {
+                    configuationMetas.push(configuationMeta);
+                }
+            }
+            // ComponentScan
             const exSet = new Set();
             Loader.loadDirectory(componentMetas, '', function (fileName: string, target: any, fpath: string) {
                 if (target[fileName] && helper.isClass(target[fileName])) {
@@ -53,18 +64,10 @@ export function Bootstrap(bootFunc?: Function): ClassDecorator {
                     }
                     exSet.add(fileName);
                 }
-            }, `!${target.name || '.no'}.ts`);
+            }, [...configuationMetas, `!${target.name || '.no'}.ts`]);
             exSet.clear();
 
-            const configuationMeta = getClassMetadata(INJECT_TAG, CONFIGUATION_SCAN, target);
-            let configuationMetas = [];
-            if (configuationMeta) {
-                if (!helper.isArray(configuationMeta)) {
-                    configuationMetas.push(configuationMeta);
-                } else {
-                    configuationMetas = configuationMeta;
-                }
-            }
+
             logger.custom('think', '', 'LoadConfiguation ...');
             Loader.loadConfigs(app, configuationMetas);
             //Contriner

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-27 10:11:39
+ * @ version: 2019-12-26 10:33:26
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -231,7 +231,6 @@ export class Loader {
                 ignore: [
                     '**/node_modules/**',
                     '**/logs/**',
-                    '**/run/**',
                     '**/static/**'
                 ].concat(ignore || [])
             });

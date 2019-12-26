@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-13 11:03:39
+ * @ version: 2019-12-26 10:23:51
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
@@ -695,7 +695,7 @@ export function injectRouter(target: any, instance?: any) {
     for (const metaKey in rmetaData) {
         // tslint:disable-next-line: no-unused-expression
         process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject method Router key: ${metaKey} => value: ${JSON.stringify(rmetaData[metaKey])}`);
-
+        //.sort((a, b) => b.priority - a.priority) 
         for (const val of rmetaData[metaKey]) {
             const tmp = {
                 ...val,
