@@ -10,8 +10,8 @@ Use Typescript's decorator implement auto injection just like SpringBoot.
 ## New features
 - ~~**New:** @Scheduled("0 0/1 * * * ?")~~ ✔️ 1.9.2
 - ~~**New:** replace koa-router to @koa/router~~ ✔️ 1.10.0
-- **New:** Custom decorator with @Target()
 - **New:** AOP：@Aspect()、@Before()、@After()
+- **New:** Custom decorator with @Target()
 - **New:** @Transactional()
 - **New:** GraphQL
 - **New:** SSR 
