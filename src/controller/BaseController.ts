@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-19 01:00:23
+ * @ version: 2019-12-26 11:41:56
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "Koa";
@@ -21,11 +21,11 @@ interface BaseControllerInterface {
     encoding: string;
     init: () => void;
     __before: () => Promise<any>;
-    __empty: () => Promise<any>;
+    __empty: () => void;
     readonly assign: (name?: string, value?: any) => Promise<any>;
-    readonly deny: (code?: number) => Promise<any>;
+    readonly deny: (code?: number) => void;
     readonly expires: (timeout: number) => void;
-    readonly fail: (errmsg?: Error | string, data?: any, code?: number) => Promise<any>;
+    readonly fail: (errmsg?: Error | string, data?: any, code?: number) => void;
     readonly header: (name?: string, value?: any) => any;
     readonly isAjax: () => boolean;
     readonly isGet: () => boolean;
@@ -33,15 +33,14 @@ interface BaseControllerInterface {
     readonly isMethod: (method: string) => boolean;
     readonly isPjax: () => boolean;
     readonly isPost: () => boolean;
-    readonly json: (data: any) => Promise<any>;
-    readonly jsonp: (data: any) => Promise<any>;
-    readonly ok: (errmsg?: Error | string, data?: any, code?: number) => Promise<any>;
+    readonly json: (data: any) => void;
+    readonly jsonp: (data: any) => void;
+    readonly ok: (errmsg?: Error | string, data?: any, code?: number) => void;
     readonly param: (name?: string) => any;
-    readonly redirect: (urls: string, alt?: string) => Promise<any>;
-    readonly referer: () => string;
+    readonly redirect: (urls: string, alt?: string) => void;
     readonly render: (templateFile?: string, charset?: string, contentType?: string) => Promise<any>;
     readonly resType: (contentType?: string, encoding?: string | boolean) => string;
-    readonly write: (data: any, contentType?: string, encoding?: string) => Promise<any>;
+    readonly body: (data: any, contentType?: string, encoding?: string) => void;
 }
 
 /**
@@ -94,7 +93,7 @@ export class BaseController implements BaseControllerInterface {
      * @returns {*}
      * @memberof BaseController
      */
-    public __empty(): Promise<any> {
+    public __empty(): void {
         return this.ctx.throw('404');
     }
 
@@ -213,18 +212,8 @@ export class BaseController implements BaseControllerInterface {
         if (encoding !== false && contentType.toLowerCase().indexOf('charset=') === -1) {
             contentType += '; charset=' + (encoding || this.app.config('encoding'));
         }
-        return this.ctx.type = contentType;
-    }
-
-    /**
-     * Get referrer
-     *
-     * @public
-     * @returns {string}
-     * @memberof BaseController
-     */
-    public referer(): string {
-        return this.ctx.headers.referer || this.ctx.headers.referrer || '';
+        this.ctx.type = contentType;
+        return contentType;
     }
 
     /**
@@ -250,9 +239,8 @@ export class BaseController implements BaseControllerInterface {
      * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public redirect(urls: string, alt?: string): Promise<any> {
-        this.ctx.redirect(urls, alt);
-        return this.app.prevent();
+    public redirect(urls: string, alt?: string) {
+        return this.ctx.redirect(urls, alt);
     }
 
     /**
@@ -262,9 +250,8 @@ export class BaseController implements BaseControllerInterface {
      * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public deny(code = 403): Promise<any> {
-        this.ctx.throw(code);
-        return this.app.prevent();
+    public deny(code = 403) {
+        return this.ctx.throw(code);
     }
 
     /**
@@ -276,12 +263,11 @@ export class BaseController implements BaseControllerInterface {
      * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public write(data: any, contentType?: string, encoding?: string): Promise<any> {
+    public body(data: any, contentType?: string, encoding?: string): void {
         contentType = contentType || 'text/plain';
         encoding = encoding || this.encoding || 'utf-8';
         this.resType(contentType, encoding);
-        this.ctx.body = data;
-        return this.app.prevent();
+        return this.ctx.body = data;
     }
 
     /**
@@ -291,8 +277,8 @@ export class BaseController implements BaseControllerInterface {
      * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public json(data: any): Promise<any> {
-        return this.write(data, 'application/json');
+    public json(data: any) {
+        return this.body(data, 'application/json');
     }
 
     /**
@@ -302,14 +288,14 @@ export class BaseController implements BaseControllerInterface {
      * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public jsonp(data: any): Promise<any> {
+    public jsonp(data: any) {
         let callback = this.ctx.querys('callback') || 'callback';
         //过滤callback值里的非法字符
         callback = callback.replace(/[^\w\.]/g, '');
         if (callback) {
             data = `${callback}(${(data !== undefined ? JSON.stringify(data) : '')})`;
         }
-        return this.write(data, 'application/json');
+        return this.body(data, 'application/json');
     }
 
     /**
@@ -321,7 +307,7 @@ export class BaseController implements BaseControllerInterface {
      * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public ok(errmsg?: string, data?: any, code = 200): Promise<any> {
+    public ok(errmsg?: string, data?: any, code = 200) {
         const obj: any = {
             'status': 1,
             'code': code,
@@ -332,7 +318,7 @@ export class BaseController implements BaseControllerInterface {
         } else {
             obj.data = {};
         }
-        return this.write(obj, 'application/json');
+        return this.body(obj, 'application/json');
     }
 
     /**
@@ -344,7 +330,7 @@ export class BaseController implements BaseControllerInterface {
      * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public fail(errmsg?: any, data?: any, code = 500): Promise<any> {
+    public fail(errmsg?: any, data?: any, code = 500) {
         const obj: any = {
             'status': 0,
             'code': code,
@@ -355,7 +341,7 @@ export class BaseController implements BaseControllerInterface {
         } else {
             obj.data = {};
         }
-        return this.write(obj, 'application/json');
+        return this.body(obj, 'application/json');
     }
 
     /**

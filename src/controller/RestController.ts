@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-13 09:40:05
+ * @ version: 2019-12-26 11:22:50
  */
 import * as helper from "think_lib";
 import { Container } from '../core/Container';
@@ -26,7 +26,7 @@ export class RestController extends BaseController {
      * @returns
      * @memberof RestController
      */
-    __empty() {
+    __empty(): void {
         return this.fail('not found.', '', 404);
     }
 
