@@ -2,14 +2,14 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-12-26 11:38:00
+ * @ version: 2019-12-26 11:59:53
  */
 import { Controller, GetMaping, Autowired, RequestMapping, RequestMethod, PathVariable, PostMaping, RequestBody, Valid, Get } from "../../../../src/index";
 import { App } from '../../App';
 import { AdminController } from "../AdminController";
 import { TestService } from "../../service/TestService";
 
-@Controller("/")
+@Controller("/admin")
 export class IndexController extends AdminController {
     app: App;
     pageInfo: { 'appName': string; 'appVersion': string; 'appKeywords': string; 'appDescription': string; };
