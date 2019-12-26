@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-26 10:33:26
+ * @ version: 2019-12-26 18:37:16
  */
 import * as globby from 'globby';
 import * as path from 'path';
@@ -57,6 +57,78 @@ export class Loader {
         });
 
         app.setMap("configs", helper.extend(config, appConfig, true));
+    }
+
+    /**
+     * Load middlewares
+     *
+     * @static
+     * @param {*} app
+     * @param {Container} container
+     * @param {(string | string[])} [loadPath]
+     * @memberof Loader
+     */
+    public static loadMiddlewares(app: any, container: Container, loadPath?: string | string[]) {
+        const configs = app.getMap("configs") || {};
+        //default middleware list
+        const defaultList = ['Static', 'Payload'];
+        //Mount default middleware
+        Loader.loadDirectory(loadPath || './middleware', app.think_path);
+        //Mount application middleware
+        // const middlewares: any = {};
+        const appMeddlewares = listModule(MIDDLEWARE_KEY) || [];
+
+        appMeddlewares.map((item: {
+            id: string;
+            target: any;
+        }) => {
+            item.id = (item.id || '').replace(`${MIDDLEWARE_KEY}:`, '');
+            if (item.id && helper.isClass(item.target)) {
+                container.reg(item.target, { scope: 'Request', type: 'MIDDLEWARE' });
+                // middlewares[item.id] = item.target;
+            }
+        });
+
+
+        const middlewareConfList = configs.middleware && configs.middleware.list ? configs.middleware.list || [] : [];
+        const bandList = ['Trace', ...defaultList];
+        middlewareConfList.map((item: any) => {
+            if (!bandList.includes(item)) {
+                defaultList.push(item);
+            }
+        });
+
+        //de-duplication
+        const appMList = [...new Set(defaultList)];
+        //Mount the middleware on first
+        appMList.unshift('Trace');
+
+        //Automatically call middleware
+        let handle: any;
+        configs.middleware = configs.middleware || { config: {} };
+        appMList.forEach((key) => {
+            handle = container.get(key, MIDDLEWARE_KEY);
+            if (!handle) {
+                throw new Error(`middleware ${key} load error.`);
+                return;
+            }
+            if (!helper.isFunction(handle.run)) {
+                throw new Error(`middleware ${key} must be implements method 'run'.`);
+                return;
+            }
+            if (configs.middleware.config[key] === false) {
+                return;
+            }
+            // tslint:disable-next-line: no-unused-expression
+            process.env.NODE_ENV === 'development' && logger.custom('think', '', `Load middleware: ${key}`);
+            if (handle.run.length < 3) {
+                app.use(handle.run(configs.middleware.config[key] || {}, app));
+            } else {
+                app.useExp(handle.run(configs.middleware.config[key] || {}, app));
+            }
+        });
+
+        // app.setMap("middlewares", middlewares);
     }
 
     /**
@@ -131,77 +203,6 @@ export class Loader {
         });
 
         app.setMap("controllers", controllers);
-    }
-
-    /**
-     * Load middlewares
-     *
-     * @static
-     * @param {*} app
-     * @param {Container} container
-     * @memberof Loader
-     */
-    public static loadMiddlewares(app: any, container: Container) {
-        const configs = app.getMap("configs") || {};
-        //default middleware list
-        const defaultList = ['Static', 'Payload'];
-        //Mount default middleware
-        Loader.loadDirectory('./middleware', app.think_path);
-        //Mount application middleware
-        // const middlewares: any = {};
-        const appMeddlewares = listModule(MIDDLEWARE_KEY) || [];
-
-        appMeddlewares.map((item: {
-            id: string;
-            target: any;
-        }) => {
-            item.id = (item.id || '').replace(`${MIDDLEWARE_KEY}:`, '');
-            if (item.id && helper.isClass(item.target)) {
-                container.reg(item.target, { scope: 'Request', type: 'MIDDLEWARE' });
-                // middlewares[item.id] = item.target;
-            }
-        });
-
-
-        const middlewareConfList = configs.middleware && configs.middleware.list ? configs.middleware.list || [] : [];
-        const bandList = ['Trace', ...defaultList];
-        middlewareConfList.map((item: any) => {
-            if (!bandList.includes(item)) {
-                defaultList.push(item);
-            }
-        });
-
-        //de-duplication
-        const appMList = [...new Set(defaultList)];
-        //Mount the middleware on first
-        appMList.unshift('Trace');
-
-        //Automatically call middleware
-        let handle: any;
-        configs.middleware = configs.middleware || { config: {} };
-        appMList.forEach((key) => {
-            handle = container.get(key, MIDDLEWARE_KEY);
-            if (!handle) {
-                throw new Error(`middleware ${key} load error.`);
-                return;
-            }
-            if (!helper.isFunction(handle.run)) {
-                throw new Error(`middleware ${key} must be implements method 'run'.`);
-                return;
-            }
-            if (configs.middleware.config[key] === false) {
-                return;
-            }
-            // tslint:disable-next-line: no-unused-expression
-            process.env.NODE_ENV === 'development' && logger.custom('think', '', `Load middleware: ${key}`);
-            if (handle.run.length < 3) {
-                app.use(handle.run(configs.middleware.config[key] || {}, app));
-            } else {
-                app.useExp(handle.run(configs.middleware.config[key] || {}, app));
-            }
-        });
-
-        // app.setMap("middlewares", middlewares);
     }
 
     /**
