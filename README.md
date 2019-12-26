@@ -15,6 +15,8 @@ Use Typescript's decorator implement auto injection just like SpringBoot.
 - **New:** @Transactional()
 - **New:** GraphQL
 - **New:** SSR 
+- **New:** [koatty-cloud-nacos](https://github.com/thinkkoa/koatty-cloud-nacos)
+- **New:** [koatty-SpringCloud](https://github.com/thinkkoa/koatty-SpringCloud)
 
 ## Documentation
 
