@@ -2,16 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-26 18:22:47
+ * @ version: 2019-12-27 10:46:26
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
 import * as logger from "think_logger";
-import { scheduleJob } from "node-schedule";
-import { TAGGED_CLS, TAGGED_PROP, TAGGED_ARGS, NAMED_TAG, ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY, SCHEDULE_KEY } from "./Constants";
+import { TAGGED_CLS, TAGGED_PROP, TAGGED_ARGS } from "./Constants";
 import { Container } from './Container';
-
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
 
@@ -669,118 +667,5 @@ export function injectValue(target: any, instance: any, container: Container) {
             writable: true,
             value: prop
         });
-    }
-}
-
-/**
- *
- *
- * @export
- * @param {*} target
- * @param {*} [instance]
- * @returns
- */
-export function injectRouter(target: any, instance?: any) {
-    // Controller router path
-    const metaDatas = listPropertyData(NAMED_TAG, target);
-    let path = '';
-    const identifier = getIdentifier(target);
-    if (metaDatas) {
-        path = metaDatas[identifier] || "";
-    }
-    path = path.startsWith("/") || path === "" ? path : '/' + path;
-
-    const rmetaData = recursiveGetMetadata(ROUTER_KEY, target);
-    const router: any = {};
-    // tslint:disable-next-line: forin
-    for (const metaKey in rmetaData) {
-        // tslint:disable-next-line: no-unused-expression
-        process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject method Router key: ${metaKey} => value: ${JSON.stringify(rmetaData[metaKey])}`);
-        //.sort((a, b) => b.priority - a.priority) 
-        for (const val of rmetaData[metaKey]) {
-            const tmp = {
-                ...val,
-                path: `${path}${val.path}`.replace("//", "/")
-            };
-            router[`${tmp.path}-${tmp.requestMethod}`] = tmp;
-        }
-    }
-
-    return router;
-}
-
-/**
- *
- *
- * @export
- * @param {*} target
- * @param {*} [instance]
- * @returns
- */
-export function injectParam(target: any, instance?: any) {
-    instance = instance || target.prototype;
-    // const methods = getMethodNames(target);
-    const metaDatas = recursiveGetMetadata(PARAM_KEY, target);
-    const argsMetaObj: any = {};
-    for (const meta in metaDatas) {
-        if (instance[meta] && instance[meta].length <= metaDatas[meta].length) {
-            // tslint:disable-next-line: no-unused-expression
-            process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${getIdentifier(target)} param key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
-            argsMetaObj[meta] = metaDatas[meta];
-        }
-    }
-    // vaild 
-    const vaildMetaDatas = recursiveGetMetadata(PARAM_RULE_KEY, target);
-    for (const vmeta in vaildMetaDatas) {
-        if (vaildMetaDatas[vmeta] && vaildMetaDatas[vmeta].length > 0 && argsMetaObj[vmeta]) {
-            for (const vn of vaildMetaDatas[vmeta]) {
-                argsMetaObj[vmeta] = argsMetaObj[vmeta].map((it: any) => {
-                    if (it.index === vn.index && vn.fn && vn.rule) {
-                        const fn = (ctx: any, type: string) => {
-                            const value = it.fn(ctx, type);
-                            return vn.fn(ctx, value, type, vn.rule, vn.msg);
-                        };
-                        return {
-                            name: it.name,
-                            fn,
-                            index: it.index,
-                            type: it.type
-                        };
-                    } else {
-                        return it;
-                    }
-                });
-            }
-        }
-    }
-    return argsMetaObj;
-}
-
-/**
- *
- *
- * @export
- * @param {*} target
- * @param {*} instance
- * @param {Container} container
- */
-export function injectSchedule(target: any, instance: any, container: Container) {
-    const metaDatas = recursiveGetMetadata(SCHEDULE_KEY, target);
-    // tslint:disable-next-line: forin
-    for (const meta in metaDatas) {
-        for (const val of metaDatas[meta]) {
-            if (val.cron && helper.isFunction(instance[meta])) {
-                // tslint:disable-next-line: no-unused-expression
-                process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${getIdentifier(target)} schedule key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
-                scheduleJob(val.cron, async function () {
-                    try {
-                        const res = await instance[meta]();
-                        return res;
-                    } catch (e) {
-                        logger.error(e);
-                    }
-                });
-            }
-        }
     }
 }
