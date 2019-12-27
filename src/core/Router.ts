@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-27 14:22:10
+ * @ version: 2019-12-27 15:16:19
  */
 import KoaRouter from '@koa/router';
 import * as Koa from 'koa';
@@ -207,8 +207,8 @@ export class Router {
      * @memberof Router
      */
     async execRouter(identifier: string, router: any, app: any, ctx: Koa.Context, container: Container, params?: any) {
-        // const ctl: any = container.get(identifier, 'CONTROLLER', [app, ctx]);
-        const ctl: any = container.get(identifier, 'CONTROLLER');
+        const ctl: any = container.get(identifier, 'CONTROLLER', [app, ctx]);
+        // const ctl: any = container.get(identifier, 'CONTROLLER');
         if (!ctx || !ctl.init) {
             return ctx.throw(404, `Controller ${identifier} not found.`);
         }
@@ -216,10 +216,10 @@ export class Router {
         ctl.app = app;
         ctl.ctx = ctx;
         // empty-method
-        if (!ctl[router.method]) {
-            //return ctx.throw(404, `Action ${router.method} not found.`);
-            return ctl.__empty();
-        }
+        // if (!ctl[router.method]) {
+        //     //return ctx.throw(404, `Action ${router.method} not found.`);
+        //     return ctl.__empty();
+        // }
         // pre-method
         if (ctl.__before) {
             await ctl.__before();
@@ -229,6 +229,11 @@ export class Router {
         if (params[router.method]) {
             args = params[router.method].sort((a: any, b: any) => a.index - b.index).map((i: any) => i.fn(ctx, i.type));
         }
-        return ctl[router.method](...args);
+        const result = await ctl[router.method](...args);
+        // after-method
+        if (ctl.__after) {
+            await ctl.__after();
+        }
+        return result;
     }
 }

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-26 11:41:56
+ * @ version: 2019-12-27 14:54:17
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "Koa";
@@ -21,7 +21,7 @@ interface BaseControllerInterface {
     encoding: string;
     init: () => void;
     __before: () => Promise<any>;
-    __empty: () => void;
+    __after: () => Promise<any>;
     readonly assign: (name?: string, value?: any) => Promise<any>;
     readonly deny: (code?: number) => void;
     readonly expires: (timeout: number) => void;
@@ -78,8 +78,9 @@ export class BaseController implements BaseControllerInterface {
     }
 
     /**
-     * Class pre-method, which is executed before all class member methods are execute
+     * Class pre-execution method, executed before each class member methods (except constructor, init, __after) are executed.
      *
+     * @returns {Promise<any>}
      * @memberof BaseController
      */
     public __before(): Promise<any> {
@@ -87,14 +88,14 @@ export class BaseController implements BaseControllerInterface {
     }
 
     /**
-     * Call if the action is not found
+     * Class after-execution method,after each class member methods (except constructor, init, __after) are executed.
      *
      * @public
      * @returns {*}
      * @memberof BaseController
      */
-    public __empty(): void {
-        return this.ctx.throw('404');
+    public __after(): Promise<any> {
+        return Promise.resolve();
     }
 
     /**

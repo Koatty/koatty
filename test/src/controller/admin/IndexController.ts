@@ -2,9 +2,9 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-12-27 14:23:33
+ * @ version: 2019-12-27 15:04:19
  */
-import { Controller, GetMaping, Autowired, RequestMapping, RequestMethod, PathVariable, PostMaping, RequestBody, Valid, Get, Before, BeforeEach } from "../../../../src/index";
+import { Controller, GetMaping, Autowired, RequestMapping, RequestMethod, PathVariable, PostMaping, RequestBody, Valid, Get, Before, BeforeEach, After } from "../../../../src/index";
 import { App } from '../../App';
 import { AdminController } from "../AdminController";
 import { TestService } from "../../service/TestService";
@@ -36,7 +36,7 @@ export class IndexController extends AdminController {
     }
 
     @RequestMapping("/test", RequestMethod.ALL)
-    // @Before("TestAspect")
+    @After("TestAspect")
     async test() {
         const info = await this.testService.test();
         return this.body(info);

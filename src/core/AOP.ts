@@ -2,14 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-27 14:22:25
+ * @ version: 2019-12-27 15:04:33
  */
 import * as helper from 'think_lib';
 import { saveModule, getIdentifier } from "./Injectable";
 import { COMPONENT_KEY } from './Constants';
 
 /**
- *
+ * Dynamically add methods for target class types
  *
  * @param {Function} clazz
  * @param {string} protoName
@@ -24,19 +24,22 @@ function defineNewProperty(clazz: Function, protoName: string, methodName: strin
                 // tslint:disable-next-line: no-invalid-this
                 await Promise.resolve(Reflect.apply(oldMethod, this, props));
             }
-            // tslint:disable-next-line: no-invalid-this
-            const target = this.app.Container.get(methodName, "COMPONENT");
-            if (target && helper.isFunction(target.run)) {
+            if (methodName) {
                 // tslint:disable-next-line: no-invalid-this
-                await Promise.resolve(Reflect.apply(target.run, this, []));
+                const target = this.app.Container.get(methodName, "COMPONENT");
+                if (target && helper.isFunction(target.run)) {
+                    // tslint:disable-next-line: no-invalid-this
+                    await Promise.resolve(Reflect.apply(target.run, this, []));
+                }
             }
+
             return Promise.resolve();
         }
     });
 }
 
 /**
- * 
+ * Indicates that an decorated class is a "aspect".
  *
  * @export
  * @param {string} [identifier]
@@ -57,7 +60,7 @@ export function Aspect(identifier?: string): ClassDecorator {
 }
 
 /**
- *
+ * Executed before specifying the pointcut method.
  *
  * @export
  * @param {string} aopName
@@ -86,26 +89,26 @@ export function Before(aopName: string): MethodDecorator {
 }
 
 /**
- *
+ * Executed after execution of each method of the specified pointcut class.
  *
  * @export
- * @param {string} aopName
+ * @param {string} [aopName]
  * @returns {Function}
  */
-export function BeforeEach(aopName: string): ClassDecorator {
+export function BeforeEach(aopName = "__before"): ClassDecorator {
     return (target: any) => {
-        return defineNewProperty(target, '__before', aopName);
+        return defineNewProperty(target, '__before', aopName === "__before" ? "" : aopName);
     };
 }
 
 /**
- *
+ * Executed after specifying the pointcut method.
  *
  * @export
  * @param {string} aopName
  * @returns {Function}
  */
-export function After(aopName: string): MethodDecorator | ClassDecorator {
+export function After(aopName: string): MethodDecorator {
     return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
         if (!aopName) {
             throw Error("AopName is required.");
@@ -131,14 +134,14 @@ export function After(aopName: string): MethodDecorator | ClassDecorator {
 }
 
 /**
- *
+ * Executed after execution of each method of the specified pointcut class.
  *
  * @export
  * @param {string} aopName
  * @returns {Function}
  */
-export function AfterEach(aopName: string): ClassDecorator {
+export function AfterEach(aopName = "__after"): ClassDecorator {
     return (target: any) => {
-        return defineNewProperty(target, '__after', aopName);
+        return defineNewProperty(target, '__after', aopName === "__after" ? "" : aopName);
     };
 }
