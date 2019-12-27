@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-27 15:24:13
+ * @ version: 2019-12-27 17:56:49
  */
 import * as helper from "think_lib";
 import { CompomentType } from './Constants';
@@ -20,13 +20,6 @@ import { getModule, getIdentifier, injectAutowired, injectValue, saveModule } fr
  * @returns
  */
 const buildInject = function (target: any, instance: any, options: ObjectDefinitionOptions, container: Container) {
-    // inject options once
-    Reflect.defineProperty(instance, '_options', {
-        enumerable: false,
-        configurable: false,
-        writable: true,
-        value: options
-    });
     // inject autowired
     injectAutowired(target, instance, container);
     // inject schedule
@@ -84,21 +77,23 @@ export class Container implements IContainer {
         };
 
         let instance = this.handlerMap.get(target);
-        if (!this.handlerMap.has(target)) {
+        if (!instance) {
+            // inject options once
+            Reflect.defineProperty(target.prototype, '_options', {
+                enumerable: false,
+                configurable: false,
+                writable: true,
+                value: options
+            });
             if (helper.isClass(target)) {
                 const ref = getModule(options.type, identifier);
                 if (!ref) {
                     saveModule(options.type, target, identifier);
                 }
-
                 // inject configuation. may be used by constructor
                 injectValue(target, target.prototype, this);
-
-                // instantiation
-                instance = Reflect.construct(target, options.args && options.args.length ? options.args : [this.app]);
-
                 // inject dependency
-                instance = buildInject(target, instance, options, this);
+                buildInject(target, target.prototype, options, this);
 
                 // // tslint:disable-next-line: no-this-assignment
                 // const container = this;
@@ -113,15 +108,22 @@ export class Container implements IContainer {
                 //         return cls;
                 //     }
                 // }), options.args && options.args.length ? options.args : [this.app]);
-
+                if (options.scope === 'Singleton') {
+                    // instantiation
+                    instance = Reflect.construct(target, options.args && options.args.length ? options.args : [this.app]);
+                } else {
+                    instance = target;
+                }
                 // registration
                 this.handlerMap.set(target, instance);
             } else {
-                instance = target;
+                return target;
             }
         }
+
         if (options.scope !== 'Singleton') {
-            instance = helper.clone(instance, true);
+            // instantiation
+            return Reflect.construct(instance, options.args && options.args.length ? options.args : [this.app]);
         }
         return instance;
     }
@@ -142,15 +144,15 @@ export class Container implements IContainer {
             return null;
         }
         // 
-        let instance: any;
-        if (args && args.length > 0) {
-            instance = this.reg(target, { scope: 'Request', type, args });
-        } else {
-            instance = this.handlerMap.get(target);
-            if (!instance) {
-                instance = this.reg(identifier, target);
-            }
+        let instance: any = this.handlerMap.get(target);
+        // not Singleton, IOC return prototype
+        if (helper.isClass(instance) || helper.isFunction(instance)) {
+            instance = instance.prototype;
         }
+        if ((args && args.length > 0) || (instance && instance._options && instance._options.scope !== 'Singleton')) {
+            instance = this.reg(target, { scope: 'Request', type, args });
+        }
+
         // tslint:disable-next-line: no-unused-expression
         instance && !instance.app && (instance.app = this.app);
 
