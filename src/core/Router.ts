@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-27 18:49:54
+ * @ version: 2019-12-27 19:12:00
  */
 import KoaRouter from '@koa/router';
 import * as Koa from 'koa';
@@ -10,8 +10,9 @@ import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { Koatty } from '../Koatty';
 import { Container } from './Container';
-import { listPropertyData, getIdentifier, recursiveGetMetadata } from './Injectable';
+import { listPropertyData, getIdentifier } from './Injectable';
 import { NAMED_TAG, ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY } from './Constants';
+import { recursiveGetMetadata } from '../util/Lib';
 
 /**
  * Http timeout timer
