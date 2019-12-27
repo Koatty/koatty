@@ -12,6 +12,7 @@ Use Typescript's decorator implement auto injection just like SpringBoot.
 - ~~**New:** replace koa-router to @koa/router~~ ✔️ 1.10.0
 - **New:** AOP：@Aspect()、@Before()、@After()
 - **New:** Custom decorator with @Target(identifier, ElementType.TYPE)
+- **New:** @Validated: Use class-validator for entity class validation
 - **New:** @Transactional()
 - **New:** GraphQL
 - **New:** SSR 
