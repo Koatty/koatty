@@ -2,14 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-27 14:54:17
+ * @ version: 2019-12-28 01:24:29
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "Koa";
 import * as helper from "think_lib";
-import { Koatty } from '../Koatty';
-import { ObjectDefinitionOptions } from '../core/IContainer';
-import { Value } from '../core/Decorators';
+import { Koatty } from "../Koatty";
+import { ObjectDefinitionOptions } from "../core/IContainer";
+import { Value } from "../core/Decorators";
 
 /**
  *
@@ -88,7 +88,7 @@ export class BaseController implements BaseControllerInterface {
     }
 
     /**
-     * Class after-execution method,after each class member methods (except constructor, init, __after) are executed.
+     * Class after-execution method,after each class member methods (except constructor, init, __before) are executed.
      *
      * @public
      * @returns {*}
@@ -106,7 +106,7 @@ export class BaseController implements BaseControllerInterface {
      * @memberof BaseController
      */
     public isGet(): boolean {
-        return this.ctx.method === 'GET';
+        return this.ctx.method === "GET";
     }
 
     /**
@@ -117,7 +117,7 @@ export class BaseController implements BaseControllerInterface {
      * @memberof BaseController
      */
     public isPost(): boolean {
-        return this.ctx.method === 'POST';
+        return this.ctx.method === "POST";
     }
 
     /**
@@ -140,7 +140,7 @@ export class BaseController implements BaseControllerInterface {
      * @memberof BaseController
      */
     public isAjax(): boolean {
-        return this.ctx.headers['x-requested-with'] === 'XMLHttpRequest';
+        return this.ctx.headers["x-requested-with"] === "XMLHttpRequest";
     }
 
     /**
@@ -151,18 +151,18 @@ export class BaseController implements BaseControllerInterface {
      * @memberof BaseController
      */
     public isPjax(): boolean {
-        return this.ctx.headers['x-pjax'] || this.ctx.headers['X-Pjax'] || false;
+        return this.ctx.headers["x-pjax"] || this.ctx.headers["X-Pjax"] || false;
     }
 
     /**
      * Whether it is jsonp call
      *
      * @public
-     * @param {string} [name='jsonpcallback']
+     * @param {string} [name="jsonpcallback"]
      * @returns {boolean}
      * @memberof BaseController
      */
-    public isJsonp(name = 'jsonpcallback'): boolean {
+    public isJsonp(name = "jsonpcallback"): boolean {
         return !!this.ctx.query[name];
     }
 
@@ -208,10 +208,10 @@ export class BaseController implements BaseControllerInterface {
      */
     public resType(contentType?: string, encoding?: string | boolean): string {
         if (!contentType) {
-            return (this.ctx.headers['content-type'] || '').split(';')[0].trim();
+            return (this.ctx.headers["content-type"] || "").split(";")[0].trim();
         }
-        if (encoding !== false && contentType.toLowerCase().indexOf('charset=') === -1) {
-            contentType += '; charset=' + (encoding || this.app.config('encoding'));
+        if (encoding !== false && contentType.toLowerCase().indexOf("charset=") === -1) {
+            contentType += "; charset=" + (encoding || this.app.config("encoding"));
         }
         this.ctx.type = contentType;
         return contentType;
@@ -228,8 +228,8 @@ export class BaseController implements BaseControllerInterface {
     public expires(timeout = 30): void {
         timeout = helper.toNumber(timeout) * 1000;
         const date = new Date(Date.now() + timeout);
-        this.ctx.set('Cache-Control', `max-age=${timeout}`);
-        return this.ctx.set('Expires', date.toUTCString());
+        this.ctx.set("Cache-Control", `max-age=${timeout}`);
+        return this.ctx.set("Expires", date.toUTCString());
     }
 
     /**
@@ -265,8 +265,8 @@ export class BaseController implements BaseControllerInterface {
      * @memberof BaseController
      */
     public body(data: any, contentType?: string, encoding?: string): void {
-        contentType = contentType || 'text/plain';
-        encoding = encoding || this.encoding || 'utf-8';
+        contentType = contentType || "text/plain";
+        encoding = encoding || this.encoding || "utf-8";
         this.resType(contentType, encoding);
         return this.ctx.body = data;
     }
@@ -279,7 +279,7 @@ export class BaseController implements BaseControllerInterface {
      * @memberof BaseController
      */
     public json(data: any) {
-        return this.body(data, 'application/json');
+        return this.body(data, "application/json");
     }
 
     /**
@@ -290,13 +290,13 @@ export class BaseController implements BaseControllerInterface {
      * @memberof BaseController
      */
     public jsonp(data: any) {
-        let callback = this.ctx.querys('callback') || 'callback';
+        let callback = this.ctx.querys("callback") || "callback";
         //过滤callback值里的非法字符
-        callback = callback.replace(/[^\w\.]/g, '');
+        callback = callback.replace(/[^\w\.]/g, "");
         if (callback) {
-            data = `${callback}(${(data !== undefined ? JSON.stringify(data) : '')})`;
+            data = `${callback}(${(data !== undefined ? JSON.stringify(data) : "")})`;
         }
-        return this.body(data, 'application/json');
+        return this.body(data, "application/json");
     }
 
     /**
@@ -310,16 +310,16 @@ export class BaseController implements BaseControllerInterface {
      */
     public ok(errmsg?: string, data?: any, code = 200) {
         const obj: any = {
-            'status': 1,
-            'code': code,
-            'message': errmsg || ''
+            "status": 1,
+            "code": code,
+            "message": errmsg || ""
         };
         if (data !== undefined) {
             obj.data = data;
         } else {
             obj.data = {};
         }
-        return this.body(obj, 'application/json');
+        return this.body(obj, "application/json");
     }
 
     /**
@@ -333,16 +333,16 @@ export class BaseController implements BaseControllerInterface {
      */
     public fail(errmsg?: any, data?: any, code = 500) {
         const obj: any = {
-            'status': 0,
-            'code': code,
-            'message': (helper.isError(errmsg) ? errmsg.message : errmsg) || 'error'
+            "status": 0,
+            "code": code,
+            "message": (helper.isError(errmsg) ? errmsg.message : errmsg) || "error"
         };
         if (data !== undefined) {
             obj.data = data;
         } else {
             obj.data = {};
         }
-        return this.body(obj, 'application/json');
+        return this.body(obj, "application/json");
     }
 
     /**
@@ -355,7 +355,7 @@ export class BaseController implements BaseControllerInterface {
      */
     public assign(name?: string, value?: any): Promise<any> {
         if (!this.ctx.assign) {
-            return this.ctx.throw('500', 'The think_view middleware is not installed or configured incorrectly.');
+            return this.ctx.throw("500", "The think_view middleware is not installed or configured incorrectly.");
         }
         return this.ctx.assign(name, value);
     }
@@ -371,7 +371,7 @@ export class BaseController implements BaseControllerInterface {
      */
     public render(templateFile?: string, charset?: string, contentType?: string): Promise<any> {
         if (!this.ctx.render) {
-            return this.ctx.throw('500', 'The think_view middleware is not installed or configured incorrectly.');
+            return this.ctx.throw("500", "The think_view middleware is not installed or configured incorrectly.");
         }
         charset = charset || this.encoding || "utf-8";
         return this.ctx.render(templateFile, null, charset, contentType);
@@ -380,24 +380,24 @@ export class BaseController implements BaseControllerInterface {
 }
 
 
-// const propertys = ['constructor', 'init'];
+// const propertys = ["constructor", "init"];
 // export const BaseController = new Proxy(Base, {
 //     set(target, key, value, receiver) {
 //         if (Reflect.get(target, key, receiver) === undefined) {
 //             return Reflect.set(target, key, value, receiver);
-//         } else if (key === 'init') {
+//         } else if (key === "init") {
 //             return Reflect.set(target, key, value, receiver);
 //         } else {
-//             throw Error('Cannot redefine getter-only property');
+//             throw Error("Cannot redefine getter-only property");
 //         }
 //     },
 //     deleteProperty(target, key) {
-//         throw Error('Cannot delete getter-only property');
+//         throw Error("Cannot delete getter-only property");
 //     },
 //     construct(target, args, newTarget) {
 //         Reflect.ownKeys(target.prototype).map((n) => {
 //             if (newTarget.prototype.hasOwnProperty(n) && !propertys.includes(helper.toString(n))) {
-//                 throw Error(`Cannot override the final method '${helper.toString(n)}'`);
+//                 throw Error(`Cannot override the final method "${helper.toString(n)}"`);
 //             }
 //         });
 //         return Reflect.construct(target, args, newTarget);

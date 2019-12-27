@@ -2,12 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-15 14:45:05
+ * @ version: 2019-12-28 01:30:30
  */
 
-const payloads = require('think_payload');
-import { Middleware } from '../core/Decorators';
-import { Koatty } from '../Koatty';
+const payloads = require("think_payload");
+import { Middleware } from "../core/Decorators";
+import { Koatty } from "../Koatty";
 
 @Middleware()
 export class Payload {

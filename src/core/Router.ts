@@ -2,17 +2,17 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-27 19:12:00
+ * @ version: 2019-12-28 01:23:53
  */
-import KoaRouter from '@koa/router';
-import * as Koa from 'koa';
+import KoaRouter from "@koa/router";
+import * as Koa from "koa";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
-import { Koatty } from '../Koatty';
-import { Container } from './Container';
-import { listPropertyData, getIdentifier } from './Injectable';
-import { NAMED_TAG, ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY } from './Constants';
-import { recursiveGetMetadata } from '../util/Lib';
+import { Koatty } from "../Koatty";
+import { Container } from "./Container";
+import { listPropertyData, getIdentifier } from "./Injectable";
+import { NAMED_TAG, ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY } from "./Constants";
+import { recursiveGetMetadata } from "../util/Lib";
 
 /**
  * Http timeout timer
@@ -22,7 +22,7 @@ import { recursiveGetMetadata } from '../util/Lib';
 // const timer = function (tmr: any, timeout: number) {
 //     return new Promise((resolve, reject) => {
 //         tmr = setTimeout(function () {
-//             const err: any = new Error('Request timeout');
+//             const err: any = new Error("Request timeout");
 //             err.status = 408;
 //             reject(err);
 //         }, timeout);
@@ -41,19 +41,19 @@ import { recursiveGetMetadata } from '../util/Lib';
 function injectRouter(target: any, instance?: any) {
     // Controller router path
     const metaDatas = listPropertyData(NAMED_TAG, target);
-    let path = '';
+    let path = "";
     const identifier = getIdentifier(target);
     if (metaDatas) {
         path = metaDatas[identifier] || "";
     }
-    path = path.startsWith("/") || path === "" ? path : '/' + path;
+    path = path.startsWith("/") || path === "" ? path : `/${path}`;
 
     const rmetaData = recursiveGetMetadata(ROUTER_KEY, target);
     const router: any = {};
     // tslint:disable-next-line: forin
     for (const metaKey in rmetaData) {
         // tslint:disable-next-line: no-unused-expression
-        process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject method Router key: ${metaKey} => value: ${JSON.stringify(rmetaData[metaKey])}`);
+        process.env.NODE_ENV === "development" && logger.custom("think", "", `Register inject method Router key: ${metaKey} => value: ${JSON.stringify(rmetaData[metaKey])}`);
         //.sort((a, b) => b.priority - a.priority) 
         for (const val of rmetaData[metaKey]) {
             const tmp = {
@@ -83,7 +83,7 @@ function injectParam(target: any, instance?: any) {
     for (const meta in metaDatas) {
         if (instance[meta] && instance[meta].length <= metaDatas[meta].length) {
             // tslint:disable-next-line: no-unused-expression
-            process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${getIdentifier(target)} param key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
+            process.env.NODE_ENV === "development" && logger.custom("think", "", `Register inject ${getIdentifier(target)} param key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
             argsMetaObj[meta] = metaDatas[meta];
         }
     }
@@ -167,7 +167,7 @@ export class Router {
                 // tslint:disable-next-line: forin
                 for (const it in ctlRouters) {
                     // tslint:disable-next-line: no-unused-expression
-                    app.app_debug && logger.custom('think', '', `Register request mapping: [${ctlRouters[it].requestMethod}] : ["${ctlRouters[it].path}" => ${n}.${ctlRouters[it].method}]`);
+                    app.app_debug && logger.custom("think", "", `Register request mapping: [${ctlRouters[it].requestMethod}] : ["${ctlRouters[it].path}" => ${n}.${ctlRouters[it].method}]`);
                     kRouter[ctlRouters[it].requestMethod](ctlRouters[it].path, async function (ctx: Koa.Context): Promise<any> {
                         // tslint:disable-next-line: prefer-const
                         // let tmr = null;
@@ -189,7 +189,7 @@ export class Router {
             }
 
             app.use(kRouter.routes()).use(kRouter.allowedMethods());
-            helper.define(app, 'Router', kRouter);
+            helper.define(app, "Router", kRouter);
         } catch (err) {
             logger.error(err);
         }
@@ -208,8 +208,8 @@ export class Router {
      * @memberof Router
      */
     async execRouter(identifier: string, router: any, app: any, ctx: Koa.Context, container: Container, params?: any) {
-        // const ctl: any = container.get(identifier, 'CONTROLLER', [app, ctx]);
-        const ctl: any = container.get(identifier, 'CONTROLLER');
+        // const ctl: any = container.get(identifier, "CONTROLLER", [app, ctx]);
+        const ctl: any = container.get(identifier, "CONTROLLER");
         if (!ctx || !ctl.init) {
             return ctx.throw(404, `Controller ${identifier} not found.`);
         }
@@ -217,10 +217,10 @@ export class Router {
         ctl.app = app;
         ctl.ctx = ctx;
         // empty-method
-        // if (!ctl[router.method]) {
-        //     //return ctx.throw(404, `Action ${router.method} not found.`);
-        //     return ctl.__empty();
-        // }
+        if (!ctl[router.method]) {
+            //return ctx.throw(404, `Action ${router.method} not found.`);
+            return ctl.__empty();
+        }
         // pre-method
         if (ctl.__before) {
             await ctl.__before();

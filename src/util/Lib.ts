@@ -2,9 +2,9 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-27 19:09:20
+ * @ version: 2019-12-28 01:31:20
  */
-import { listPropertyData } from '../core/Injectable';
+import { listPropertyData } from "../core/Injectable";
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
 
@@ -18,7 +18,7 @@ const ARGUMENT_NAMES = /([^\s,]+)/g;
 export function requireDefault(p: string) {
     /* eslint-disable global-require */
     const ex = require(p);
-    return (ex && (typeof ex === 'object') && 'default' in ex) ? ex.default : ex;
+    return (ex && (typeof ex === "object") && "default" in ex) ? ex.default : ex;
 }
 
 /**
@@ -26,17 +26,17 @@ export function requireDefault(p: string) {
  *
  * @export
  * @param {string} name
- * @param {string} [controllerSuffix='']
+ * @param {string} [controllerSuffix=""]
  * @returns
  */
 let controllerReg: any = null;
-export function ControllerMatch(name: string, controllerSuffix = '') {
+export function ControllerMatch(name: string, controllerSuffix = "") {
     if (!controllerReg) {
-        const controllerSuffix = '';
+        const controllerSuffix = "";
         controllerReg = new RegExp(`([a-zA-Z0-9_]+)${controllerSuffix}`);
     }
 
-    const result = name.split('.')[0].match(controllerReg);
+    const result = name.split(".")[0].match(controllerReg);
     return result;
 }
 
@@ -46,8 +46,8 @@ export function ControllerMatch(name: string, controllerSuffix = '') {
  * @param func
  */
 export function getParamNames(func: { toString: () => { replace: (arg0: RegExp, arg1: string) => any } }) {
-    const fnStr = func.toString().replace(STRIP_COMMENTS, '');
-    let result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
+    const fnStr = func.toString().replace(STRIP_COMMENTS, "");
+    let result = fnStr.slice(fnStr.indexOf("(") + 1, fnStr.indexOf(")")).match(ARGUMENT_NAMES);
     if (result === null) {
         result = [];
     }
@@ -60,7 +60,7 @@ const functionPrototype = Object.getPrototypeOf(Function);
 // https://tc39.github.io/ecma262/#sec-ordinarygetprototypeof
 function ordinaryGetPrototypeOf(obj: any): any {
     const proto = Object.getPrototypeOf(obj);
-    if (typeof obj !== 'function' || obj === functionPrototype) {
+    if (typeof obj !== "function" || obj === functionPrototype) {
         return proto;
     }
 
@@ -86,7 +86,7 @@ function ordinaryGetPrototypeOf(obj: any): any {
 
     // If the constructor was not a function, then we cannot determine the heritage.
     const constructor = prototypeProto.constructor;
-    if (typeof constructor !== 'function') {
+    if (typeof constructor !== "function") {
         return proto;
     }
 

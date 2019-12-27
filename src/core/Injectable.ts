@@ -2,15 +2,15 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-27 19:09:42
+ * @ version: 2019-12-28 01:29:25
  */
 // tslint:disable-next-line: no-import-side-effect
-import 'reflect-metadata';
+import "reflect-metadata";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { TAGGED_CLS, TAGGED_PROP, TAGGED_ARGS } from "./Constants";
-import { Container } from './Container';
-import { recursiveGetMetadata } from '../util/Lib';
+import { Container } from "./Container";
+import { recursiveGetMetadata } from "../util/Lib";
 
 export class Injectable {
 
@@ -26,7 +26,7 @@ export class Injectable {
      */
     public static getOriginMetadata(metadataKey: string | symbol, target: any, propertyKey?: string | symbol) {
         // filter Object.create(null)
-        if (typeof target === 'object' && target.constructor) {
+        if (typeof target === "object" && target.constructor) {
             target = target.constructor;
         }
         if (propertyKey) {
@@ -56,7 +56,7 @@ export class Injectable {
      */
     public getMetadataMap(metadataKey: string | symbol, target: any, propertyKey?: string | symbol) {
         // filter Object.create(null)
-        if (typeof target === 'object' && target.constructor) {
+        if (typeof target === "object" && target.constructor) {
             target = target.constructor;
         }
         if (!this.metadataMap.has(target)) {
@@ -468,13 +468,13 @@ export function injectAutowired(target: any, instance: any, container: Container
     // tslint:disable-next-line: forin
     for (const metaKey in metaData) {
         let dep;
-        const { type, identifier, delay, args } = metaData[metaKey] || { type: '', identifier: '', delay: false, args: [] };
+        const { type, identifier, delay, args } = metaData[metaKey] || { type: "", identifier: "", delay: false, args: [] };
         if (type && identifier) {
             if (!delay || isLazy) {
                 dep = container.get(identifier, type, args);
                 if (dep) {
                     // tslint:disable-next-line: no-unused-expression
-                    process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${target.name} properties key: ${metaKey} => value: ${JSON.stringify(metaData[metaKey])}`);
+                    process.env.NODE_ENV === "development" && logger.custom("think", "", `Register inject ${target.name} properties key: ${metaKey} => value: ${JSON.stringify(metaData[metaKey])}`);
                     Reflect.defineProperty(instance, metaKey, {
                         enumerable: true,
                         configurable: false,
@@ -482,7 +482,7 @@ export function injectAutowired(target: any, instance: any, container: Container
                         value: dep
                     });
                 } else {
-                    throw new Error(`Component ${metaData[metaKey].identifier || ''} not found. It's autowired in class ${target.name}`);
+                    throw new Error(`Component ${metaData[metaKey].identifier || ""} not found. It's autowired in class ${target.name}`);
                 }
             } else {
                 // Delay loading solves the problem of cyclic dependency
@@ -509,8 +509,8 @@ export function injectValue(target: any, instance: any, container: Container) {
     // tslint:disable-next-line: forin
     for (const metaKey in metaData) {
         // tslint:disable-next-line: no-unused-expression
-        process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${getIdentifier(target)} config key: ${metaKey} => value: ${metaData[metaKey]}`);
-        const propKeys = metaData[metaKey].split('|');
+        process.env.NODE_ENV === "development" && logger.custom("think", "", `Register inject ${getIdentifier(target)} config key: ${metaKey} => value: ${metaData[metaKey]}`);
+        const propKeys = metaData[metaKey].split("|");
         const [propKey, type] = propKeys;
         const prop = container.app.config(propKey, type);
         Reflect.defineProperty(instance, metaKey, {

@@ -2,30 +2,30 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-13 11:54:33
+ * @ version: 2019-12-28 01:35:04
  */
 
 import * as path from "path";
 import Koa from "koa";
-import KoaRouter from '@koa/router';
+import KoaRouter from "@koa/router";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
-import { PREVENT_NEXT_PROCESS } from './core/Constants';
-import { Container } from './core/Container';
-const pkg = require('../package.json');
+import { PREVENT_NEXT_PROCESS } from "./core/Constants";
+import { Container } from "./core/Container";
+const pkg = require("../package.json");
 
 /**
  * check node version
  * @return {void} []
  */
 const checkEnv = () => {
-    let node_engines = pkg.engines.node.slice(1) || '10.0.0';
-    node_engines = node_engines.slice(0, node_engines.lastIndexOf('.'));
+    let node_engines = pkg.engines.node.slice(1) || "10.0.0";
+    node_engines = node_engines.slice(0, node_engines.lastIndexOf("."));
     let nodeVersion = process.version;
-    if (nodeVersion[0] === 'v') {
+    if (nodeVersion[0] === "v") {
         nodeVersion = nodeVersion.slice(1);
     }
-    nodeVersion = nodeVersion.slice(0, nodeVersion.lastIndexOf('.'));
+    nodeVersion = nodeVersion.slice(0, nodeVersion.lastIndexOf("."));
 
     if (helper.toNumber(node_engines) > helper.toNumber(nodeVersion)) {
         logger.error(`ThinkKoa need node version > ${node_engines}, current version is ${nodeVersion}, please upgrade it.`);
@@ -107,16 +107,16 @@ export class Koatty extends Koa {
     private initialize() {
         //development env is default
         this.app_debug = (this.options && this.options.app_debug) || this.app_debug || true;
-        process.env.NODE_ENV = 'development';
+        process.env.NODE_ENV = "development";
         const env = JSON.stringify(process.execArgv);
         //production mode
-        if ((env.indexOf('--production') > -1) || (process.env.NODE_ENV === 'production')) {
+        if ((env.indexOf("--production") > -1) || (process.env.NODE_ENV === "production")) {
             this.app_debug = false;
-            process.env.NODE_ENV = 'production';
+            process.env.NODE_ENV = "production";
         }
-        if (env.indexOf('ts-node') < 0 && env.indexOf('--inspect') < 0) {
+        if (env.indexOf("ts-node") < 0 && env.indexOf("--inspect") < 0) {
             this.app_debug = false;
-            process.env.NODE_ENV = 'production';
+            process.env.NODE_ENV = "production";
         }
         process.env.APP_DEBUG = helper.toString(this.app_debug);
 
@@ -124,18 +124,18 @@ export class Koatty extends Koa {
         checkEnv();
         // define path        
         const root_path = (this.options && this.options.root_path) || this.root_path || process.cwd();
-        const app_path = this.app_path || (this.options && this.options.app_path) || path.resolve(root_path, env.indexOf('ts-node') > -1 ? 'src' : 'dist');
+        const app_path = this.app_path || (this.options && this.options.app_path) || path.resolve(root_path, env.indexOf("ts-node") > -1 ? "src" : "dist");
         const think_path = __dirname;
-        helper.define(this, 'root_path', root_path);
-        helper.define(this, 'app_path', app_path);
-        helper.define(this, 'think_path', think_path);
+        helper.define(this, "root_path", root_path);
+        helper.define(this, "app_path", app_path);
+        helper.define(this, "think_path", think_path);
 
         process.env.ROOT_PATH = this.root_path;
         process.env.APP_PATH = this.app_path;
         process.env.THINK_PATH = this.think_path;
 
         // Compatible with old version
-        Object.defineProperty(this, '_caches', {
+        Object.defineProperty(this, "_caches", {
             value: {},
             writable: true,
             configurable: false,
@@ -216,10 +216,10 @@ export class Koatty extends Koa {
      * Read app configuration
      * 
      * @param {any} name 
-     * @param {string} [type='config'] 
+     * @param {string} [type="config"] 
      * @memberof ThinkKoa
      */
-    public config(name: string, type = 'config') {
+    public config(name: string, type = "config") {
         try {
             const caches = this.getMap("configs") || {};
             // tslint:disable-next-line: no-unused-expression
@@ -229,10 +229,10 @@ export class Koatty extends Koa {
             }
             if (helper.isString(name)) {
                 //name不含. 一级
-                if (name.indexOf('.') === -1) {
+                if (name.indexOf(".") === -1) {
                     return caches[type][name];
                 } else { //name包含. 二级
-                    const keys = name.split('.');
+                    const keys = name.split(".");
                     const value = caches[type][keys[0]] || {};
                     return value[keys[1]];
                 }
@@ -255,21 +255,21 @@ export class Koatty extends Koa {
 
         //start server
         //port?: number, hostname?: string, listeningListener?: Function
-        const port = this.config('app_port') || '3000';
-        const hostname = this.config('app_hostname') || '';
+        const port = this.config("app_port") || "3000";
+        const hostname = this.config("app_hostname") || "";
         const app_debug = this.app_debug || false;
 
         return super.listen(port, hostname, function () {
-            logger.custom('think', '', `Nodejs Version: ${process.version}`);
-            logger.custom('think', '', `${pkg.name} Version: v${pkg.version}`);
-            logger.custom('think', '', `App Enviroment: ${app_debug ? 'debug mode' : 'production mode'}`);
-            logger.custom('think', '', `Server running at http://${hostname || 'localhost'}:${port}/`);
-            logger.custom('think', '', '====================================');
+            logger.custom("think", "", `Nodejs Version: ${process.version}`);
+            logger.custom("think", "", `${pkg.name} Version: v${pkg.version}`);
+            logger.custom("think", "", `App Enviroment: ${app_debug ? "debug mode" : "production mode"}`);
+            logger.custom("think", "", `Server running at http://${hostname || "localhost"}:${port}/`);
+            logger.custom("think", "", "====================================");
             // tslint:disable-next-line: no-unused-expression
             app_debug && logger.warn(`Running in debug mode, please modify the app_debug value to false when production env.`);
-        }).on('clientError', function (err: any, sock: any) {
-            // logger.error('Bad request, HTTP parse error');
-            sock.end('400 Bad Request\r\n\r\n');
+        }).on("clientError", function (err: any, sock: any) {
+            // logger.error("Bad request, HTTP parse error");
+            sock.end("400 Bad Request\r\n\r\n");
         });
     }
 
@@ -283,37 +283,37 @@ export class Koatty extends Koa {
         //日志
         if (configs.config) {
             process.env.LOGS = configs.config.logs || false;
-            process.env.LOGS_PATH = configs.config.logs_path || this.root_path + '/logs';
+            process.env.LOGS_PATH = configs.config.logs_path || this.root_path + "/logs";
             process.env.LOGS_LEVEL = configs.config.logs_level || [];
         }
 
         //koa error
-        this.removeAllListeners('error');
-        this.on('error', (err: any) => {
+        this.removeAllListeners("error");
+        this.on("error", (err: any) => {
             if (!this.isPrevent(err)) {
                 logger.error(err);
             }
             return;
         });
         //warning
-        process.removeAllListeners('warning');
-        process.on('warning', (warning) => {
+        process.removeAllListeners("warning");
+        process.on("warning", (warning) => {
             logger.warn(helper.toString(warning));
             return;
         });
 
         //promise reject error
-        process.removeAllListeners('unhandledRejection');
-        process.on('unhandledRejection', (reason) => {
+        process.removeAllListeners("unhandledRejection");
+        process.on("unhandledRejection", (reason) => {
             if (!this.isPrevent(reason)) {
                 logger.error(helper.toString(reason));
             }
             return;
         });
         //ubcaugth exception
-        process.removeAllListeners('uncaughtException');
-        process.on('uncaughtException', (err) => {
-            if (err.message.indexOf('EADDRINUSE') > -1) {
+        process.removeAllListeners("uncaughtException");
+        process.on("uncaughtException", (err) => {
+            if (err.message.indexOf("EADDRINUSE") > -1) {
                 logger.error(helper.toString(err));
                 process.exit(-1);
             }
@@ -325,19 +325,19 @@ export class Koatty extends Koa {
     }
 }
 
-// const propertys = ['constructor', 'init'];
+// const propertys = ["constructor", "init"];
 // export const Koatty = new Proxy(Application, {
 //     set(target, key, value, receiver) {
 //         if (Reflect.get(target, key, receiver) === undefined) {
 //             return Reflect.set(target, key, value, receiver);
-//         } else if (key === 'init') {
+//         } else if (key === "init") {
 //             return Reflect.set(target, key, value, receiver);
 //         } else {
-//             throw Error('Cannot redefine getter-only property');
+//             throw Error("Cannot redefine getter-only property");
 //         }
 //     },
 //     deleteProperty(target, key) {
-//         throw Error('Cannot delete getter-only property');
+//         throw Error("Cannot delete getter-only property");
 //     },
 //     construct(target, args, newTarget) {
 //         Reflect.ownKeys(target.prototype).map((n) => {

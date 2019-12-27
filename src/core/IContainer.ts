@@ -2,9 +2,9 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-10-31 10:05:46
+ * @ version: 2019-12-28 01:28:46
  */
-import { Scope, CompomentType } from './Constants';
+import { Scope, CompomentType } from "./Constants";
 
 
 /**

@@ -2,10 +2,10 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-28 17:41:54
+ * @ version: 2019-12-28 01:29:57
  */
 // tslint:disable-next-line: no-import-side-effect
-import 'reflect-metadata';
+import "reflect-metadata";
 import * as helper from "think_lib";
 import { attachPropertyData } from "./Injectable";
 import { ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY } from "./Constants";
@@ -58,7 +58,7 @@ export const RequestMapping = (
         routerName?: string;
     } = {}
 ): MethodDecorator => {
-    const routerName = routerOptions.routerName || '';
+    const routerName = routerOptions.routerName || "";
 
     return (target, key: string, descriptor: PropertyDescriptor) => {
         // tslint:disable-next-line: no-object-literal-type-assertion
@@ -207,11 +207,11 @@ export const HeadMaping = (
 const Inject = (fn: Function, vaildRule?: any[] | Function, message?: string): ParameterDecorator => {
     return (target: any, propertyKey: string, descriptor: any) => {
         // 获取成员类型
-        // const type = Reflect.getMetadata('design:type', target, propertyKey);
+        // const type = Reflect.getMetadata("design:type", target, propertyKey);
         // 获取成员参数类型
-        const paramtypes = Reflect.getMetadata('design:paramtypes', target, propertyKey);
+        const paramtypes = Reflect.getMetadata("design:paramtypes", target, propertyKey);
         // 获取成员返回类型
-        // const returntype = Reflect.getMetadata('design:returntype', target, propertyKey);
+        // const returntype = Reflect.getMetadata("design:returntype", target, propertyKey);
         // 获取所有元数据 key (由 TypeScript 注入)
         // const keys = Reflect.getMetadataKeys(target, propertyKey);
 
@@ -222,7 +222,7 @@ const Inject = (fn: Function, vaildRule?: any[] | Function, message?: string): P
                 rule: vaildRule,
                 msg: message,
                 index: descriptor,
-                type: (paramtypes[descriptor] && paramtypes[descriptor].name ? paramtypes[descriptor].name : '').toLowerCase()
+                type: (paramtypes[descriptor] && paramtypes[descriptor].name ? paramtypes[descriptor].name : "").toLowerCase()
             }, target, propertyKey);
             return descriptor;
         } else {
@@ -230,7 +230,7 @@ const Inject = (fn: Function, vaildRule?: any[] | Function, message?: string): P
                 name: propertyKey,
                 fn,
                 index: descriptor,
-                type: (paramtypes[descriptor] && paramtypes[descriptor].name ? paramtypes[descriptor].name : '').toLowerCase()
+                type: (paramtypes[descriptor] && paramtypes[descriptor].name ? paramtypes[descriptor].name : "").toLowerCase()
             }, target, propertyKey);
             return descriptor;
         }
@@ -251,7 +251,7 @@ const Inject = (fn: Function, vaildRule?: any[] | Function, message?: string): P
 // tslint:disable-next-line: cyclomatic-complexity
 const convertParamsType = (param: any, type: string, ctx: any, isConvert = false, isCheck = false) => {
     switch (type) {
-        case 'number':
+        case "number":
             if (isConvert && !helper.isEmpty(param)) {
                 const tmp = helper.toNumber(param);
                 param = helper.isNaN(tmp) ? param : tmp;
@@ -260,7 +260,7 @@ const convertParamsType = (param: any, type: string, ctx: any, isConvert = false
                 return ctx.throw(400, `Invalid parameter type, the value \`${param}\` is not ${type}`);
             }
             return param;
-        case 'boolean':
+        case "boolean":
             if (isConvert) {
                 param = !!param;
             }
@@ -268,8 +268,8 @@ const convertParamsType = (param: any, type: string, ctx: any, isConvert = false
                 return ctx.throw(400, `Invalid parameter type, the value \`${param}\` is not ${type}`);
             }
             return param;
-        case 'array':
-        case 'tuple':
+        case "array":
+        case "tuple":
             if (isConvert) {
                 param = helper.toArray(param);
             }
@@ -277,7 +277,7 @@ const convertParamsType = (param: any, type: string, ctx: any, isConvert = false
                 return ctx.throw(400, `Invalid parameter type, the value \`${param}\` is not ${type}`);
             }
             return param;
-        case 'string':
+        case "string":
             if (isConvert) {
                 // Almost all types can be converted to strings, so returning directly.
                 return helper.toString(param);
@@ -286,8 +286,8 @@ const convertParamsType = (param: any, type: string, ctx: any, isConvert = false
                 return ctx.throw(400, `Invalid parameter type, the value \`${param}\` is not ${type}`);
             }
             return param;
-        case 'object':
-        case 'enum':
+        case "object":
+        case "enum":
             if (isCheck && helper.isUndefined(param)) {
                 return ctx.throw(400, `Invalid parameter type, the value \`${param}\` is not ${type}`);
             }
@@ -477,9 +477,12 @@ function ValidCheck(ctx: any, value: any, type: string, rule: any, message = "")
             return ctx.throw(400, message || `Invalid parameter value: ${value}, typeof ${typeof value}.`);
         }
         return value;
-    } else if (helper.isArray(rule)) {
-        if (<any[]>rule.some((it: string) => ruleObj[it] && !ruleObj[it](value))) {
-            return ctx.throw(400, message || 'Invalid parameter value.');
+    } else {
+        if (helper.isString(rule)) {
+            rule = [rule];
+        }
+        if (rule.some((it: string) => ruleObj[it] && !ruleObj[it](value))) {
+            return ctx.throw(400, message || "Invalid parameter value.");
         }
     }
     return value;

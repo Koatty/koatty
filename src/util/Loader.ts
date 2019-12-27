@@ -2,18 +2,18 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-27 10:54:47
+ * @ version: 2019-12-28 01:33:17
  */
-import * as globby from 'globby';
-import * as path from 'path';
+import * as globby from "globby";
+import * as path from "path";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
-import { requireDefault } from './Lib';
-import { Container } from '../core/Container';
-import { listModule } from '../core/Injectable';
-import { COMPONENT_KEY, CONTROLLER_KEY, MIDDLEWARE_KEY, SERVICE_KEY } from '../core/Constants';
-import { Base } from '../core/Base';
-import { BaseController } from '../controller/BaseController';
+import { requireDefault } from "./Lib";
+import { Container } from "../core/Container";
+import { listModule } from "../core/Injectable";
+import { COMPONENT_KEY, CONTROLLER_KEY, MIDDLEWARE_KEY, SERVICE_KEY } from "../core/Constants";
+import { Base } from "../core/Base";
+import { BaseController } from "../controller/BaseController";
 
 /**
  * 
@@ -43,17 +43,17 @@ export class Loader {
     public static loadConfigs(app: any, loadPath?: string | string[]) {
         const config: any = {};
         // tslint:disable-next-line: no-unused-expression
-        process.env.NODE_ENV === 'development' && logger.custom('think', '', `Load configuation path: ${app.think_path}/config`);
-        Loader.loadDirectory('./config', app.think_path, function (name: string, exp: any) {
+        process.env.NODE_ENV === "development" && logger.custom("think", "", `Load configuation path: ${app.think_path}/config`);
+        Loader.loadDirectory("./config", app.think_path, function (name: string, exp: any) {
             config[name] = exp;
         });
         const appConfig: any = {};
         if (helper.isArray(loadPath)) {
-            loadPath = loadPath.length > 0 ? loadPath : '';
+            loadPath = loadPath.length > 0 ? loadPath : "";
         }
         // tslint:disable-next-line: no-unused-expression
-        process.env.NODE_ENV === 'development' && logger.custom('think', '', `Load configuation path: ${app.app_path}${loadPath || '/config'}`);
-        Loader.loadDirectory(loadPath || './config', app.app_path, function (name: string, exp: any) {
+        process.env.NODE_ENV === "development" && logger.custom("think", "", `Load configuation path: ${app.app_path}${loadPath || "/config"}`);
+        Loader.loadDirectory(loadPath || "./config", app.app_path, function (name: string, exp: any) {
             appConfig[name] = exp;
         });
 
@@ -72,9 +72,9 @@ export class Loader {
     public static loadMiddlewares(app: any, container: Container, loadPath?: string | string[]) {
         const configs = app.getMap("configs") || {};
         //default middleware list
-        const defaultList = ['Static', 'Payload'];
+        const defaultList = ["Static", "Payload"];
         //Mount default middleware
-        Loader.loadDirectory(loadPath || './middleware', app.think_path);
+        Loader.loadDirectory(loadPath || "./middleware", app.think_path);
         //Mount application middleware
         // const middlewares: any = {};
         const appMeddlewares = listModule(MIDDLEWARE_KEY) || [];
@@ -83,16 +83,16 @@ export class Loader {
             id: string;
             target: any;
         }) => {
-            item.id = (item.id || '').replace(`${MIDDLEWARE_KEY}:`, '');
+            item.id = (item.id || "").replace(`${MIDDLEWARE_KEY}:`, "");
             if (item.id && helper.isClass(item.target)) {
-                container.reg(item.target, { scope: 'Request', type: 'MIDDLEWARE' });
+                container.reg(item.target, { scope: "Request", type: "MIDDLEWARE" });
                 // middlewares[item.id] = item.target;
             }
         });
 
 
         const middlewareConfList = configs.middleware && configs.middleware.list ? configs.middleware.list || [] : [];
-        const bandList = ['Trace', ...defaultList];
+        const bandList = ["Trace", ...defaultList];
         middlewareConfList.map((item: any) => {
             if (!bandList.includes(item)) {
                 defaultList.push(item);
@@ -102,7 +102,7 @@ export class Loader {
         //de-duplication
         const appMList = [...new Set(defaultList)];
         //Mount the middleware on first
-        appMList.unshift('Trace');
+        appMList.unshift("Trace");
 
         //Automatically call middleware
         let handle: any;
@@ -121,7 +121,7 @@ export class Loader {
                 return;
             }
             // tslint:disable-next-line: no-unused-expression
-            process.env.NODE_ENV === 'development' && logger.custom('think', '', `Load middleware: ${key}`);
+            process.env.NODE_ENV === "development" && logger.custom("think", "", `Load middleware: ${key}`);
             if (handle.run.length < 3) {
                 app.use(handle.run(configs.middleware.config[key] || {}, app));
             } else {
@@ -144,11 +144,11 @@ export class Loader {
         const componentList = listModule(COMPONENT_KEY);
 
         componentList.map((item: any) => {
-            item.id = (item.id || '').replace(`${COMPONENT_KEY}:`, '');
+            item.id = (item.id || "").replace(`${COMPONENT_KEY}:`, "");
             if (item.id && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
-                process.env.NODE_ENV === 'development' && logger.custom('think', '', `Load component: ${item.id}`);
-                container.reg(item.target, { scope: 'Singleton', type: 'COMPONENT' });
+                process.env.NODE_ENV === "development" && logger.custom("think", "", `Load component: ${item.id}`);
+                container.reg(item.target, { scope: "Singleton", type: "COMPONENT" });
             }
         });
     }
@@ -165,11 +165,11 @@ export class Loader {
         const serviceList = listModule(SERVICE_KEY);
 
         serviceList.map((item: any) => {
-            item.id = (item.id || '').replace(`${SERVICE_KEY}:`, '');
+            item.id = (item.id || "").replace(`${SERVICE_KEY}:`, "");
             if (item.id && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
-                process.env.NODE_ENV === 'development' && logger.custom('think', '', `Load service: ${item.id}`);
-                const cls = container.reg(item.target, { scope: 'Singleton', type: 'SERVICE' });
+                process.env.NODE_ENV === "development" && logger.custom("think", "", `Load service: ${item.id}`);
+                const cls = container.reg(item.target, { scope: "Singleton", type: "SERVICE" });
                 if (!(cls instanceof Base)) {
                     throw new Error(`class ${item.id} does not inherit the class Base`);
                 }
@@ -190,12 +190,12 @@ export class Loader {
 
         const controllers: any = {};
         controllerList.map((item: any) => {
-            item.id = (item.id || '').replace(`${CONTROLLER_KEY}:`, '');
+            item.id = (item.id || "").replace(`${CONTROLLER_KEY}:`, "");
             if (item.id && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
-                process.env.NODE_ENV === 'development' && logger.custom('think', '', `Load controller: ${item.id}`);
+                process.env.NODE_ENV === "development" && logger.custom("think", "", `Load controller: ${item.id}`);
 
-                const ctl = container.reg(item.target, { scope: 'Request', type: 'CONTROLLER' });
+                const ctl = container.reg(item.target, { scope: "Request", type: "CONTROLLER" });
                 if (!(ctl instanceof BaseController)) {
                     throw new Error(`class ${item.id} does not inherit the class BaseController`);
                 }

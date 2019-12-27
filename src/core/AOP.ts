@@ -2,11 +2,11 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-27 15:04:33
+ * @ version: 2019-12-28 01:25:34
  */
-import * as helper from 'think_lib';
+import * as helper from "think_lib";
 import { saveModule, getIdentifier } from "./Injectable";
-import { COMPONENT_KEY } from './Constants';
+import { COMPONENT_KEY } from "./Constants";
 
 /**
  * Dynamically add methods for target class types
@@ -97,7 +97,7 @@ export function Before(aopName: string): MethodDecorator {
  */
 export function BeforeEach(aopName = "__before"): ClassDecorator {
     return (target: any) => {
-        return defineNewProperty(target, '__before', aopName === "__before" ? "" : aopName);
+        return defineNewProperty(target, "__before", aopName === "__before" ? "" : aopName);
     };
 }
 
@@ -142,6 +142,6 @@ export function After(aopName: string): MethodDecorator {
  */
 export function AfterEach(aopName = "__after"): ClassDecorator {
     return (target: any) => {
-        return defineNewProperty(target, '__after', aopName === "__after" ? "" : aopName);
+        return defineNewProperty(target, "__after", aopName === "__after" ? "" : aopName);
     };
 }

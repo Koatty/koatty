@@ -2,13 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-27 20:17:25
+ * @ version: 2019-12-28 01:28:09
  */
 import * as helper from "think_lib";
-import { CompomentType } from './Constants';
-import { injectSchedule } from './Schedule';
-import { IContainer, ObjectDefinitionOptions } from './IContainer';
-import { getModule, getIdentifier, injectAutowired, injectValue, saveModule } from './Injectable';
+import { CompomentType } from "./Constants";
+import { injectSchedule } from "./Schedule";
+import { IContainer, ObjectDefinitionOptions } from "./IContainer";
+import { getModule, getIdentifier, injectAutowired, injectValue, saveModule } from "./Injectable";
 
 /**
  * Auto injection
@@ -68,10 +68,10 @@ export class Container implements IContainer {
         }
         options = {
             isAsync: false,
-            initMethod: 'constructor',
-            destroyMethod: 'distructor',
-            scope: 'Singleton',
-            type: 'COMPONENT',
+            initMethod: "constructor",
+            destroyMethod: "distructor",
+            scope: "Singleton",
+            type: "COMPONENT",
             args: [],
             ...options
         };
@@ -79,7 +79,7 @@ export class Container implements IContainer {
         let instance = this.handlerMap.get(target);
         if (!instance) {
             // inject options once
-            Reflect.defineProperty(target.prototype, '_options', {
+            Reflect.defineProperty(target.prototype, "_options", {
                 enumerable: false,
                 configurable: false,
                 writable: true,
@@ -108,7 +108,7 @@ export class Container implements IContainer {
                 //         return cls;
                 //     }
                 // }), options.args && options.args.length ? options.args : [this.app]);
-                if (options.scope === 'Singleton') {
+                if (options.scope === "Singleton") {
                     // instantiation
                     instance = Reflect.construct(target, options.args && options.args.length ? options.args : [this.app]);
                 } else {
@@ -121,7 +121,7 @@ export class Container implements IContainer {
             }
         }
 
-        if (options.scope !== 'Singleton') {
+        if (options.scope !== "Singleton") {
             // instantiation
             return Reflect.construct(instance, options.args && options.args.length ? options.args : [this.app]);
         }
@@ -133,12 +133,12 @@ export class Container implements IContainer {
      *
      * @template T
      * @param {string} identifier
-     * @param {CompomentType} [type='SERVICE']
+     * @param {CompomentType} [type="SERVICE"]
      * @param {any[]} [args]
      * @returns {T}
      * @memberof Container
      */
-    public get<T>(identifier: string, type: CompomentType = 'SERVICE', args?: any[]): T {
+    public get<T>(identifier: string, type: CompomentType = "SERVICE", args?: any[]): T {
         const target = getModule(type, identifier);
         if (!target) {
             return null;
@@ -149,8 +149,8 @@ export class Container implements IContainer {
         if (helper.isClass(instance) || helper.isFunction(instance)) {
             instance = instance.prototype;
         }
-        if ((args && args.length > 0) || (instance && instance._options && instance._options.scope !== 'Singleton')) {
-            instance = this.reg(target, { scope: 'Request', type, args });
+        if ((args && args.length > 0) || (instance && instance._options && instance._options.scope !== "Singleton")) {
+            instance = this.reg(target, { scope: "Request", type, args });
         }
 
         // tslint:disable-next-line: no-unused-expression

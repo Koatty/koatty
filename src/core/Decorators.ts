@@ -2,13 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-27 11:17:37
+ * @ version: 2019-12-28 01:28:39
  */
 // tslint:disable-next-line: no-import-side-effect
-import 'reflect-metadata';
+import "reflect-metadata";
 import { saveModule, getIdentifier, savePropertyData } from "./Injectable";
-import { CONTROLLER_KEY, COMPONENT_KEY, TAGGED_PROP, TAGGED_ARGS, MIDDLEWARE_KEY, NAMED_TAG, SERVICE_KEY, CompomentType } from './Constants';
-import * as helper from 'think_lib';
+import { CONTROLLER_KEY, COMPONENT_KEY, TAGGED_PROP, TAGGED_ARGS, MIDDLEWARE_KEY, NAMED_TAG, SERVICE_KEY, CompomentType } from "./Constants";
+import * as helper from "think_lib";
 
 /**
  * Indicates that an decorated class is a "component".
@@ -54,7 +54,7 @@ export function Middleware(identifier?: string): ClassDecorator {
 }
 
 /**
- * Indicates that an decorated class is a "middleware".
+ * Indicates that an decorated class is a "service".
  *
  * @export
  * @param {string} [identifier] middleware name
@@ -68,7 +68,7 @@ export function Service(identifier?: string): ClassDecorator {
 }
 
 /**
- * Marks a constructor method as to be autowired by Koatty's dependency injection facilities.
+ * Marks a constructor method as to be autowired by Koatty"s dependency injection facilities.
  *
  * @export
  * @param {string} [identifier]
@@ -79,7 +79,7 @@ export function Service(identifier?: string): ClassDecorator {
  */
 export function Autowired(identifier?: string, type?: CompomentType, constructArgs?: any[], isDelay = false): PropertyDecorator {
     return (target: any, propertyKey: string) => {
-        const designType = Reflect.getMetadata('design:type', target, propertyKey);
+        const designType = Reflect.getMetadata("design:type", target, propertyKey);
         if (!identifier) {
             if (!designType || designType.name === "Object") {
                 // throw Error("identifier cannot be empty when circular dependency exists");
@@ -92,23 +92,23 @@ export function Autowired(identifier?: string, type?: CompomentType, constructAr
             throw Error("identifier cannot be empty when circular dependency exists");
         }
         if (type === undefined) {
-            if (identifier.indexOf('Controller') > -1) {
-                type = 'CONTROLLER';
-            } else if (identifier.indexOf('Middleware') > -1) {
-                type = 'MIDDLEWARE';
-            } else if (identifier.indexOf('Service') > -1) {
-                type = 'SERVICE';
+            if (identifier.indexOf("Controller") > -1) {
+                type = "CONTROLLER";
+            } else if (identifier.indexOf("Middleware") > -1) {
+                type = "MIDDLEWARE";
+            } else if (identifier.indexOf("Service") > -1) {
+                type = "SERVICE";
             } else {
-                type = 'COMPONENT';
+                type = "COMPONENT";
             }
         }
         //Cannot rely on injection controller
-        if (type === 'CONTROLLER' && constructArgs.length < 2) {
-            throw new Error(`The dependency injection controller ${identifier || ''} must have a construction arguments(etc: app, ctx)!`);
+        if (type === "CONTROLLER" && constructArgs.length < 2) {
+            throw new Error(`The dependency injection controller ${identifier || ""} must have a construction arguments(etc: app, ctx)!`);
         }
         //Cannot rely on injection middleware
-        // if (type === 'MIDDLEWARE') {
-        //     throw new Error(`Middleware ${identifier || ''} cannot be injected!`);
+        // if (type === "MIDDLEWARE") {
+        //     throw new Error(`Middleware ${identifier || ""} cannot be injected!`);
         // }
 
         if (!designType || designType.name === "Object") {
@@ -136,6 +136,6 @@ export function Value(identifier: string, type?: string): PropertyDecorator {
     return (target: any, propertyKey: string) => {
         // identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
         identifier = identifier || propertyKey;
-        savePropertyData(TAGGED_ARGS, `${identifier || ''}|${type || 'config'}`, target, propertyKey);
+        savePropertyData(TAGGED_ARGS, `${identifier || ""}|${type || "config"}`, target, propertyKey);
     };
 }
