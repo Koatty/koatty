@@ -2,12 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-29 14:36:13
+ * @ version: 2019-12-27 15:24:13
  */
 import * as helper from "think_lib";
 import { CompomentType } from './Constants';
+import { injectSchedule } from './Schedule';
 import { IContainer, ObjectDefinitionOptions } from './IContainer';
-import { getModule, getIdentifier, injectAutowired, injectValue, saveModule, injectSchedule } from './Injectable';
+import { getModule, getIdentifier, injectAutowired, injectValue, saveModule } from './Injectable';
 
 /**
  * Auto injection
@@ -83,7 +84,7 @@ export class Container implements IContainer {
         };
 
         let instance = this.handlerMap.get(target);
-        if (!this.handlerMap.has(target) || options.scope !== 'Singleton') {
+        if (!this.handlerMap.has(target)) {
             if (helper.isClass(target)) {
                 const ref = getModule(options.type, identifier);
                 if (!ref) {
@@ -118,6 +119,9 @@ export class Container implements IContainer {
             } else {
                 instance = target;
             }
+        }
+        if (options.scope !== 'Singleton') {
+            instance = helper.clone(instance, true);
         }
         return instance;
     }
