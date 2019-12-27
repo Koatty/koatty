@@ -2,30 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-27 18:49:05
+ * @ version: 2019-12-27 19:01:40
  */
 import * as helper from "think_lib";
 import { CompomentType } from './Constants';
-import { injectSchedule } from './Schedule';
 import { IContainer, ObjectDefinitionOptions } from './IContainer';
 import { getModule, getIdentifier, injectAutowired, injectValue, saveModule } from './Injectable';
-
-/**
- * Auto injection
- *
- * @param {*} target
- * @param {*} instance
- * @param {ObjectDefinitionOptions} options
- * @param {Container} container
- * @returns
- */
-const buildInject = function (target: any, instance: any, options: ObjectDefinitionOptions, container: Container) {
-    // inject autowired
-    injectAutowired(target, instance, container);
-    // inject schedule
-    injectSchedule(target, instance, container);
-    return instance;
-};
 
 /**
  * IOC Container
@@ -93,7 +75,7 @@ export class Container implements IContainer {
                 // inject configuation. may be used by constructor
                 injectValue(target, target.prototype, this);
                 // inject dependency
-                buildInject(target, target.prototype, options, this);
+                injectAutowired(target, target.prototype, this);
 
                 // // tslint:disable-next-line: no-this-assignment
                 // const container = this;
