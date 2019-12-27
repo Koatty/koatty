@@ -2,17 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-27 10:44:32
+ * @ version: 2019-12-27 19:00:17
  */
 // tslint:disable-next-line: no-import-side-effect
 import 'reflect-metadata';
 import * as helper from "think_lib";
-import { attachPropertyData, recursiveGetMetadata, getIdentifier } from './Injectable';
-import { SCHEDULE_KEY } from './Constants';
-import { Container } from './Container';
 import logger from 'think_logger';
 import { scheduleJob } from 'node-schedule';
-
 
 /**
  * Schedule task
@@ -36,39 +32,30 @@ export function Scheduled(cron: string): MethodDecorator {
         throw Error("ScheduleJob rule is not defined");
     }
     return (target, propertyKey: string, descriptor: PropertyDescriptor) => {
-        attachPropertyData(SCHEDULE_KEY, {
-            cron,
-            method: propertyKey
-        }, target, propertyKey);
-    };
-}
-
-
-/**
- *
- *
- * @export
- * @param {*} target
- * @param {*} instance
- * @param {Container} container
- */
-export function injectSchedule(target: any, instance: any, container: Container) {
-    const metaDatas = recursiveGetMetadata(SCHEDULE_KEY, target);
-    // tslint:disable-next-line: forin
-    for (const meta in metaDatas) {
-        for (const val of metaDatas[meta]) {
-            if (val.cron && helper.isFunction(instance[meta])) {
-                // tslint:disable-next-line: no-unused-expression
-                process.env.NODE_ENV === 'development' && logger.custom('think', '', `Register inject ${getIdentifier(target)} schedule key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
-                scheduleJob(val.cron, async function () {
+        // attachPropertyData(SCHEDULE_KEY, {
+        //     cron,
+        //     method: propertyKey
+        // }, target, propertyKey);
+        const { value, configurable, enumerable } = descriptor;
+        descriptor = {
+            configurable,
+            enumerable,
+            writable: true,
+            value: async function run(...props: any[]) {
+                scheduleJob(cron, async function (props) {
                     try {
-                        const res = await instance[meta]();
+                        // tslint:disable-next-line: no-invalid-this
+                        const res = await value.apply(this, props);
                         return res;
                     } catch (e) {
                         logger.error(e);
                     }
                 });
+                // tslint:disable-next-line: no-invalid-this
+                return value.apply(this, props);
             }
-        }
-    }
+        };
+        return descriptor;
+    };
+
 }
