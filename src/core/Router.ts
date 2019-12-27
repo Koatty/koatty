@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-27 10:45:53
+ * @ version: 2019-12-27 14:22:10
  */
 import KoaRouter from '@koa/router';
 import * as Koa from 'koa';
@@ -37,7 +37,7 @@ import { NAMED_TAG, ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY } from './Constants';
  * @param {*} [instance]
  * @returns
  */
-export function injectRouter(target: any, instance?: any) {
+function injectRouter(target: any, instance?: any) {
     // Controller router path
     const metaDatas = listPropertyData(NAMED_TAG, target);
     let path = '';
@@ -74,7 +74,7 @@ export function injectRouter(target: any, instance?: any) {
  * @param {*} [instance]
  * @returns
  */
-export function injectParam(target: any, instance?: any) {
+function injectParam(target: any, instance?: any) {
     instance = instance || target.prototype;
     // const methods = getMethodNames(target);
     const metaDatas = recursiveGetMetadata(PARAM_KEY, target);

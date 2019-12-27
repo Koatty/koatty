@@ -1,7 +1,7 @@
 # koatty
 Koa2 + Typescript = koatty. 
 
-Use Typescript's decorator implement auto injection just like SpringBoot.
+Use Typescript's decorator implement auto injection and AOP, just like SpringBoot.
 
 
 [![Version npm](https://img.shields.io/npm/v/koatty.svg?style=flat-square)](https://www.npmjs.com/package/koatty)[![npm Downloads](https://img.shields.io/npm/dm/koatty.svg?style=flat-square)](https://npmcharts.com/compare/koatty?minimal=true)
@@ -10,7 +10,7 @@ Use Typescript's decorator implement auto injection just like SpringBoot.
 ## New features
 - ~~**New:** @Scheduled("0 0/1 * * * ?")~~ ✔️ 1.9.2
 - ~~**New:** replace koa-router to @koa/router~~ ✔️ 1.10.0
-- **New:** AOP：@Aspect()、@Before()、@After()
+- ~~**New:** AOP：@Aspect()、@Before()、@After()、@BeforeEach()、@AfterEach()~~  ✔️ pre-build
 - **New:** @Validated: Use class-validator for entity class validation
 - **New:** Custom decorator with @Target(identifier, ElementType.TYPE)
 - **New:** @Transactional() with ThinkORM

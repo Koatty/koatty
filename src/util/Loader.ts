@@ -2,12 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-26 18:37:16
+ * @ version: 2019-12-27 10:54:47
  */
 import * as globby from 'globby';
 import * as path from 'path';
 import * as helper from "think_lib";
 import * as logger from "think_logger";
+import { requireDefault } from './Lib';
 import { Container } from '../core/Container';
 import { listModule } from '../core/Injectable';
 import { COMPONENT_KEY, CONTROLLER_KEY, MIDDLEWARE_KEY, SERVICE_KEY } from '../core/Constants';
@@ -44,7 +45,7 @@ export class Loader {
         // tslint:disable-next-line: no-unused-expression
         process.env.NODE_ENV === 'development' && logger.custom('think', '', `Load configuation path: ${app.think_path}/config`);
         Loader.loadDirectory('./config', app.think_path, function (name: string, exp: any) {
-            config[name] = exp.default ? exp.default : exp;
+            config[name] = exp;
         });
         const appConfig: any = {};
         if (helper.isArray(loadPath)) {
@@ -53,7 +54,7 @@ export class Loader {
         // tslint:disable-next-line: no-unused-expression
         process.env.NODE_ENV === 'development' && logger.custom('think', '', `Load configuation path: ${app.app_path}${loadPath || '/config'}`);
         Loader.loadDirectory(loadPath || './config', app.app_path, function (name: string, exp: any) {
-            appConfig[name] = exp.default ? exp.default : exp;
+            appConfig[name] = exp;
         });
 
         app.setMap("configs", helper.extend(config, appConfig, true));
@@ -248,7 +249,7 @@ export class Loader {
                 // const fileName = name.slice(0, name.lastIndexOf(namePattern));
                 const fileName = name.slice(0, -3);
                 //
-                const exports = require(file);
+                const exports = requireDefault(file);
 
                 const tkeys = Object.keys(exports);
                 if (!exports[fileName] && (tkeys[0] && helper.isClass(exports[tkeys[0]]) && tkeys[0] !== fileName)) {
