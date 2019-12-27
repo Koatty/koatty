@@ -10,10 +10,15 @@ Use Typescript's decorator implement auto injection just like SpringBoot.
 ## New features
 - ~~**New:** @Scheduled("0 0/1 * * * ?")~~ ✔️ 1.9.2
 - ~~**New:** replace koa-router to @koa/router~~ ✔️ 1.10.0
-- **New:** Custom decorator with @Target
-- **New:** @Transactional
+- **New:** AOP：@Aspect()、@Before()、@After()
+- **New:** @Validated: Use class-validator for entity class validation
+- **New:** Custom decorator with @Target(identifier, ElementType.TYPE)
+- **New:** @Transactional() with ThinkORM
+- **New:** koatty-grpc server & think_grpc middleware
 - **New:** GraphQL
 - **New:** SSR 
+- **New:** [koatty-cloud-nacos](https://github.com/thinkkoa/koatty-cloud-nacos)
+- **New:** [koatty-SpringCloud](https://github.com/thinkkoa/koatty-SpringCloud)
 
 ## Documentation
 
