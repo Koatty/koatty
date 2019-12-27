@@ -1,6 +1,6 @@
 {
     "name": "koatty",
-    "version": "1.10.1",
+    "version": "1.11.0",
     "description": "Koa2 + Typescript = koatty. Use Typescript's decorator implement auto injection just like SpringBoot.",
     "scripts": {
         "build": "trash ./dist && tsc",
@@ -48,7 +48,7 @@
         "ts-node": "^8.5.4",
         "tslint": "^5.20.1",
         "tslint-config-alloy": "^0.2.1",
-        "typescript": "^3.7.3"
+        "typescript": "^3.7.4"
     },
     "dependencies": {
         "@koa/router": "^8.0.5",
