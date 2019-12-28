@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-12-26 11:16:30
+ * @ version: 2019-12-28 11:56:00
  */
 import { Service, Base, Autowired, Scheduled } from "../../../src/index";
 import { App } from '../App';
@@ -18,6 +18,7 @@ export class TestService extends CommonService {
 
     async test() {
         // return Promise.reject("aa");
+        console.log('TestService.test');
         return Promise.resolve("success");
     }
 }

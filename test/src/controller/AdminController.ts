@@ -2,13 +2,14 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-12-13 11:04:53
+ * @ version: 2019-12-28 12:15:29
  */
-import { Controller, BaseController, Autowired, Logger, Helper, RequestBody } from "../../../src/index";
+import { Controller, BaseController, Autowired, Logger, Helper, RequestBody, BeforeEach } from "../../../src/index";
 import { App } from '../App';
 import { CommonService } from '../service/CommonService';
 
 @Controller()
+@BeforeEach("TestAspect")
 export class AdminController extends BaseController {
     app: App;
     // Mo: { rel: false; sortby: any; field: any[]; ispage: boolean; pagesize: number; page: number; };
@@ -24,10 +25,6 @@ export class AdminController extends BaseController {
         // this.Model = null;
         // this.Mo = { rel: false, sortby: {}, field: [], ispage: true, pagesize: 20, page: 1 };
         // this.Map = {};
-    }
-
-    __empty() {
-        return this.fail('没有权限访问', {}, 404);
     }
 
     test(@RequestBody() body: any) {
