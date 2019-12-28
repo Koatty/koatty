@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-28 01:28:09
+ * @ version: 2019-12-28 11:52:23
  */
 import * as helper from "think_lib";
 import { CompomentType } from "./Constants";
@@ -20,6 +20,8 @@ import { getModule, getIdentifier, injectAutowired, injectValue, saveModule } fr
  * @returns
  */
 const buildInject = function (target: any, instance: any, options: ObjectDefinitionOptions, container: Container) {
+    // inject configuation
+    injectValue(target, instance, container);
     // inject autowired
     injectAutowired(target, instance, container);
     // inject schedule
@@ -75,6 +77,7 @@ export class Container implements IContainer {
             args: [],
             ...options
         };
+        options.args = options.args.length ? options.args : [this.app];
 
         let instance = this.handlerMap.get(target);
         if (!instance) {
@@ -90,12 +93,10 @@ export class Container implements IContainer {
                 if (!ref) {
                     saveModule(options.type, target, identifier);
                 }
-                // inject configuation. may be used by constructor
-                injectValue(target, target.prototype, this);
                 // inject dependency
                 buildInject(target, target.prototype, options, this);
 
-                // // tslint:disable-next-line: no-this-assignment
+                // tslint:disable-next-line: no-this-assignment
                 // const container = this;
                 // instance = Reflect.construct(new Proxy(target, {
                 //     construct(tgt, args, newTarget) {
@@ -107,10 +108,10 @@ export class Container implements IContainer {
                 //         cls.init && cls.init(...args);
                 //         return cls;
                 //     }
-                // }), options.args && options.args.length ? options.args : [this.app]);
+                // }), options.args);
                 if (options.scope === "Singleton") {
                     // instantiation
-                    instance = Reflect.construct(target, options.args && options.args.length ? options.args : [this.app]);
+                    instance = Reflect.construct(target, options.args);
                 } else {
                     instance = target;
                 }
@@ -123,7 +124,7 @@ export class Container implements IContainer {
 
         if (options.scope !== "Singleton") {
             // instantiation
-            return Reflect.construct(instance, options.args && options.args.length ? options.args : [this.app]);
+            return Reflect.construct(instance, options.args);
         }
         return instance;
     }
@@ -131,30 +132,32 @@ export class Container implements IContainer {
     /**
      * Get instance from IOC container.
      *
-     * @template T
      * @param {string} identifier
      * @param {CompomentType} [type="SERVICE"]
-     * @param {any[]} [args]
-     * @returns {T}
+     * @param {any[]} [args=[]]
+     * @returns {object}
      * @memberof Container
      */
-    public get<T>(identifier: string, type: CompomentType = "SERVICE", args?: any[]): T {
+    public get(identifier: string, type: CompomentType = "SERVICE", args: any[] = []): object {
         const target = getModule(type, identifier);
         if (!target) {
             return null;
         }
-        // 
+        // get instance from the Container
         let instance: any = this.handlerMap.get(target);
-        // not Singleton, IOC return prototype
-        if (helper.isClass(instance) || helper.isFunction(instance)) {
-            instance = instance.prototype;
-        }
-        if ((args && args.length > 0) || (instance && instance._options && instance._options.scope !== "Singleton")) {
-            instance = this.reg(target, { scope: "Request", type, args });
+        if (!instance) {
+            return null;
         }
 
-        // tslint:disable-next-line: no-unused-expression
-        instance && !instance.app && (instance.app = this.app);
+        // not Singleton, the Container return prototype
+        if (args.length > 0 || helper.isClass(instance)) {
+            // instantiation
+            instance = Reflect.construct(instance, args);
+        }
+
+        if (!instance.app) {
+            instance.app = this.app;
+        }
 
         return instance;
     }

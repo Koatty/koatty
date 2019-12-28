@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-28 01:23:53
+ * @ version: 2019-12-28 12:05:36
  */
 import KoaRouter from "@koa/router";
 import * as Koa from "koa";
@@ -208,18 +208,10 @@ export class Router {
      * @memberof Router
      */
     async execRouter(identifier: string, router: any, app: any, ctx: Koa.Context, container: Container, params?: any) {
-        // const ctl: any = container.get(identifier, "CONTROLLER", [app, ctx]);
-        const ctl: any = container.get(identifier, "CONTROLLER");
+        const ctl: any = container.get(identifier, "CONTROLLER", [app, ctx]);
+        // const ctl: any = container.get(identifier, "CONTROLLER");
         if (!ctx || !ctl.init) {
             return ctx.throw(404, `Controller ${identifier} not found.`);
-        }
-        // inject properties
-        ctl.app = app;
-        ctl.ctx = ctx;
-        // empty-method
-        if (!ctl[router.method]) {
-            //return ctx.throw(404, `Action ${router.method} not found.`);
-            return ctl.__empty();
         }
         // pre-method
         if (ctl.__before) {
