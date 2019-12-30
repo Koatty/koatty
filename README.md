@@ -82,6 +82,7 @@ koatty middleware -o typeorm test
 
 ```javascript
 import { Controller, BaseController, Autowired, GetMaping, RequestBody, PathVariable, PostMaping, RequestMapping, RequestMethod, Valid } from "koatty";
+import { TestDTO } from "../model/dto/TestDTO";
 import { TestService } from "../service/TestService";
 import { App } from "../App";
 
@@ -97,13 +98,14 @@ export class IndexController extends BaseController {
     }
 
     @RequestMapping("/", RequestMethod.ALL)
-    async default(@PathVariable("test") @Valid("notEmpty") test: string) {
+    async default(@PathVariable("test") @Valid("IsNotEmpty") test: string) {
         const info = await this.testService.sayHello();
         return this.ok(test, info);
     }
 
     @PostMaping("/test")
-    test(@RequestBody() body: any) {
+    @Validated()
+    test(@RequestBody() body: TestDTO) {
         return this.ok("test", body);
     }
 }
