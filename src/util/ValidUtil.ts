@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-30 18:43:41
+ * @ version: 2019-12-30 20:06:58
  */
 import helper from "think_lib";
 import { plainToClass } from "class-transformer";
@@ -41,7 +41,7 @@ export class ValidateUtil {
      */
     async valid(Clazz: any, data: any): Promise<any> {
         const obj = plainToClass(Clazz, data);
-        const errors = await validate(obj);
+        const errors = await validate(obj, { skipMissingProperties: true});
         if (errors.length > 0) {
             throw new Error(Object.values(errors[0].constraints)[0]);
         }
@@ -146,6 +146,9 @@ export function IsCnName(validationOptions?: ValidationOptions) {
             validator: {
                 validate(value: any, args: ValidationArguments) {
                     return iscnname(value);
+                },
+                defaultMessage(args: ValidationArguments) { // here you can provide default error message if validation failed
+                    return "The ($value) must be a chinese name!";
                 }
             }
         });
@@ -170,6 +173,9 @@ export function IsIdNumber(validationOptions?: ValidationOptions) {
             validator: {
                 validate(value: any, args: ValidationArguments) {
                     return isidnumber(value);
+                },
+                defaultMessage(args: ValidationArguments) { // here you can provide default error message if validation failed
+                    return "The ($value) must be a idcard number!";
                 }
             }
         });
@@ -194,6 +200,9 @@ export function IsZipCode(validationOptions?: ValidationOptions) {
             validator: {
                 validate(value: any, args: ValidationArguments) {
                     return iszipcode(value);
+                },
+                defaultMessage(args: ValidationArguments) { // here you can provide default error message if validation failed
+                    return "The ($value) must be a zip code!";
                 }
             }
         });
@@ -218,6 +227,9 @@ export function IsMobile(validationOptions?: ValidationOptions) {
             validator: {
                 validate(value: any, args: ValidationArguments) {
                     return ismobile(value);
+                },
+                defaultMessage(args: ValidationArguments) { // here you can provide default error message if validation failed
+                    return "The ($value) must be a mobile number!";
                 }
             }
         });
@@ -242,34 +254,14 @@ export function IsPlateNumber(validationOptions?: ValidationOptions) {
             validator: {
                 validate(value: any, args: ValidationArguments) {
                     return isplatenumber(value);
+                },
+                defaultMessage(args: ValidationArguments) { // here you can provide default error message if validation failed
+                    return "The ($value) must be a plate number!";
                 }
             }
         });
     };
 
-}
-
-/**
- * Checks value is empty, undefined, null, '', NaN, [], {} and any empty string(including spaces, tabs, formfeeds, etc.), returns true.
- *
- * @export
- * @param {ValidationOptions} [validationOptions]
- * @returns
- */
-export function IsEmpty(validationOptions?: ValidationOptions) {
-    return function (object: Object, propertyName: string) {
-        registerDecorator({
-            name: "IsEmpty",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return helper.isEmpty(value);
-                }
-            }
-        });
-    };
 }
 
 /**
@@ -289,6 +281,9 @@ export function IsNotEmpty(validationOptions?: ValidationOptions) {
             validator: {
                 validate(value: any, args: ValidationArguments) {
                     return !!helper.isEmpty(value);
+                },
+                defaultMessage(args: ValidationArguments) { // here you can provide default error message if validation failed
+                    return "The ($value) must be not empty!";
                 }
             }
         });

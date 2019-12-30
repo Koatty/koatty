@@ -2,14 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-30 19:04:34
+ * @ version: 2019-12-30 20:05:31
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import helper from "think_lib";
 import { PARAM_RULE_KEY } from './Constants';
 import { attachPropertyData } from './Injectable';
-import { ValidateUtil, validatorCls, IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsEmpty, IsNotEmpty, iscnname, isidnumber, ismobile, iszipcode, isplatenumber } from "../util/ValidUtil";
+import { ValidateUtil, validatorCls, IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsNotEmpty, iscnname, isidnumber, ismobile, iszipcode, isplatenumber } from "../util/ValidUtil";
 // export decorators of class-validator
 export {
     Equals, NotEquals, Contains, IsIn, IsNotIn,
@@ -17,7 +17,7 @@ export {
     Min, Max, Length, MinLength, MaxLength, IsEmail, IsIP, IsPhoneNumber, IsUrl, IsHash
 } from "class-validator";
 // export decorators of custom-rules
-export { IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsEmpty, IsNotEmpty };
+export { IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsNotEmpty };
 const validIns = ValidateUtil.getInstance();
 
 /**
