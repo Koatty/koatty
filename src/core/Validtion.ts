@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-30 20:05:31
+ * @ version: 2019-12-31 09:22:36
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -12,9 +12,8 @@ import { attachPropertyData } from './Injectable';
 import { ValidateUtil, validatorCls, IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsNotEmpty, iscnname, isidnumber, ismobile, iszipcode, isplatenumber } from "../util/ValidUtil";
 // export decorators of class-validator
 export {
-    Equals, NotEquals, Contains, IsIn, IsNotIn,
-    IsBoolean, IsObject, IsDate, IsString, IsArray, IsNumber, IsInt, IsBooleanString, IsNumberString,
-    Min, Max, Length, MinLength, MaxLength, IsEmail, IsIP, IsPhoneNumber, IsUrl, IsHash
+    Equals, NotEquals, Contains, IsIn, IsNotIn, IsDate,
+    Min, Max, Length, IsEmail, IsIP, IsPhoneNumber, IsUrl, IsHash
 } from "class-validator";
 // export decorators of custom-rules
 export { IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsNotEmpty };
@@ -26,9 +25,8 @@ const validIns = ValidateUtil.getInstance();
  * @export
  * @type {number}
  */
-export type ValidRules = "IsEmpty" | "IsNotEmpty" | "Equals" | "NotEquals" | "Contains" | "IsIn" | "IsNotIn" |
-    "IsBoolean" | "IsObject" | "IsDate" | "IsString" | "IsArray" | "IsNumber" | "IsInt" | "IsBooleanString" | "IsNumberString" |
-    "Min" | "Max" | "Length" | "MinLength" | "MaxLength" | "IsEmail" | "IsIP" | "IsPhoneNumber" | "IsUrl" | "IsHash" | "IsCnName" | "IsIdNumber" | "IsZipCode" | "IsMobile" | "IsPlateNumber";
+export type ValidRules = "IsNotEmpty" | "Equals" | "NotEquals" | "Contains" | "Min" | "Max" | "Length" | "IsIn" | "IsNotIn" | "IsDate" |
+    "IsEmail" | "IsIP" | "IsPhoneNumber" | "IsUrl" | "IsHash" | "IsCnName" | "IsIdNumber" | "IsZipCode" | "IsMobile" | "IsPlateNumber";
 
 /**
  * rule map
@@ -39,20 +37,10 @@ const ruleObj: any = {
     Contains: validatorCls.contains,
     IsIn: validatorCls.isIn,
     IsNotIn: validatorCls.isNotIn,
-    IsBoolean: validatorCls.isBoolean,
-    IsObject: validatorCls.isObject,
     IsDate: validatorCls.isDate,
-    IsString: validatorCls.isString,
-    IsArray: validatorCls.isArray,
-    IsNumber: validatorCls.isNumber,
-    IsInt: validatorCls.isInt,
-    IsBooleanString: validatorCls.isBooleanString,
-    IsNumberString: validatorCls.isNumberString,
     Min: validatorCls.min,
     Max: validatorCls.max,
     Length: validatorCls.length,
-    MinLength: validatorCls.minLength,
-    MaxLength: validatorCls.maxLength,
     IsEmail: validatorCls.isEmail,
     IsIP: validatorCls.isIP,
     IsPhoneNumber: validatorCls.isPhoneNumber,
@@ -63,7 +51,6 @@ const ruleObj: any = {
     IsZipCode: iszipcode,
     IsMobile: ismobile,
     IsPlateNumber: isplatenumber,
-    IsEmpty: helper.isEmpty,
     IsNotEmpty(value: any) {
         return !!helper.isEmpty(value);
     }
