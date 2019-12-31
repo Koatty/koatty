@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-31 09:22:36
+ * @ version: 2019-12-31 10:32:26
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -52,7 +52,7 @@ const ruleObj: any = {
     IsMobile: ismobile,
     IsPlateNumber: isplatenumber,
     IsNotEmpty(value: any) {
-        return !!helper.isEmpty(value);
+        return !helper.isEmpty(value);
     }
 };
 

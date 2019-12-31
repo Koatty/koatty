@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-30 20:06:58
+ * @ version: 2019-12-31 10:32:15
  */
 import helper from "think_lib";
 import { plainToClass } from "class-transformer";
@@ -41,7 +41,7 @@ export class ValidateUtil {
      */
     async valid(Clazz: any, data: any): Promise<any> {
         const obj = plainToClass(Clazz, data);
-        const errors = await validate(obj, { skipMissingProperties: true});
+        const errors = await validate(obj, { skipMissingProperties: true });
         if (errors.length > 0) {
             throw new Error(Object.values(errors[0].constraints)[0]);
         }
@@ -280,10 +280,10 @@ export function IsNotEmpty(validationOptions?: ValidationOptions) {
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return !!helper.isEmpty(value);
+                    return !helper.isEmpty(value);
                 },
                 defaultMessage(args: ValidationArguments) { // here you can provide default error message if validation failed
-                    return "The ($value) must be not empty!";
+                    return "The ($property)'s value must be not empty!";
                 }
             }
         });
