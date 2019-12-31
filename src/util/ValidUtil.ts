@@ -2,11 +2,16 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-31 10:32:15
+ * @ version: 2019-12-31 15:58:05
  */
 import helper from "think_lib";
 import { plainToClass } from "class-transformer";
 import { validate, registerDecorator, ValidationArguments, ValidationOptions, Validator } from "class-validator";
+// export decorators of class-validator
+export {
+    Equals, NotEquals, Contains, IsIn, IsNotIn, IsDate,
+    Min, Max, Length, IsEmail, IsIP, IsPhoneNumber, IsUrl, IsHash
+} from "class-validator";
 export const validatorCls = new Validator();
 /**
  *

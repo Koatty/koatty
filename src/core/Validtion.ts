@@ -2,36 +2,33 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-31 10:32:26
+ * @ version: 2019-12-31 16:00:15
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import helper from "think_lib";
 import { PARAM_RULE_KEY } from './Constants';
 import { attachPropertyData } from './Injectable';
-import { ValidateUtil, validatorCls, IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsNotEmpty, iscnname, isidnumber, ismobile, iszipcode, isplatenumber } from "../util/ValidUtil";
-// export decorators of class-validator
-export {
-    Equals, NotEquals, Contains, IsIn, IsNotIn, IsDate,
+import {
+    ValidateUtil, validatorCls, IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsNotEmpty, iscnname, isidnumber, ismobile, iszipcode, isplatenumber, Equals, NotEquals, Contains, IsIn, IsNotIn, IsDate,
     Min, Max, Length, IsEmail, IsIP, IsPhoneNumber, IsUrl, IsHash
-} from "class-validator";
+} from "../util/ValidUtil";
+
 // export decorators of custom-rules
-export { IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsNotEmpty };
-const validIns = ValidateUtil.getInstance();
+export {
+    IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsEmail, IsIP, IsPhoneNumber, IsUrl, IsHash, IsNotEmpty, Equals, NotEquals, Contains, IsIn, IsNotIn, IsDate,
+    Min, Max, Length
+};
 
 /**
- * type checked rules
- *
- * @export
- * @type {number}
+ * ClassValidator for manual
  */
-export type ValidRules = "IsNotEmpty" | "Equals" | "NotEquals" | "Contains" | "Min" | "Max" | "Length" | "IsIn" | "IsNotIn" | "IsDate" |
-    "IsEmail" | "IsIP" | "IsPhoneNumber" | "IsUrl" | "IsHash" | "IsCnName" | "IsIdNumber" | "IsZipCode" | "IsMobile" | "IsPlateNumber";
+export const ClassValidator = ValidateUtil.getInstance();
 
 /**
- * rule map
+ * Validator Functions
  */
-const ruleObj: any = {
+export const FunctionValidator: any = {
     Equals: validatorCls.equals,
     NotEquals: validatorCls.notEquals,
     Contains: validatorCls.contains,
@@ -55,6 +52,15 @@ const ruleObj: any = {
         return !helper.isEmpty(value);
     }
 };
+
+/**
+ * type checked rules
+ *
+ * @export
+ * @type {number}
+ */
+export type ValidRules = "IsNotEmpty" | "Equals" | "NotEquals" | "Contains" | "Min" | "Max" | "Length" | "IsIn" | "IsNotIn" | "IsDate" |
+    "IsEmail" | "IsIP" | "IsPhoneNumber" | "IsUrl" | "IsHash" | "IsCnName" | "IsIdNumber" | "IsZipCode" | "IsMobile" | "IsPlateNumber";
 
 /**
  * Check the base types.
@@ -121,7 +127,7 @@ const ValidCheck = function (ctx: any, value: any, type: string, rule: any, mess
         if (helper.isString(rule)) {
             rule = [rule];
         }
-        if (rule.some((it: string) => ruleObj[it] && !ruleObj[it](value))) {
+        if (rule.some((it: string) => FunctionValidator[it] && !FunctionValidator[it](value))) {
             return ctx.throw(400, message || "Invalid parameter value.");
         }
     }
@@ -178,7 +184,7 @@ export function Validated(): MethodDecorator {
                 // tslint:disable-next-line: no-unused-expression
                 props.map && props.map((value: any, index: number) => {
                     if (helper.isObject(value) && helper.isClass(paramtypes[index])) {
-                        ps.push(validIns.valid(paramtypes[index], value));
+                        ps.push(ClassValidator.valid(paramtypes[index], value));
                     }
                 });
                 if (ps.length > 0) {
