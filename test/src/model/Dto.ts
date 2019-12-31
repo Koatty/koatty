@@ -1,9 +1,9 @@
-import { Length, IsInt, Min, Max, IsCnName, Contains } from '../../../src';
+import { Length, Min, Max, IsCnName, Contains } from '../../../src';
 /**
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-30 19:05:59
+ * @ version: 2019-12-31 09:28:37
  */
 
 export class Dto {
@@ -15,7 +15,6 @@ export class Dto {
     @Contains("hello")
     text: string;
 
-    @IsInt()
     @Min(0)
     @Max(10)
     rating: number;
