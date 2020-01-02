@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-31 16:00:15
+ * @ version: 2020-01-02 09:37:59
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -11,12 +11,12 @@ import { PARAM_RULE_KEY } from './Constants';
 import { attachPropertyData } from './Injectable';
 import {
     ValidateUtil, validatorCls, IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsNotEmpty, iscnname, isidnumber, ismobile, iszipcode, isplatenumber, Equals, NotEquals, Contains, IsIn, IsNotIn, IsDate,
-    Min, Max, Length, IsEmail, IsIP, IsPhoneNumber, IsUrl, IsHash
+    Min, Max, Length, IsEmail, IsIP, IsPhoneNumber, IsUrl, IsHash, IsDefined
 } from "../util/ValidUtil";
 
 // export decorators of custom-rules
 export {
-    IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsEmail, IsIP, IsPhoneNumber, IsUrl, IsHash, IsNotEmpty, Equals, NotEquals, Contains, IsIn, IsNotIn, IsDate,
+    IsDefined, IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsEmail, IsIP, IsPhoneNumber, IsUrl, IsHash, IsNotEmpty, Equals, NotEquals, Contains, IsIn, IsNotIn, IsDate,
     Min, Max, Length
 };
 
