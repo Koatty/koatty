@@ -1,6 +1,6 @@
 {
     "name": "koatty",
-    "version": "1.12.5",
+    "version": "1.12.6",
     "description": "Koa2 + Typescript = koatty. Use Typescript's decorator implement auto injection just like SpringBoot.",
     "scripts": {
         "build": "trash ./dist && tsc",
