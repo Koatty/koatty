@@ -2,14 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-28 01:24:29
+ * @ version: 2020-01-03 20:36:50
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "Koa";
 import * as helper from "think_lib";
 import { Koatty } from "../Koatty";
 import { ObjectDefinitionOptions } from "../core/IContainer";
-import { Value } from "../core/Decorators";
+import { Value } from "../core/Component";
 
 /**
  *

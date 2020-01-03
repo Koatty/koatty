@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-30 19:10:34
+ * @ version: 2020-01-03 20:36:57
  */
 import * as think_lib from "think_lib";
 import * as think_logger from "think_logger";
@@ -13,7 +13,7 @@ export * from "./core/Bootstrap";
 export * from "./controller/BaseController";
 export * from "./controller/RestController";
 export * from "./core/Container";
-export * from "./core/Decorators";
+export * from "./core/Component";
 export * from "./Koatty";
 export * from "./core/RequestMapping";
 export { Scheduled } from "./core/Schedule";

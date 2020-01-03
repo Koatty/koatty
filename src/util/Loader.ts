@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-28 01:33:17
+ * @ version: 2020-01-03 20:31:27
  */
 import * as globby from "globby";
 import * as path from "path";
@@ -171,7 +171,7 @@ export class Loader {
                 process.env.NODE_ENV === "development" && logger.custom("think", "", `Load service: ${item.id}`);
                 const cls = container.reg(item.target, { scope: "Singleton", type: "SERVICE" });
                 if (!(cls instanceof Base)) {
-                    throw new Error(`class ${item.id} does not inherit the class Base`);
+                    throw new Error(`class ${item.id} does not inherit from Base`);
                 }
             }
         });
@@ -197,7 +197,7 @@ export class Loader {
 
                 const ctl = container.reg(item.target, { scope: "Request", type: "CONTROLLER" });
                 if (!(ctl instanceof BaseController)) {
-                    throw new Error(`class ${item.id} does not inherit the class BaseController`);
+                    throw new Error(`class ${item.id} does not inherit from BaseController`);
                 }
                 controllers[item.id] = item.target;
             }

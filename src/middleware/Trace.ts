@@ -2,9 +2,9 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-28 01:30:38
+ * @ version: 2020-01-03 20:36:55
  */
-import { Middleware } from "../core/Decorators";
+import { Middleware } from "../core/Component";
 import { Koatty } from "../Koatty";
 const traces = require("think_trace");
 

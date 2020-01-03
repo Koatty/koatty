@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-03 18:48:00
+ * @ version: 2020-01-03 20:31:10
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -13,6 +13,7 @@ import { INJECT_TAG, COMPONENT_SCAN, CONFIGUATION_SCAN } from "./Constants";
 import { Container } from "./Container";
 import { Loader } from "../util/Loader";
 import { Router } from "./Router";
+import { Koatty } from '../Koatty';
 
 /**
  * Bootstrap appliction
@@ -30,6 +31,9 @@ export function Bootstrap(bootFunc?: Function): ClassDecorator {
     return (target: any) => {
         try {
             const app = Reflect.construct(target, []);
+            if (!(app instanceof Koatty)) {
+                throw new Error(`class ${target.name} does not inherit from Koatty`);
+            }
 
             logger.custom("think", "", "ComponentScan ...");
             let componentMetas = [];
