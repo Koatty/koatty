@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-28 11:52:23
+ * @ version: 2020-01-03 19:48:21
  */
 import * as helper from "think_lib";
 import { CompomentType } from "./Constants";
@@ -14,19 +14,18 @@ import { getModule, getIdentifier, injectAutowired, injectValue, saveModule } fr
  * Auto injection
  *
  * @param {*} target
- * @param {*} instance
  * @param {ObjectDefinitionOptions} options
  * @param {Container} container
  * @returns
  */
-const buildInject = function (target: any, instance: any, options: ObjectDefinitionOptions, container: Container) {
+const BuildInject = function (target: any, options: ObjectDefinitionOptions, container: Container) {
     // inject configuation
-    injectValue(target, instance, container);
+    injectValue(target, target.prototype, container);
     // inject autowired
-    injectAutowired(target, instance, container);
+    injectAutowired(target, target.prototype, container);
     // inject schedule
-    injectSchedule(target, instance, container);
-    return instance;
+    injectSchedule(target, target.prototype, container);
+    return target;
 };
 
 /**
@@ -94,21 +93,8 @@ export class Container implements IContainer {
                     saveModule(options.type, target, identifier);
                 }
                 // inject dependency
-                buildInject(target, target.prototype, options, this);
+                BuildInject(target, options, this);
 
-                // tslint:disable-next-line: no-this-assignment
-                // const container = this;
-                // instance = Reflect.construct(new Proxy(target, {
-                //     construct(tgt, args, newTarget) {
-                //         const cls: any = Reflect.construct(tgt, args, newTarget);
-                //         // injection dependency
-                //         buildInject(tgt, cls, options, container);
-                //         // custom construct method
-                //         // tslint:disable-next-line: no-unused-expression
-                //         cls.init && cls.init(...args);
-                //         return cls;
-                //     }
-                // }), options.args);
                 if (options.scope === "Singleton") {
                     // instantiation
                     instance = Reflect.construct(target, options.args);
