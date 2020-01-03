@@ -112,6 +112,14 @@
     "@types/keygrip" "*"
     "@types/node" "*"
 
+"@types/cron@^1.x.x":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@types/cron/-/cron-1.7.1.tgz#752e47ebbe26e83d9e40f2dd6a3f679f2eec54b8"
+  integrity sha512-48brwgU18DqA0mQX1As5OcJEo1yNjaXMM6Mk4r8K1dOzLJRQ37FE/kCivKx7ClKEHfhX2FdcxKzJ1B744a+V3A==
+  dependencies:
+    "@types/node" "*"
+    moment ">=2.14.0"
+
 "@types/eslint-visitor-keys@^1.0.0":
   version "1.0.0"
   resolved "http://r.cnpmjs.org/@types/eslint-visitor-keys/download/@types/eslint-visitor-keys-1.0.0.tgz#1ee30d79544ca84d68d4b3cdb0af4f205663dd2d"
@@ -182,10 +190,10 @@
     "@types/koa-compose" "*"
     "@types/node" "*"
 
-"@types/koa__router@^8.0.2":
+"@types/koa__router@^8.x.x":
   version "8.0.2"
-  resolved "http://r.cnpmjs.org/@types/koa__router/download/@types/koa__router-8.0.2.tgz#32381a4b2487226e09be1c960da066a4e373af35"
-  integrity sha1-MjgaSySHIm4JvhyWDaBmpONzrzU=
+  resolved "https://registry.yarnpkg.com/@types/koa__router/-/koa__router-8.0.2.tgz#32381a4b2487226e09be1c960da066a4e373af35"
+  integrity sha512-3ZWfVAEcErHrZA31fWUC2YyZyAgoG4eKtQPy2XwBzdSpQealxjL7GcEEtGY925qPPs1wurW59qDl0KuRB39rrw==
   dependencies:
     "@types/koa" "*"
 
@@ -203,13 +211,6 @@
   version "3.0.3"
   resolved "http://r.cnpmjs.org/@types/minimatch/download/@types/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
   integrity sha1-PcoOPzOyAPx9ETnAzZbBJoyt/Z0=
-
-"@types/node-schedule@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@types/node-schedule/-/node-schedule-1.3.0.tgz#100f69078e74d736d59433fc4634ff49d0a9142d"
-  integrity sha512-gjKmC9wFxn8laKYKwVP2iZvxeiA1DWUb6CXAYXtoYBcDbiyMqxLn2sQq+8aaNc7Xr0p93Hf0O0VizdaEPUO0vA==
-  dependencies:
-    "@types/node" "*"
 
 "@types/node@*":
   version "13.1.1"
@@ -630,13 +631,12 @@ cp-file@^6.1.0:
     pify "^4.0.1"
     safe-buffer "^5.0.1"
 
-cron-parser@^2.7.3:
-  version "2.13.0"
-  resolved "http://r.cnpmjs.org/cron-parser/download/cron-parser-2.13.0.tgz#6f930bb6f2931790d2a9eec83b3ec276e27a6725"
-  integrity sha1-b5MLtvKTF5DSqe7IOz7CduJ6ZyU=
+cron@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/cron/-/cron-1.7.2.tgz#2ea1f35c138a07edac2ac5af5084ed6fee5723db"
+  integrity sha512-+SaJ2OfeRvfQqwXQ2kgr0Y5pzBR/lijf5OpnnaruwWnmI799JfWr2jN2ItOV9s3A/+TFOt6mxvKzQq5F0Jp6VQ==
   dependencies:
-    is-nan "^1.2.1"
-    moment-timezone "^0.5.25"
+    moment-timezone "^0.5.x"
 
 cross-spawn-async@^2.1.1:
   version "2.2.5"
@@ -723,13 +723,6 @@ defer-to-connect@^1.0.1:
   version "1.1.1"
   resolved "http://r.cnpmjs.org/defer-to-connect/download/defer-to-connect-1.1.1.tgz#88ae694b93f67b81815a2c8c769aef6574ac8f2f"
   integrity sha1-iK5pS5P2e4GBWiyMdprvZXSsjy8=
-
-define-properties@^1.1.3:
-  version "1.1.3"
-  resolved "http://r.cnpmjs.org/define-properties/download/define-properties-1.1.3.tgz#cf88da6cbee26fe6db7094f61d870cbd84cee9f1"
-  integrity sha1-z4jabL7ib+bbcJT2HYcMvYTO6fE=
-  dependencies:
-    object-keys "^1.0.12"
 
 delegates@^1.0.0:
   version "1.0.0"
@@ -1365,13 +1358,6 @@ is-installed-globally@^0.1.0:
     global-dirs "^0.1.0"
     is-path-inside "^1.0.0"
 
-is-nan@^1.2.1:
-  version "1.3.0"
-  resolved "http://r.cnpmjs.org/is-nan/download/is-nan-1.3.0.tgz#85d1f5482f7051c2019f5673ccebdb06f3b0db03"
-  integrity sha1-hdH1SC9wUcIBn1ZzzOvbBvOw2wM=
-  dependencies:
-    define-properties "^1.1.3"
-
 is-npm@^3.0.0:
   version "3.0.0"
   resolved "http://r.cnpmjs.org/is-npm/download/is-npm-3.0.0.tgz#ec9147bfb629c43f494cf67936a961edec7e8053"
@@ -1557,11 +1543,6 @@ lodash@^4.17.14, lodash@^4.17.15:
   resolved "http://r.cnpmjs.org/lodash/download/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha1-tEf2ZwoEVbv+7dETku/zMOoJdUg=
 
-long-timeout@0.1.1:
-  version "0.1.1"
-  resolved "http://r.cnpmjs.org/long-timeout/download/long-timeout-0.1.1.tgz#9721d788b47e0bcb5a24c2e2bee1a0da55dab514"
-  integrity sha1-lyHXiLR+C8taJMLivuGg2lXatRQ=
-
 loud-rejection@^1.0.0:
   version "1.6.0"
   resolved "http://r.cnpmjs.org/loud-rejection/download/loud-rejection-1.6.0.tgz#5b46f80147edee578870f086d04821cf998e551f"
@@ -1705,14 +1686,14 @@ mkdirp@^0.5.1:
   dependencies:
     minimist "0.0.8"
 
-moment-timezone@^0.5.25:
+moment-timezone@^0.5.x:
   version "0.5.27"
   resolved "http://r.cnpmjs.org/moment-timezone/download/moment-timezone-0.5.27.tgz#73adec8139b6fe30452e78f210f27b1f346b8877"
   integrity sha1-c63sgTm2/jBFLnjyEPJ7HzRriHc=
   dependencies:
     moment ">= 2.9.0"
 
-"moment@>= 2.9.0", moment@^2.24.0:
+"moment@>= 2.9.0", moment@>=2.14.0, moment@^2.24.0:
   version "2.24.0"
   resolved "http://r.cnpmjs.org/moment/download/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha1-DQVdU/UFKqZTyfbraLtdEr9cK1s=
@@ -1770,15 +1751,6 @@ nice-try@^1.0.4:
   resolved "http://r.cnpmjs.org/nice-try/download/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
   integrity sha1-ozeKdpbOfSI+iPybdkvX7xCJ42Y=
 
-node-schedule@^1.3.2:
-  version "1.3.2"
-  resolved "http://r.cnpmjs.org/node-schedule/download/node-schedule-1.3.2.tgz#d774b383e2a6f6ade59eecc62254aea07cd758cb"
-  integrity sha1-13Szg+Km9q3lnuzGIlSuoHzXWMs=
-  dependencies:
-    cron-parser "^2.7.3"
-    long-timeout "0.1.1"
-    sorted-array-functions "^1.0.0"
-
 normalize-package-data@^2.3.2, normalize-package-data@^2.3.4:
   version "2.5.0"
   resolved "http://r.cnpmjs.org/normalize-package-data/download/normalize-package-data-2.5.0.tgz#e66db1838b200c1dfc233225d12cb36520e234a8"
@@ -1817,11 +1789,6 @@ object-assign@^4.0.1:
   version "4.1.1"
   resolved "http://r.cnpmjs.org/object-assign/download/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
   integrity sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM=
-
-object-keys@^1.0.12:
-  version "1.1.1"
-  resolved "http://r.cnpmjs.org/object-keys/download/object-keys-1.1.1.tgz#1c47f272df277f3b1daf061677d9c82e2322c60e"
-  integrity sha1-HEfyct8nfzsdrwYWd9nILiMixg4=
 
 on-finished@^2.3.0:
   version "2.3.0"
@@ -2269,11 +2236,6 @@ slice-ansi@^2.1.0:
     ansi-styles "^3.2.0"
     astral-regex "^1.0.0"
     is-fullwidth-code-point "^2.0.0"
-
-sorted-array-functions@^1.0.0:
-  version "1.2.0"
-  resolved "http://r.cnpmjs.org/sorted-array-functions/download/sorted-array-functions-1.2.0.tgz#43265b21d6e985b7df31621b1c11cc68d8efc7c3"
-  integrity sha1-QyZbIdbphbffMWIbHBHMaNjvx8M=
 
 source-map-support@^0.5.6:
   version "0.5.16"
