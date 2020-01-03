@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-28 01:28:39
+ * @ version: 2020-01-03 19:40:37
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -103,8 +103,8 @@ export function Autowired(identifier?: string, type?: CompomentType, constructAr
             }
         }
         //Cannot rely on injection controller
-        if (type === "CONTROLLER" && constructArgs.length < 2) {
-            throw new Error(`The dependency injection controller ${identifier || ""} must have a construction arguments(etc: app, ctx)!`);
+        if (type === "CONTROLLER") {
+            throw new Error(`Controller cannot be injection!`);
         }
         //Cannot rely on injection middleware
         // if (type === "MIDDLEWARE") {
