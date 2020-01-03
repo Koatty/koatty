@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-28 01:35:04
+ * @ version: 2020-01-03 21:42:34
  */
 
 import * as path from "path";
@@ -135,7 +135,7 @@ export class Koatty extends Koa {
         process.env.THINK_PATH = this.think_path;
 
         // Compatible with old version
-        Object.defineProperty(this, "_caches", {
+        Reflect.defineProperty(this, "_caches", {
             value: {},
             writable: true,
             configurable: false,
