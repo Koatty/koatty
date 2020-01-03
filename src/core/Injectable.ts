@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-03 18:48:45
+ * @ version: 2020-01-03 19:48:00
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -122,13 +122,38 @@ export class Injectable {
     /**
      *
      *
+     * @param {*} target
+     * @returns
+     * @memberof Injectable
+     */
+    public getType(target: any) {
+        const metaData = Reflect.getOwnMetadata(TAGGED_CLS, target);
+        if (metaData) {
+            return metaData.type;
+        } else {
+            const name = target.name;
+            if (name.indexOf("Controller") > -1) {
+                return "CONTROLLER";
+            } else if (name.indexOf("Middleware") > -1) {
+                return "MIDDLEWARE";
+            } else if (name.indexOf("Service") > -1) {
+                return "SERVICE";
+            } else {
+                return "COMPONENT";
+            }
+        }
+    }
+
+    /**
+     *
+     *
      * @param {string} key
      * @param {*} module
      * @param {string} identifier
      * @memberof Injectable
      */
     public saveModule(key: string, module: any, identifier: string) {
-        Reflect.defineMetadata(TAGGED_CLS, { id: identifier }, module);
+        Reflect.defineMetadata(TAGGED_CLS, { id: identifier, type: key }, module);
         key = `${key}:${identifier}`;
         if (!this.handlerMap.has(key)) {
             this.handlerMap.set(key, module);
@@ -451,6 +476,14 @@ export function getModule(key: string, identifier: string) {
  */
 export function getIdentifier(target: any) {
     return manager.getIdentifier(target);
+}
+
+/**
+ * get type
+ * @param target 
+ */
+export function getType(target: any) {
+    return manager.getType(target);
 }
 
 /**
