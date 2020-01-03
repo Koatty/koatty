@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-02 09:37:59
+ * @ version: 2020-01-03 18:29:08
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -140,9 +140,9 @@ const ValidCheck = function (ctx: any, value: any, type: string, rule: any, mess
  * @export
  * @param {(ValidRules | ValidRules[] | Function)} rule
  * @param {string} [message]
- * @returns
+ * @returns {ParameterDecorator}
  */
-export function Valid(rule: ValidRules | ValidRules[] | Function, message?: string) {
+export function Valid(rule: ValidRules | ValidRules[] | Function, message?: string): ParameterDecorator {
     let rules: any = [];
     if (helper.isString(rule)) {
         rules = (<string>rule).split(",");
