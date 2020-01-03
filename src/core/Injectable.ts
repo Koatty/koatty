@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-28 01:29:25
+ * @ version: 2020-01-03 18:48:45
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -487,7 +487,7 @@ export function injectAutowired(target: any, instance: any, container: Container
             } else {
                 // Delay loading solves the problem of cyclic dependency
                 // tslint:disable-next-line: no-unused-expression
-                container.app.once && container.app.once("appLazy", () => {
+                container.app.once && container.app.once("appStart", () => {
                     // lazy inject autowired
                     injectAutowired(target, instance, container, true);
                 });
