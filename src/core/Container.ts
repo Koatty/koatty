@@ -2,13 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-03 19:48:21
+ * @ version: 2020-01-07 09:35:19
  */
 import * as helper from "think_lib";
 import { CompomentType } from "./Constants";
 import { injectSchedule } from "./Schedule";
 import { IContainer, ObjectDefinitionOptions } from "./IContainer";
-import { getModule, getIdentifier, injectAutowired, injectValue, saveModule } from "./Injectable";
+import { getModule, getIdentifier, saveModule } from "./Injectable";
+import { injectValue, injectAutowired } from './Autowired';
 
 /**
  * Auto injection

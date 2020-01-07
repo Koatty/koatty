@@ -2,15 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-03 19:48:00
+ * @ version: 2020-01-07 09:32:32
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import * as helper from "think_lib";
-import * as logger from "think_logger";
-import { TAGGED_CLS, TAGGED_PROP, TAGGED_ARGS } from "./Constants";
-import { Container } from "./Container";
-import { recursiveGetMetadata } from "../util/Lib";
+import { TAGGED_CLS } from "./Constants";
 
 export class Injectable {
 
@@ -486,71 +483,3 @@ export function getType(target: any) {
     return manager.getType(target);
 }
 
-/**
- *
- *
- * @export
- * @param {*} target
- * @param {*} instance
- * @param {Container} container
- * @param {boolean} [isLazy=false]
- */
-export function injectAutowired(target: any, instance: any, container: Container, isLazy = false) {
-    const metaData = recursiveGetMetadata(TAGGED_PROP, target);
-
-    // tslint:disable-next-line: forin
-    for (const metaKey in metaData) {
-        let dep;
-        const { type, identifier, delay, args } = metaData[metaKey] || { type: "", identifier: "", delay: false, args: [] };
-        if (type && identifier) {
-            if (!delay || isLazy) {
-                dep = container.get(identifier, type, args);
-                if (dep) {
-                    // tslint:disable-next-line: no-unused-expression
-                    process.env.NODE_ENV === "development" && logger.custom("think", "", `Register inject ${target.name} properties key: ${metaKey} => value: ${JSON.stringify(metaData[metaKey])}`);
-                    Reflect.defineProperty(instance, metaKey, {
-                        enumerable: true,
-                        configurable: false,
-                        writable: true,
-                        value: dep
-                    });
-                } else {
-                    throw new Error(`Component ${metaData[metaKey].identifier || ""} not found. It's autowired in class ${target.name}`);
-                }
-            } else {
-                // Delay loading solves the problem of cyclic dependency
-                // tslint:disable-next-line: no-unused-expression
-                container.app.once && container.app.once("appStart", () => {
-                    // lazy inject autowired
-                    injectAutowired(target, instance, container, true);
-                });
-            }
-        }
-    }
-}
-
-/**
- *
- *
- * @export
- * @param {*} target
- * @param {*} instance
- * @param {Container} container
- */
-export function injectValue(target: any, instance: any, container: Container) {
-    const metaData = recursiveGetMetadata(TAGGED_ARGS, target);
-    // tslint:disable-next-line: forin
-    for (const metaKey in metaData) {
-        // tslint:disable-next-line: no-unused-expression
-        process.env.NODE_ENV === "development" && logger.custom("think", "", `Register inject ${getIdentifier(target)} config key: ${metaKey} => value: ${metaData[metaKey]}`);
-        const propKeys = metaData[metaKey].split("|");
-        const [propKey, type] = propKeys;
-        const prop = container.app.config(propKey, type);
-        Reflect.defineProperty(instance, metaKey, {
-            enumerable: true,
-            configurable: false,
-            writable: true,
-            value: prop
-        });
-    }
-}
