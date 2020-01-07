@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-03 19:40:37
+ * @ version: 2020-01-07 09:26:46
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -134,6 +134,23 @@ export function Autowired(identifier?: string, type?: CompomentType, constructAr
  */
 export function Value(identifier: string, type?: string): PropertyDecorator {
     return (target: any, propertyKey: string) => {
+        // identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
+        identifier = identifier || propertyKey;
+        savePropertyData(TAGGED_ARGS, `${identifier || ""}|${type || "config"}`, target, propertyKey);
+    };
+}
+
+/**
+ * Indicates that an decorated configuations as a property.
+ *
+ * @export
+ * @param {string} identifier
+ * @param {string} [type]
+ * @returns {PropertyDecorator}
+ */
+export function Config(identifier: string, type?: string): PropertyDecorator {
+    return (target: any, propertyKey: string) => {
+        const designType = Reflect.getMetadata("design:type", target, propertyKey);
         // identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
         identifier = identifier || propertyKey;
         savePropertyData(TAGGED_ARGS, `${identifier || ""}|${type || "config"}`, target, propertyKey);
