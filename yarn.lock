@@ -2391,7 +2391,7 @@ text-table@^0.2.0:
   resolved "http://r.cnpmjs.org/text-table/download/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
-think_lib@^2.x.x:
+think_lib@^2.2.13, think_lib@^2.x.x:
   version "2.2.13"
   resolved "http://r.cnpmjs.org/think_lib/download/think_lib-2.2.13.tgz#d35198a9171267c7b0b9ca1f4579b75f795494e6"
   integrity sha1-01GYqRcSZ8ewucofRXm3X3lUlOY=
@@ -2400,7 +2400,7 @@ think_lib@^2.x.x:
     lodash "^4.17.15"
     moment "^2.24.0"
 
-think_logger@^2.x.x:
+think_logger@^2.2.0, think_logger@^2.x.x:
   version "2.2.0"
   resolved "http://r.cnpmjs.org/think_logger/download/think_logger-2.2.0.tgz#a1c2747c5bf4e87ffd768c6fe39de09afadd3511"
   integrity sha1-ocJ0fFv06H/9doxv453gmvrdNRE=
@@ -2436,6 +2436,18 @@ think_trace@^2.x.x:
     http-errors "^1.7.3"
     think_lib "^2.x.x"
     think_logger "^2.x.x"
+
+think_validtion@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/think_validtion/-/think_validtion-1.0.1.tgz#ed6b9cd250983ef66bdf8cd7bc9864ec2cd491d5"
+  integrity sha512-gy+lvILhlRFL0nRZ/nEnr4D1VXjQBqWoxsMj913pQYc/aozTY/i26LU/7fQMwsGdKxdECX2ujO0wZi0kv3M8Cg==
+  dependencies:
+    class-transformer "^0.2.3"
+    class-validator "^0.11.0"
+    reflect-metadata "^0.1.13"
+    think_lib "^2.2.13"
+    think_logger "^2.2.0"
+    tslib "^1.10.0"
 
 through@^2.3.6:
   version "2.3.8"

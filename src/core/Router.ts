@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-28 12:05:36
+ * @ version: 2020-01-07 18:26:40
  */
 import KoaRouter from "@koa/router";
 import * as Koa from "koa";
@@ -220,7 +220,7 @@ export class Router {
         // inject param
         let args = [];
         if (params[router.method]) {
-            args = params[router.method].sort((a: any, b: any) => a.index - b.index).map((i: any) => i.fn(ctx, i.type));
+            args = params[router.method].sort((a: any, b: any) => a.index - b.index).map((i: any) => i.fn(ctx, i.name, i.type));
         }
         const result = await ctl[router.method](...args);
         // after-method

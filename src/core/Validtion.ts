@@ -2,56 +2,18 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-03 18:29:08
+ * @ version: 2020-01-07 19:25:21
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import helper from "think_lib";
 import { PARAM_RULE_KEY } from './Constants';
 import { attachPropertyData } from './Injectable';
-import {
-    ValidateUtil, validatorCls, IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsNotEmpty, iscnname, isidnumber, ismobile, iszipcode, isplatenumber, Equals, NotEquals, Contains, IsIn, IsNotIn, IsDate,
-    Min, Max, Length, IsEmail, IsIP, IsPhoneNumber, IsUrl, IsHash, IsDefined
-} from "../util/ValidUtil";
-
-// export decorators of custom-rules
+import { FunctionValidator, ClassValidator } from 'think_validtion';
 export {
-    IsDefined, IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsEmail, IsIP, IsPhoneNumber, IsUrl, IsHash, IsNotEmpty, Equals, NotEquals, Contains, IsIn, IsNotIn, IsDate,
+    ClassValidator, FunctionValidator, IsDefined, IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsEmail, IsIP, IsPhoneNumber, IsUrl, IsHash, IsNotEmpty, Equals, NotEquals, Contains, IsIn, IsNotIn, IsDate,
     Min, Max, Length
-};
-
-/**
- * ClassValidator for manual
- */
-export const ClassValidator = ValidateUtil.getInstance();
-
-/**
- * Validator Functions
- */
-export const FunctionValidator: any = {
-    Equals: validatorCls.equals,
-    NotEquals: validatorCls.notEquals,
-    Contains: validatorCls.contains,
-    IsIn: validatorCls.isIn,
-    IsNotIn: validatorCls.isNotIn,
-    IsDate: validatorCls.isDate,
-    Min: validatorCls.min,
-    Max: validatorCls.max,
-    Length: validatorCls.length,
-    IsEmail: validatorCls.isEmail,
-    IsIP: validatorCls.isIP,
-    IsPhoneNumber: validatorCls.isPhoneNumber,
-    IsUrl: validatorCls.isURL,
-    IsHash: validatorCls.isHash,
-    IsCnName: iscnname,
-    IsIdNumber: isidnumber,
-    IsZipCode: iszipcode,
-    IsMobile: ismobile,
-    IsPlateNumber: isplatenumber,
-    IsNotEmpty(value: any) {
-        return !helper.isEmpty(value);
-    }
-};
+} from "think_validtion";
 
 /**
  * type checked rules
@@ -107,20 +69,21 @@ const checkParamsType = function (value: any, type: string): boolean {
  * Invoke valid rules.
  *
  * @param {*} ctx
+ * @param {string} name
  * @param {*} value
  * @param {string} type
  * @param {(ValidRules | ValidRules[] | Function)} rule
  * @param {string} [message=""]
  * @returns
  */
-const ValidCheck = function (ctx: any, value: any, type: string, rule: any, message = "") {
+const ValidCheck = function (ctx: any, name: string, value: any, type: string, rule: any, message = "") {
     // check type
     if (!checkParamsType(value, type)) {
-        return ctx.throw(400, `Invalid parameter type, the parameter \`${value}\` is not ${type}`);
+        return ctx.throw(400, `Invalid parameter type, the parameter \`${name}\` is not ${type}`);
     }
     if (helper.isFunction(rule)) {
         if (!rule(value)) {
-            return ctx.throw(400, message || `Invalid parameter value: ${value}, typeof ${typeof value}.`);
+            return ctx.throw(400, message || `The parameter \`${name}\` is invalid.`);
         }
         return value;
     } else {
@@ -128,7 +91,7 @@ const ValidCheck = function (ctx: any, value: any, type: string, rule: any, mess
             rule = [rule];
         }
         if (rule.some((it: string) => FunctionValidator[it] && !FunctionValidator[it](value))) {
-            return ctx.throw(400, message || "Invalid parameter value.");
+            return ctx.throw(400, message || `The parameter \`${name}\` is invalid.`);
         }
     }
     return value;
