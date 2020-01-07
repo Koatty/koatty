@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-30 19:02:22
+ * @ version: 2020-01-07 15:50:14
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -258,7 +258,7 @@ const convertParamsType = (param: any, type: string) => {
  * @export
  * @returns
  */
-export function RequestBody() {
+export function RequestBody(): ParameterDecorator {
     return Inject((ctx: any) => ctx.request.body);
 }
 
@@ -269,7 +269,7 @@ export function RequestBody() {
  * @param {string} [name] params name
  * @returns
  */
-export function PathVariable(name?: string) {
+export function PathVariable(name?: string): ParameterDecorator {
     if (name) {
         return Inject((ctx: any, type: string) => {
             const data: any = helper.extend(ctx.params || {}, ctx.query);
@@ -290,7 +290,7 @@ export function PathVariable(name?: string) {
  * @export
  * @returns
  */
-export function Body() {
+export function Body(): ParameterDecorator {
     return Inject((ctx: any) => ctx.request.body);
 }
 
@@ -301,7 +301,7 @@ export function Body() {
  * @param {string} [name]
  * @returns
  */
-export function Get(name?: string) {
+export function Get(name?: string): ParameterDecorator {
     if (name) {
         return Inject((ctx: any, type: string) => {
             const data: any = helper.extend(ctx.params || {}, ctx.query);
@@ -322,7 +322,7 @@ export function Get(name?: string) {
  * @param {string} [name]
  * @returns
  */
-export function Post(name?: string) {
+export function Post(name?: string): ParameterDecorator {
     if (name) {
         return Inject((ctx: any, type: string) => {
             return ctx.post(name);
@@ -341,7 +341,7 @@ export function Post(name?: string) {
  * @param {string} [name]
  * @returns
  */
-export function File(name?: string) {
+export function File(name?: string): ParameterDecorator {
     if (name) {
         return Inject((ctx: any, type: string) => {
             return ctx.file(name);
@@ -360,7 +360,7 @@ export function File(name?: string) {
  * @param {string} [name]
  * @returns
  */
-export function Header(name?: string) {
+export function Header(name?: string): ParameterDecorator {
     if (name) {
         return Inject((ctx: any, type: string) => {
             return ctx.get(name);
