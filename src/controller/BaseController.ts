@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-07 09:36:06
+ * @ version: 2020-01-07 17:16:39
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "Koa";
@@ -37,10 +37,10 @@ interface BaseControllerInterface {
     readonly jsonp: (data: any) => void;
     readonly ok: (errmsg?: Error | string, data?: any, code?: number) => void;
     readonly param: (name?: string) => any;
-    readonly redirect: (urls: string, alt?: string) => void;
+    readonly redirect: (urls: string, alt?: string) => Promise<any>;
     readonly render: (templateFile?: string, charset?: string, contentType?: string) => Promise<any>;
     readonly resType: (contentType?: string, encoding?: string | boolean) => string;
-    readonly body: (data: any, contentType?: string, encoding?: string) => void;
+    readonly body: (data: any, contentType?: string, encoding?: string) => Promise<any>;
 }
 
 /**
@@ -241,7 +241,8 @@ export class BaseController implements BaseControllerInterface {
      * @memberof BaseController
      */
     public redirect(urls: string, alt?: string) {
-        return this.ctx.redirect(urls, alt);
+        this.ctx.redirect(urls, alt);
+        return this.app.prevent();
     }
 
     /**
@@ -264,11 +265,12 @@ export class BaseController implements BaseControllerInterface {
      * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public body(data: any, contentType?: string, encoding?: string): void {
+    public body(data: any, contentType?: string, encoding?: string) {
         contentType = contentType || "text/plain";
         encoding = encoding || this.encoding || "utf-8";
         this.resType(contentType, encoding);
-        return this.ctx.body = data;
+        this.ctx.body = data;
+        return this.app.prevent();
     }
 
     /**
