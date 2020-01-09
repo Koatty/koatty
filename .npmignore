@@ -5,4 +5,5 @@ npm-debug.log
 coverage
 .travis.yml
 .coveralls.yml
+src
 test

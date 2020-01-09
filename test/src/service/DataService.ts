@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-01-03 19:57:24
+ * @ version: 2020-01-09 17:17:58
  */
 import { Service, Base, Autowired, Scheduled } from "../../../src/index";
 import { App } from '../App';
@@ -19,7 +19,7 @@ export class DataService extends CommonService {
         //property
     }
 
-    @Scheduled("0 * * * * *")
+    // @Scheduled("0 * * * * *")
     async task() {
         const info = await this.Model.init();
         console.log('Schedule task run...');

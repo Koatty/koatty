@@ -511,11 +511,6 @@ ci-info@^2.0.0:
   resolved "http://r.cnpmjs.org/ci-info/download/ci-info-2.0.0.tgz#67a9e964be31a51e15e5010d58e6f12834002f46"
   integrity sha1-Z6npZL4xpR4V5QENWObxKDQAL0Y=
 
-class-transformer@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/class-transformer/-/class-transformer-0.2.3.tgz#598c92ca71dcca73f91ccb875d74a3847ccfa32d"
-  integrity sha512-qsP+0xoavpOlJHuYsQJsN58HXSl8Jvveo+T37rEvCEeRfMWoytAyR0Ua/YsFgpM6AZYZ/og2PJwArwzJl1aXtQ==
-
 class-validator@^0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/class-validator/-/class-validator-0.11.0.tgz#5fca8b8a957c738a6749391e03ee81fad375dc4a"
@@ -2407,10 +2402,10 @@ think_logger@^2.2.0, think_logger@^2.x.x:
   dependencies:
     think_lib "^2.x.x"
 
-think_payload@^2.x.x:
+think_payload@^2.1.1:
   version "2.1.1"
-  resolved "http://r.cnpmjs.org/think_payload/download/think_payload-2.1.1.tgz#03d8238d8221cbd870be9a5810bdae6487accff0"
-  integrity sha1-A9gjjYIhy9hwvppYEL2uZIesz/A=
+  resolved "https://registry.yarnpkg.com/think_payload/-/think_payload-2.1.1.tgz#03d8238d8221cbd870be9a5810bdae6487accff0"
+  integrity sha512-1dWTbeXt30/SspN/r823OroQhW7ZbQ/IEqxbHW7+zsKUPnCCxZPdDj4O/MbR+22Z5YpCx7QuNjNH6jDDIGsCYg==
   dependencies:
     formidable "^1.2.1"
     inflation "^2.0.0"
@@ -2419,30 +2414,29 @@ think_payload@^2.x.x:
     think_lib "^2.x.x"
     xml2js "^0.4.22"
 
-think_static@^2.x.x:
+think_static@^2.1.2:
   version "2.1.2"
-  resolved "http://r.cnpmjs.org/think_static/download/think_static-2.1.2.tgz#2473ee661d71be4e6aefff1c1edc3e56167aece4"
-  integrity sha1-JHPuZh1xvk5q7/8cHtw+VhZ67OQ=
+  resolved "https://registry.yarnpkg.com/think_static/-/think_static-2.1.2.tgz#2473ee661d71be4e6aefff1c1edc3e56167aece4"
+  integrity sha512-jZj3U6iy0Ip0pMFoxcSuRiq5deimU3OPuKMye7D2A0cnO/boxLbGmIQ2R72qQTSISat49M9MHMOOHLT08AwQQg==
   dependencies:
     compressible "^2.0.17"
     mime-types "^2.1.24"
     think_lib "^2.x.x"
 
-think_trace@^2.x.x:
+think_trace@^2.1.2:
   version "2.1.2"
-  resolved "http://r.cnpmjs.org/think_trace/download/think_trace-2.1.2.tgz#f92ba4ae3381fe6173810b47d84509b852c9abde"
-  integrity sha1-+SukrjOB/mFzgQtH2EUJuFLJq94=
+  resolved "https://registry.yarnpkg.com/think_trace/-/think_trace-2.1.2.tgz#f92ba4ae3381fe6173810b47d84509b852c9abde"
+  integrity sha512-L89HQtSo6rBCHsImPbwnK6FEF8yGbD4s/gd86P/BEU82gfIdWrTYeNV/9H9l4Y1Rf4hWXz+1A4le5j0FGK1dvw==
   dependencies:
     http-errors "^1.7.3"
     think_lib "^2.x.x"
     think_logger "^2.x.x"
 
-think_validtion@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/think_validtion/-/think_validtion-1.0.1.tgz#ed6b9cd250983ef66bdf8cd7bc9864ec2cd491d5"
-  integrity sha512-gy+lvILhlRFL0nRZ/nEnr4D1VXjQBqWoxsMj913pQYc/aozTY/i26LU/7fQMwsGdKxdECX2ujO0wZi0kv3M8Cg==
+think_validtion@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/think_validtion/-/think_validtion-1.2.0.tgz#0082d1cbc767d79e966c7c27dc5592fab4ae277d"
+  integrity sha512-1+qurHl2yBMwnawoDOYNBKOFNy9HVR5kE11VeVmS1LRPqL9WtCNMEwO9CRcxCkui7OQkbCbptuwUMlOFYSDDWw==
   dependencies:
-    class-transformer "^0.2.3"
     class-validator "^0.11.0"
     reflect-metadata "^0.1.13"
     think_lib "^2.2.13"

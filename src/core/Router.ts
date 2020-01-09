@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-07 18:26:40
+ * @ version: 2020-01-09 17:15:05
  */
 import KoaRouter from "@koa/router";
 import * as Koa from "koa";
@@ -13,6 +13,7 @@ import { Container } from "./Container";
 import { listPropertyData, getIdentifier } from "./Injectable";
 import { NAMED_TAG, ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY } from "./Constants";
 import { recursiveGetMetadata } from "../util/Lib";
+import { validParamter } from 'think_validtion';
 
 /**
  * Http timeout timer
@@ -84,33 +85,37 @@ function injectParam(target: any, instance?: any) {
         if (instance[meta] && instance[meta].length <= metaDatas[meta].length) {
             // tslint:disable-next-line: no-unused-expression
             process.env.NODE_ENV === "development" && logger.custom("think", "", `Register inject ${getIdentifier(target)} param key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
+            // vaild paramter
+            validParamter(target, meta);
+            // cover to obj
             argsMetaObj[meta] = metaDatas[meta];
         }
     }
+
     // vaild 
-    const vaildMetaDatas = recursiveGetMetadata(PARAM_RULE_KEY, target);
-    for (const vmeta in vaildMetaDatas) {
-        if (vaildMetaDatas[vmeta] && vaildMetaDatas[vmeta].length > 0 && argsMetaObj[vmeta]) {
-            for (const vn of vaildMetaDatas[vmeta]) {
-                argsMetaObj[vmeta] = argsMetaObj[vmeta].map((it: any) => {
-                    if (it.index === vn.index && vn.fn && vn.rule) {
-                        const fn = (ctx: any, type: string) => {
-                            const value = it.fn(ctx, type);
-                            return vn.fn(ctx, value, type, vn.rule, vn.msg);
-                        };
-                        return {
-                            name: it.name,
-                            fn,
-                            index: it.index,
-                            type: it.type
-                        };
-                    } else {
-                        return it;
-                    }
-                });
-            }
-        }
-    }
+    // const vaildMetaDatas = recursiveGetMetadata(PARAM_RULE_KEY, target);
+    // for (const vmeta in vaildMetaDatas) {
+    //     if (vaildMetaDatas[vmeta] && vaildMetaDatas[vmeta].length > 0 && argsMetaObj[vmeta]) {
+    //         for (const vn of vaildMetaDatas[vmeta]) {
+    //             argsMetaObj[vmeta] = argsMetaObj[vmeta].map((it: any) => {
+    //                 if (it.index === vn.index && vn.fn && vn.rule) {
+    //                     const fn = (ctx: any, type: string) => {
+    //                         const value = it.fn(ctx, type);
+    //                         return vn.fn(ctx, value, type, vn.rule, vn.msg);
+    //                     };
+    //                     return {
+    //                         name: it.name,
+    //                         fn,
+    //                         index: it.index,
+    //                         type: it.type
+    //                     };
+    //                 } else {
+    //                     return it;
+    //                 }
+    //             });
+    //         }
+    //     }
+    // }
     return argsMetaObj;
 }
 
@@ -220,7 +225,7 @@ export class Router {
         // inject param
         let args = [];
         if (params[router.method]) {
-            args = params[router.method].sort((a: any, b: any) => a.index - b.index).map((i: any) => i.fn(ctx, i.name, i.type));
+            args = params[router.method].sort((a: any, b: any) => a.index - b.index).map((i: any) => i.fn(ctx, i.type));
         }
         const result = await ctl[router.method](...args);
         // after-method
