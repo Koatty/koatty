@@ -15,10 +15,11 @@ Use Typescript's decorator implement auto injection and AOP, just like SpringBoo
 - **New:** @Transactional() with ThinkORM. ✔️ ThinkORM@4.3.0
 - **New:** Scheduled tasks support redis-based distributed locks. ✔️ 1.14.1
 - **New:** koatty-grpc server & think_grpc middleware.
+- **New:** koatty-cloud for nacos
+- **New:** koatty-cloud for SpringCloud
 - **New:** GraphQL
 - **New:** SSR 
-- **New:** [koatty-cloud-nacos](https://github.com/thinkkoa/koatty-cloud-nacos)
-- **New:** [koatty-SpringCloud](https://github.com/thinkkoa/koatty-SpringCloud)
+
 
 ## Documentation
 
