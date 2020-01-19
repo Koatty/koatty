@@ -17,8 +17,8 @@ Use Typescript's decorator implement auto injection and AOP, just like SpringBoo
 - **New:** koatty-grpc server & think_grpc middleware.
 - **New:** GraphQL
 - **New:** SSR 
-- **New:** [koatty-cloud-nacos](https://github.com/thinkkoa/koatty-cloud-nacos)
-- **New:** [koatty-SpringCloud](https://github.com/thinkkoa/koatty-SpringCloud)
+- **New:** koatty-cloud for nacos
+- **New:** koatty-cloud for SpringCloud
 
 ## Documentation
 
