@@ -60,6 +60,7 @@
         "think_logger": "^2.2.0",
         "think_payload": "^2.1.1",
         "think_static": "^2.1.2",
+        "think_store": "^2.4.2",
         "think_trace": "^2.1.2",
         "think_validtion": "^1.2.3",
         "tslib": "^1.10.0"

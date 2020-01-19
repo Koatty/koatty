@@ -12,8 +12,9 @@ Use Typescript's decorator implement auto injection and AOP, just like SpringBoo
 - **New:** replace koa-router to @koa/router ✔️ 1.10.0
 - **New:** AOP：@Aspect()、@Before()、@After()、@BeforeEach()、@AfterEach()  ✔️ 1.11.2
 - **New:** @Validated: Use class-validator for entity class validation, and support auto create Apidoc.  ✔️ 1.12.4
-- **New:** @Transactional() with ThinkORM
-- **New:** koatty-grpc server & think_grpc middleware
+- **New:** @Transactional() with ThinkORM. ✔️ ThinkORM@4.3.0
+- **New:** Scheduled tasks support redis-based distributed locks.
+- **New:** koatty-grpc server & think_grpc middleware.
 - **New:** GraphQL
 - **New:** SSR 
 - **New:** [koatty-cloud-nacos](https://github.com/thinkkoa/koatty-cloud-nacos)
