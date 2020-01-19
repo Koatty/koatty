@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-19 10:40:54
+ * @ version: 2020-01-19 12:44:36
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -125,6 +125,9 @@ const execInject = function (target: any, container: Container, method: string, 
         const instance: any = container.get(identifier, type);
         let lockerCls: any;
         if (lockerOption && lockerOption.enableLocker) {
+            if (helper.isEmpty(redisOptions)) {
+                throw Error("Missing redis server configuration");
+            }
             lockerCls = Locker.getInstance(redisOptions);
         }
         if (instance && helper.isFunction(instance[method]) && cron) {
@@ -176,9 +179,6 @@ const execInject = function (target: any, container: Container, method: string, 
 export function injectSchedule(target: any, instance: any, container: Container) {
     const metaDatas = recursiveGetMetadata(SCHEDULE_KEY, target);
     const redisOptions = container.app.config("Scheduled", "db") || container.app.config("redis", "db");
-    if (helper.isEmpty(redisOptions)) {
-        throw Error("Missing redis server configuration");
-    }
     // tslint:disable-next-line: forin
     for (const meta in metaDatas) {
         for (const val of metaDatas[meta]) {
