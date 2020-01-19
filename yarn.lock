@@ -2464,6 +2464,13 @@ think_logger@^2.2.0, think_logger@^2.x.x:
   dependencies:
     think_lib "^2.x.x"
 
+think_logger@^2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/think_logger/-/think_logger-2.2.4.tgz#58688602d8a65ff4c5afdf40f383bcb7889f63f1"
+  integrity sha512-2jwU8AmRwv/FTEYFC/nmd5QP3id7woXEubbFJgZv++V6WX5rPmVeN2tqWSiypMECySXQLMksO8VCxxmI4cSe/Q==
+  dependencies:
+    think_lib "^2.x.x"
+
 think_payload@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/think_payload/-/think_payload-2.1.1.tgz#03d8238d8221cbd870be9a5810bdae6487accff0"
