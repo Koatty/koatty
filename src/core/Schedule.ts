@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-19 12:44:36
+ * @ version: 2020-02-12 10:35:37
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -90,7 +90,7 @@ interface ScheduleLocker {
  */
 export function Scheduled(cron: string, enableLocker: boolean, lockTimeOut?: number, waitLockInterval?: number, waitLockTimeOut?: number): MethodDecorator {
     if (helper.isEmpty(cron)) {
-        // cron = "* */1 * * * *";
+        // cron = "0 * * * * *";
         throw Error("ScheduleJob rule is not defined");
     }
     return (target, propertyKey: string, descriptor: PropertyDescriptor) => {
