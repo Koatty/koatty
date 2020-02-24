@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-25 09:55:36
+ * @ version: 2020-02-24 15:06:08
  */
 import { Bootstrap, ComponentScan, Autowired, Koatty, ConfiguationScan, Logger, Helper } from '../../src/index';
 import * as path from "path";
@@ -13,7 +13,7 @@ import * as path from "path";
     //忽略https自签名验证
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     //运行环境
-    process.env.RUN_TIME = 'alpha';
+    process.env.KOATTY_ENV = 'alpha';
     console.log("bootFunc");
 })
 // @ComponentScan('./test')

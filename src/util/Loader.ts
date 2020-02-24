@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-03 20:31:27
+ * @ version: 2020-02-24 14:59:52
  */
 import * as globby from "globby";
 import * as path from "path";
@@ -51,11 +51,22 @@ export class Loader {
         if (helper.isArray(loadPath)) {
             loadPath = loadPath.length > 0 ? loadPath : "";
         }
+        const tempConfig: any = {};
         // tslint:disable-next-line: no-unused-expression
         process.env.NODE_ENV === "development" && logger.custom("think", "", `Load configuation path: ${app.app_path}${loadPath || "/config"}`);
         Loader.loadDirectory(loadPath || "./config", app.app_path, function (name: string, exp: any) {
-            appConfig[name] = exp;
+            if (process.env.KOATTY_ENV && name.indexOf(`_${process.env.KOATTY_ENV}`) > -1) {
+                tempConfig[name] = exp;
+            } else {
+                appConfig[name] = exp;
+            }
         });
+        // load env configuation
+        for (const n in appConfig) {
+            if (n && tempConfig[`${n}_${process.env.KOATTY_ENV}`]) {
+                appConfig[n] = helper.extend(appConfig[n], tempConfig[`${n}_${process.env.KOATTY_ENV}`], true);
+            }
+        }
 
         app.setMap("configs", helper.extend(config, appConfig, true));
     }

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-03 20:31:10
+ * @ version: 2020-02-24 15:07:51
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -70,6 +70,15 @@ export function Bootstrap(bootFunc?: Function): ClassDecorator {
             }, [...configuationMetas, `!${target.name || ".no"}.ts`]);
             exSet.clear();
 
+            //Emit app init
+            logger.custom("think", "", "Emit App Init ...");
+            //Boot function
+            if (helper.isFunction(bootFunc)) {
+                app.once("appInit", () => {
+                    bootFunc(app);
+                });
+            }
+            app.emit("appInit");
 
             logger.custom("think", "", "LoadConfiguation ...");
             Loader.loadConfigs(app, configuationMetas);
@@ -82,12 +91,6 @@ export function Bootstrap(bootFunc?: Function): ClassDecorator {
 
             //Emit app ready
             logger.custom("think", "", "Emit App Ready ...");
-            //Boot function
-            if (helper.isFunction(bootFunc)) {
-                app.once("appReady", () => {
-                    bootFunc(app);
-                });
-            }
             app.emit("appReady");
             container.app = app;
 
