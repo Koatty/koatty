@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-02-12 10:35:37
+ * @ version: 2020-02-25 16:09:24
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -14,17 +14,13 @@ import { CronJob } from "cron";
 import { Locker } from "../util/Locker";
 import { recursiveGetMetadata } from "../util/Lib";
 import { attachPropertyData, getIdentifier, getType } from "./Injectable";
+import { Helper } from '..';
 
 interface ScheduleLocker {
-
     /**
-     * Enable redis-based distributed locks.
-     *
-     * @type {boolean}
-     * @memberof ScheduleLocker
+     * Locker name
      */
-    enableLocker: boolean;
-
+    name: string;
     /**
      * Redis server connection configs.
      *
@@ -37,13 +33,7 @@ interface ScheduleLocker {
      *     }}
      * @memberof ScheduleLocker
      */
-    redisOptions: {
-        key_prefix?: string;
-        redis_host: string;
-        redis_port?: number;
-        redis_password?: string;
-        redis_db?: string
-    };
+    redisOptions?: any;
 
     /**
      * Automatic release of lock within a limited maximum time.
@@ -86,9 +76,10 @@ interface ScheduleLocker {
  * @param {number} [lockTimeOut] Automatic release of lock within a limited maximum time.
  * @param {number} [waitLockInterval] Try to acquire lock every interval time(millisecond).
  * @param {number} [waitLockTimeOut] When using more than TimeOut(millisecond) still fails to get the lock and return failure.
+ * @param {*} [redisOptions] Reids server config.
  * @returns {MethodDecorator}
  */
-export function Scheduled(cron: string, enableLocker: boolean, lockTimeOut?: number, waitLockInterval?: number, waitLockTimeOut?: number): MethodDecorator {
+export function Scheduled(cron: string, enableLocker: boolean, lockTimeOut?: number, waitLockInterval?: number, waitLockTimeOut?: number, redisOptions?: any): MethodDecorator {
     if (helper.isEmpty(cron)) {
         // cron = "0 * * * * *";
         throw Error("ScheduleJob rule is not defined");
@@ -102,8 +93,74 @@ export function Scheduled(cron: string, enableLocker: boolean, lockTimeOut?: num
                 lockTimeOut,
                 waitLockInterval,
                 waitLockTimeOut
-            }
+            },
+            opt: redisOptions
         }, target, propertyKey);
+    };
+}
+
+/**
+ * redis-based distributed locks
+ *
+ * @export
+ * @param {string} [name] The locker name. If name is duplicated, lock sharing contention will result.
+ * @param {number} [lockTimeOut] Automatic release of lock within a limited maximum time.
+ * @param {number} [waitLockInterval] Try to acquire lock every interval time(millisecond).
+ * @param {number} [waitLockTimeOut] When using more than TimeOut(millisecond) still fails to get the lock and return failure.
+ * @param {*} [redisOptions] Reids server config.
+ * @returns {MethodDecorator}
+ */
+export function Locked(name?: string, lockTimeOut?: number, waitLockInterval?: number, waitLockTimeOut?: number, redisOptions?: any): MethodDecorator {
+    return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
+        const { value, configurable, enumerable } = descriptor;
+        descriptor = {
+            configurable,
+            enumerable,
+            writable: true,
+            value: async function before(...props: any[]) {
+                if (Helper.isEmpty(name)) {
+                    name = `${target.name}${methodName}`;
+                }
+                if (Helper.isEmpty(redisOptions)) {
+                    // tslint:disable-next-line: no-invalid-this
+                    redisOptions = this.app.config("Locked", "db") || this.app.config("redis", "db");
+                    if (helper.isEmpty(redisOptions)) {
+                        throw Error("Missing redis server configuration. Please write a configuration item with the key name Locked or redis in the db.ts file.");
+                    }
+                }
+                const lockerCls = Locker.getInstance(redisOptions);
+                let lockerFlag = false;
+                if (lockerCls) {
+                    const locker = await lockerCls.defineCommand();
+                    if (locker.waitLockInterval || locker.waitLockTimeOut) {
+                        lockerFlag = await lockerCls.waitLock(locker.name,
+                            locker.lockTimeOut,
+                            locker.waitLockInterval,
+                            locker.waitLockTimeOut
+                        );
+                    } else {
+                        lockerFlag = await lockerCls.lock(locker.name, locker.lockTimeOut);
+                    }
+                } else {
+                    return Promise.reject(`Redis lock ${name} acquisition failed. The method ${methodName} is not executed.`);
+                }
+                if (lockerFlag) {
+                    try {
+                        logger.info(`The locker ${name} executed.`);
+                        // tslint:disable-next-line: no-invalid-this
+                        const res = await value.apply(this, props);
+                        return res;
+                    } catch (e) {
+                        return Promise.reject(e);
+                    } finally {
+                        if (lockerCls) {
+                            await lockerCls.unLock(name);
+                        }
+                    }
+                }
+            }
+        };
+        return descriptor;
     };
 }
 
@@ -117,7 +174,7 @@ export function Scheduled(cron: string, enableLocker: boolean, lockTimeOut?: num
  * @param {*} lockerOption
  * @param {*} redisOptions
  */
-const execInject = function (target: any, container: Container, method: string, cron: string, lockerOption: any, redisOptions: any) {
+const execInjectSchedule = function (target: any, container: Container, method: string, cron: string, lockerOption: any, redisOptions: any) {
     // tslint:disable-next-line: no-unused-expression
     container.app.once && container.app.once("appStart", () => {
         const identifier = getIdentifier(target);
@@ -126,13 +183,13 @@ const execInject = function (target: any, container: Container, method: string, 
         let lockerCls: any;
         if (lockerOption && lockerOption.enableLocker) {
             if (helper.isEmpty(redisOptions)) {
-                throw Error("Missing redis server configuration");
+                throw Error("Missing redis server configuration. Please write a configuration item with the key name Scheduled or redis in the db.ts file.");
             }
             lockerCls = Locker.getInstance(redisOptions);
         }
         if (instance && helper.isFunction(instance[method]) && cron) {
             // tslint:disable-next-line: no-unused-expression
-            process.env.NODE_ENV === "development" && logger.custom("think", "", `Register inject ${identifier} schedule key: ${method} => value: ${cron}`);
+            process.env.APP_DEBUG && logger.custom("think", "", `Register inject ${identifier} schedule key: ${method} => value: ${cron}`);
             new CronJob(cron, async function () {
                 let lockerFlag = false;
                 const key = `${identifier}_${method}`;
@@ -183,9 +240,11 @@ export function injectSchedule(target: any, instance: any, container: Container)
     for (const meta in metaDatas) {
         for (const val of metaDatas[meta]) {
             if (val.cron && meta) {
-                execInject(target, container, meta, val.cron, val.locker, redisOptions);
+                if (Helper.isEmpty(val.opt)) {
+                    val.opt = redisOptions;
+                }
+                execInjectSchedule(target, container, meta, val.cron, val.locker, val.opt);
             }
         }
     }
 }
-
