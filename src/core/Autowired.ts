@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-07 09:36:45
+ * @ version: 2020-02-24 16:11:42
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -108,7 +108,7 @@ export function injectAutowired(target: any, instance: any, container: Container
                 dep = container.get(identifier, type, args);
                 if (dep) {
                     // tslint:disable-next-line: no-unused-expression
-                    process.env.NODE_ENV === "development" && logger.custom("think", "", `Register inject ${target.name} properties key: ${metaKey} => value: ${JSON.stringify(metaData[metaKey])}`);
+                    process.env.APP_DEBUG && logger.custom("think", "", `Register inject ${target.name} properties key: ${metaKey} => value: ${JSON.stringify(metaData[metaKey])}`);
                     Reflect.defineProperty(instance, metaKey, {
                         enumerable: true,
                         configurable: false,
@@ -143,7 +143,7 @@ export function injectValue(target: any, instance: any, container: Container) {
     // tslint:disable-next-line: forin
     for (const metaKey in metaData) {
         // tslint:disable-next-line: no-unused-expression
-        process.env.NODE_ENV === "development" && logger.custom("think", "", `Register inject ${getIdentifier(target)} config key: ${metaKey} => value: ${metaData[metaKey]}`);
+        process.env.APP_DEBUG && logger.custom("think", "", `Register inject ${getIdentifier(target)} config key: ${metaKey} => value: ${metaData[metaKey]}`);
         const propKeys = metaData[metaKey].split("|");
         const [propKey, type] = propKeys;
         const prop = container.app.config(propKey, type);

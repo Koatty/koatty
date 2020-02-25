@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-02-24 15:08:05
+ * @ version: 2020-02-25 16:11:43
  */
 
 import * as path from "path";
@@ -106,22 +106,24 @@ export class Koatty extends Koa {
      */
     private initialize() {
         //development env is default
-        this.app_debug = (this.options && this.options.app_debug) || this.app_debug || true;
+        this.app_debug = this.options.app_debug || this.app_debug;
+        if (!helper.isBoolean(this.app_debug)) {
+            this.app_debug = true;
+        }
         process.env.NODE_ENV = "development";
         const env = JSON.stringify(process.execArgv);
         //production mode
+        if ((env.indexOf("--production") > -1) || (process.env.NODE_ENV === "production")) {
+            this.app_debug = false;
+            process.env.NODE_ENV = "production";
+        }
+
         if (!this.app_debug) {
-            if ((env.indexOf("--production") > -1) || (process.env.NODE_ENV === "production")) {
-                this.app_debug = false;
-                process.env.NODE_ENV = "production";
-            }
-            if (env.indexOf("ts-node") < 0 && env.indexOf("--inspect") < 0) {
-                this.app_debug = false;
-                process.env.NODE_ENV = "production";
-            }
+            process.env.NODE_ENV = "production";
+        } else {
+            process.env.APP_DEBUG = "true";
         }
         process.env.KOATTY_ENV = process.env.NODE_ENV;
-        process.env.APP_DEBUG = helper.toString(this.app_debug);
 
         // check env
         checkEnv();

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-09 17:15:05
+ * @ version: 2020-02-24 16:11:48
  */
 import KoaRouter from "@koa/router";
 import * as Koa from "koa";
@@ -54,7 +54,7 @@ function injectRouter(target: any, instance?: any) {
     // tslint:disable-next-line: forin
     for (const metaKey in rmetaData) {
         // tslint:disable-next-line: no-unused-expression
-        process.env.NODE_ENV === "development" && logger.custom("think", "", `Register inject method Router key: ${metaKey} => value: ${JSON.stringify(rmetaData[metaKey])}`);
+        process.env.APP_DEBUG && logger.custom("think", "", `Register inject method Router key: ${metaKey} => value: ${JSON.stringify(rmetaData[metaKey])}`);
         //.sort((a, b) => b.priority - a.priority) 
         for (const val of rmetaData[metaKey]) {
             const tmp = {
@@ -84,7 +84,7 @@ function injectParam(target: any, instance?: any) {
     for (const meta in metaDatas) {
         if (instance[meta] && instance[meta].length <= metaDatas[meta].length) {
             // tslint:disable-next-line: no-unused-expression
-            process.env.NODE_ENV === "development" && logger.custom("think", "", `Register inject ${getIdentifier(target)} param key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
+            process.env.APP_DEBUG && logger.custom("think", "", `Register inject ${getIdentifier(target)} param key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
             // vaild paramter
             validParamter(target, meta);
             // cover to obj
