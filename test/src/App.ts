@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-02-24 15:06:08
+ * @ version: 2020-02-24 16:18:55
  */
 import { Bootstrap, ComponentScan, Autowired, Koatty, ConfiguationScan, Logger, Helper } from '../../src/index';
 import * as path from "path";
@@ -26,7 +26,7 @@ export class App extends Koatty {
     public init() {
         this.root_path = path.dirname(__dirname);
         // this.app_path = `${this.root_path}${path.sep}src`;
-        // this.app_debug = true; //线上环境请将debug模式关闭，即：app_debug:false
+        // this.app_debug = false; //线上环境请将debug模式关闭，即：app_debug:false
     }
 }
 

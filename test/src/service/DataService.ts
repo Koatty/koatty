@@ -2,9 +2,9 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-01-19 15:43:18
+ * @ version: 2020-02-25 16:01:53
  */
-import { Service, Base, Autowired, Scheduled } from "../../../src/index";
+import { Service, Base, Autowired, Scheduled, Locked } from "../../../src/index";
 import { App } from '../App';
 import { TestModel } from "../model/TestModel";
 import { CommonService, MoInterface } from './CommonService';
@@ -19,7 +19,8 @@ export class DataService extends CommonService {
         //property
     }
 
-    @Scheduled("0 * * * * *", true, 60000, 10000)
+    // @Scheduled("0 * * * * *", true, 60000, 10000)
+    @Locked()
     async task() {
         const info = await this.Model.init();
         console.log('Schedule task run...');
