@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-02-25 16:09:24
+ * @ version: 2020-02-25 16:43:20
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -142,7 +142,7 @@ export function Locked(name?: string, lockTimeOut?: number, waitLockInterval?: n
                         lockerFlag = await lockerCls.lock(locker.name, locker.lockTimeOut);
                     }
                 } else {
-                    return Promise.reject(`Redis lock ${name} acquisition failed. The method ${methodName} is not executed.`);
+                    return Promise.reject(`Redis connection failed. The method ${methodName} is not executed.`);
                 }
                 if (lockerFlag) {
                     try {
@@ -157,6 +157,8 @@ export function Locked(name?: string, lockTimeOut?: number, waitLockInterval?: n
                             await lockerCls.unLock(name);
                         }
                     }
+                } else {
+                    return Promise.reject(`Redis lock ${name} acquisition failed. The method ${methodName} is not executed.`);
                 }
             }
         };
