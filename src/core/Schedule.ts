@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-02-27 14:34:20
+ * @ version: 2020-02-27 15:37:21
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -57,19 +57,20 @@ export function Scheduled(cron: string): MethodDecorator {
 export function SchedulerLock(name?: string, lockTimeOut?: number, waitLockInterval?: number, waitLockTimeOut?: number, redisOptions?: any): MethodDecorator {
     return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
         const { value, configurable, enumerable } = descriptor;
+        if (Helper.isEmpty(name)) {
+            const identifier = getIdentifier(target) || (target.constructor ? target.constructor.name : "");
+            name = `${identifier}_${methodName}`;
+        }
         descriptor = {
             configurable,
             enumerable,
             writable: true,
             value: async function before(...props: any[]) {
-                if (Helper.isEmpty(name)) {
-                    name = `${target.name}${methodName}`;
-                }
                 if (Helper.isEmpty(redisOptions)) {
                     // tslint:disable-next-line: no-invalid-this
-                    redisOptions = this.app.config("Locked", "db") || this.app.config("redis", "db");
+                    redisOptions = this.app.config("Scheduled", "db") || this.app.config("redis", "db");
                     if (helper.isEmpty(redisOptions)) {
-                        throw Error("Missing redis server configuration. Please write a configuration item with the key name Locked or redis in the db.ts file.");
+                        throw Error("Missing redis server configuration. Please write a configuration item with the key name Scheduled or redis in the db.ts file.");
                     }
                 }
                 const lockerCls = Locker.getInstance(redisOptions);
@@ -124,13 +125,14 @@ const execInjectSchedule = function (target: any, container: Container, method: 
         const identifier = getIdentifier(target);
         const type = getType(target);
         const instance: any = container.get(identifier, type);
+        const name = `${identifier}_${method}`;
 
         if (instance && helper.isFunction(instance[method]) && cron) {
             // tslint:disable-next-line: no-unused-expression
             process.env.APP_DEBUG && logger.custom("think", "", `Register inject ${identifier} schedule key: ${method} => value: ${cron}`);
             new CronJob(cron, async function () {
 
-                logger.info(`The schedule job ${identifier}_${method} started.`);
+                logger.info(`The schedule job ${name} started.`);
                 try {
                     const res = await instance[method]();
                     return res;
