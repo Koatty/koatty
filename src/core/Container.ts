@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-07 09:35:19
+ * @ version: 2020-02-27 14:19:20
  */
 import * as helper from "think_lib";
 import { CompomentType } from "./Constants";
@@ -147,6 +147,22 @@ export class Container implements IContainer {
         }
 
         return instance;
+    }
+
+    /**
+     * Get class from IOC container.
+     *
+     * @param {string} identifier
+     * @param {CompomentType} [type="SERVICE"]
+     * @returns {object}
+     * @memberof Container
+     */
+    public getClass(identifier: string, type: CompomentType = "SERVICE"): object {
+        const target = getModule(type, identifier);
+        if (!target) {
+            return null;
+        }
+        return target;
     }
 
 }
