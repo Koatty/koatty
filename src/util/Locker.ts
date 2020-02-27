@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-19 10:49:56
+ * @ version: 2020-02-27 14:37:35
  */
 
 const store = require("think_store");
@@ -107,7 +107,7 @@ export class Locker {
      * @returns
      * @memberof Locker
      */
-    async lock(key: string, expire = 60000): Promise<boolean> {
+    async lock(key: string, expire = 10000): Promise<boolean> {
         try {
             key = `${this.options.key_prefix}${key}`;
             const value = crypto.randomBytes(16).toString('hex');
@@ -138,7 +138,7 @@ export class Locker {
      * @returns
      * @memberof Locker
      */
-    async waitLock(key: string, expire: number, interval = 50, waitTime = 10000): Promise<boolean> {
+    async waitLock(key: string, expire: number, interval = 50, waitTime = 15000): Promise<boolean> {
         try {
             const start_time = Date.now();
             let result;
