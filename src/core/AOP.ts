@@ -2,20 +2,21 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-28 01:25:34
+ * @ version: 2020-03-02 14:08:39
  */
 import * as helper from "think_lib";
 import { saveModule, getIdentifier } from "./Injectable";
 import { COMPONENT_KEY } from "./Constants";
+
 
 /**
  * Dynamically add methods for target class types
  *
  * @param {Function} clazz
  * @param {string} protoName
- * @param {string} methodName
+ * @param {(string | Function)} methodName
  */
-function defineNewProperty(clazz: Function, protoName: string, methodName: string) {
+function defineNewProperty(clazz: Function, protoName: string, methodName: string | Function) {
     const oldMethod = Reflect.get(clazz.prototype, protoName);
     Reflect.defineProperty(clazz.prototype, protoName, {
         writable: true,
@@ -25,11 +26,17 @@ function defineNewProperty(clazz: Function, protoName: string, methodName: strin
                 await Promise.resolve(Reflect.apply(oldMethod, this, props));
             }
             if (methodName) {
-                // tslint:disable-next-line: no-invalid-this
-                const target = this.app.Container.get(methodName, "COMPONENT");
-                if (target && helper.isFunction(target.run)) {
+                let aspect;
+                if (helper.isFunction(methodName)) {
                     // tslint:disable-next-line: no-invalid-this
-                    await Promise.resolve(Reflect.apply(target.run, this, []));
+                    aspect = this.app.Container.getClsByClass(methodName);
+                } else {
+                    // tslint:disable-next-line: no-invalid-this
+                    aspect = this.app.Container.get(methodName, "COMPONENT");
+                }
+                if (aspect && helper.isFunction(aspect.run)) {
+                    // tslint:disable-next-line: no-invalid-this
+                    await Promise.resolve(Reflect.apply(aspect.run, this, props));
                 }
             }
 
@@ -63,10 +70,10 @@ export function Aspect(identifier?: string): ClassDecorator {
  * Executed before specifying the pointcut method.
  *
  * @export
- * @param {string} aopName
+ * @param {(string | Function)} aopName
  * @returns {MethodDecorator}
  */
-export function Before(aopName: string): MethodDecorator {
+export function Before(aopName: string | Function): MethodDecorator {
     return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
         const { value, configurable, enumerable } = descriptor;
         descriptor = {
@@ -74,11 +81,17 @@ export function Before(aopName: string): MethodDecorator {
             enumerable,
             writable: true,
             value: async function before(...props: any[]) {
-                // tslint:disable-next-line: no-invalid-this
-                const aspect = this.app.Container.get(aopName, "COMPONENT");
+                let aspect;
+                if (helper.isFunction(aopName)) {
+                    // tslint:disable-next-line: no-invalid-this
+                    aspect = this.app.Container.getClsByClass(aopName);
+                } else {
+                    // tslint:disable-next-line: no-invalid-this
+                    aspect = this.app.Container.get(aopName, "COMPONENT");
+                }
                 if (aspect && helper.isFunction(aspect.run)) {
                     // tslint:disable-next-line: no-invalid-this
-                    await Promise.resolve(Reflect.apply(aspect.run, this, []));
+                    await Promise.resolve(Reflect.apply(aspect.run, this, props));
                 }
                 // tslint:disable-next-line: no-invalid-this
                 return value.apply(this, props);
@@ -105,10 +118,10 @@ export function BeforeEach(aopName = "__before"): ClassDecorator {
  * Executed after specifying the pointcut method.
  *
  * @export
- * @param {string} aopName
- * @returns {Function}
+ * @param {(string | Function)} aopName
+ * @returns {MethodDecorator}
  */
-export function After(aopName: string): MethodDecorator {
+export function After(aopName: string | Function): MethodDecorator {
     return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
         if (!aopName) {
             throw Error("AopName is required.");
@@ -119,11 +132,17 @@ export function After(aopName: string): MethodDecorator {
             enumerable,
             writable: true,
             value: async function before(...props: any[]) {
-                // tslint:disable-next-line: no-invalid-this
-                const aspect = this.app.Container.get(aopName, "COMPONENT");
+                let aspect;
+                if (helper.isFunction(aopName)) {
+                    // tslint:disable-next-line: no-invalid-this
+                    aspect = this.app.Container.getClsByClass(aopName);
+                } else {
+                    // tslint:disable-next-line: no-invalid-this
+                    aspect = this.app.Container.get(aopName, "COMPONENT");
+                }
                 if (aspect && helper.isFunction(aspect.run)) {
                     // tslint:disable-next-line: no-invalid-this
-                    await Promise.resolve(Reflect.apply(aspect.run, this, []));
+                    await Promise.resolve(Reflect.apply(aspect.run, this, props));
                 }
                 // tslint:disable-next-line: no-invalid-this
                 return value.apply(this, props);

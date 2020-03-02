@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-02-27 14:19:20
+ * @ version: 2020-03-02 12:04:55
  */
 import * as helper from "think_lib";
 import { CompomentType } from "./Constants";
@@ -150,7 +150,7 @@ export class Container implements IContainer {
     }
 
     /**
-     * Get class from IOC container.
+     * Get class from IOC container by identifier.
      *
      * @param {string} identifier
      * @param {CompomentType} [type="SERVICE"]
@@ -163,6 +163,38 @@ export class Container implements IContainer {
             return null;
         }
         return target;
+    }
+
+    /**
+     * Get instance from IOC container by class.
+     *
+     * @template T
+     * @param {T} target
+     * @param {any[]} [args=[]]
+     * @returns {T}
+     * @memberof Container
+     */
+    public getClsByClass<T>(target: T, args: any[] = []): T {
+        if (!target || !helper.isClass(target)) {
+            return null;
+        }
+        // get instance from the Container
+        let instance: any = this.handlerMap.get(target);
+        if (!instance) {
+            return null;
+        }
+
+        // not Singleton, the Container return prototype
+        if (args.length > 0 || helper.isClass(instance)) {
+            // instantiation
+            instance = Reflect.construct(instance, args);
+        }
+
+        if (!instance.app) {
+            instance.app = this.app;
+        }
+
+        return instance;
     }
 
 }
