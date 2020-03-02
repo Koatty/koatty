@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-01-17 11:08:27
+ * @ version: 2020-03-02 12:55:58
  */
 import { Controller, GetMaping, Autowired, RequestMapping, RequestMethod, PostMaping, Before, BeforeEach, After, RequestBody, Get, Validated, Valid, Helper } from "../../../../src/index";
 import { App } from '../../App';
@@ -10,6 +10,7 @@ import { AdminController } from "../AdminController";
 import { TestService } from "../../service/TestService";
 import { Dto } from '../../model/Dto';
 import { TestModel } from '../../model/TestModel';
+import { TestAspect } from '../../aspect/TestAspect';
 
 @Controller("/admin")
 export class IndexController extends AdminController {
@@ -30,8 +31,8 @@ export class IndexController extends AdminController {
     // }
 
     @RequestMapping("/", RequestMethod.ALL)
-    // @Before("TestAspect")
-    async default(@Get("aa") @Valid(["IsNotEmpty", "IsDate"], "格式不正确") aa: number) {
+    @Before(TestAspect)
+    async default(@Get("aa") @Valid(["IsNotEmpty"], "格式不正确") aa: number) {
         return this.ok(Helper.toString(aa));
     }
 
