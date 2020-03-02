@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-02-27 15:37:21
+ * @ version: 2020-02-27 16:03:27
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -14,7 +14,7 @@ import { CronJob } from "cron";
 import { Locker } from "../util/Locker";
 import { recursiveGetMetadata } from "../util/Lib";
 import { attachPropertyData, getIdentifier, getType } from "./Injectable";
-import { Helper } from '..';
+import { Helper, Logger } from '..';
 
 /**
  * Schedule task
@@ -98,8 +98,10 @@ export function SchedulerLock(name?: string, lockTimeOut?: number, waitLockInter
                     } catch (e) {
                         return Promise.reject(e);
                     } finally {
-                        if (lockerCls) {
-                            await lockerCls.unLock(name);
+                        if (lockerCls.unLock) {
+                            await lockerCls.unLock(name).catch((er: any) => {
+                                Logger.error(er);
+                            });
                         }
                     }
                 } else {
