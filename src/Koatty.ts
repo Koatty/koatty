@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-05 09:10:00
+ * @ version: 2020-03-05 11:38:05
  */
 
 import * as path from "path";
@@ -253,15 +253,17 @@ export class Koatty extends Koa {
     /**
      * Shorthand for:
      * http.createServer(app.callback()).listen(...)
+     * 
      * Options {
-     *    port?: number;
-     *    host?: string;
-     *    backlog?: number;
-     *    path?: string;
-     *    exclusive?: boolean;
-     *    readableAll?: boolean;
-     *    writableAll?: boolean;
-     *    ipv6Only?: boolean; //default false
+     * *   port?: number;
+     * *   host?: string;
+     * *   backlog?: number;
+     * *   path?: string;
+     * *   exclusive?: boolean;
+     * *   readableAll?: boolean;
+     * *   writableAll?: boolean;
+     * *   ipv6Only?: boolean; //default false
+     * 
      * }
      */
     public listen(options: any, listeningListener?: any) {
