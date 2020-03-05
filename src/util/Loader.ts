@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-02-24 16:12:03
+ * @ version: 2020-03-05 10:57:12
  */
 import * as globby from "globby";
 import * as path from "path";
@@ -73,15 +73,15 @@ export class Loader {
 
     /**
      * Load middlewares
-     *
+     * [async]
      * @static
      * @param {*} app
      * @param {Container} container
      * @param {(string | string[])} [loadPath]
      * @memberof Loader
      */
-    public static loadMiddlewares(app: any, container: Container, loadPath?: string | string[]) {
-        const configs = app.getMap("configs") || {};
+    public static async loadMiddlewares(app: any, container: Container, loadPath?: string | string[]) {
+        const middlewareConf = app.config(undefined, "middleware") || { config: {}, list: [] };
         //default middleware list
         const defaultList = ["Static", "Payload"];
         //Mount default middleware
@@ -101,8 +101,7 @@ export class Loader {
             }
         });
 
-
-        const middlewareConfList = configs.middleware && configs.middleware.list ? configs.middleware.list || [] : [];
+        const middlewareConfList = middlewareConf.list;
         const bandList = ["Trace", ...defaultList];
         middlewareConfList.map((item: any) => {
             if (!bandList.includes(item)) {
@@ -117,8 +116,7 @@ export class Loader {
 
         //Automatically call middleware
         let handle: any;
-        configs.middleware = configs.middleware || { config: {} };
-        appMList.forEach((key) => {
+        for (const key of appMList) {
             handle = container.get(key, MIDDLEWARE_KEY);
             if (!handle) {
                 throw new Error(`middleware ${key} load error.`);
@@ -128,18 +126,18 @@ export class Loader {
                 throw new Error(`middleware ${key} must be implements method 'run'.`);
                 return;
             }
-            if (configs.middleware.config[key] === false) {
+            if (middlewareConf.config[key] === false) {
                 return;
             }
             // tslint:disable-next-line: no-unused-expression
             process.env.APP_DEBUG && logger.custom("think", "", `Load middleware: ${key}`);
+            const result = await handle.run(middlewareConf.config[key] || {}, app);
             if (handle.run.length < 3) {
-                app.use(handle.run(configs.middleware.config[key] || {}, app));
+                app.use(result);
             } else {
-                app.useExp(handle.run(configs.middleware.config[key] || {}, app));
+                app.useExp(result);
             }
-        });
-
+        }
         // app.setMap("middlewares", middlewares);
     }
 

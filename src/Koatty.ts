@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-02-25 16:11:43
+ * @ version: 2020-03-05 09:10:00
  */
 
 import * as path from "path";
@@ -253,26 +253,22 @@ export class Koatty extends Koa {
     /**
      * Shorthand for:
      * http.createServer(app.callback()).listen(...)
+     * Options {
+     *    port?: number;
+     *    host?: string;
+     *    backlog?: number;
+     *    path?: string;
+     *    exclusive?: boolean;
+     *    readableAll?: boolean;
+     *    writableAll?: boolean;
+     *    ipv6Only?: boolean; //default false
+     * }
      */
-    public listen() {
+    public listen(options: any, listeningListener?: any) {
         //catch error
         this.captureError();
-
         //start server
-        //port?: number, hostname?: string, listeningListener?: Function
-        const port = this.config("app_port") || "3000";
-        const hostname = this.config("app_hostname") || "";
-        const app_debug = this.app_debug || false;
-
-        return super.listen(port, hostname, function () {
-            logger.custom("think", "", `Nodejs Version: ${process.version}`);
-            logger.custom("think", "", `${pkg.name} Version: v${pkg.version}`);
-            logger.custom("think", "", `App Enviroment: ${app_debug ? "debug mode" : "production mode"}`);
-            logger.custom("think", "", `Server running at http://${hostname || "localhost"}:${port}/`);
-            logger.custom("think", "", "====================================");
-            // tslint:disable-next-line: no-unused-expression
-            app_debug && logger.warn(`Running in debug mode, please modify the app_debug value to false when production env.`);
-        }).on("clientError", function (err: any, sock: any) {
+        return super.listen(options, listeningListener).on("clientError", function (err: any, sock: any) {
             // logger.error("Bad request, HTTP parse error");
             sock.end("400 Bad Request\r\n\r\n");
         });
