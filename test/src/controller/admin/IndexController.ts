@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-03-02 12:55:58
+ * @ version: 2020-03-05 14:14:42
  */
 import { Controller, GetMaping, Autowired, RequestMapping, RequestMethod, PostMaping, Before, BeforeEach, After, RequestBody, Get, Validated, Valid, Helper } from "../../../../src/index";
 import { App } from '../../App';
@@ -13,6 +13,7 @@ import { TestModel } from '../../model/TestModel';
 import { TestAspect } from '../../aspect/TestAspect';
 
 @Controller("/admin")
+@BeforeEach()
 export class IndexController extends AdminController {
     app: App;
     pageInfo: { 'appName': string; 'appVersion': string; 'appKeywords': string; 'appDescription': string; };
@@ -25,10 +26,10 @@ export class IndexController extends AdminController {
         this.cache = {};
     }
 
-    // __before() {
-    //     console.log('__before');
-    //     return Promise.resolve();
-    // }
+    __before() {
+        console.log('__before');
+        return Promise.resolve();
+    }
 
     @RequestMapping("/", RequestMethod.ALL)
     @Before(TestAspect)

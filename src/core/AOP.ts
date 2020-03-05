@@ -2,11 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-02 14:08:39
+ * @ version: 2020-03-05 14:18:12
  */
 import * as helper from "think_lib";
 import { saveModule, getIdentifier } from "./Injectable";
 import { COMPONENT_KEY } from "./Constants";
+import logger from 'think_logger';
 
 
 /**
@@ -26,15 +27,19 @@ function defineNewProperty(clazz: Function, protoName: string, methodName: strin
                 await Promise.resolve(Reflect.apply(oldMethod, this, props));
             }
             if (methodName) {
-                let aspect;
+                // tslint:disable-next-line: one-variable-per-declaration
+                let aspect, name = "";
                 if (helper.isFunction(methodName)) {
                     // tslint:disable-next-line: no-invalid-this
                     aspect = this.app.Container.getClsByClass(methodName);
+                    name = getIdentifier(methodName) || methodName.name || "";
                 } else {
                     // tslint:disable-next-line: no-invalid-this
                     aspect = this.app.Container.get(methodName, "COMPONENT");
+                    name = <string>methodName;
                 }
                 if (aspect && helper.isFunction(aspect.run)) {
+                    logger.info(`Execute the aspect ${name}`);
                     // tslint:disable-next-line: no-invalid-this
                     await Promise.resolve(Reflect.apply(aspect.run, this, props));
                 }
@@ -81,15 +86,19 @@ export function Before(aopName: string | Function): MethodDecorator {
             enumerable,
             writable: true,
             value: async function before(...props: any[]) {
-                let aspect;
+                // tslint:disable-next-line: one-variable-per-declaration
+                let aspect, name = "";
                 if (helper.isFunction(aopName)) {
                     // tslint:disable-next-line: no-invalid-this
                     aspect = this.app.Container.getClsByClass(aopName);
+                    name = getIdentifier(aopName) || aopName.name || "";
                 } else {
                     // tslint:disable-next-line: no-invalid-this
                     aspect = this.app.Container.get(aopName, "COMPONENT");
+                    name = <string>aopName;
                 }
                 if (aspect && helper.isFunction(aspect.run)) {
+                    logger.info(`Execute the aspect ${name}`);
                     // tslint:disable-next-line: no-invalid-this
                     await Promise.resolve(Reflect.apply(aspect.run, this, props));
                 }
@@ -108,8 +117,9 @@ export function Before(aopName: string | Function): MethodDecorator {
  * @param {string} [aopName]
  * @returns {Function}
  */
-export function BeforeEach(aopName = "__before"): ClassDecorator {
+export function BeforeEach(aopName?: string | Function): ClassDecorator {
     return (target: any) => {
+        aopName = aopName || "__before";
         return defineNewProperty(target, "__before", aopName === "__before" ? "" : aopName);
     };
 }
@@ -132,15 +142,19 @@ export function After(aopName: string | Function): MethodDecorator {
             enumerable,
             writable: true,
             value: async function before(...props: any[]) {
-                let aspect;
+                // tslint:disable-next-line: one-variable-per-declaration
+                let aspect, name = "";
                 if (helper.isFunction(aopName)) {
                     // tslint:disable-next-line: no-invalid-this
                     aspect = this.app.Container.getClsByClass(aopName);
+                    name = getIdentifier(aopName) || aopName.name || "";
                 } else {
                     // tslint:disable-next-line: no-invalid-this
                     aspect = this.app.Container.get(aopName, "COMPONENT");
+                    name = <string>aopName;
                 }
                 if (aspect && helper.isFunction(aspect.run)) {
+                    logger.info(`Execute the aspect ${name}`);
                     // tslint:disable-next-line: no-invalid-this
                     await Promise.resolve(Reflect.apply(aspect.run, this, props));
                 }
@@ -159,8 +173,9 @@ export function After(aopName: string | Function): MethodDecorator {
  * @param {string} aopName
  * @returns {Function}
  */
-export function AfterEach(aopName = "__after"): ClassDecorator {
+export function AfterEach(aopName?: string | Function): ClassDecorator {
     return (target: any) => {
+        aopName = aopName || "__after";
         return defineNewProperty(target, "__after", aopName === "__after" ? "" : aopName);
     };
 }

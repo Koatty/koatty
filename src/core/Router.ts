@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-02-24 16:11:48
+ * @ version: 2020-03-05 14:16:54
  */
 import KoaRouter from "@koa/router";
 import * as Koa from "koa";
@@ -220,6 +220,7 @@ export class Router {
         }
         // pre-method
         if (ctl.__before) {
+            logger.info(`Execute the aspect __before`);
             await ctl.__before();
         }
         // inject param
@@ -230,6 +231,7 @@ export class Router {
         const result = await ctl[router.method](...args);
         // after-method
         if (ctl.__after) {
+            logger.info(`Execute the aspect __after`);
             await ctl.__after();
         }
         return result;
