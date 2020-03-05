@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-05 10:41:12
+ * @ version: 2020-03-05 11:23:55
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -14,7 +14,6 @@ import { Container } from "./Container";
 import { Loader } from "../util/Loader";
 import { Router } from "./Router";
 import { Koatty } from '../Koatty';
-import { EventEmitter, once } from 'koa';
 const pkg = require("../../package.json");
 
 /**
@@ -27,7 +26,9 @@ const asyncEvent = async function (app: Koatty, eventName: string) {
     try {
         const ls: any[] = app.listeners(eventName);
         for (const func of ls) {
-            await func();
+            if (helper.isFunction(func)) {
+                await func();
+            }
         }
         return;
     } catch (err) {
