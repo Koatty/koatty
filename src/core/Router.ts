@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-05 14:16:54
+ * @ version: 2020-03-05 18:09:38
  */
 import KoaRouter from "@koa/router";
 import * as Koa from "koa";
@@ -228,12 +228,14 @@ export class Router {
         if (params[router.method]) {
             args = params[router.method].sort((a: any, b: any) => a.index - b.index).map((i: any) => i.fn(ctx, i.type));
         }
-        const result = await ctl[router.method](...args);
-        // after-method
-        if (ctl.__after) {
-            logger.info(`Execute the aspect __after`);
-            await ctl.__after();
+        try {
+            return ctl[router.method](...args);
+        } finally {
+            // after-method
+            if (ctl.__after) {
+                logger.info(`Execute the aspect __after`);
+                await ctl.__after();
+            }
         }
-        return result;
     }
 }
