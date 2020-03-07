@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-07 09:32:32
+ * @ version: 2020-03-06 14:56:29
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -128,12 +128,12 @@ export class Injectable {
         if (metaData) {
             return metaData.type;
         } else {
-            const name = target.name;
-            if (name.indexOf("Controller") > -1) {
+            const name = target.name || target.constructor.name || "";
+            if (~name.indexOf("Controller")) {
                 return "CONTROLLER";
-            } else if (name.indexOf("Middleware") > -1) {
+            } else if (~name.indexOf("Middleware")) {
                 return "MIDDLEWARE";
-            } else if (name.indexOf("Service") > -1) {
+            } else if (~name.indexOf("Service")) {
                 return "SERVICE";
             } else {
                 return "COMPONENT";

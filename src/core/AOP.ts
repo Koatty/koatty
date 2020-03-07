@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-05 14:18:12
+ * @ version: 2020-03-06 09:10:35
  */
 import * as helper from "think_lib";
 import { saveModule, getIdentifier } from "./Injectable";
@@ -21,7 +21,7 @@ function defineNewProperty(clazz: Function, protoName: string, methodName: strin
     const oldMethod = Reflect.get(clazz.prototype, protoName);
     Reflect.defineProperty(clazz.prototype, protoName, {
         writable: true,
-        value: async function fn(...props: any[]) {
+        async value(...props: any[]) {
             if (oldMethod) {
                 // tslint:disable-next-line: no-invalid-this
                 await Promise.resolve(Reflect.apply(oldMethod, this, props));
@@ -85,7 +85,7 @@ export function Before(aopName: string | Function): MethodDecorator {
             configurable,
             enumerable,
             writable: true,
-            value: async function before(...props: any[]) {
+            async value(...props: any[]) {
                 // tslint:disable-next-line: one-variable-per-declaration
                 let aspect, name = "";
                 if (helper.isFunction(aopName)) {
@@ -141,7 +141,7 @@ export function After(aopName: string | Function): MethodDecorator {
             configurable,
             enumerable,
             writable: true,
-            value: async function before(...props: any[]) {
+            async value(...props: any[]) {
                 // tslint:disable-next-line: one-variable-per-declaration
                 let aspect, name = "";
                 if (helper.isFunction(aopName)) {
