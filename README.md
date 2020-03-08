@@ -16,7 +16,7 @@ Use Typescript's decorator implement auto injection and AOP, just like SpringBoo
 - **New:** @Transactional() with ThinkORM. ✔️ ThinkORM@4.4.8
 - **New:** think_apollo supports Apollo Configuration Center. ✔️ 
 - **New:** bootFunc supports asynchronous. And the appRady/appStart event also supports asynchronous  ✔️ 1.15.0
-- **New:** @CacheEvict., @CacheEvict supports redis-based caching
+- **New:** @Cacheable, @CacheEvict supports redis-based caching
 - **New:** koatty-cloud for nacos
 - **New:** koatty-grpc server & think_grpc middleware.
 - **New:** koatty-cloud for SpringCloud
