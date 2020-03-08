@@ -12,11 +12,11 @@ Use Typescript's decorator implement auto injection and AOP, just like SpringBoo
 - **New:** replace koa-router to @koa/router ✔️ 1.10.0
 - **New:** AOP：@Aspect()、@Before()、@After()、@BeforeEach()、@AfterEach()  ✔️ 1.11.2
 - **New:** @Validated: Use class-validator for entity class validation, and support auto create Apidoc.  ✔️ 1.12.4
-- **New:** Scheduled tasks support. ✔️ 1.14.1
 - **New:** SchedulerLock is redis-based distributed locks. ✔️ 1.14.8
 - **New:** @Transactional() with ThinkORM. ✔️ ThinkORM@4.4.8
 - **New:** think_apollo supports Apollo Configuration Center. ✔️ 
 - **New:** bootFunc supports asynchronous. And the appRady/appStart event also supports asynchronous  ✔️ 1.15.0
+- **New:** @CacheEvict., @CacheEvict supports redis-based caching
 - **New:** koatty-cloud for nacos
 - **New:** koatty-grpc server & think_grpc middleware.
 - **New:** koatty-cloud for SpringCloud
