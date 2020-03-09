@@ -2,20 +2,19 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-02-27 14:37:35
+ * @ version: 2020-03-06 18:20:25
  */
 
 const store = require("think_store");
 import * as crypto from "crypto";
 import logger from "think_logger";
 
-interface RedisOptions {
-    type: string;
+export interface RedisOptions {
     key_prefix: string;
-    redis_host: string;
-    redis_port: number;
-    redis_password: string;
-    redis_db: string;
+    host: string;
+    port: number;
+    password: string;
+    db: string;
 }
 
 /**
@@ -30,21 +29,24 @@ const delay = function (ms: number) {
 
 export class Locker {
     lockMap: Map<any, any>;
-    options: RedisOptions;
+    options: any;
     store: any;
 
     private static instance: Locker;
-    handle: any;
+    client: any;
+
 
     /**
      * 
      *
      * @static
+     * @param {RedisOptions} options
+     * @param {boolean} [force=false]
      * @returns
-     * @memberof ValidateUtil
+     * @memberof Locker
      */
-    static getInstance(options: RedisOptions) {
-        if (!this.instance) {
+    static getInstance(options: RedisOptions, force = false) {
+        if (!this.instance || force) {
             this.instance = new Locker(options);
         }
         return this.instance;
@@ -60,11 +62,27 @@ export class Locker {
         this.options = {
             type: "redis",
             key_prefix: options.key_prefix || '',
-            redis_host: options.redis_host || '127.0.0.1',
-            redis_port: options.redis_port || 6379,
-            redis_password: options.redis_password || '',
-            redis_db: options.redis_db || '0'
+            host: options.host || '127.0.0.1',
+            port: options.port || 6379,
+            password: options.password || '',
+            db: options.db || '2'
         };
+    }
+
+    /**
+     *
+     *
+     * @returns
+     * @memberof Locker
+     */
+    async connect() {
+        if (!this.store) {
+            this.store = store.getInstance(this.options);
+        }
+        if (!this.client || (!this.client || this.client.status !== 'ready')) {
+            this.client = await this.store.handle.connect(this.options);
+        }
+        return this.client;
     }
 
     /**
@@ -75,24 +93,25 @@ export class Locker {
      */
     async defineCommand() {
         try {
-            const redisStore = store.getInstance(this.options);
-            const connect = await redisStore.handle.connect(this.options);
+            const client = await this.connect();
             //定义lua脚本让它原子化执行
-            connect.defineCommand('lua_unlock', {
-                numberOfKeys: 1,
-                lua: `
-                local remote_value = redis.call("get",KEYS[1])
-                
-                if (not remote_value) then
-                    return 0
-                elseif (remote_value == ARGV[1]) then
-                    return redis.call("del",KEYS[1])
-                else
-                    return -1
-                end
-            `});
-            this.handle = connect;
-            return this.handle;
+            if (!client.lua_unlock) {
+                client.defineCommand('lua_unlock', {
+                    numberOfKeys: 1,
+                    lua: `
+                    local remote_value = redis.call("get",KEYS[1])
+                    
+                    if (not remote_value) then
+                        return 0
+                    elseif (remote_value == ARGV[1]) then
+                        return redis.call("del",KEYS[1])
+                    else
+                        return -1
+                    end
+                `});
+            }
+            this.client = client;
+            return this.client;
         } catch (e) {
             logger.error(e);
             return null;
@@ -111,7 +130,7 @@ export class Locker {
         try {
             key = `${this.options.key_prefix}${key}`;
             const value = crypto.randomBytes(16).toString('hex');
-            const result = await this.handle.set(key, value, 'NX', 'PX', expire);
+            const result = await this.client.set(key, value, 'NX', 'PX', expire);
             // logger.info('redis.set=='+result);
             if (result === null) {
                 // logger.error('lock error: key already exists');
@@ -183,10 +202,11 @@ export class Locker {
             if (!this.lockMap.has(key)) {
                 return null;
             }
+
             const { value } = this.lockMap.get(key);
+            await this.client.lua_unlock(key, value);
             this.lockMap.delete(key);
 
-            await this.handle.lua_unlock(key, value);
             return true;
         } catch (e) {
             logger.error(e);
