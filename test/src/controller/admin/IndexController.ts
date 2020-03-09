@@ -2,9 +2,9 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-03-05 14:14:42
+ * @ version: 2020-03-06 14:58:02
  */
-import { Controller, GetMaping, Autowired, RequestMapping, RequestMethod, PostMaping, Before, BeforeEach, After, RequestBody, Get, Validated, Valid, Helper } from "../../../../src/index";
+import { Controller, GetMaping, Autowired, RequestMapping, RequestMethod, PostMaping, Before, BeforeEach, After, RequestBody, Get, Validated, Valid, Helper, Cacheable } from "../../../../src/index";
 import { App } from '../../App';
 import { AdminController } from "../AdminController";
 import { TestService } from "../../service/TestService";

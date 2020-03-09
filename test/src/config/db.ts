@@ -2,14 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-02-24 16:05:46
+ * @ version: 2020-03-06 15:02:18
  */
 export default {
     "redis": {
         key_prefix: '',
-        redis_host: '127.0.0.1',
-        redis_port: 6379,
-        redis_password: '',
-        redis_db: '4'
+        host: '192.168.0.150',
+        port: 6379,
+        password: '',
+        db: '4'
     }
 };

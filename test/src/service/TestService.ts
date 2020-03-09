@@ -2,9 +2,9 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-01-09 18:17:14
+ * @ version: 2020-03-06 18:24:25
  */
-import { Service, Base, Autowired, Scheduled } from "../../../src/index";
+import { Service, Base, Autowired, Scheduled, Cacheable } from "../../../src/index";
 import { App } from '../App';
 import { CommonService, MoInterface } from './CommonService';
 import { Dto } from '../model/Dto';
@@ -17,6 +17,7 @@ export class TestService extends CommonService {
         //property
     }
 
+    @Cacheable("test", 0)
     async test(aa: Dto) {
         // return Promise.reject("aa");
         console.log('TestService.test');
