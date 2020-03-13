@@ -1930,17 +1930,17 @@ think_lib@^2.2.13, think_lib@^2.x.x:
     lodash "^4.17.15"
     moment "^2.24.0"
 
-think_logger@^2.2.0, think_logger@^2.x.x:
-  version "2.2.0"
-  resolved "http://r.cnpmjs.org/think_logger/download/think_logger-2.2.0.tgz#a1c2747c5bf4e87ffd768c6fe39de09afadd3511"
-  integrity sha1-ocJ0fFv06H/9doxv453gmvrdNRE=
-  dependencies:
-    think_lib "^2.x.x"
-
 think_logger@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/think_logger/-/think_logger-2.2.4.tgz#58688602d8a65ff4c5afdf40f383bcb7889f63f1"
   integrity sha512-2jwU8AmRwv/FTEYFC/nmd5QP3id7woXEubbFJgZv++V6WX5rPmVeN2tqWSiypMECySXQLMksO8VCxxmI4cSe/Q==
+  dependencies:
+    think_lib "^2.x.x"
+
+think_logger@^2.x.x:
+  version "2.2.0"
+  resolved "http://r.cnpmjs.org/think_logger/download/think_logger-2.2.0.tgz#a1c2747c5bf4e87ffd768c6fe39de09afadd3511"
+  integrity sha1-ocJ0fFv06H/9doxv453gmvrdNRE=
   dependencies:
     think_lib "^2.x.x"
 
@@ -1983,16 +1983,16 @@ think_trace@^2.1.4:
     think_lib "^2.x.x"
     think_logger "^2.x.x"
 
-think_validtion@^1.2.4:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/think_validtion/-/think_validtion-1.2.4.tgz#8d706be755a01731f17e347ef1d7a817238acde4"
-  integrity sha512-UlGCfAQQj0mkQcrPpBAUNwURkBduxhUG4nerDWZkjlMdemqzCtDKelCCsmcjhO8eLTeVlaXBVFaKL0AdLf5Fxg==
+think_validtion@^1.2.12:
+  version "1.2.12"
+  resolved "https://registry.yarnpkg.com/think_validtion/-/think_validtion-1.2.12.tgz#f5d0a985b1a0f2e12457812f0b4eb8ae1b9ea838"
+  integrity sha512-Zw50kIRHQmXVIy+jRPyruAOhEXyF9VUk9GkcwMx/mD7HWnB5o67Hr65m1aGYKDGZ0TXkRdScHdMxclDvytKYhQ==
   dependencies:
     class-validator "^0.11.0"
     reflect-metadata "^0.1.13"
     think_lib "^2.2.13"
-    think_logger "^2.2.0"
-    tslib "^1.10.0"
+    think_logger "^2.2.4"
+    tslib "^1.11.1"
 
 through@^2.3.6:
   version "2.3.8"
