@@ -14,11 +14,11 @@ Use Typescript's decorator implement auto injection and AOP, just like SpringBoo
 - **New:** @Validated: Use class-validator for entity class validation, and support auto create Apidoc.  ✔️ 1.12.4
 - **New:** SchedulerLock is redis-based distributed locks. ✔️ 1.14.8
 - **New:** @Transactional() with ThinkORM. ✔️ ThinkORM@4.4.8
-- **New:** think_apollo supports Apollo Configuration Center. ✔️ 
+- **New:** think_apollo middleware supports Apollo Configuration Center. ✔️ 
 - **New:** bootFunc supports asynchronous. And the appRady/appStart event also supports asynchronous  ✔️ 1.15.0
 - **New:** @Cacheable, @CacheEvict supports redis-based caching  ✔️ 1.16.0
 - **New:** koatty-cloud for nacos
-- **New:** koatty-grpc server & think_grpc middleware.
+- **New:** koatty grpc server/client by think_grpc middleware.
 - **New:** koatty-cloud for SpringCloud
 - **New:** GraphQL
 - **New:** SSR 
