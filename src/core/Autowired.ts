@@ -2,16 +2,15 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-02-24 16:11:42
+ * @ version: 2020-03-14 13:49:33
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
-import { savePropertyData, getIdentifier } from "./Injectable";
 import { TAGGED_PROP, TAGGED_ARGS, CompomentType } from "./Constants";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { recursiveGetMetadata } from "../util/Lib";
-import { Container } from "./Container";
+import { Container, IOCContainer } from "./Container";
 
 
 /**
@@ -62,7 +61,7 @@ export function Autowired(identifier?: string, type?: CompomentType, constructAr
             isDelay = true;
         }
 
-        savePropertyData(TAGGED_PROP, {
+        IOCContainer.savePropertyData(TAGGED_PROP, {
             type,
             identifier,
             delay: isDelay,
@@ -83,7 +82,7 @@ export function Value(identifier: string, type?: string): PropertyDecorator {
     return (target: any, propertyKey: string) => {
         // identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
         identifier = identifier || propertyKey;
-        savePropertyData(TAGGED_ARGS, `${identifier || ""}|${type || "config"}`, target, propertyKey);
+        IOCContainer.savePropertyData(TAGGED_ARGS, `${identifier || ""}|${type || "config"}`, target, propertyKey);
     };
 }
 
@@ -120,8 +119,9 @@ export function injectAutowired(target: any, instance: any, container: Container
                 }
             } else {
                 // Delay loading solves the problem of cyclic dependency
+                const app = container.getApp();
                 // tslint:disable-next-line: no-unused-expression
-                container.app.once && container.app.once("appStart", () => {
+                app && app.once("appStart", () => {
                     // lazy inject autowired
                     injectAutowired(target, instance, container, true);
                 });
@@ -140,13 +140,14 @@ export function injectAutowired(target: any, instance: any, container: Container
  */
 export function injectValue(target: any, instance: any, container: Container) {
     const metaData = recursiveGetMetadata(TAGGED_ARGS, target);
+    const app = container.getApp();
     // tslint:disable-next-line: forin
     for (const metaKey in metaData) {
         // tslint:disable-next-line: no-unused-expression
-        process.env.APP_DEBUG && logger.custom("think", "", `Register inject ${getIdentifier(target)} config key: ${metaKey} => value: ${metaData[metaKey]}`);
+        process.env.APP_DEBUG && logger.custom("think", "", `Register inject ${IOCContainer.getIdentifier(target)} config key: ${metaKey} => value: ${metaData[metaKey]}`);
         const propKeys = metaData[metaKey].split("|");
         const [propKey, type] = propKeys;
-        const prop = container.app.config(propKey, type);
+        const prop = app.config(propKey, type);
         Reflect.defineProperty(instance, metaKey, {
             enumerable: true,
             configurable: false,

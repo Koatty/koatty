@@ -2,9 +2,9 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-28 01:31:20
+ * @ version: 2020-03-14 14:43:13
  */
-import { listPropertyData } from "../core/Injectable";
+import { IOCContainer } from '../core/Container';
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
 
@@ -106,13 +106,13 @@ function ordinaryGetPrototypeOf(obj: any): any {
 export function recursiveGetMetadata(metadataKey: any, target: any, propertyKey?: string | symbol): any[] {
     // get metadata value of a metadata key on the prototype
     // let metadata = Reflect.getOwnMetadata(metadataKey, target, propertyKey);
-    const metadata = listPropertyData(metadataKey, target) || {};
+    const metadata = IOCContainer.listPropertyData(metadataKey, target) || {};
 
     // get metadata value of a metadata key on the prototype chain
     let parent = ordinaryGetPrototypeOf(target);
     while (parent !== null) {
         // metadata = Reflect.getOwnMetadata(metadataKey, parent, propertyKey);
-        const pmetadata = listPropertyData(metadataKey, parent);
+        const pmetadata = IOCContainer.listPropertyData(metadataKey, parent);
         if (pmetadata) {
             for (const n in pmetadata) {
                 if (!metadata.hasOwnProperty(n)) {

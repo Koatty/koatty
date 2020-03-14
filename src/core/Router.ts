@@ -2,15 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-05 18:09:38
+ * @ version: 2020-03-14 13:50:17
  */
 import KoaRouter from "@koa/router";
 import * as Koa from "koa";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { Koatty } from "../Koatty";
-import { Container } from "./Container";
-import { listPropertyData, getIdentifier } from "./Injectable";
+import { Container, IOCContainer } from "./Container";
 import { NAMED_TAG, ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY } from "./Constants";
 import { recursiveGetMetadata } from "../util/Lib";
 import { validParamter } from 'think_validtion';
@@ -41,9 +40,9 @@ import { validParamter } from 'think_validtion';
  */
 function injectRouter(target: any, instance?: any) {
     // Controller router path
-    const metaDatas = listPropertyData(NAMED_TAG, target);
+    const metaDatas = IOCContainer.listPropertyData(NAMED_TAG, target);
     let path = "";
-    const identifier = getIdentifier(target);
+    const identifier = IOCContainer.getIdentifier(target);
     if (metaDatas) {
         path = metaDatas[identifier] || "";
     }
@@ -84,7 +83,7 @@ function injectParam(target: any, instance?: any) {
     for (const meta in metaDatas) {
         if (instance[meta] && instance[meta].length <= metaDatas[meta].length) {
             // tslint:disable-next-line: no-unused-expression
-            process.env.APP_DEBUG && logger.custom("think", "", `Register inject ${getIdentifier(target)} param key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
+            process.env.APP_DEBUG && logger.custom("think", "", `Register inject ${IOCContainer.getIdentifier(target)} param key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
             // vaild paramter
             validParamter(target, meta);
             // cover to obj

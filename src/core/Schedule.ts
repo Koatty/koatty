@@ -2,18 +2,17 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-06 18:52:42
+ * @ version: 2020-03-14 13:50:24
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import * as helper from "think_lib";
 import logger from "think_logger";
-import { Container } from "./Container";
+import { Container, IOCContainer } from "./Container";
 import { SCHEDULE_KEY } from "./Constants";
 import { CronJob } from "cron";
 import { Locker, RedisOptions } from "../util/Locker";
 import { recursiveGetMetadata } from "../util/Lib";
-import { attachPropertyData, getIdentifier, getType } from "./Injectable";
 
 /**
  * Schedule task
@@ -36,11 +35,11 @@ export function Scheduled(cron: string): MethodDecorator {
     }
 
     return (target, propertyKey: string, descriptor: PropertyDescriptor) => {
-        const type = getType(target);
+        const type = IOCContainer.getType(target);
         if (type === "CONTROLLER") {
             throw Error("Cacheable decorator cannot be used in the controller class.");
         }
-        attachPropertyData(SCHEDULE_KEY, {
+        IOCContainer.attachPropertyData(SCHEDULE_KEY, {
             cron,
             method: propertyKey
         }, target, propertyKey);
@@ -63,7 +62,7 @@ export function SchedulerLock(name?: string, lockTimeOut?: number, waitLockInter
     return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
         const { value, configurable, enumerable } = descriptor;
         if (helper.isEmpty(name)) {
-            const identifier = getIdentifier(target) || (target.constructor ? target.constructor.name : "");
+            const identifier = IOCContainer.getIdentifier(target) || (target.constructor ? target.constructor.name : "");
             name = `${identifier}_${methodName}`;
         }
         descriptor = {
@@ -134,10 +133,11 @@ export function SchedulerLock(name?: string, lockTimeOut?: number, waitLockInter
  * @param {string} cron
  */
 const execInjectSchedule = function (target: any, container: Container, method: string, cron: string) {
+    const app = container.getApp();
     // tslint:disable-next-line: no-unused-expression
-    container.app.once && container.app.once("appStart", () => {
-        const identifier = getIdentifier(target);
-        const instance: any = container.getClsByClass(target);
+    app && app.once("appStart", () => {
+        const identifier = IOCContainer.getIdentifier(target);
+        const instance: any = container.getInsByClass(target);
         const name = `${identifier}_${method}`;
 
         if (instance && helper.isFunction(instance[method]) && cron) {

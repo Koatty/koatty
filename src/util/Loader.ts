@@ -2,15 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-05 10:57:12
+ * @ version: 2020-03-14 13:50:41
  */
 import * as globby from "globby";
 import * as path from "path";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { requireDefault } from "./Lib";
-import { Container } from "../core/Container";
-import { listModule } from "../core/Injectable";
+import { Container, IOCContainer } from "../core/Container";
 import { COMPONENT_KEY, CONTROLLER_KEY, MIDDLEWARE_KEY, SERVICE_KEY } from "../core/Constants";
 import { Base } from "../core/Base";
 import { BaseController } from "../controller/BaseController";
@@ -88,7 +87,7 @@ export class Loader {
         Loader.loadDirectory(loadPath || "./middleware", app.think_path);
         //Mount application middleware
         // const middlewares: any = {};
-        const appMeddlewares = listModule(MIDDLEWARE_KEY) || [];
+        const appMeddlewares = IOCContainer.listClass(MIDDLEWARE_KEY) || [];
 
         appMeddlewares.map((item: {
             id: string;
@@ -150,7 +149,7 @@ export class Loader {
      * @memberof Loader
      */
     public static loadComponents(app: any, container: Container) {
-        const componentList = listModule(COMPONENT_KEY);
+        const componentList = IOCContainer.listClass(COMPONENT_KEY);
 
         componentList.map((item: any) => {
             item.id = (item.id || "").replace(`${COMPONENT_KEY}:`, "");
@@ -171,7 +170,7 @@ export class Loader {
      * @memberof Loader
      */
     public static loadServices(app: any, container: Container) {
-        const serviceList = listModule(SERVICE_KEY);
+        const serviceList = IOCContainer.listClass(SERVICE_KEY);
 
         serviceList.map((item: any) => {
             item.id = (item.id || "").replace(`${SERVICE_KEY}:`, "");
@@ -195,7 +194,7 @@ export class Loader {
      * @memberof Loader
      */
     public static loadControllers(app: any, container: Container) {
-        const controllerList = listModule(CONTROLLER_KEY);
+        const controllerList = IOCContainer.listClass(CONTROLLER_KEY);
 
         const controllers: any = {};
         controllerList.map((item: any) => {

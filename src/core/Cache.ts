@@ -2,12 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-06 18:46:54
+ * @ version: 2020-03-14 13:49:50
  */
 import { Locker, RedisOptions } from "../util/Locker";
-import { getType } from "../core/Injectable";
 import * as helper from "think_lib";
 import logger from "think_logger";
+import { IOCContainer } from './Container';
 
 
 /**
@@ -23,7 +23,7 @@ import logger from "think_logger";
  */
 export function Cacheable(cacheName: string, paramKey?: number | number[], redisOptions?: RedisOptions): MethodDecorator {
     return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
-        const type = getType(target);
+        const type = IOCContainer.getType(target);
         if (type === "CONTROLLER") {
             throw Error("Cacheable decorator cannot be used in the controller class.");
         }
@@ -121,7 +121,7 @@ export type eventTimes = "Before" | "After";
  */
 export function CacheEvict(cacheName: string, paramKey?: number | number[], eventTime: eventTimes = "Before", redisOptions?: RedisOptions) {
     return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
-        const type = getType(target);
+        const type = IOCContainer.getType(target);
         if (type === "CONTROLLER") {
             throw Error("CacheEvict decorator cannot be used in the controller class.");
         }

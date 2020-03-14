@@ -2,15 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-05 11:23:55
+ * @ version: 2020-03-14 13:49:44
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
-import { saveClassMetadata, getClassMetadata } from "./Injectable";
 import { INJECT_TAG, COMPONENT_SCAN, CONFIGUATION_SCAN } from "./Constants";
-import { Container } from "./Container";
+import { IOCContainer } from "./Container";
 import { Loader } from "../util/Loader";
 import { Router } from "./Router";
 import { Koatty } from '../Koatty';
@@ -63,7 +62,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
 
         logger.custom("think", "", "ComponentScan ...");
         let componentMetas = [];
-        const componentMeta = getClassMetadata(INJECT_TAG, COMPONENT_SCAN, target);
+        const componentMeta = IOCContainer.getClassMetadata(INJECT_TAG, COMPONENT_SCAN, target);
         if (componentMeta) {
             if (!helper.isArray(componentMeta)) {
                 componentMetas.push(componentMeta);
@@ -75,7 +74,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
             componentMetas = [app.app_path];
         }
         // configuationMetas
-        const configuationMeta = getClassMetadata(INJECT_TAG, CONFIGUATION_SCAN, target);
+        const configuationMeta = IOCContainer.getClassMetadata(INJECT_TAG, CONFIGUATION_SCAN, target);
         let configuationMetas = [];
         if (configuationMeta) {
             if (helper.isArray(configuationMeta)) {
@@ -96,15 +95,14 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         }, [...configuationMetas, `!${target.name || ".no"}.ts`]);
         exSet.clear();
 
-
         logger.custom("think", "", "LoadConfiguation ...");
         Loader.loadConfigs(app, configuationMetas);
         //Contriner
-        const container = new Container(app);
-        helper.define(app, "Container", container);
+        IOCContainer.setApp(app);
+        helper.define(app, "Container", IOCContainer);
 
         logger.custom("think", "", "LoadMiddlewares ...");
-        await Loader.loadMiddlewares(app, container);
+        await Loader.loadMiddlewares(app, IOCContainer);
 
         //Emit app ready
         logger.custom("think", "", "Emit App Ready ...");
@@ -112,13 +110,13 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         await asyncEvent(app, "appReady");
 
         logger.custom("think", "", "LoadComponents ...");
-        Loader.loadComponents(app, container);
+        Loader.loadComponents(app, IOCContainer);
 
         logger.custom("think", "", "LoadServices ...");
-        Loader.loadServices(app, container);
+        Loader.loadServices(app, IOCContainer);
 
         logger.custom("think", "", "LoadControllers ...");
-        Loader.loadControllers(app, container);
+        Loader.loadControllers(app, IOCContainer);
 
         //Emit app lazy loading
         logger.custom("think", "", "Emit App Started ...");
@@ -127,12 +125,12 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
 
         logger.custom("think", "", "LoadRouters ...");
         const routerConf = app.config(undefined, "router") || {};
-        const router = new Router(app, container, routerConf);
+        const router = new Router(app, IOCContainer, routerConf);
         router.loadRouter();
 
         logger.custom("think", "", "====================================");
         //Start app
-        container.app = app;
+        IOCContainer.setApp(app);
         logger.custom("think", "", "Listening ...");
         const port = app.config("app_port");
         const hostname = app.config("app_hostname") || "";
@@ -178,7 +176,7 @@ export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
 
     return (target: any) => {
         scanPath = scanPath || "";
-        saveClassMetadata(INJECT_TAG, COMPONENT_SCAN, scanPath, target);
+        IOCContainer.saveClassMetadata(INJECT_TAG, COMPONENT_SCAN, scanPath, target);
     };
 }
 
@@ -194,6 +192,6 @@ export function ConfiguationScan(scanPath?: string | string[]): ClassDecorator {
 
     return (target: any) => {
         scanPath = scanPath || "";
-        saveClassMetadata(INJECT_TAG, CONFIGUATION_SCAN, scanPath, target);
+        IOCContainer.saveClassMetadata(INJECT_TAG, CONFIGUATION_SCAN, scanPath, target);
     };
 }

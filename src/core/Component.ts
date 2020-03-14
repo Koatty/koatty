@@ -2,12 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-07 09:32:55
+ * @ version: 2020-03-14 13:49:56
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import * as helper from "think_lib";
-import { saveModule, getIdentifier, savePropertyData } from "./Injectable";
+import { IOCContainer } from './Container';
 import { CONTROLLER_KEY, COMPONENT_KEY, MIDDLEWARE_KEY, NAMED_TAG, SERVICE_KEY } from "./Constants";
 
 /**
@@ -19,8 +19,8 @@ import { CONTROLLER_KEY, COMPONENT_KEY, MIDDLEWARE_KEY, NAMED_TAG, SERVICE_KEY }
  */
 export function Component(identifier?: string): ClassDecorator {
     return (target: any) => {
-        identifier = identifier || getIdentifier(target);
-        saveModule(COMPONENT_KEY, target, identifier);
+        identifier = identifier || IOCContainer.getIdentifier(target);
+        IOCContainer.saveClass(COMPONENT_KEY, target, identifier);
     };
 }
 
@@ -33,9 +33,9 @@ export function Component(identifier?: string): ClassDecorator {
  */
 export function Controller(path = ""): ClassDecorator {
     return (target: any) => {
-        const identifier = getIdentifier(target);
-        saveModule(CONTROLLER_KEY, target, identifier);
-        savePropertyData(NAMED_TAG, path, target, identifier);
+        const identifier = IOCContainer.getIdentifier(target);
+        IOCContainer.saveClass(CONTROLLER_KEY, target, identifier);
+        IOCContainer.savePropertyData(NAMED_TAG, path, target, identifier);
     };
 }
 
@@ -48,8 +48,8 @@ export function Controller(path = ""): ClassDecorator {
  */
 export function Middleware(identifier?: string): ClassDecorator {
     return (target: any) => {
-        identifier = identifier || getIdentifier(target);
-        saveModule(MIDDLEWARE_KEY, target, identifier);
+        identifier = identifier || IOCContainer.getIdentifier(target);
+        IOCContainer.saveClass(MIDDLEWARE_KEY, target, identifier);
     };
 }
 
@@ -62,7 +62,7 @@ export function Middleware(identifier?: string): ClassDecorator {
  */
 export function Service(identifier?: string): ClassDecorator {
     return (target: any) => {
-        identifier = identifier || getIdentifier(target);
-        saveModule(SERVICE_KEY, target, identifier);
+        identifier = identifier || IOCContainer.getIdentifier(target);
+        IOCContainer.saveClass(SERVICE_KEY, target, identifier);
     };
 }

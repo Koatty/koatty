@@ -2,12 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-06 09:10:35
+ * @ version: 2020-03-14 13:49:19
  */
 import * as helper from "think_lib";
-import { saveModule, getIdentifier } from "./Injectable";
 import { COMPONENT_KEY } from "./Constants";
 import logger from 'think_logger';
+import { IOCContainer } from './Container';
 
 
 /**
@@ -31,8 +31,8 @@ function defineNewProperty(clazz: Function, protoName: string, methodName: strin
                 let aspect, name = "";
                 if (helper.isFunction(methodName)) {
                     // tslint:disable-next-line: no-invalid-this
-                    aspect = this.app.Container.getClsByClass(methodName);
-                    name = getIdentifier(methodName) || methodName.name || "";
+                    aspect = this.app.Container.getInsByClass(methodName);
+                    name = IOCContainer.getIdentifier(methodName) || methodName.name || "";
                 } else {
                     // tslint:disable-next-line: no-invalid-this
                     aspect = this.app.Container.get(methodName, "COMPONENT");
@@ -59,7 +59,7 @@ function defineNewProperty(clazz: Function, protoName: string, methodName: strin
  */
 export function Aspect(identifier?: string): ClassDecorator {
     return (target: any) => {
-        identifier = identifier || getIdentifier(target);
+        identifier = identifier || IOCContainer.getIdentifier(target);
         if (!identifier.endsWith("Aspect")) {
             throw Error("Aspect class names must use a suffix `Aspect`.");
         }
@@ -67,7 +67,7 @@ export function Aspect(identifier?: string): ClassDecorator {
         if (!oldMethod) {
             throw Error("The aspect class must implement the `run` method.");
         }
-        saveModule(COMPONENT_KEY, target, identifier);
+        IOCContainer.saveClass(COMPONENT_KEY, target, identifier);
     };
 }
 
@@ -90,8 +90,8 @@ export function Before(aopName: string | Function): MethodDecorator {
                 let aspect, name = "";
                 if (helper.isFunction(aopName)) {
                     // tslint:disable-next-line: no-invalid-this
-                    aspect = this.app.Container.getClsByClass(aopName);
-                    name = getIdentifier(aopName) || aopName.name || "";
+                    aspect = this.app.Container.getInsByClass(aopName);
+                    name = IOCContainer.getIdentifier(aopName) || aopName.name || "";
                 } else {
                     // tslint:disable-next-line: no-invalid-this
                     aspect = this.app.Container.get(aopName, "COMPONENT");
@@ -146,8 +146,8 @@ export function After(aopName: string | Function): MethodDecorator {
                 let aspect, name = "";
                 if (helper.isFunction(aopName)) {
                     // tslint:disable-next-line: no-invalid-this
-                    aspect = this.app.Container.getClsByClass(aopName);
-                    name = getIdentifier(aopName) || aopName.name || "";
+                    aspect = this.app.Container.getInsByClass(aopName);
+                    name = IOCContainer.getIdentifier(aopName) || aopName.name || "";
                 } else {
                     // tslint:disable-next-line: no-invalid-this
                     aspect = this.app.Container.get(aopName, "COMPONENT");
