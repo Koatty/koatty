@@ -2,13 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-07 15:50:14
+ * @ version: 2020-03-14 13:50:11
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import * as helper from "think_lib";
-import { attachPropertyData } from "./Injectable";
-import { ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY } from "./Constants";
+import { IOCContainer } from './Container';
+import { convertParamsType } from "think_validtion";
+import { ROUTER_KEY, PARAM_KEY } from "./Constants";
 
 /**
  *
@@ -61,7 +62,7 @@ export const RequestMapping = (
 
     return (target, key: string, descriptor: PropertyDescriptor) => {
         // tslint:disable-next-line: no-object-literal-type-assertion
-        attachPropertyData(ROUTER_KEY, {
+        IOCContainer.attachPropertyData(ROUTER_KEY, {
             path,
             requestMethod,
             routerName,
@@ -214,7 +215,7 @@ const Inject = (fn: Function): ParameterDecorator => {
         // 获取所有元数据 key (由 TypeScript 注入)
         // const keys = Reflect.getMetadataKeys(target, propertyKey);
 
-        attachPropertyData(PARAM_KEY, {
+        IOCContainer.attachPropertyData(PARAM_KEY, {
             name: propertyKey,
             fn,
             index: descriptor,
@@ -224,32 +225,6 @@ const Inject = (fn: Function): ParameterDecorator => {
 
     };
 
-};
-
-/**
- * Convert paramer's type to defined.
- *
- * @param {*} param
- * @param {string} type
- * @returns
- */
-const convertParamsType = (param: any, type: string) => {
-    switch (type) {
-        case "number":
-            return helper.toNumber(param);
-        case "boolean":
-            return !!param;
-        case "array":
-        case "tuple":
-            return helper.toArray(param);
-        case "string":
-            // Almost all types can be converted to strings, so returning directly.
-            return helper.toString(param);
-        case "object":
-        case "enum":
-        default: //any
-            return param;
-    }
 };
 
 /**
@@ -272,12 +247,15 @@ export function RequestBody(): ParameterDecorator {
 export function PathVariable(name?: string): ParameterDecorator {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            const data: any = helper.extend(ctx.params || {}, ctx.query);
+            const data: any = { ...(ctx.params || {}), ...(ctx.query || {}) };
             return convertParamsType(data[name], type);
         });
     } else {
         return Inject((ctx: any, type: string) => {
-            const data: any = helper.extend(ctx.params || {}, ctx.query);
+            const data: any = { ...(ctx.params || {}), ...(ctx.query || {}) };
+            for (const key of Object.keys(data)) {
+                data[key] = convertParamsType(data[key], type);
+            }
             return data;
         });
     }
@@ -304,12 +282,15 @@ export function Body(): ParameterDecorator {
 export function Get(name?: string): ParameterDecorator {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            const data: any = helper.extend(ctx.params || {}, ctx.query);
+            const data: any = { ...(ctx.params || {}), ...(ctx.query || {}) };
             return convertParamsType(data[name], type);
         });
     } else {
         return Inject((ctx: any, type: string) => {
-            const data: any = helper.extend(ctx.params || {}, ctx.query);
+            const data: any = { ...(ctx.params || {}), ...(ctx.query || {}) };
+            for (const key of Object.keys(data)) {
+                data[key] = convertParamsType(data[key], type);
+            }
             return data;
         });
     }
