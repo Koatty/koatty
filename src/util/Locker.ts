@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-06 18:20:25
+ * @ version: 2020-03-14 15:32:34
  */
 
 const store = require("think_store");
@@ -76,13 +76,18 @@ export class Locker {
      * @memberof Locker
      */
     async connect() {
-        if (!this.store) {
-            this.store = store.getInstance(this.options);
+        try {
+            if (!this.store) {
+                this.store = store.getInstance(this.options);
+            }
+            if (!this.client || (!this.client || this.client.status !== 'ready')) {
+                this.client = await this.store.handle.connect(this.options);
+            }
+            return this.client;
+        } catch (e) {
+            logger.error(e);
+            return null;
         }
-        if (!this.client || (!this.client || this.client.status !== 'ready')) {
-            this.client = await this.store.handle.connect(this.options);
-        }
-        return this.client;
     }
 
     /**
@@ -95,7 +100,7 @@ export class Locker {
         try {
             const client = await this.connect();
             //定义lua脚本让它原子化执行
-            if (!client.lua_unlock) {
+            if (client && !client.lua_unlock) {
                 client.defineCommand('lua_unlock', {
                     numberOfKeys: 1,
                     lua: `
@@ -128,6 +133,9 @@ export class Locker {
      */
     async lock(key: string, expire = 10000): Promise<boolean> {
         try {
+            if (!this.client) {
+                await this.defineCommand();
+            }
             key = `${this.options.key_prefix}${key}`;
             const value = crypto.randomBytes(16).toString('hex');
             const result = await this.client.set(key, value, 'NX', 'PX', expire);
@@ -141,7 +149,7 @@ export class Locker {
             // logger.info('this.lockMap='+JSON.stringify(this.lockMap));
             return true;
         } catch (e) {
-            logger.error(e);
+            // logger.error(e);
             return false;
         }
     }
@@ -173,7 +181,7 @@ export class Locker {
             // throw new Error('waitLock timeout');
             return false;
         } catch (e) {
-            logger.error(e);
+            // logger.error(e);
             return false;
         }
     }
@@ -198,11 +206,13 @@ export class Locker {
      */
     async unLock(key: string) {
         try {
+            if (!this.client) {
+                await this.defineCommand();
+            }
             key = `${this.options.key_prefix}${key}`;
             if (!this.lockMap.has(key)) {
                 return null;
             }
-
             const { value } = this.lockMap.get(key);
             await this.client.lua_unlock(key, value);
             this.lockMap.delete(key);
