@@ -2,8 +2,9 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-28 11:31:05
+ * @ version: 2020-03-14 13:48:03
  */
+import { Koatty } from '../Koatty';
 import { Scope, CompomentType } from "./Constants";
 
 
@@ -14,16 +15,29 @@ import { Scope, CompomentType } from "./Constants";
  * @interface IContainer
  */
 export interface IContainer {
+    setApp(app: Koatty): void;
     reg<T>(target: T, options?: ObjectDefinitionOptions): T;
     reg<T>(identifier: string, target: T, options?: ObjectDefinitionOptions): T;
-    get(identifier: string): object;
-    // tslint:disable-next-line: unified-signatures
     get(identifier: string, type?: CompomentType, args?: any[]): object;
+    getClass(identifier: string, type?: CompomentType): object;
+    getInsByClass<T>(target: T, args?: any[]): T;
+    getMetadataMap(metadataKey: string | symbol, target: any, propertyKey?: string | symbol): any;
+    getIdentifier(target: Function): string;
+    getType(target: Function): string;
+    saveClass(key: string, module: Function, identifier: string): void;
+    listClass(key: string): any[];
+    saveClassMetadata(type: string, decoratorNameKey: string | symbol, data: any, target: Function | object, propertyName?: string): void;
+    attachClassMetadata(type: string, decoratorNameKey: string | symbol, data: any, target: Function | object, propertyName?: string): void;
+    getClassMetadata(type: string, decoratorNameKey: string | symbol, target: Function | object, propertyName?: string): any;
+    savePropertyData(decoratorNameKey: string | symbol, data: any, target: Function | object, propertyName: string | symbol): void;
+    attachPropertyData(decoratorNameKey: string | symbol, data: any, target: Function | object, propertyName: string | symbol): void;
+    getPropertyData(decoratorNameKey: string | symbol, target: Function | object, propertyName: string | symbol): any;
+    listPropertyData(decoratorNameKey: string | symbol, target: Function | object): any[];
 }
 
 
 /**
- * IOC object interface
+ * BeanFactory object interface
  *
  * @export
  * @interface ObjectDefinitionOptions
