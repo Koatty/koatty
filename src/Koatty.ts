@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-05 11:38:05
+ * @ version: 2020-03-14 15:16:56
  */
 
 import * as path from "path";
@@ -67,6 +67,17 @@ interface InitOptions {
     root_path?: string;
     app_path?: string;
     app_debug?: boolean;
+}
+
+interface ListenOptions {
+    port?: number;
+    host?: string;
+    backlog?: number;
+    path?: string;
+    exclusive?: boolean;
+    readableAll?: boolean;
+    writableAll?: boolean;
+    ipv6Only?: boolean;
 }
 
 /**
@@ -254,7 +265,7 @@ export class Koatty extends Koa {
      * Shorthand for:
      * http.createServer(app.callback()).listen(...)
      * 
-     * Options {
+     * opts {
      * *   port?: number;
      * *   host?: string;
      * *   backlog?: number;
@@ -266,11 +277,15 @@ export class Koatty extends Koa {
      * 
      * }
      */
-    public listen(options: any, listeningListener?: any) {
+    // tslint:disable-next-line: no-object-literal-type-assertion
+    public listen(opts: any = <ListenOptions>{
+        host: "127.0.0.1",
+        port: 3000
+    }, listeningListener?: any) {
         //catch error
         this.captureError();
         //start server
-        return super.listen(options, listeningListener).on("clientError", function (err: any, sock: any) {
+        return super.listen(opts, listeningListener).on("clientError", function (err: any, sock: any) {
             // logger.error("Bad request, HTTP parse error");
             sock.end("400 Bad Request\r\n\r\n");
         });
