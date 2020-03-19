@@ -1965,14 +1965,15 @@ think_static@^2.1.3:
     mime-types "^2.1.26"
     think_lib "^2.x.x"
 
-think_store@^2.5.3:
-  version "2.5.3"
-  resolved "https://registry.yarnpkg.com/think_store/-/think_store-2.5.3.tgz#8a320e6b3b14c8da9001f2e63e2490bfc822df06"
-  integrity sha512-HkdJBFAb6EAeFhYfD1NHFo8H1fufSP6GId1lc3JB/LXuSt00AoycK+Wt3ULKp/B96QLq9GdqfHnDocahhBiR7A==
+think_store@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/think_store/-/think_store-4.0.0.tgz#293cae1131ce7fad87f10baeb5670d06b48808ef"
+  integrity sha512-C3ZZ3QKONMCmMaDfs9DmxdBX8DO7ERunMCzHkI/Lu/9YCpImeKTcBS3TN01ai7dD5URXNNLUiJGrdfC4HZF8JQ==
   dependencies:
     generic-pool "^3.7.1"
     ioredis "^4.16.0"
-    think_lib "^2.x.x"
+    think_lib "^2.2.13"
+    think_logger "^2.2.4"
 
 think_trace@^2.1.4:
   version "2.1.4"
@@ -1983,10 +1984,10 @@ think_trace@^2.1.4:
     think_lib "^2.x.x"
     think_logger "^2.x.x"
 
-think_validtion@^1.2.12:
-  version "1.2.12"
-  resolved "https://registry.yarnpkg.com/think_validtion/-/think_validtion-1.2.12.tgz#f5d0a985b1a0f2e12457812f0b4eb8ae1b9ea838"
-  integrity sha512-Zw50kIRHQmXVIy+jRPyruAOhEXyF9VUk9GkcwMx/mD7HWnB5o67Hr65m1aGYKDGZ0TXkRdScHdMxclDvytKYhQ==
+think_validtion@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/think_validtion/-/think_validtion-1.4.2.tgz#f5ee95e9b7348bb2b2741261dde44b9292ec64be"
+  integrity sha512-stFy2WpBP/CvS0yHgrsuC5P39GK8wWvsWarZGTIqXDoFHseyYxqIdHwVpkCNVHSDBfsu+oj4tDX7fSpqFSpnSA==
   dependencies:
     class-validator "^0.11.0"
     reflect-metadata "^0.1.13"
