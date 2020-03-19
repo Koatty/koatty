@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-03-02 12:57:43
+ * @ version: 2020-03-19 14:09:55
  */
 import { Controller, BaseController, Autowired, Logger, Helper, RequestBody, BeforeEach } from "../../../src/index";
 import { App } from '../App';
@@ -25,10 +25,6 @@ export class AdminController extends BaseController {
         // this.Model = null;
         // this.Mo = { rel: false, sortby: {}, field: [], ispage: true, pagesize: 20, page: 1 };
         // this.Map = {};
-    }
-
-    test(@RequestBody() body: any) {
-        return this.ok("test", body);
     }
 
 }

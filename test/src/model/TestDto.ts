@@ -3,15 +3,15 @@ import { Length, Min, Max, IsCnName, Contains, IsNotEmpty, IsDefined } from '../
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-13 14:34:07
+ * @ version: 2020-03-19 19:56:00
  */
 
-export class Dto {
+export class TestDto {
     // @Length(10, 20, {
     //     message: "name必填或格式不正确"
     // })
-    @IsDefined()
     // @IsNotEmpty({ message: "name不能为空" })
+    @IsDefined()
     name: number;
 
     @Contains("hello")

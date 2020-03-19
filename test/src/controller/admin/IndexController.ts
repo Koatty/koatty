@@ -2,13 +2,13 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-03-13 20:34:30
+ * @ version: 2020-03-19 17:27:06
  */
-import { Controller, GetMaping, Autowired, RequestMapping, RequestMethod, PostMaping, Before, BeforeEach, After, RequestBody, Get, Validated, Valid, Helper, Cacheable, Post } from "../../../../src/index";
+import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, BeforeEach, After, RequestBody, Get, Validated, Valid, Helper, Cacheable, Post, RequestParam } from "../../../../src/index";
 import { App } from '../../App';
 import { AdminController } from "../AdminController";
 import { TestService } from "../../service/TestService";
-import { Dto } from '../../model/Dto';
+import { TestDto } from '../../model/TestDto';
 import { TestModel } from '../../model/TestModel';
 import { TestAspect } from '../../aspect/TestAspect';
 
@@ -31,18 +31,18 @@ export class IndexController extends AdminController {
         return Promise.resolve();
     }
 
-    @RequestMapping("/", RequestMethod.ALL)
+    @GetMapping("/")
     @Before(TestAspect)
     async default(@Get("aa") @Valid(["IsNotEmpty"], "参数不能为空") aa: number) {
-        return this.ok(Helper.toString(aa));
+        return this.ok("", aa);
     }
 
-    @RequestMapping("/test", RequestMethod.ALL)
+    @GetMapping("/test")
     @Validated()
-    async test(@Post() aa: Dto) {
+    async test(@RequestParam() aa: TestDto) {
         console.log(Helper.isFunction(TestModel));
         const info = await this.testService.test(aa);
-        return this.body(info);
+        return this.ok("", info);
     }
 
 }
