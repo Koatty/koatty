@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-14 15:32:34
+ * @ version: 2020-03-15 23:39:33
  */
 
 const store = require("think_store");
@@ -67,27 +67,7 @@ export class Locker {
             password: options.password || '',
             db: options.db || '2'
         };
-    }
-
-    /**
-     *
-     *
-     * @returns
-     * @memberof Locker
-     */
-    async connect() {
-        try {
-            if (!this.store) {
-                this.store = store.getInstance(this.options);
-            }
-            if (!this.client || (!this.client || this.client.status !== 'ready')) {
-                this.client = await this.store.handle.connect(this.options);
-            }
-            return this.client;
-        } catch (e) {
-            logger.error(e);
-            return null;
-        }
+        this.store = store.getInstance(this.options);
     }
 
     /**
@@ -98,7 +78,7 @@ export class Locker {
      */
     async defineCommand() {
         try {
-            const client = await this.connect();
+            const client = await this.store.connect(this.options);
             //定义lua脚本让它原子化执行
             if (client && !client.lua_unlock) {
                 client.defineCommand('lua_unlock', {
@@ -115,8 +95,7 @@ export class Locker {
                     end
                 `});
             }
-            this.client = client;
-            return this.client;
+            return client;
         } catch (e) {
             logger.error(e);
             return null;
@@ -133,12 +112,10 @@ export class Locker {
      */
     async lock(key: string, expire = 10000): Promise<boolean> {
         try {
-            if (!this.client) {
-                await this.defineCommand();
-            }
+            const client = await this.defineCommand();
             key = `${this.options.key_prefix}${key}`;
             const value = crypto.randomBytes(16).toString('hex');
-            const result = await this.client.set(key, value, 'NX', 'PX', expire);
+            const result = await client.set(key, value, 'NX', 'PX', expire);
             // logger.info('redis.set=='+result);
             if (result === null) {
                 // logger.error('lock error: key already exists');
@@ -206,15 +183,13 @@ export class Locker {
      */
     async unLock(key: string) {
         try {
-            if (!this.client) {
-                await this.defineCommand();
-            }
+            const client = await this.defineCommand();
             key = `${this.options.key_prefix}${key}`;
             if (!this.lockMap.has(key)) {
                 return null;
             }
             const { value } = this.lockMap.get(key);
-            await this.client.lua_unlock(key, value);
+            await client.lua_unlock(key, value);
             this.lockMap.delete(key);
 
             return true;

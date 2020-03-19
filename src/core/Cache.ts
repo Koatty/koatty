@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-14 13:49:50
+ * @ version: 2020-03-15 23:26:27
  */
 import { Locker, RedisOptions } from "../util/Locker";
 import * as helper from "think_lib";
@@ -52,10 +52,7 @@ export function Cacheable(cacheName: string, paramKey?: number | number[], redis
                 }
 
                 if (cacheFlag) {
-                    let client = lockerCls.client;
-                    if (!client) {
-                        client = await lockerCls.defineCommand();
-                    }
+                    const client = await lockerCls.defineCommand();
                     // tslint:disable-next-line: one-variable-per-declaration
                     let key = "", res;
                     if (helper.isArray(paramKey)) {
@@ -150,10 +147,7 @@ export function CacheEvict(cacheName: string, paramKey?: number | number[], even
                 }
 
                 if (cacheFlag) {
-                    let client = lockerCls.client;
-                    if (!client) {
-                        client = await lockerCls.defineCommand();
-                    }
+                    const client = await lockerCls.defineCommand();
                     let key = "";
                     if (helper.isArray(paramKey)) {
                         (<number[]>paramKey).map((it: any) => {

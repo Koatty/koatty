@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-14 13:50:24
+ * @ version: 2020-03-15 23:27:31
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -81,9 +81,6 @@ export function SchedulerLock(name?: string, lockTimeOut?: number, waitLockInter
                 let lockerFlag = false;
                 if (!lockerCls) {
                     return Promise.reject(`Redis connection failed. The method ${methodName} is not executed.`);
-                }
-                if (!lockerCls.client) {
-                    await lockerCls.defineCommand();
                 }
                 if (waitLockInterval || waitLockTimeOut) {
                     lockerFlag = await lockerCls.waitLock(name,
