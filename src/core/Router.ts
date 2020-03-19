@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-19 20:27:43
+ * @ version: 2020-03-20 07:05:00
  */
 import KoaRouter from "@koa/router";
 import * as Koa from "koa";
@@ -28,34 +28,6 @@ import { convertParamsType, ValidatorFuncs, plainToClass } from 'think_validtion
 //         }, timeout);
 //     });
 // };
-/**
- * Convert paramter types and valid check.
- *
- * @export
- * @param {*} params
- * @param {string} method
- * @param {Koa.Context} ctx
- * @returns
- */
-export function getParamter(params: any[], valids: any[], ctx: Koa.Context) {
-    params = params.sort((a: any, b: any) => a.index - b.index); //.map((i: any) => i.fn(ctx, i.type))
-    //convert type
-    const props: any[] = params.map((v: any, k: number) => {
-        let value = v.fn(ctx, v.type);
-        if (helper.isString(v.type)) {
-            value = convertParamsType(value, v.type);
-            //@Valid()
-            if (valids[k] && valids[k].type && valids[k].rule) {
-                ValidatorFuncs(`${k}`, value, valids[k].type, valids[k].rule, valids[k].message);
-            }
-        } else if (helper.isClass(v.type)) {
-            // DTO class
-            value = plainToClass(v.type, value, true);
-        }
-        return value;
-    });
-    return props;
-}
 
 /**
  *
@@ -114,12 +86,48 @@ function injectParam(target: any, instance?: any) {
             process.env.APP_DEBUG && logger.custom("think", "", `Register inject ${IOCContainer.getIdentifier(target)} param key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
 
             // cover to obj
-            argsMetaObj[meta] = { valids: vaildMetaDatas[meta] || [], data: metaDatas[meta] || [] };
+            const data = (metaDatas[meta] || []).sort((a: any, b: any) => a.index - b.index);
+            argsMetaObj[meta] = { valids: vaildMetaDatas[meta] || [], data };
         }
     }
     return argsMetaObj;
 }
 
+/**
+ * Convert paramter types and valid check.
+ *
+ * @export
+ * @param {*} params
+ * @param {string} method
+ * @param {Koa.Context} ctx
+ * @returns
+ */
+function getParamter(params: any[], valids: any[], ctx: Koa.Context) {
+    // params = params.sort((a: any, b: any) => a.index - b.index);
+    //convert type
+    const props: any[] = params.map((v: any, k: number) => {
+        let value: any = null;
+        if (v.fn && helper.isFunction(v.fn)) {
+            value = v.fn(ctx, v.type);
+        }
+        if (helper.isClass(v.type)) {
+            // DTO class
+            value = plainToClass(v.type, value, true);
+        } else {
+            value = convertParamsType(value, v.type);
+            //@Valid()
+            if (valids[k] && valids[k].type && valids[k].rule) {
+                ValidatorFuncs(`${k}`, value, valids[k].type, valids[k].rule, valids[k].message, false);
+            }
+        }
+        return value;
+    });
+    return props;
+}
+
+/**
+ * Router class
+ */
 export class Router {
     app: Koatty;
     container: Container;
