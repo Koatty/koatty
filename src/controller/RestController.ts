@@ -2,12 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-28 01:25:19
+ * @ version: 2020-03-18 15:44:00
  */
 import * as helper from "think_lib";
 import { Container } from "../core/Container";
 import { BaseController } from "./BaseController";
-import { GetMaping, PathVariable, PostMaping, DeleteMaping, PutMaping, RequestBody } from "../core/RequestMapping";
+import { GetMapping, PathVariable, PostMapping, DeleteMapping, PutMapping, RequestBody } from "../core/RequestMapping";
 
 /**
  * RESTful controller
@@ -35,7 +35,7 @@ export class RestController extends BaseController {
      * @returns
      * @memberof RestController
      */
-    @GetMaping("/:resource/:id")
+    @GetMapping("/:resource/:id")
     async getResource(@PathVariable("id") id: number | string, @PathVariable("resource") resource: string) {
         if (helper.isEmpty(id)) {
             return this.fail("id is empty");
@@ -74,7 +74,7 @@ export class RestController extends BaseController {
      * @returns
      * @memberof RestController
      */
-    @PostMaping("/:resource/:id")
+    @PostMapping("/:resource/:id")
     async postResource(@PathVariable("id") id: number | string, @PathVariable("resource") resource: string, @RequestBody() data: any) {
         if (helper.isEmpty(id)) {
             return this.fail("id is empty");
@@ -109,7 +109,7 @@ export class RestController extends BaseController {
      * @returns
      * @memberof RestController
      */
-    @DeleteMaping("/:resource/:id")
+    @DeleteMapping("/:resource/:id")
     async deleteResource(@PathVariable("id") id: number | string, @PathVariable("resource") resource: string) {
         if (helper.isEmpty(id)) {
             return this.fail("id is empty");
@@ -143,7 +143,7 @@ export class RestController extends BaseController {
      * @returns
      * @memberof RestController
      */
-    @PutMaping("/:resource/:id")
+    @PutMapping("/:resource/:id")
     async putResource(@PathVariable("id") id: number | string, @PathVariable("resource") resource: string, @RequestBody() data: any) {
         if (helper.isEmpty(id)) {
             return this.fail("id is empty");

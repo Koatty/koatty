@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-02-03 14:16:29
+ * @ version: 2020-03-18 11:33:49
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "koa";
@@ -10,6 +10,7 @@ import * as helper from "think_lib";
 import { Koatty } from "../Koatty";
 import { ObjectDefinitionOptions } from "../core/IContainer";
 import { Value } from '../core/Autowired';
+import logger from 'think_logger';
 
 /**
  *
@@ -26,7 +27,7 @@ interface BaseControllerInterface {
     readonly deny: (code?: number) => void;
     readonly expires: (timeout: number) => void;
     readonly fail: (errmsg?: Error | string, data?: any, code?: number) => void;
-    readonly header: (name?: string, value?: any) => any;
+    readonly header: (name: string, value?: any) => any;
     readonly isAjax: () => boolean;
     readonly isGet: () => boolean;
     readonly isJsonp: () => boolean;
@@ -36,7 +37,6 @@ interface BaseControllerInterface {
     readonly json: (data: any) => void;
     readonly jsonp: (data: any) => void;
     readonly ok: (errmsg?: Error | string, data?: any, code?: number) => void;
-    readonly param: (name?: string) => any;
     readonly redirect: (urls: string, alt?: string) => Promise<any>;
     readonly render: (templateFile?: string, charset?: string, contentType?: string) => Promise<any>;
     readonly resType: (contentType?: string, encoding?: string | boolean) => string;
@@ -167,19 +167,7 @@ export class BaseController implements BaseControllerInterface {
     }
 
     /**
-     * Get post or get parameters, post priority
-     *
-     * @public
-     * @param {string} name
-     * @returns {*}
-     * @memberof BaseController
-     */
-    public param(name?: string): any {
-        return this.ctx.param(name);
-    }
-
-    /**
-     * Get or set headers.
+     * Set headers.
      *
      * @public
      * @param {string} name
@@ -187,13 +175,7 @@ export class BaseController implements BaseControllerInterface {
      * @returns {*}
      * @memberof BaseController
      */
-    public header(name?: string, value?: any): any {
-        if (name === undefined) {
-            return this.ctx.headers;
-        }
-        if (value === undefined) {
-            return this.ctx.get(name);
-        }
+    public header(name: string, value?: any): any {
         return this.ctx.set(name, value);
     }
 

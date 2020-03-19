@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-14 13:50:11
+ * @ version: 2020-03-18 15:42:51
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -82,7 +82,7 @@ export const RequestMapping = (
  *     }} [routerOptions={}]
  * @returns {MethodDecorator}
  */
-export const PostMaping = (
+export const PostMapping = (
     path = "/",
     routerOptions: {
         routerName?: string;
@@ -100,7 +100,7 @@ export const PostMaping = (
  *     }} [routerOptions={}]
  * @returns {MethodDecorator}
  */
-export const GetMaping = (
+export const GetMapping = (
     path = "/",
     routerOptions: {
         routerName?: string;
@@ -118,7 +118,7 @@ export const GetMaping = (
  *     }} [routerOptions={}]
  * @returns {MethodDecorator}
  */
-export const DeleteMaping = (
+export const DeleteMapping = (
     path = "/",
     routerOptions: {
         routerName?: string;
@@ -136,7 +136,7 @@ export const DeleteMaping = (
  *     }} [routerOptions={}]
  * @returns {MethodDecorator}
  */
-export const PutMaping = (
+export const PutMapping = (
     path = "/",
     routerOptions: {
         routerName?: string;
@@ -154,7 +154,7 @@ export const PutMaping = (
  *     }} [routerOptions={}]
  * @returns {MethodDecorator}
  */
-export const PatchMaping = (
+export const PatchMapping = (
     path = "/",
     routerOptions: {
         routerName?: string;
@@ -172,7 +172,7 @@ export const PatchMaping = (
  *     }} [routerOptions={}]
  * @returns {MethodDecorator}
  */
-export const OptionsMaping = (
+export const OptionsMapping = (
     path = "/",
     routerOptions: {
         routerName?: string;
@@ -190,7 +190,7 @@ export const OptionsMaping = (
  *     }} [routerOptions={}]
  * @returns {MethodDecorator}
  */
-export const HeadMaping = (
+export const HeadMapping = (
     path = "/",
     routerOptions: {
         routerName?: string;
@@ -214,17 +214,17 @@ const Inject = (fn: Function): ParameterDecorator => {
         // const returntype = Reflect.getMetadata("design:returntype", target, propertyKey);
         // 获取所有元数据 key (由 TypeScript 注入)
         // const keys = Reflect.getMetadataKeys(target, propertyKey);
+        const type = (paramtypes[descriptor] && paramtypes[descriptor].name) ? paramtypes[descriptor].name : "any";
 
         IOCContainer.attachPropertyData(PARAM_KEY, {
             name: propertyKey,
             fn,
             index: descriptor,
-            type: (paramtypes[descriptor] && paramtypes[descriptor].name ? paramtypes[descriptor].name : "").toLowerCase()
+            type
         }, target, propertyKey);
         return descriptor;
 
     };
-
 };
 
 /**
@@ -238,6 +238,27 @@ export function RequestBody(): ParameterDecorator {
 }
 
 /**
+ * Get post or get parameters, post priority
+ *
+ * @export
+ * @param {string} [name]
+ * @returns {ParameterDecorator}
+ */
+export function RequestParam(name?: string): ParameterDecorator {
+    if (name) {
+        return Inject((ctx: any, type: string) => {
+            const data: any = { ...ctx._get, ...ctx._post };
+            return data[name];
+        });
+    } else {
+        return Inject((ctx: any, type: string) => {
+            const data: any = { ...ctx._get, ...ctx._post };
+            return data[name];
+        });
+    }
+}
+
+/**
  * Get parsed query-string.
  *
  * @export
@@ -247,29 +268,15 @@ export function RequestBody(): ParameterDecorator {
 export function PathVariable(name?: string): ParameterDecorator {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            const data: any = { ...(ctx.params || {}), ...(ctx.query || {}) };
-            return convertParamsType(data[name], type);
+            const data: any = ctx.querys(name);
+            return convertParamsType(data, type);
         });
     } else {
         return Inject((ctx: any, type: string) => {
-            const data: any = { ...(ctx.params || {}), ...(ctx.query || {}) };
-            for (const key of Object.keys(data)) {
-                data[key] = convertParamsType(data[key], type);
-            }
+            const data: any = ctx.querys();
             return data;
         });
     }
-}
-
-
-/**
- * Get parsed request body.
- *
- * @export
- * @returns
- */
-export function Body(): ParameterDecorator {
-    return Inject((ctx: any) => ctx.request.body);
 }
 
 /**
@@ -282,15 +289,12 @@ export function Body(): ParameterDecorator {
 export function Get(name?: string): ParameterDecorator {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            const data: any = { ...(ctx.params || {}), ...(ctx.query || {}) };
-            return convertParamsType(data[name], type);
+            const data: any = ctx.querys(name);
+            return convertParamsType(data, type);
         });
     } else {
         return Inject((ctx: any, type: string) => {
-            const data: any = { ...(ctx.params || {}), ...(ctx.query || {}) };
-            for (const key of Object.keys(data)) {
-                data[key] = convertParamsType(data[key], type);
-            }
+            const data: any = ctx.querys();
             return data;
         });
     }
@@ -306,7 +310,8 @@ export function Get(name?: string): ParameterDecorator {
 export function Post(name?: string): ParameterDecorator {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            return ctx.post(name);
+            const data: any = ctx.post(name);
+            return convertParamsType(data, type);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -344,7 +349,8 @@ export function File(name?: string): ParameterDecorator {
 export function Header(name?: string): ParameterDecorator {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            return ctx.get(name);
+            const data: any = ctx.get(name);
+            return convertParamsType(data, type);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -353,3 +359,12 @@ export function Header(name?: string): ParameterDecorator {
     }
 }
 
+/**
+ * Get parsed request body.
+ *
+ * @export
+ * @returns
+ */
+export function Body(): ParameterDecorator {
+    return Inject((ctx: any) => ctx.request.body);
+}
