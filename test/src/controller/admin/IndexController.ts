@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-03-19 17:27:06
+ * @ version: 2020-03-20 06:34:45
  */
 import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, BeforeEach, After, RequestBody, Get, Validated, Valid, Helper, Cacheable, Post, RequestParam } from "../../../../src/index";
 import { App } from '../../App';
@@ -33,8 +33,8 @@ export class IndexController extends AdminController {
 
     @GetMapping("/")
     @Before(TestAspect)
-    async default(@Get("aa") @Valid(["IsNotEmpty"], "参数不能为空") aa: number) {
-        return this.ok("", aa);
+    async default(@Get("aa") @Valid(["IsNotEmpty"], "参数不能为空") aa: number, @Get("name") name: string) {
+        return this.ok("", { aa, name });
     }
 
     @GetMapping("/test")

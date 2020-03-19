@@ -3,7 +3,7 @@ import { Length, Min, Max, IsCnName, Contains, IsNotEmpty, IsDefined } from '../
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-19 19:56:00
+ * @ version: 2020-03-20 07:02:12
  */
 
 export class TestDto {
@@ -17,7 +17,7 @@ export class TestDto {
     @Contains("hello")
     text: string;
 
-    @Min(0)
-    @Max(10)
+    @Min(0, { message: "大于等于0" })
+    @Max(10, { message: "小于等于10" })
     rating: number;
 }
