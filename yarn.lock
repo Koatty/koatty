@@ -1984,10 +1984,10 @@ think_trace@^2.1.4:
     think_lib "^2.x.x"
     think_logger "^2.x.x"
 
-think_validtion@^1.4.3:
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/think_validtion/-/think_validtion-1.4.3.tgz#33146daebe4a61249825265fea82941cf1bc1aad"
-  integrity sha512-S7VKNVc7tsu56xqxVVQN+c1O3/e0tASOllAFPY4bBhasjqtIUpfml0nSRQenw0IGtrEJLdGrjnYgs8w8xc9xTg==
+think_validtion@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/think_validtion/-/think_validtion-1.5.0.tgz#88e7ede1b17d6d8c89c151cdc47fc9657a3e4fde"
+  integrity sha512-H7baq3qXZf8e6EvfZIis7Yuzl72DzEblPKJeuWt0U6ADf2MlwvJYzaPA0mxKaw/4JZ2h09IsWiU18CSCsSn3YA==
   dependencies:
     class-validator "^0.11.0"
     reflect-metadata "^0.1.13"
