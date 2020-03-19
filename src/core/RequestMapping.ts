@@ -2,13 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-18 15:42:51
+ * @ version: 2020-03-19 19:45:40
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import * as helper from "think_lib";
 import { IOCContainer } from './Container';
-import { convertParamsType } from "think_validtion";
+import { paramterTypes } from "think_validtion";
 import { ROUTER_KEY, PARAM_KEY } from "./Constants";
 
 /**
@@ -214,7 +214,11 @@ const Inject = (fn: Function): ParameterDecorator => {
         // const returntype = Reflect.getMetadata("design:returntype", target, propertyKey);
         // 获取所有元数据 key (由 TypeScript 注入)
         // const keys = Reflect.getMetadataKeys(target, propertyKey);
-        const type = (paramtypes[descriptor] && paramtypes[descriptor].name) ? paramtypes[descriptor].name : "any";
+        let type = (paramtypes[descriptor] && paramtypes[descriptor].name) ? paramtypes[descriptor].name : "object";
+        //DTO class
+        if (!paramterTypes[type]) {
+            type = paramtypes[descriptor];
+        }
 
         IOCContainer.attachPropertyData(PARAM_KEY, {
             name: propertyKey,
@@ -253,7 +257,7 @@ export function RequestParam(name?: string): ParameterDecorator {
     } else {
         return Inject((ctx: any, type: string) => {
             const data: any = { ...ctx._get, ...ctx._post };
-            return data[name];
+            return data;
         });
     }
 }
@@ -268,13 +272,11 @@ export function RequestParam(name?: string): ParameterDecorator {
 export function PathVariable(name?: string): ParameterDecorator {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            const data: any = ctx.querys(name);
-            return convertParamsType(data, type);
+            return ctx.querys(name);
         });
     } else {
         return Inject((ctx: any, type: string) => {
-            const data: any = ctx.querys();
-            return data;
+            return ctx.querys();
         });
     }
 }
@@ -289,13 +291,11 @@ export function PathVariable(name?: string): ParameterDecorator {
 export function Get(name?: string): ParameterDecorator {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            const data: any = ctx.querys(name);
-            return convertParamsType(data, type);
+            return ctx.querys(name);
         });
     } else {
         return Inject((ctx: any, type: string) => {
-            const data: any = ctx.querys();
-            return data;
+            return ctx.querys();
         });
     }
 }
@@ -310,8 +310,7 @@ export function Get(name?: string): ParameterDecorator {
 export function Post(name?: string): ParameterDecorator {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            const data: any = ctx.post(name);
-            return convertParamsType(data, type);
+            return ctx.post(name);
         });
     } else {
         return Inject((ctx: any, type: string) => {
@@ -349,8 +348,7 @@ export function File(name?: string): ParameterDecorator {
 export function Header(name?: string): ParameterDecorator {
     if (name) {
         return Inject((ctx: any, type: string) => {
-            const data: any = ctx.get(name);
-            return convertParamsType(data, type);
+            return ctx.get(name);
         });
     } else {
         return Inject((ctx: any, type: string) => {

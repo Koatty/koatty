@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-14 13:50:17
+ * @ version: 2020-03-19 20:27:43
  */
 import KoaRouter from "@koa/router";
 import * as Koa from "koa";
@@ -12,7 +12,7 @@ import { Koatty } from "../Koatty";
 import { Container, IOCContainer } from "./Container";
 import { NAMED_TAG, ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY } from "./Constants";
 import { recursiveGetMetadata } from "../util/Lib";
-import { validParamter } from 'think_validtion';
+import { convertParamsType, ValidatorFuncs, plainToClass } from 'think_validtion';
 
 /**
  * Http timeout timer
@@ -28,7 +28,34 @@ import { validParamter } from 'think_validtion';
 //         }, timeout);
 //     });
 // };
-
+/**
+ * Convert paramter types and valid check.
+ *
+ * @export
+ * @param {*} params
+ * @param {string} method
+ * @param {Koa.Context} ctx
+ * @returns
+ */
+export function getParamter(params: any[], valids: any[], ctx: Koa.Context) {
+    params = params.sort((a: any, b: any) => a.index - b.index); //.map((i: any) => i.fn(ctx, i.type))
+    //convert type
+    const props: any[] = params.map((v: any, k: number) => {
+        let value = v.fn(ctx, v.type);
+        if (helper.isString(v.type)) {
+            value = convertParamsType(value, v.type);
+            //@Valid()
+            if (valids[k] && valids[k].type && valids[k].rule) {
+                ValidatorFuncs(`${k}`, value, valids[k].type, valids[k].rule, valids[k].message);
+            }
+        } else if (helper.isClass(v.type)) {
+            // DTO class
+            value = plainToClass(v.type, value, true);
+        }
+        return value;
+    });
+    return props;
+}
 
 /**
  *
@@ -79,42 +106,17 @@ function injectParam(target: any, instance?: any) {
     instance = instance || target.prototype;
     // const methods = getMethodNames(target);
     const metaDatas = recursiveGetMetadata(PARAM_KEY, target);
+    const vaildMetaDatas = recursiveGetMetadata(PARAM_RULE_KEY, target);
     const argsMetaObj: any = {};
     for (const meta in metaDatas) {
         if (instance[meta] && instance[meta].length <= metaDatas[meta].length) {
             // tslint:disable-next-line: no-unused-expression
             process.env.APP_DEBUG && logger.custom("think", "", `Register inject ${IOCContainer.getIdentifier(target)} param key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
-            // vaild paramter
-            validParamter(target, meta);
+
             // cover to obj
-            argsMetaObj[meta] = metaDatas[meta];
+            argsMetaObj[meta] = { valids: vaildMetaDatas[meta] || [], data: metaDatas[meta] || [] };
         }
     }
-
-    // vaild 
-    // const vaildMetaDatas = recursiveGetMetadata(PARAM_RULE_KEY, target);
-    // for (const vmeta in vaildMetaDatas) {
-    //     if (vaildMetaDatas[vmeta] && vaildMetaDatas[vmeta].length > 0 && argsMetaObj[vmeta]) {
-    //         for (const vn of vaildMetaDatas[vmeta]) {
-    //             argsMetaObj[vmeta] = argsMetaObj[vmeta].map((it: any) => {
-    //                 if (it.index === vn.index && vn.fn && vn.rule) {
-    //                     const fn = (ctx: any, type: string) => {
-    //                         const value = it.fn(ctx, type);
-    //                         return vn.fn(ctx, value, type, vn.rule, vn.msg);
-    //                     };
-    //                     return {
-    //                         name: it.name,
-    //                         fn,
-    //                         index: it.index,
-    //                         type: it.type
-    //                     };
-    //                 } else {
-    //                     return it;
-    //                 }
-    //             });
-    //         }
-    //     }
-    // }
     return argsMetaObj;
 }
 
@@ -207,11 +209,11 @@ export class Router {
      * @param {*} app
      * @param {Koa.Context} ctx
      * @param {Container} container
-     * @param {*} [params]
+     * @param {*} ctlParams
      * @returns
      * @memberof Router
      */
-    async execRouter(identifier: string, router: any, app: any, ctx: Koa.Context, container: Container, params?: any) {
+    async execRouter(identifier: string, router: any, app: any, ctx: Koa.Context, container: Container, ctlParams: any) {
         const ctl: any = container.get(identifier, "CONTROLLER", [app, ctx]);
         // const ctl: any = container.get(identifier, "CONTROLLER");
         if (!ctx || !ctl.init) {
@@ -224,8 +226,8 @@ export class Router {
         }
         // inject param
         let args = [];
-        if (params[router.method]) {
-            args = params[router.method].sort((a: any, b: any) => a.index - b.index).map((i: any) => i.fn(ctx, i.type));
+        if (ctlParams[router.method]) {
+            args = getParamter(ctlParams[router.method].data || [], ctlParams[router.method].valids || [], ctx);
         }
         try {
             return ctl[router.method](...args);
