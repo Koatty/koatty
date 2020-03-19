@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-15 23:26:27
+ * @ version: 2020-03-20 07:25:29
  */
 import { Locker, RedisOptions } from "../util/Locker";
 import * as helper from "think_lib";
@@ -42,17 +42,32 @@ export function Cacheable(cacheName: string, paramKey?: number | number[], redis
                         logger.error("Missing redis server configuration. Please write a configuration item with the key name 'Cacheable' or 'redis' in the db.ts file.");
                     }
                 }
-                let lockerCls;
+                // tslint:disable-next-line: one-variable-per-declaration
+                let lockerCls, client, isError = false;
                 if (cacheFlag) {
                     lockerCls = Locker.getInstance(redisOptions);
                     if (!lockerCls) {
                         cacheFlag = false;
-                        logger.error(`Redis connection failed. @Cacheable is not executed.`);
+                        isError = true;
+                        // logger.error(`Redis connection failed. @Cacheable is not executed.`);
+                    } else {
+                        client = await lockerCls.defineCommand().catch((err: any) => {
+                            cacheFlag = false;
+                            isError = true;
+                            // logger.error(`Redis connection error. @Cacheable is not executed.`);
+                        });
+                        if (!client || !helper.isFunction(client.hget)) {
+                            cacheFlag = false;
+                            isError = true;
+                            // logger.error(`Redis connection error. @Cacheable is not executed.`);
+                        }
                     }
+                }
+                if (isError) {
+                    logger.error(`Redis connection failed. @Cacheable is not executed.`);
                 }
 
                 if (cacheFlag) {
-                    const client = await lockerCls.defineCommand();
                     // tslint:disable-next-line: one-variable-per-declaration
                     let key = "", res;
                     if (helper.isArray(paramKey)) {
@@ -137,17 +152,32 @@ export function CacheEvict(cacheName: string, paramKey?: number | number[], even
                         logger.error("Missing redis server configuration. Please write a configuration item with the key name 'Cacheable' or 'redis' in the db.ts file.");
                     }
                 }
-                let lockerCls;
+                // tslint:disable-next-line: one-variable-per-declaration
+                let lockerCls, client, isError = false;
                 if (cacheFlag) {
                     lockerCls = Locker.getInstance(redisOptions);
                     if (!lockerCls) {
                         cacheFlag = false;
-                        logger.error(`Redis connection failed. @CacheEvict is not executed.`);
+                        isError = true;
+                        // logger.error(`Redis connection failed. @Cacheable is not executed.`);
+                    } else {
+                        client = await lockerCls.defineCommand().catch((err: any) => {
+                            cacheFlag = false;
+                            isError = true;
+                            // logger.error(`Redis connection error. @Cacheable is not executed.`);
+                        });
+                        if (!client || !helper.isFunction(client.hget)) {
+                            cacheFlag = false;
+                            isError = true;
+                            // logger.error(`Redis connection error. @Cacheable is not executed.`);
+                        }
                     }
+                }
+                if (isError) {
+                    logger.error(`Redis connection failed. @Cacheable is not executed.`);
                 }
 
                 if (cacheFlag) {
-                    const client = await lockerCls.defineCommand();
                     let key = "";
                     if (helper.isArray(paramKey)) {
                         (<number[]>paramKey).map((it: any) => {
