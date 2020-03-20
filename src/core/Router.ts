@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-20 07:05:00
+ * @ version: 2020-03-20 12:06:47
  */
 import KoaRouter from "@koa/router";
 import * as Koa from "koa";
@@ -110,9 +110,12 @@ function getParamter(params: any[], valids: any[], ctx: Koa.Context) {
         if (v.fn && helper.isFunction(v.fn)) {
             value = v.fn(ctx, v.type);
         }
-        if (helper.isClass(v.type)) {
+        if (v.isDto) {
             // DTO class
-            value = plainToClass(v.type, value, true);
+            const clazz = IOCContainer.getClass(v.type, "COMPONENT");
+            if (clazz) {
+                value = plainToClass(clazz, value, true);
+            }
         } else {
             value = convertParamsType(value, v.type);
             //@Valid()
