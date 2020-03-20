@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-14 15:16:56
+ * @ version: 2020-03-20 12:21:45
  */
 
 import * as path from "path";
@@ -134,7 +134,7 @@ export class Koatty extends Koa {
         } else {
             process.env.APP_DEBUG = "true";
         }
-        process.env.KOATTY_ENV = process.env.NODE_ENV;
+        // process.env.KOATTY_ENV = process.env.NODE_ENV;
 
         // check env
         checkEnv();

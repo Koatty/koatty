@@ -1,11 +1,11 @@
-import { Length, Min, Max, IsCnName, Contains, IsNotEmpty, IsDefined } from '../../../src';
+import { Length, Min, Max, IsCnName, Contains, IsNotEmpty, IsDefined, Component } from '../../../src';
 /**
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-20 07:02:12
+ * @ version: 2020-03-20 11:44:55
  */
-
+@Component()
 export class TestDto {
     // @Length(10, 20, {
     //     message: "name必填或格式不正确"
