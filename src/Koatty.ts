@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-20 12:21:45
+ * @ version: 2020-03-20 12:44:35
  */
 
 import * as path from "path";
@@ -28,7 +28,7 @@ const checkEnv = () => {
     nodeVersion = nodeVersion.slice(0, nodeVersion.lastIndexOf("."));
 
     if (helper.toNumber(node_engines) > helper.toNumber(nodeVersion)) {
-        logger.error(`ThinkKoa need node version > ${node_engines}, current version is ${nodeVersion}, please upgrade it.`);
+        logger.error(`Koatty need node version > ${node_engines}, current version is ${nodeVersion}, please upgrade it.`);
         process.exit(-1);
     }
 };
@@ -117,28 +117,22 @@ export class Koatty extends Koa {
      */
     private initialize() {
         //development env is default
-        this.app_debug = this.options.app_debug || this.app_debug;
-        if (!helper.isBoolean(this.app_debug)) {
+        this.app_debug = !!(this.options.app_debug || this.app_debug);
+
+        const env = JSON.stringify(process.execArgv);
+        if ((env.indexOf("--production") > -1) || (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "pro")) {
+            this.app_debug = false;
+        }
+        if (env.indexOf("ts-node") > -1 || env.indexOf("--debug") > -1) {
             this.app_debug = true;
         }
-        process.env.NODE_ENV = "development";
-        const env = JSON.stringify(process.execArgv);
-        //production mode
-        if ((env.indexOf("--production") > -1) || (process.env.NODE_ENV === "production")) {
-            this.app_debug = false;
-            process.env.NODE_ENV = "production";
-        }
-
-        if (!this.app_debug) {
-            process.env.NODE_ENV = "production";
-        } else {
+        if (this.app_debug) {
             process.env.APP_DEBUG = "true";
         }
-        // process.env.KOATTY_ENV = process.env.NODE_ENV;
 
         // check env
         checkEnv();
-        // define path        
+        // define path  
         const root_path = (this.options && this.options.root_path) || this.root_path || process.cwd();
         const app_path = this.app_path || (this.options && this.options.app_path) || path.resolve(root_path, env.indexOf("ts-node") > -1 ? "src" : "dist");
         const think_path = __dirname;
