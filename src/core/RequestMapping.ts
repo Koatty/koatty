@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-19 19:45:40
+ * @ version: 2020-03-20 11:44:34
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -215,16 +215,21 @@ const Inject = (fn: Function): ParameterDecorator => {
         // 获取所有元数据 key (由 TypeScript 注入)
         // const keys = Reflect.getMetadataKeys(target, propertyKey);
         let type = (paramtypes[descriptor] && paramtypes[descriptor].name) ? paramtypes[descriptor].name : "object";
+        let isDto = false;
         //DTO class
         if (!paramterTypes[type]) {
-            type = paramtypes[descriptor];
+            type = IOCContainer.getIdentifier(paramtypes[descriptor]);
+            // reg to IOC container
+            // IOCContainer.reg(type, paramtypes[descriptor]);
+            isDto = true;
         }
 
         IOCContainer.attachPropertyData(PARAM_KEY, {
             name: propertyKey,
             fn,
             index: descriptor,
-            type
+            type,
+            isDto
         }, target, propertyKey);
         return descriptor;
 
