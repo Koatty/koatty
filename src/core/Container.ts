@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-21 12:20:36
+ * @ version: 2020-03-21 20:40:14
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -122,12 +122,7 @@ export class Container implements IContainer {
                     if (options.scope === "Singleton") {
                         // instantiation
                         instance = Reflect.construct(target, options.args);
-                        Reflect.defineProperty(instance, "app", {
-                            enumerable: true,
-                            configurable: false,
-                            writable: false,
-                            value: this.app
-                        });
+                        helper.define(instance, "app", this.app);
                     } else {
                         instance = target;
                     }
@@ -141,14 +136,9 @@ export class Container implements IContainer {
 
         if (options.scope !== "Singleton") {
             // instantiation
-            const ins = Reflect.construct(instance, options.args);
-            Reflect.defineProperty(ins, "app", {
-                enumerable: true,
-                configurable: false,
-                writable: false,
-                value: this.app
-            });
-            return ins;
+            instance = Reflect.construct(instance, options.args);
+            helper.define(instance, "app", this.app);
+            return instance;
         }
         return instance;
     }
@@ -177,12 +167,7 @@ export class Container implements IContainer {
         if (args.length > 0 || helper.isClass(instance)) {
             // instantiation
             instance = Reflect.construct(instance, args);
-            Reflect.defineProperty(instance, "app", {
-                enumerable: true,
-                configurable: false,
-                writable: false,
-                value: this.app
-            });
+            helper.define(instance, "app", this.app);
         }
 
         return instance;
@@ -223,12 +208,7 @@ export class Container implements IContainer {
         if (args.length > 0 || helper.isClass(instance)) {
             // instantiation
             instance = Reflect.construct(instance, args);
-            Reflect.defineProperty(instance, "app", {
-                enumerable: true,
-                configurable: false,
-                writable: false,
-                value: this.app
-            });
+            helper.define(instance, "app", this.app);
         }
         return instance;
     }
