@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-02-24 16:18:55
+ * @ version: 2020-03-21 09:13:37
  */
 import { Bootstrap, ComponentScan, Autowired, Koatty, ConfiguationScan, Logger, Helper } from '../../src/index';
 import * as path from "path";
@@ -22,6 +22,7 @@ export class App extends Koatty {
     root_path: string;
     mm1: any;
     mm2: any;
+    test: string;
 
     public init() {
         this.root_path = path.dirname(__dirname);
