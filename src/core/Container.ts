@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-14 13:49:01
+ * @ version: 2020-03-21 12:20:36
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -116,19 +116,24 @@ export class Container implements IContainer {
             if (helper.isClass(target)) {
                 const ref = this.getClass(options.type, identifier);
                 if (!ref) {
-                    this.saveClass(options.type, target, identifier);
-                }
-                // inject dependency
-                BuildInject(target, options, this);
+                    // inject dependency
+                    BuildInject(target, options, this);
 
-                if (options.scope === "Singleton") {
-                    // instantiation
-                    instance = Reflect.construct(target, options.args);
-                } else {
-                    instance = target;
+                    if (options.scope === "Singleton") {
+                        // instantiation
+                        instance = Reflect.construct(target, options.args);
+                        Reflect.defineProperty(instance, "app", {
+                            enumerable: true,
+                            configurable: false,
+                            writable: false,
+                            value: this.app
+                        });
+                    } else {
+                        instance = target;
+                    }
+                    // registration
+                    this.instanceMap.set(target, Object.seal(instance));
                 }
-                // registration
-                this.instanceMap.set(target, instance);
             } else {
                 return target;
             }
@@ -136,7 +141,14 @@ export class Container implements IContainer {
 
         if (options.scope !== "Singleton") {
             // instantiation
-            return Reflect.construct(instance, options.args);
+            const ins = Reflect.construct(instance, options.args);
+            Reflect.defineProperty(ins, "app", {
+                enumerable: true,
+                configurable: false,
+                writable: false,
+                value: this.app
+            });
+            return ins;
         }
         return instance;
     }
@@ -165,10 +177,12 @@ export class Container implements IContainer {
         if (args.length > 0 || helper.isClass(instance)) {
             // instantiation
             instance = Reflect.construct(instance, args);
-        }
-
-        if (!instance.app) {
-            instance.app = this.app;
+            Reflect.defineProperty(instance, "app", {
+                enumerable: true,
+                configurable: false,
+                writable: false,
+                value: this.app
+            });
         }
 
         return instance;
@@ -209,10 +223,12 @@ export class Container implements IContainer {
         if (args.length > 0 || helper.isClass(instance)) {
             // instantiation
             instance = Reflect.construct(instance, args);
-        }
-
-        if (!instance.app) {
-            instance.app = this.app;
+            Reflect.defineProperty(instance, "app", {
+                enumerable: true,
+                configurable: false,
+                writable: false,
+                value: this.app
+            });
         }
         return instance;
     }
