@@ -2,11 +2,11 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-22 03:16:13
+ * @ version: 2020-03-23 03:20:08
  */
 import * as helper from "think_lib";
 import { ValidRules, ClassValidator, paramterTypes } from 'think_validtion';
-import { PARAM_RULE_KEY } from './Constants';
+import { PARAM_RULE_KEY, PARAM_CHECK_KEY } from './Constants';
 import { IOCContainer } from './Container';
 export {
     ClassValidator, FunctionValidator,
@@ -52,31 +52,37 @@ export function Valid(rule: ValidRules | ValidRules[] | Function, message?: stri
  */
 export function Validated(): MethodDecorator {
     return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+        //
+        IOCContainer.savePropertyData(PARAM_CHECK_KEY, {
+            dtoCheck: 1
+        }, target, propertyKey);
+
         // 获取成员参数类型
-        const paramtypes = Reflect.getMetadata("design:paramtypes", target, propertyKey);
-        const { value, configurable, enumerable } = descriptor;
-        descriptor = {
-            configurable,
-            enumerable,
-            writable: true,
-            value: async function valid(...props: any[]) {
-                const ps: any[] = [];
-                // tslint:disable-next-line: no-unused-expression
-                (props || []).map((value: any, index: number) => {
-                    const type = (paramtypes[index] && paramtypes[index].name) ? paramtypes[index].name : "any";
-                    if (!paramterTypes[type]) {
-                        ps.push(ClassValidator.valid(paramtypes[index], value, true));
-                    } else {
-                        ps.push(Promise.resolve(value));
-                    }
-                });
-                if (ps.length > 0) {
-                    props = await Promise.all(ps);
-                }
-                // tslint:disable-next-line: no-invalid-this
-                return value.apply(this, props);
-            }
-        };
-        return descriptor;
+        // const paramtypes = Reflect.getMetadata("design:paramtypes", target, propertyKey) || [];
+
+        // const { value, configurable, enumerable } = descriptor;
+        // descriptor = {
+        //     configurable,
+        //     enumerable,
+        //     writable: true,
+        //     value: async function valid(...props: any[]) {
+        //         const ps: any[] = [];
+        //         // tslint:disable-next-line: no-unused-expression
+        //         (props || []).map((value: any, index: number) => {
+        //             const type = (paramtypes[index] && paramtypes[index].name) ? paramtypes[index].name : "any";
+        //             if (!paramterTypes[type]) {
+        //                 ps.push(ClassValidator.valid(paramtypes[index], value, true));
+        //             } else {
+        //                 ps.push(Promise.resolve(value));
+        //             }
+        //         });
+        //         if (ps.length > 0) {
+        //             props = await Promise.all(ps);
+        //         }
+        //         // tslint:disable-next-line: no-invalid-this
+        //         return value.apply(this, props);
+        //     }
+        // };
+        // return descriptor;
     };
 }
