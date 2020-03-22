@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-22 00:42:40
+ * @ version: 2020-03-23 03:54:54
  */
 import KoaRouter from "@koa/router";
 import * as Koa from "koa";
@@ -10,9 +10,9 @@ import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { Koatty } from "../Koatty";
 import { Container, IOCContainer } from "./Container";
-import { NAMED_TAG, ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY } from "./Constants";
+import { NAMED_TAG, ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY, PARAM_CHECK_KEY } from "./Constants";
 import { recursiveGetMetadata } from "../util/Lib";
-import { convertParamsType, ValidatorFuncs, plainToClass } from 'think_validtion';
+import { convertParamsType, ValidatorFuncs, plainToClass, ClassValidator } from 'think_validtion';
 
 /**
  * Http timeout timer
@@ -79,6 +79,7 @@ function injectParam(target: any, instance?: any) {
     // const methods = getMethodNames(target);
     const metaDatas = recursiveGetMetadata(PARAM_KEY, target);
     const vaildMetaDatas = recursiveGetMetadata(PARAM_RULE_KEY, target);
+    const vaildatedMetaDatas = recursiveGetMetadata(PARAM_CHECK_KEY, target);
     const argsMetaObj: any = {};
     for (const meta in metaDatas) {
         if (instance[meta] && instance[meta].length <= metaDatas[meta].length) {
@@ -96,25 +97,29 @@ function injectParam(target: any, instance?: any) {
                     }
                 });
             });
-            argsMetaObj[meta] = { valids: vaildMetaObj, data };
+            argsMetaObj[meta] = {
+                valids: vaildMetaObj,
+                data,
+                dtoCheck: (vaildatedMetaDatas[meta] && vaildatedMetaDatas[meta].dtoCheck) ? true : false
+            };
         }
     }
     return argsMetaObj;
 }
 
+
 /**
  * Convert paramter types and valid check.
  *
- * @export
- * @param {*} params
- * @param {string} method
+ * @param {any[]} params
+ * @param {*} valids
+ * @param {boolean} dtoCheck
  * @param {Koa.Context} ctx
  * @returns
  */
-function getParamter(params: any[], valids: any, ctx: Koa.Context) {
-    // params = params.sort((a: any, b: any) => a.index - b.index);
+async function getParamter(params: any[], valids: any, dtoCheck: boolean, ctx: Koa.Context) {
     //convert type
-    const props: any[] = params.map((v: any, k: number) => {
+    const props: any[] = params.map(async function (v: any, k: number) {
         let value: any = null;
         if (v.fn && helper.isFunction(v.fn)) {
             value = v.fn(ctx, v.type);
@@ -123,7 +128,11 @@ function getParamter(params: any[], valids: any, ctx: Koa.Context) {
             // DTO class
             const clazz = IOCContainer.getClass(v.type, "COMPONENT");
             if (clazz) {
-                value = plainToClass(clazz, value, true);
+                if (dtoCheck) {
+                    value = await ClassValidator.valid(clazz, value, true);
+                } else {
+                    value = plainToClass(clazz, value, true);
+                }
             }
         } else {
             value = convertParamsType(value, v.type);
@@ -134,7 +143,7 @@ function getParamter(params: any[], valids: any, ctx: Koa.Context) {
         }
         return value;
     });
-    return props;
+    return Promise.all(props);
 }
 
 /**
@@ -209,7 +218,7 @@ export class Router {
                         //     tmr && clearTimeout(tmr);
                         // }
                         const router = ctlRouters[it];
-                        return execRouter(n, router, app, ctx, container, ctlParams);
+                        return execRouter(n, router, app, ctx, container, ctlParams[router.method]);
                     });
                 }
             }
@@ -246,8 +255,8 @@ export class Router {
         }
         // inject param
         let args = [];
-        if (ctlParams[router.method]) {
-            args = getParamter(ctlParams[router.method].data || [], ctlParams[router.method].valids || {}, ctx);
+        if (ctlParams) {
+            args = await getParamter(ctlParams.data || [], ctlParams.valids || {}, ctlParams.dtoCheck, ctx);
         }
         try {
             return ctl[router.method](...args);
