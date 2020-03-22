@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-20 12:06:47
+ * @ version: 2020-03-22 00:42:40
  */
 import KoaRouter from "@koa/router";
 import * as Koa from "koa";
@@ -87,7 +87,16 @@ function injectParam(target: any, instance?: any) {
 
             // cover to obj
             const data = (metaDatas[meta] || []).sort((a: any, b: any) => a.index - b.index);
-            argsMetaObj[meta] = { valids: vaildMetaDatas[meta] || [], data };
+            const vaildData = vaildMetaDatas[meta] || [];
+            const vaildMetaObj: any = {};
+            data.map((v: any) => {
+                vaildData.map((it: any) => {
+                    if (v.index === it.index) {
+                        vaildMetaObj[v.index] = it;
+                    }
+                });
+            });
+            argsMetaObj[meta] = { valids: vaildMetaObj, data };
         }
     }
     return argsMetaObj;
@@ -102,7 +111,7 @@ function injectParam(target: any, instance?: any) {
  * @param {Koa.Context} ctx
  * @returns
  */
-function getParamter(params: any[], valids: any[], ctx: Koa.Context) {
+function getParamter(params: any[], valids: any, ctx: Koa.Context) {
     // params = params.sort((a: any, b: any) => a.index - b.index);
     //convert type
     const props: any[] = params.map((v: any, k: number) => {
@@ -238,7 +247,7 @@ export class Router {
         // inject param
         let args = [];
         if (ctlParams[router.method]) {
-            args = getParamter(ctlParams[router.method].data || [], ctlParams[router.method].valids || [], ctx);
+            args = getParamter(ctlParams[router.method].data || [], ctlParams[router.method].valids || {}, ctx);
         }
         try {
             return ctl[router.method](...args);

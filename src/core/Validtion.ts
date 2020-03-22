@@ -2,10 +2,10 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-20 06:55:06
+ * @ version: 2020-03-22 03:16:13
  */
 import * as helper from "think_lib";
-import { ValidRules, ClassValidator } from 'think_validtion';
+import { ValidRules, ClassValidator, paramterTypes } from 'think_validtion';
 import { PARAM_RULE_KEY } from './Constants';
 import { IOCContainer } from './Container';
 export {
@@ -63,7 +63,8 @@ export function Validated(): MethodDecorator {
                 const ps: any[] = [];
                 // tslint:disable-next-line: no-unused-expression
                 (props || []).map((value: any, index: number) => {
-                    if (helper.isClass(paramtypes[index])) {
+                    const type = (paramtypes[index] && paramtypes[index].name) ? paramtypes[index].name : "any";
+                    if (!paramterTypes[type]) {
                         ps.push(ClassValidator.valid(paramtypes[index], value, true));
                     } else {
                         ps.push(Promise.resolve(value));
