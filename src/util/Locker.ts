@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-15 23:39:33
+ * @ version: 2020-03-23 03:16:47
  */
 
 const store = require("think_store");
@@ -65,7 +65,8 @@ export class Locker {
             host: options.host || '127.0.0.1',
             port: options.port || 6379,
             password: options.password || '',
-            db: options.db || '2'
+            db: options.db || '2',
+            conn_timeout: 1000
         };
         this.store = store.getInstance(this.options);
     }
