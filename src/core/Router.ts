@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-23 03:54:54
+ * @ version: 2020-03-23 15:04:38
  */
 import KoaRouter from "@koa/router";
 import * as Koa from "koa";
@@ -204,19 +204,6 @@ export class Router {
                     // tslint:disable-next-line: no-unused-expression
                     app.app_debug && logger.custom("think", "", `Register request mapping: [${ctlRouters[it].requestMethod}] : ["${ctlRouters[it].path}" => ${n}.${ctlRouters[it].method}]`);
                     kRouter[ctlRouters[it].requestMethod](ctlRouters[it].path, async function (ctx: Koa.Context): Promise<any> {
-                        // tslint:disable-next-line: prefer-const
-                        // let tmr = null;
-                        // // try /catch
-                        // try {
-                        //     const router = ctlRouters[it];
-                        //     const startTime = ctx.startTime || Date.now();
-                        //     const timeout = ((options.timeout || 30) * 1000) - (Date.now() - startTime);
-                        //     // promise.race
-                        //     return Promise.race([timer(tmr, timeout), execRouter(n, router, app, ctx, container, ctlParams)]);
-                        // } finally {
-                        //     // tslint:disable-next-line: no-unused-expression
-                        //     tmr && clearTimeout(tmr);
-                        // }
                         const router = ctlRouters[it];
                         return execRouter(n, router, app, ctx, container, ctlParams[router.method]);
                     });
@@ -250,7 +237,7 @@ export class Router {
         }
         // pre-method
         if (ctl.__before) {
-            logger.info(`Execute the aspect __before`);
+            logger.info(`Execute the aspect __before()`);
             await ctl.__before();
         }
         // inject param
@@ -263,7 +250,7 @@ export class Router {
         } finally {
             // after-method
             if (ctl.__after) {
-                logger.info(`Execute the aspect __after`);
+                logger.info(`Execute the aspect __after()`);
                 await ctl.__after();
             }
         }

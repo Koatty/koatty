@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-03 20:36:55
+ * @ version: 2020-03-23 15:06:12
  */
 import { Middleware } from "../core/Component";
 import { Koatty } from "../Koatty";

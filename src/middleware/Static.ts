@@ -2,12 +2,11 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-03 20:36:53
+ * @ version: 2020-03-23 15:06:09
  */
-
-const statics = require("think_static");
 import { Middleware } from "../core/Component";
 import { Koatty } from "../Koatty";
+const statics = require("think_static");
 
 @Middleware()
 export class Static {

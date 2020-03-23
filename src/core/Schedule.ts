@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-15 23:27:31
+ * @ version: 2020-03-23 15:05:15
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -37,7 +37,7 @@ export function Scheduled(cron: string): MethodDecorator {
     return (target, propertyKey: string, descriptor: PropertyDescriptor) => {
         const type = IOCContainer.getType(target);
         if (type === "CONTROLLER") {
-            throw Error("Cacheable decorator cannot be used in the controller class.");
+            throw Error("Scheduled decorator cannot be used in the controller class.");
         }
         IOCContainer.attachPropertyData(SCHEDULE_KEY, {
             cron,
