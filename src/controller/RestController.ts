@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-18 15:44:00
+ * @ version: 2020-03-24 15:27:11
  */
 import * as helper from "think_lib";
 import { Container } from "../core/Container";
@@ -44,7 +44,7 @@ export class RestController extends BaseController {
             return this.fail("resource is empty");
         }
         if (!this.model) {
-            const resourceName = helper.camelCase(resource, { pascalCase: true });
+            const resourceName = helper.camelCase(resource, true);
             this.model = this.container.get(`${resourceName}Model`, "COMPONENT");
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
@@ -86,7 +86,7 @@ export class RestController extends BaseController {
             return this.fail("body is empty");
         }
         if (!this.model) {
-            const resourceName = helper.camelCase(resource, { pascalCase: true });
+            const resourceName = helper.camelCase(resource, true);
             this.model = this.container.get(`${resourceName}Model`, "COMPONENT");
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
@@ -118,7 +118,7 @@ export class RestController extends BaseController {
             return this.fail("resource is empty");
         }
         if (!this.model) {
-            const resourceName = helper.camelCase(resource, { pascalCase: true });
+            const resourceName = helper.camelCase(resource, true);
             this.model = this.container.get(`${resourceName}Model`, "COMPONENT");
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
@@ -155,7 +155,7 @@ export class RestController extends BaseController {
             return this.fail("body is empty");
         }
         if (!this.model) {
-            const resourceName = helper.camelCase(resource, { pascalCase: true });
+            const resourceName = helper.camelCase(resource, true);
             this.model = this.container.get(`${resourceName}Model`, "COMPONENT");
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);

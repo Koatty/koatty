@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-14 13:49:33
+ * @ version: 2020-03-27 10:24:58
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -29,7 +29,7 @@ export function Autowired(identifier?: string, type?: CompomentType, constructAr
         if (!identifier) {
             if (!designType || designType.name === "Object") {
                 // throw Error("identifier cannot be empty when circular dependency exists");
-                identifier = helper.camelCase(propertyKey, { pascalCase: true });
+                identifier = helper.camelCase(propertyKey, true);
             } else {
                 identifier = designType.name;
             }
@@ -78,11 +78,11 @@ export function Autowired(identifier?: string, type?: CompomentType, constructAr
  * @param {string} [type] configuations type
  * @returns {PropertyDecorator}
  */
-export function Value(identifier: string, type?: string): PropertyDecorator {
+export function Value(key: string, type?: string): PropertyDecorator {
     return (target: any, propertyKey: string) => {
         // identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
-        identifier = identifier || propertyKey;
-        IOCContainer.savePropertyData(TAGGED_ARGS, `${identifier || ""}|${type || "config"}`, target, propertyKey);
+        key = key || propertyKey;
+        IOCContainer.savePropertyData(TAGGED_ARGS, `${key || ""}|${type || "config"}`, target, propertyKey);
     };
 }
 

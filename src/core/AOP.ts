@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-14 13:49:19
+ * @ version: 2020-03-29 04:14:46
  */
 import * as helper from "think_lib";
 import { COMPONENT_KEY } from "./Constants";
@@ -32,7 +32,7 @@ function defineNewProperty(clazz: Function, protoName: string, methodName: strin
                 if (helper.isFunction(methodName)) {
                     // tslint:disable-next-line: no-invalid-this
                     aspect = this.app.Container.getInsByClass(methodName);
-                    name = IOCContainer.getIdentifier(methodName) || methodName.name || "";
+                    name = IOCContainer.getIdentifier(<Function>methodName) || (<Function>methodName).name || "";
                 } else {
                     // tslint:disable-next-line: no-invalid-this
                     aspect = this.app.Container.get(methodName, "COMPONENT");
@@ -44,7 +44,6 @@ function defineNewProperty(clazz: Function, protoName: string, methodName: strin
                     await Promise.resolve(Reflect.apply(aspect.run, this, props));
                 }
             }
-
             return Promise.resolve();
         }
     });
@@ -91,7 +90,7 @@ export function Before(aopName: string | Function): MethodDecorator {
                 if (helper.isFunction(aopName)) {
                     // tslint:disable-next-line: no-invalid-this
                     aspect = this.app.Container.getInsByClass(aopName);
-                    name = IOCContainer.getIdentifier(aopName) || aopName.name || "";
+                    name = IOCContainer.getIdentifier(<Function>aopName) || (<Function>aopName).name || "";
                 } else {
                     // tslint:disable-next-line: no-invalid-this
                     aspect = this.app.Container.get(aopName, "COMPONENT");
@@ -119,8 +118,14 @@ export function Before(aopName: string | Function): MethodDecorator {
  */
 export function BeforeEach(aopName?: string | Function): ClassDecorator {
     return (target: any) => {
-        aopName = aopName || "__before";
-        return defineNewProperty(target, "__before", aopName === "__before" ? "" : aopName);
+        // only used in Controller
+        const type = IOCContainer.getType(target);
+        if (type !== "CONTROLLER") {
+            throw Error("BeforeEach decorator is only used in the controller class.");
+        }
+        if (aopName && aopName !== "__before") {
+            defineNewProperty(target, "__before", aopName);
+        }
     };
 }
 
@@ -147,7 +152,7 @@ export function After(aopName: string | Function): MethodDecorator {
                 if (helper.isFunction(aopName)) {
                     // tslint:disable-next-line: no-invalid-this
                     aspect = this.app.Container.getInsByClass(aopName);
-                    name = IOCContainer.getIdentifier(aopName) || aopName.name || "";
+                    name = IOCContainer.getIdentifier(<Function>aopName) || (<Function>aopName).name || "";
                 } else {
                     // tslint:disable-next-line: no-invalid-this
                     aspect = this.app.Container.get(aopName, "COMPONENT");
@@ -175,7 +180,13 @@ export function After(aopName: string | Function): MethodDecorator {
  */
 export function AfterEach(aopName?: string | Function): ClassDecorator {
     return (target: any) => {
-        aopName = aopName || "__after";
-        return defineNewProperty(target, "__after", aopName === "__after" ? "" : aopName);
+        // only used in Controller
+        const type = IOCContainer.getType(target);
+        if (type !== "CONTROLLER") {
+            throw Error("AfterEach decorator is only used in the controller class.");
+        }
+        if (aopName && aopName !== "__after") {
+            defineNewProperty(target, "__after", aopName);
+        }
     };
 }
