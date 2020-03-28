@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-20 07:25:29
+ * @ version: 2020-03-29 03:56:02
  */
 import { Locker, RedisOptions } from "../util/Locker";
 import * as helper from "think_lib";
@@ -74,7 +74,7 @@ export function Cacheable(cacheName: string, paramKey?: number | number[], redis
                         (<number[]>paramKey).map((it: any) => {
                             if (!helper.isTrueEmpty(props[it])) {
                                 if (typeof props[it] === "object") {
-                                    key = `${key}${helper.md5(JSON.stringify(props[it]))}`;
+                                    key = `${key}${helper.murmurHash(JSON.stringify(props[it]))}`;
                                 } else {
                                     key = `${key}${props[it]}`;
                                 }
@@ -82,7 +82,7 @@ export function Cacheable(cacheName: string, paramKey?: number | number[], redis
                         });
                     } else {
                         if (typeof props[(<number>paramKey)] === "object") {
-                            key = helper.md5(JSON.stringify(props[(<number>paramKey)]));
+                            key = helper.murmurHash(JSON.stringify(props[(<number>paramKey)]));
                         } else {
                             key = props[(<number>paramKey)] || "";
                         }
@@ -183,7 +183,7 @@ export function CacheEvict(cacheName: string, paramKey?: number | number[], even
                         (<number[]>paramKey).map((it: any) => {
                             if (!helper.isTrueEmpty(props[it])) {
                                 if (typeof props[it] === "object") {
-                                    key = `${key}${helper.md5(JSON.stringify(props[it]))}`;
+                                    key = `${key}${helper.murmurHash(JSON.stringify(props[it]))}`;
                                 } else {
                                     key = `${key}${props[it]}`;
                                 }
@@ -191,7 +191,7 @@ export function CacheEvict(cacheName: string, paramKey?: number | number[], even
                         });
                     } else {
                         if (typeof props[(<number>paramKey)] === "object") {
-                            key = helper.md5(JSON.stringify(props[(<number>paramKey)]));
+                            key = helper.murmurHash(JSON.stringify(props[(<number>paramKey)]));
                         } else {
                             key = props[(<number>paramKey)] || "";
                         }
