@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-23 03:16:47
+ * @ version: 2020-04-14 20:29:24
  */
 
 const store = require("think_store");
@@ -98,7 +98,7 @@ export class Locker {
             }
             return client;
         } catch (e) {
-            logger.error(e);
+            // logger.error(e);
             return null;
         }
     }

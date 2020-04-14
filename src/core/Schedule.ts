@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-23 15:05:15
+ * @ version: 2020-04-14 17:51:42
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -47,18 +47,17 @@ export function Scheduled(cron: string): MethodDecorator {
 }
 
 /**
- * Schedule redis-based distributed locks
+ * Schedule redis-based distributed locks. Reids server config from db.ts.
  *
  * @export
  * @param {string} [name] The locker name. If name is duplicated, lock sharing contention will result.
  * @param {number} [lockTimeOut] Automatic release of lock within a limited maximum time.
  * @param {number} [waitLockInterval] Try to acquire lock every interval time(millisecond).
  * @param {number} [waitLockTimeOut] When using more than TimeOut(millisecond) still fails to get the lock and return failure.
- * @param {*} [redisOptions] Reids server config. Read from db.ts by default.
  * 
  * @returns {MethodDecorator}
  */
-export function SchedulerLock(name?: string, lockTimeOut?: number, waitLockInterval?: number, waitLockTimeOut?: number, redisOptions?: RedisOptions): MethodDecorator {
+export function SchedulerLock(name?: string, lockTimeOut?: number, waitLockInterval?: number, waitLockTimeOut?: number): MethodDecorator {
     return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
         const { value, configurable, enumerable } = descriptor;
         if (helper.isEmpty(name)) {
@@ -70,12 +69,10 @@ export function SchedulerLock(name?: string, lockTimeOut?: number, waitLockInter
             enumerable,
             writable: true,
             async value(...props: any[]) {
+                // tslint:disable-next-line: no-invalid-this
+                const redisOptions = this.app.config("SchedulerLock", "db") || this.app.config("redis", "db");
                 if (helper.isEmpty(redisOptions)) {
-                    // tslint:disable-next-line: no-invalid-this
-                    redisOptions = this.app.config("Scheduled", "db") || this.app.config("redis", "db");
-                    if (helper.isEmpty(redisOptions)) {
-                        throw Error("Missing redis server configuration. Please write a configuration item with the key name 'Scheduled' or 'redis' in the db.ts file.");
-                    }
+                    throw Error("Missing redis server configuration. Please write a configuration item with the key name 'SchedulerLock' or 'redis' in the db.ts file.");
                 }
                 const lockerCls = Locker.getInstance(redisOptions);
                 let lockerFlag = false;
