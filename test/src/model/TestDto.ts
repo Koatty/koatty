@@ -3,7 +3,7 @@ import { Length, Min, Max, IsCnName, Contains, IsNotEmpty, IsDefined, Component 
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-23 03:19:07
+ * @ version: 2020-04-14 18:21:20
  */
 @Component()
 export class TestDto {
@@ -12,12 +12,13 @@ export class TestDto {
     // })
     @IsNotEmpty({ message: "name不能为空" })
     // @IsDefined()
-    name: number;
+    name: string;
 
-    @Contains("hello")
+    // @Contains("hello")
+    @IsDefined()
     text: string;
 
-    @Min(0, { message: "大于等于0" })
-    @Max(10, { message: "小于等于10" })
+    // @Min(0, { message: "大于等于0" })
+    // @Max(10, { message: "小于等于10" })
     rating: number;
 }
