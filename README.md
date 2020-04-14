@@ -1,8 +1,7 @@
 # koatty
 Koa2 + Typescript = koatty. 
 
-Use Typescript's decorator implement auto injection and AOP, just like SpringBoot.
-
+Use Typescript's decorator implement IOC and AOP, just like SpringBoot.
 
 [![Version npm](https://img.shields.io/npm/v/koatty.svg?style=flat-square)](https://www.npmjs.com/package/koatty)[![npm Downloads](https://img.shields.io/npm/dm/koatty.svg?style=flat-square)](https://npmcharts.com/compare/koatty?minimal=true)
 
@@ -16,7 +15,7 @@ Use Typescript's decorator implement auto injection and AOP, just like SpringBoo
 - **New:** @Transactional() with ThinkORM. ✔️ ThinkORM@4.4.8
 - **New:** think_apollo middleware supports Apollo Configuration Center. ✔️ 
 - **New:** bootFunc supports asynchronous. And the appRady/appStart event also supports asynchronous  ✔️ 1.15.0
-- **New:** @Cacheable, @CacheEvict supports redis-based caching  ✔️ 1.16.0
+- **New:** @CacheAble, @CacheEvict supports redis-based caching  ✔️ 1.16.0
 - **New:** koatty-cloud for nacos
 - **New:** koatty grpc server/client by think_grpc middleware.
 - **New:** koatty-cloud for SpringCloud
