@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-27 10:24:58
+ * @ version: 2020-04-15 16:43:29
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -81,6 +81,10 @@ export function Autowired(identifier?: string, type?: CompomentType, constructAr
 export function Value(key: string, type?: string): PropertyDecorator {
     return (target: any, propertyKey: string) => {
         // identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
+        const type = IOCContainer.getType(target);
+        if (type !== "MIDDLEWARE") {
+            throw Error("Value decorator cannot be used in the middleware class. Please use app.config() to get the configuration.");
+        }
         key = key || propertyKey;
         IOCContainer.savePropertyData(TAGGED_ARGS, `${key || ""}|${type || "config"}`, target, propertyKey);
     };
