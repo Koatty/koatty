@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-15 15:15:43
+ * @ version: 2020-04-15 16:10:41
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "koa";
@@ -73,10 +73,9 @@ export class BaseController implements BaseControllerInterface {
      * init
      *
      * @protected
-     * @param {...any[]} arg
      * @memberof BaseController
      */
-    protected init(...arg: any[]): void {
+    protected init(): void {
 
     }
 
