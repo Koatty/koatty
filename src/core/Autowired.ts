@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-15 16:43:29
+ * @ version: 2020-04-15 16:54:48
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -82,7 +82,7 @@ export function Value(key: string, type?: string): PropertyDecorator {
     return (target: any, propertyKey: string) => {
         // identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
         const type = IOCContainer.getType(target);
-        if (type !== "MIDDLEWARE") {
+        if (type === "MIDDLEWARE") {
             throw Error("Value decorator cannot be used in the middleware class. Please use app.config() to get the configuration.");
         }
         key = key || propertyKey;

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-21 20:40:14
+ * @ version: 2020-04-15 16:47:45
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -166,8 +166,8 @@ export class Container implements IContainer {
         // not Singleton, the Container return prototype
         if (args.length > 0 || helper.isClass(instance)) {
             // instantiation
-            instance = Reflect.construct(instance, args);
-            helper.define(instance, "app", this.app);
+            instance = Reflect.construct(instance, [this.app, ...args]);
+            // helper.define(instance, "app", this.app);
         }
 
         return instance;
