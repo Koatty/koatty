@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-28 01:25:45
+ * @ version: 2020-04-15 15:42:17
  */
 import { Koatty } from "../Koatty";
 import { ObjectDefinitionOptions } from "../core/IContainer";
@@ -22,15 +22,18 @@ export class Base {
      * @param {Koatty} app
      * @memberof Base
      */
-    protected constructor(app: Koatty) {
-        this.app = app;
-        this.init();
+    protected constructor(...arg: any[]) {
+        this.init(arg);
     }
 
     /**
      * init
+     *
+     * @protected
+     * @param {...any[]} arg
+     * @memberof Base
      */
-    protected init(): void {
+    protected init(...arg: any[]): void {
 
     }
 }

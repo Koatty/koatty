@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-24 15:27:11
+ * @ version: 2020-04-15 15:15:56
  */
 import * as helper from "think_lib";
 import { Container } from "../core/Container";
@@ -22,8 +22,12 @@ export class RestController extends BaseController {
 
     /**
      * init
+     *
+     * @protected
+     * @param {...any[]} arg
+     * @memberof BaseController
      */
-    public init() {
+    protected init(...arg: any[]): void {
         this.container = this.app.Container;
     }
 

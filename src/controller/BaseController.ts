@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-18 11:33:49
+ * @ version: 2020-04-15 15:15:43
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "koa";
@@ -20,7 +20,6 @@ interface BaseControllerInterface {
     app: Koatty;
     ctx: Koa.Context;
     encoding: string;
-    init: () => void;
     __before: () => Promise<any>;
     __after: () => Promise<any>;
     readonly assign: (name?: string, value?: any) => Promise<any>;
@@ -72,8 +71,12 @@ export class BaseController implements BaseControllerInterface {
 
     /**
      * init
+     *
+     * @protected
+     * @param {...any[]} arg
+     * @memberof BaseController
      */
-    public init() {
+    protected init(...arg: any[]): void {
 
     }
 

@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-03-20 23:01:19
+ * @ version: 2020-04-15 15:16:29
  */
 import { Service, Base, Autowired, Scheduled, SchedulerLock } from "../../../src/index";
 import { App } from '../App';
@@ -15,7 +15,7 @@ export class DataService extends CommonService {
     @Autowired()
     Model: TestModel;
 
-    init() {
+    init(aa: string) {
         //property
     }
 
