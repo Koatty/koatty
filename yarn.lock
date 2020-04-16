@@ -1921,15 +1921,6 @@ text-table@^0.2.0:
   resolved "https://r.cnpmjs.org/text-table/download/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
-think_lib@^2.5.2:
-  version "2.5.2"
-  resolved "https://registry.yarnpkg.com/think_lib/-/think_lib-2.5.2.tgz#6be720de31286b7cad6e90f1a208a805cc41fc87"
-  integrity sha512-5QfsetW8xOJ99D20Fx8PSYPD4cUvdZYGA0EOX3SrlaQgAxFQZt5YWvJ5Bhye/euBq8WuOJni5G0/9aRINAAZNw==
-  dependencies:
-    co "^4.6.0"
-    lodash "^4.17.15"
-    murmurhash "^0.0.2"
-
 think_lib@^2.x.x:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/think_lib/-/think_lib-2.5.1.tgz#e806f06967c2d18c96deffe963618d24317775ed"
@@ -1939,13 +1930,6 @@ think_lib@^2.x.x:
     lodash "^4.17.15"
     murmurhash "^0.0.2"
 
-think_logger@^2.2.4:
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/think_logger/-/think_logger-2.2.4.tgz#58688602d8a65ff4c5afdf40f383bcb7889f63f1"
-  integrity sha512-2jwU8AmRwv/FTEYFC/nmd5QP3id7woXEubbFJgZv++V6WX5rPmVeN2tqWSiypMECySXQLMksO8VCxxmI4cSe/Q==
-  dependencies:
-    think_lib "^2.x.x"
-
 think_logger@^2.x.x:
   version "2.2.0"
   resolved "https://r.cnpmjs.org/think_logger/download/think_logger-2.2.0.tgz#a1c2747c5bf4e87ffd768c6fe39de09afadd3511"
@@ -1953,7 +1937,7 @@ think_logger@^2.x.x:
   dependencies:
     think_lib "^2.x.x"
 
-think_payload@^2.3.0:
+think_payload@^2.x.x:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/think_payload/-/think_payload-2.3.0.tgz#b205c1d05e68c6e17e4119c0ae1b4e1c0cb74441"
   integrity sha512-HMdssQa/35BndAXHCWKW3fxOPtFlRPwiBiOTZazssPR9JDlvNIqNPesdYS8fMhjWaFT1TIg08DQu8oZ7eLSuSg==
@@ -1965,16 +1949,16 @@ think_payload@^2.3.0:
     think_lib "^2.x.x"
     xml2js "^0.4.23"
 
-think_static@^2.1.3:
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/think_static/-/think_static-2.1.3.tgz#46a650bd66fa2003911d0b3650e245d25d0028b4"
-  integrity sha512-lLVwHQfQ5xo5ymwkodoGC5cfBQcLP3l5odXNLXBfuFGzvuwpcbvscD6j/meNcSqV7gPPMegEXimmqZ4ygQVjkw==
+think_static@^2.x.x:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/think_static/-/think_static-2.1.4.tgz#e19804ad833d61948f7bd357821befcdc4334032"
+  integrity sha512-M0WqOcwfIs+KDEBYHjUEZx7NRfIBEXLf0ncB+tNQTYJkVRaJJ27GimzwNHKu6pbUYQsuVKTbb6OAb4ef2iSpPg==
   dependencies:
     compressible "^2.0.18"
     mime-types "^2.1.26"
     think_lib "^2.x.x"
 
-think_store@^4.0.6:
+think_store@^4.x.x:
   version "4.0.6"
   resolved "https://registry.yarnpkg.com/think_store/-/think_store-4.0.6.tgz#78b81e271a6f207fb407e108e9250fa5305e2df9"
   integrity sha512-ZSni15fgJFguBb3fzD+ZjC6b8r4sefX9nmsItc2bAOliv8Evps2hOXqNbvYTt5UUokvwMLn/3ywiMzV00cQgdw==
@@ -1984,7 +1968,7 @@ think_store@^4.0.6:
     think_lib "^2.x.x"
     think_logger "^2.x.x"
 
-think_trace@^2.2.0:
+think_trace@^2.x.x:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/think_trace/-/think_trace-2.2.0.tgz#b9eb91ebc8b0c45501af849bc3e2e81b3f122c88"
   integrity sha512-MVCp1q5a9oz/HY0/EKIU6sv8Sfeuq4xZfARnh0i2xPPtmRcFgVH3u4cMfUUpwxz02hJbbFHPcanEF1N+liV9Lw==
@@ -1993,7 +1977,7 @@ think_trace@^2.2.0:
     think_lib "^2.x.x"
     think_logger "^2.x.x"
 
-think_validtion@1.6.2:
+think_validtion@^1.x.x:
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/think_validtion/-/think_validtion-1.6.2.tgz#bc1bbff169cab3595c36924985c0a7f37ecb20c8"
   integrity sha512-BELv58WGLcI0/6XrDODBoZk2JHYEBlxrOEvl+E3y2Y4g5r0vnfEy9qNICTFtJZnqXrrldUV1mqVDhCMHF/+L3Q==

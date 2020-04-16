@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-15 16:47:45
+ * @ version: 2020-04-15 18:15:08
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -121,8 +121,8 @@ export class Container implements IContainer {
 
                     if (options.scope === "Singleton") {
                         // instantiation
+                        helper.define(target.prototype, "app", this.app, true);
                         instance = Reflect.construct(target, options.args);
-                        helper.define(instance, "app", this.app);
                     } else {
                         instance = target;
                     }
@@ -136,8 +136,8 @@ export class Container implements IContainer {
 
         if (options.scope !== "Singleton") {
             // instantiation
-            instance = Reflect.construct(instance, options.args);
-            helper.define(instance, "app", this.app);
+            helper.define(target.prototype, "app", this.app, true);
+            instance = Reflect.construct(target, options.args);
             return instance;
         }
         return instance;
@@ -154,23 +154,7 @@ export class Container implements IContainer {
      */
     public get(identifier: string, type: CompomentType = "SERVICE", args: any[] = []): object {
         const target = this.getClass(identifier, type);
-        if (!target) {
-            return null;
-        }
-        // get instance from the Container
-        let instance: any = this.instanceMap.get(target);
-        if (!instance) {
-            return null;
-        }
-
-        // not Singleton, the Container return prototype
-        if (args.length > 0 || helper.isClass(instance)) {
-            // instantiation
-            instance = Reflect.construct(instance, [this.app, ...args]);
-            // helper.define(instance, "app", this.app);
-        }
-
-        return instance;
+        return this.getInsByClass(target, args);
     }
 
     /**
@@ -199,17 +183,24 @@ export class Container implements IContainer {
             return null;
         }
         // get instance from the Container
-        let instance: any = this.instanceMap.get(target);
+        let instance: any;
+
+        // require Request instance
+        if (args.length > 0) {
+            instance = target;
+        } else {
+            instance = this.instanceMap.get(target);
+        }
         if (!instance) {
             return null;
         }
-
         // not Singleton, the Container return prototype
-        if (args.length > 0 || helper.isClass(instance)) {
+        if (helper.isClass(instance)) {
             // instantiation
+            helper.define(instance.prototype, "app", this.app, true);
             instance = Reflect.construct(instance, args);
-            helper.define(instance, "app", this.app);
         }
+
         return instance;
     }
 
