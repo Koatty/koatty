@@ -2,10 +2,9 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-29 04:14:46
+ * @ version: 2020-04-16 23:33:43
  */
 import * as helper from "think_lib";
-import { COMPONENT_KEY } from "./Constants";
 import logger from 'think_logger';
 import { IOCContainer } from './Container';
 
@@ -66,7 +65,7 @@ export function Aspect(identifier?: string): ClassDecorator {
         if (!oldMethod) {
             throw Error("The aspect class must implement the `run` method.");
         }
-        IOCContainer.saveClass(COMPONENT_KEY, target, identifier);
+        IOCContainer.saveClass("COMPONENT", target, identifier);
     };
 }
 

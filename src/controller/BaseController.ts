@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-15 16:10:41
+ * @ version: 2020-04-16 23:40:31
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "koa";
@@ -56,15 +56,13 @@ export class BaseController implements BaseControllerInterface {
     public encoding: string;
     protected _options: ObjectDefinitionOptions;
 
-
     /**
      * instance of BaseController.
      * @param {Koatty} app
      * @param {Koa.Context} ctx
      * @memberof BaseController
      */
-    protected constructor(app: Koatty, ctx: Koa.Context) {
-        this.app = app;
+    protected constructor(ctx: Koa.Context) {
         this.ctx = ctx;
         this.init();
     }

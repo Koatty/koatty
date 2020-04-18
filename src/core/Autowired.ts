@@ -2,15 +2,15 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-15 18:26:51
+ * @ version: 2020-04-16 23:38:30
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
-import { TAGGED_PROP, TAGGED_ARGS, CompomentType } from "./Constants";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { recursiveGetMetadata } from "../util/Lib";
 import { Container, IOCContainer } from "./Container";
+import { TAGGED_PROP, TAGGED_ARGS, CompomentType } from "./Constants";
 
 
 /**

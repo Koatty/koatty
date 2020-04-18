@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-29 04:17:12
+ * @ version: 2020-04-16 23:41:21
  */
 import KoaRouter from "@koa/router";
 import * as Koa from "koa";
@@ -205,7 +205,7 @@ export class Router {
                     app.app_debug && logger.custom("think", "", `Register request mapping: [${ctlRouters[it].requestMethod}] : ["${ctlRouters[it].path}" => ${n}.${ctlRouters[it].method}]`);
                     kRouter[ctlRouters[it].requestMethod](ctlRouters[it].path, async function (ctx: Koa.Context): Promise<any> {
                         const router = ctlRouters[it];
-                        return execRouter(n, router, app, ctx, container, ctlParams[router.method]);
+                        return execRouter(n, router, ctx, container, ctlParams[router.method]);
                     });
                 }
             }
@@ -222,15 +222,14 @@ export class Router {
      *
      * @param {string} identifier
      * @param {*} router
-     * @param {*} app
      * @param {Koa.Context} ctx
      * @param {Container} container
      * @param {*} ctlParams
      * @returns
      * @memberof Router
      */
-    async execRouter(identifier: string, router: any, app: any, ctx: Koa.Context, container: Container, ctlParams: any) {
-        const ctl: any = container.get(identifier, "CONTROLLER", [app, ctx]);
+    async execRouter(identifier: string, router: any, ctx: Koa.Context, container: Container, ctlParams: any) {
+        const ctl: any = container.get(identifier, "CONTROLLER", [ctx]);
         // const ctl: any = container.get(identifier, "CONTROLLER");
         if (!ctx || !ctl.init) {
             return ctx.throw(404, `Controller ${identifier} not found.`);

@@ -2,13 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-14 13:49:56
+ * @ version: 2020-04-16 23:35:25
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
-import * as helper from "think_lib";
+// import * as helper from "think_lib";
 import { IOCContainer } from './Container';
-import { CONTROLLER_KEY, COMPONENT_KEY, MIDDLEWARE_KEY, NAMED_TAG, SERVICE_KEY } from "./Constants";
+import { NAMED_TAG } from "./Constants";
 
 /**
  * Indicates that an decorated class is a "component".
@@ -20,7 +20,7 @@ import { CONTROLLER_KEY, COMPONENT_KEY, MIDDLEWARE_KEY, NAMED_TAG, SERVICE_KEY }
 export function Component(identifier?: string): ClassDecorator {
     return (target: any) => {
         identifier = identifier || IOCContainer.getIdentifier(target);
-        IOCContainer.saveClass(COMPONENT_KEY, target, identifier);
+        IOCContainer.saveClass("COMPONENT", target, identifier);
     };
 }
 
@@ -34,7 +34,7 @@ export function Component(identifier?: string): ClassDecorator {
 export function Controller(path = ""): ClassDecorator {
     return (target: any) => {
         const identifier = IOCContainer.getIdentifier(target);
-        IOCContainer.saveClass(CONTROLLER_KEY, target, identifier);
+        IOCContainer.saveClass("CONTROLLER", target, identifier);
         IOCContainer.savePropertyData(NAMED_TAG, path, target, identifier);
     };
 }
@@ -49,7 +49,7 @@ export function Controller(path = ""): ClassDecorator {
 export function Middleware(identifier?: string): ClassDecorator {
     return (target: any) => {
         identifier = identifier || IOCContainer.getIdentifier(target);
-        IOCContainer.saveClass(MIDDLEWARE_KEY, target, identifier);
+        IOCContainer.saveClass("MIDDLEWARE", target, identifier);
     };
 }
 
@@ -63,6 +63,6 @@ export function Middleware(identifier?: string): ClassDecorator {
 export function Service(identifier?: string): ClassDecorator {
     return (target: any) => {
         identifier = identifier || IOCContainer.getIdentifier(target);
-        IOCContainer.saveClass(SERVICE_KEY, target, identifier);
+        IOCContainer.saveClass("SERVICE", target, identifier);
     };
 }

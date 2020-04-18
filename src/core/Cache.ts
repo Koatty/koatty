@@ -2,11 +2,11 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-14 20:04:28
+ * @ version: 2020-04-16 23:39:01
  */
-import { Locker, RedisOptions } from "../util/Locker";
 import * as helper from "think_lib";
 import logger from "think_logger";
+import { Locker } from "../util/Locker";
 import { IOCContainer } from './Container';
 
 

@@ -2,15 +2,11 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-23 02:54:31
+ * @ version: 2020-04-17 00:00:25
  */
 
-export const COMPONENT_KEY = 'COMPONENT';
 export const COMPONENT_SCAN = 'COMPONENT_SCAN';
 export const CONFIGUATION_SCAN = 'CONFIGUATION_SCAN';
-export const CONTROLLER_KEY = 'CONTROLLER';
-export const MIDDLEWARE_KEY = 'MIDDLEWARE';
-export const SERVICE_KEY = 'SERVICE';
 export const PRIORITY_KEY = 'PRIORITY_KEY';
 
 export const PARAM_KEY = 'PARAM_KEY';
@@ -20,7 +16,8 @@ export const NAMED_TAG = 'NAMED_TAG';
 export const ROUTER_KEY = 'ROUTER_KEY';
 export const SCHEDULE_KEY = 'SCHEDULE_KEY';
 
-export type Scope = 'Singleton' | 'Request' | 'Prototype';
+// export type Scope = 'Singleton' | 'Request' | 'Prototype';
+export type Scope = 'Singleton' | 'Request';
 export type CompomentType = 'COMPONENT' | 'CONTROLLER' | 'MIDDLEWARE' | 'SERVICE';
 
 
