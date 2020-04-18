@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-17 00:00:25
+ * @ version: 2020-04-18 16:12:09
  */
 
 export const COMPONENT_SCAN = 'COMPONENT_SCAN';
@@ -16,8 +16,7 @@ export const NAMED_TAG = 'NAMED_TAG';
 export const ROUTER_KEY = 'ROUTER_KEY';
 export const SCHEDULE_KEY = 'SCHEDULE_KEY';
 
-// export type Scope = 'Singleton' | 'Request' | 'Prototype';
-export type Scope = 'Singleton' | 'Request';
+export type Scope = 'Singleton' | 'Prototype';
 export type CompomentType = 'COMPONENT' | 'CONTROLLER' | 'MIDDLEWARE' | 'SERVICE';
 
 

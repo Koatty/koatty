@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-14 13:48:03
+ * @ version: 2020-04-17 09:11:34
  */
 import { Koatty } from '../Koatty';
 import { Scope, CompomentType } from "./Constants";
@@ -21,11 +21,11 @@ export interface IContainer {
     get(identifier: string, type?: CompomentType, args?: any[]): object;
     getClass(identifier: string, type?: CompomentType): object;
     getInsByClass<T>(target: T, args?: any[]): T;
-    getMetadataMap(metadataKey: string | symbol, target: any, propertyKey?: string | symbol): any;
+    saveClass(type: CompomentType, module: Function, identifier: string): void;
+    listClass(type: CompomentType): any[];
     getIdentifier(target: Function): string;
     getType(target: Function): string;
-    saveClass(key: string, module: Function, identifier: string): void;
-    listClass(key: string): any[];
+    getMetadataMap(metadataKey: string | symbol, target: any, propertyKey?: string | symbol): any;
     saveClassMetadata(type: string, decoratorNameKey: string | symbol, data: any, target: Function | object, propertyName?: string): void;
     attachClassMetadata(type: string, decoratorNameKey: string | symbol, data: any, target: Function | object, propertyName?: string): void;
     getClassMetadata(type: string, decoratorNameKey: string | symbol, target: Function | object, propertyName?: string): any;

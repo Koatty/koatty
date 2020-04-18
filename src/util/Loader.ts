@@ -2,16 +2,17 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-14 13:50:41
+ * @ version: 2020-04-18 16:13:36
  */
 import * as globby from "globby";
 import * as path from "path";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
-import { requireDefault } from "./Lib";
-import { Container, IOCContainer } from "../core/Container";
-import { COMPONENT_KEY, CONTROLLER_KEY, MIDDLEWARE_KEY, SERVICE_KEY } from "../core/Constants";
 import { Base } from "../core/Base";
+import { requireDefault } from "./Lib";
+import { injectSchedule } from '../core/Schedule';
+import { injectValue } from '../core/Autowired';
+import { Container, IOCContainer } from "../core/Container";
 import { BaseController } from "../controller/BaseController";
 
 /**
@@ -87,15 +88,15 @@ export class Loader {
         Loader.loadDirectory(loadPath || "./middleware", app.think_path);
         //Mount application middleware
         // const middlewares: any = {};
-        const appMeddlewares = IOCContainer.listClass(MIDDLEWARE_KEY) || [];
+        const appMeddlewares = IOCContainer.listClass("MIDDLEWARE") || [];
 
         appMeddlewares.map((item: {
             id: string;
             target: any;
         }) => {
-            item.id = (item.id || "").replace(`${MIDDLEWARE_KEY}:`, "");
+            item.id = (item.id || "").replace("MIDDLEWARE:", "");
             if (item.id && helper.isClass(item.target)) {
-                container.reg(item.target, { scope: "Request", type: "MIDDLEWARE" });
+                container.reg(item.target, { scope: "Prototype", type: "MIDDLEWARE" });
                 // middlewares[item.id] = item.target;
             }
         });
@@ -116,7 +117,7 @@ export class Loader {
         //Automatically call middleware
         let handle: any;
         for (const key of appMList) {
-            handle = container.get(key, MIDDLEWARE_KEY);
+            handle = container.get(key, "MIDDLEWARE");
             if (!handle) {
                 throw new Error(`middleware ${key} load error.`);
                 return;
@@ -149,13 +150,18 @@ export class Loader {
      * @memberof Loader
      */
     public static loadComponents(app: any, container: Container) {
-        const componentList = IOCContainer.listClass(COMPONENT_KEY);
+        const componentList = IOCContainer.listClass("COMPONENT");
 
         componentList.map((item: any) => {
-            item.id = (item.id || "").replace(`${COMPONENT_KEY}:`, "");
+            item.id = (item.id || "").replace("COMPONENT:", "");
             if (item.id && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
                 process.env.APP_DEBUG && logger.custom("think", "", `Load component: ${item.id}`);
+                // inject configuation
+                injectValue(item.target, item.target.prototype, container);
+                // inject schedule
+                injectSchedule(item.target, item.target.prototype, container);
+                // registering to IOC
                 container.reg(item.target, { scope: "Singleton", type: "COMPONENT" });
             }
         });
@@ -170,15 +176,21 @@ export class Loader {
      * @memberof Loader
      */
     public static loadServices(app: any, container: Container) {
-        const serviceList = IOCContainer.listClass(SERVICE_KEY);
+        const serviceList = IOCContainer.listClass("SERVICE");
 
         serviceList.map((item: any) => {
-            item.id = (item.id || "").replace(`${SERVICE_KEY}:`, "");
+            item.id = (item.id || "").replace("SERVICE:", "");
             if (item.id && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
                 process.env.APP_DEBUG && logger.custom("think", "", `Load service: ${item.id}`);
-                const cls = container.reg(item.target, { scope: "Singleton", type: "SERVICE" });
-                if (!(cls instanceof Base)) {
+                // inject configuation
+                injectValue(item.target, item.target.prototype, container);
+                // inject schedule
+                injectSchedule(item.target, item.target.prototype, container);
+                // registering to IOC
+                container.reg(item.target, { scope: "Singleton", type: "SERVICE" });
+                const ctl = container.getInsByClass(item.target);
+                if (!(ctl instanceof Base)) {
                     throw new Error(`class ${item.id} does not inherit from Base`);
                 }
             }
@@ -194,16 +206,19 @@ export class Loader {
      * @memberof Loader
      */
     public static loadControllers(app: any, container: Container) {
-        const controllerList = IOCContainer.listClass(CONTROLLER_KEY);
+        const controllerList = IOCContainer.listClass("CONTROLLER");
 
         const controllers: any = {};
         controllerList.map((item: any) => {
-            item.id = (item.id || "").replace(`${CONTROLLER_KEY}:`, "");
+            item.id = (item.id || "").replace("CONTROLLER:", "");
             if (item.id && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
                 process.env.APP_DEBUG && logger.custom("think", "", `Load controller: ${item.id}`);
-
-                const ctl = container.reg(item.target, { scope: "Request", type: "CONTROLLER" });
+                // inject configuation
+                injectValue(item.target, item.target.prototype, container);
+                // registering to IOC
+                container.reg(item.target, { scope: "Prototype", type: "CONTROLLER" });
+                const ctl = container.getInsByClass(item.target);
                 if (!(ctl instanceof BaseController)) {
                     throw new Error(`class ${item.id} does not inherit from BaseController`);
                 }

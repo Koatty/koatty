@@ -2,34 +2,15 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-15 18:15:08
+ * @ version: 2020-04-18 16:13:16
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
+import { Koatty } from '../Koatty';
 import * as helper from "think_lib";
-import { injectSchedule } from "./Schedule";
+import { injectAutowired } from './Autowired';
 import { CompomentType, TAGGED_CLS } from "./Constants";
 import { IContainer, ObjectDefinitionOptions } from "./IContainer";
-import { injectValue, injectAutowired } from './Autowired';
-import { Koatty } from '../Koatty';
-
-/**
- * Auto injection
- *
- * @param {*} target
- * @param {ObjectDefinitionOptions} options
- * @param {Container} container
- * @returns
- */
-const BuildInject = function (target: any, options: ObjectDefinitionOptions, container: Container) {
-    // inject configuation
-    injectValue(target, target.prototype, container);
-    // inject autowired
-    injectAutowired(target, target.prototype, container);
-    // inject schedule
-    injectSchedule(target, target.prototype, container);
-    return target;
-};
 
 /**
  * IOC Container
@@ -93,19 +74,22 @@ export class Container implements IContainer {
             target = (identifier as any);
             identifier = this.getIdentifier(target);
         }
-        options = {
-            isAsync: false,
-            initMethod: "constructor",
-            destroyMethod: "distructor",
-            scope: "Singleton",
-            type: "COMPONENT",
-            args: [],
-            ...options
-        };
-        options.args = options.args.length ? options.args : [this.app];
+        if (!helper.isClass(target)) {
+            return target;
+        }
 
         let instance = this.instanceMap.get(target);
         if (!instance) {
+            options = {
+                isAsync: false,
+                initMethod: "constructor",
+                destroyMethod: "distructor",
+                scope: "Singleton",
+                type: "COMPONENT",
+                args: [],
+                ...options
+            };
+            options.args = options.args.length ? options.args : [this.app];
             // inject options once
             Reflect.defineProperty(target.prototype, "_options", {
                 enumerable: false,
@@ -113,32 +97,23 @@ export class Container implements IContainer {
                 writable: true,
                 value: options
             });
-            if (helper.isClass(target)) {
-                const ref = this.getClass(options.type, identifier);
-                if (!ref) {
-                    // inject dependency
-                    BuildInject(target, options, this);
-
-                    if (options.scope === "Singleton") {
-                        // instantiation
-                        helper.define(target.prototype, "app", this.app, true);
-                        instance = Reflect.construct(target, options.args);
-                    } else {
-                        instance = target;
-                    }
-                    // registration
-                    this.instanceMap.set(target, Object.seal(instance));
-                }
-            } else {
-                return target;
+            const ref = this.getClass(options.type, identifier);
+            if (!ref) {
+                this.saveClass(options.type, target, identifier);
             }
-        }
+            // define app
+            helper.define(target.prototype, "app", this.app);
+            // inject autowired
+            injectAutowired(target, target.prototype, this);
 
-        if (options.scope !== "Singleton") {
-            // instantiation
-            helper.define(target.prototype, "app", this.app, true);
-            instance = Reflect.construct(target, options.args);
-            return instance;
+            if (options.scope === "Singleton") {
+                // instantiation
+                instance = Reflect.construct(target, options.args);
+            } else {
+                instance = target;
+            }
+            // registration
+            this.instanceMap.set(target, Object.seal(instance));
         }
         return instance;
     }
@@ -154,7 +129,20 @@ export class Container implements IContainer {
      */
     public get(identifier: string, type: CompomentType = "SERVICE", args: any[] = []): object {
         const target = this.getClass(identifier, type);
-        return this.getInsByClass(target, args);
+        if (!helper.isClass(target)) {
+            return null;
+        }
+        // get instance from the Container
+        const instance: any = this.reg(target, { scope: args.length > 0 ? "Prototype" : "Singleton", type, args });
+
+        // require Prototype instance
+        if (helper.isClass(instance)) {
+            // instantiation
+            return Reflect.construct(target, args);
+        } else {
+            return instance;
+        }
+
     }
 
     /**
@@ -162,10 +150,10 @@ export class Container implements IContainer {
      *
      * @param {string} identifier
      * @param {CompomentType} [type="SERVICE"]
-     * @returns {object}
+     * @returns {Function}
      * @memberof Container
      */
-    public getClass(identifier: string, type: CompomentType = "SERVICE"): object {
+    public getClass(identifier: string, type: CompomentType = "SERVICE"): Function {
         return this.classMap.get(`${type}:${identifier}`);
     }
 
@@ -179,29 +167,20 @@ export class Container implements IContainer {
      * @memberof Container
      */
     public getInsByClass<T>(target: T, args: any[] = []): T {
-        if (!target || !helper.isClass(target)) {
+        if (!helper.isClass(target)) {
             return null;
         }
+        const type = this.getType(<Function><unknown>target);
         // get instance from the Container
-        let instance: any;
+        const instance: any = this.reg(target, { scope: args.length > 0 ? "Prototype" : "Singleton", type, args });
 
-        // require Request instance
-        if (args.length > 0) {
-            instance = target;
-        } else {
-            instance = this.instanceMap.get(target);
-        }
-        if (!instance) {
-            return null;
-        }
-        // not Singleton, the Container return prototype
+        // require Prototype instance
         if (helper.isClass(instance)) {
             // instantiation
-            helper.define(instance.prototype, "app", this.app, true);
-            instance = Reflect.construct(instance, args);
+            return Reflect.construct(<Function><unknown>target, args);
+        } else {
+            return instance;
         }
-
-        return instance;
     }
 
     /**
@@ -243,18 +222,23 @@ export class Container implements IContainer {
     /**
      * get identifier from class
      *
-     * @param {Function} target
+     * @param {Function | Object} target
      * @returns
      * @memberof Container
      */
-    public getIdentifier(target: Function) {
-        const metaData = Reflect.getOwnMetadata(TAGGED_CLS, target);
-        if (metaData) {
-            return metaData.id;
+    public getIdentifier(target: Function | Object) {
+        let name = "";
+        if (helper.isFunction(target)) {
+            const metaData = Reflect.getOwnMetadata(TAGGED_CLS, target);
+            if (metaData) {
+                name = metaData.id || "";
+            } else {
+                name = (<Function>target).name || "";
+            }
         } else {
-            // return helper.camelCase(target.name, { pascalCase: true });
-            return target.name;
+            name = target.constructor ? (target.constructor.name || "") : "";
         }
+        return name;
     }
 
     /**
@@ -269,7 +253,8 @@ export class Container implements IContainer {
         if (metaData) {
             return metaData.type;
         } else {
-            const name = (<Function>target).name || target.constructor.name || "";
+            let name = (<Function>target).name || "";
+            name = name || (target.constructor ? (target.constructor.name || "") : "");
             if (~name.indexOf("Controller")) {
                 return "CONTROLLER";
             } else if (~name.indexOf("Middleware")) {
@@ -285,14 +270,14 @@ export class Container implements IContainer {
     /**
      * save class to Container
      *
-     * @param {string} key
+     * @param {CompomentType} type
      * @param {Function} module
      * @param {string} identifier
      * @memberof Container
      */
-    public saveClass(key: string, module: Function, identifier: string) {
-        Reflect.defineMetadata(TAGGED_CLS, { id: identifier, type: key }, module);
-        key = `${key}:${identifier}`;
+    public saveClass(type: CompomentType, module: Function, identifier: string) {
+        Reflect.defineMetadata(TAGGED_CLS, { id: identifier, type }, module);
+        const key = `${type}:${identifier}`;
         if (!this.classMap.has(key)) {
             this.classMap.set(key, module);
         }
@@ -301,14 +286,14 @@ export class Container implements IContainer {
     /**
      * get all class from Container
      *
-     * @param {string} key
+     * @param {CompomentType} type
      * @returns
      * @memberof Container
      */
-    public listClass(key: string) {
+    public listClass(type: CompomentType) {
         const modules: any[] = [];
         this.classMap.forEach((v, k) => {
-            if (k.startsWith(key)) {
+            if (k.startsWith(type)) {
                 modules.push({
                     id: k,
                     target: v
