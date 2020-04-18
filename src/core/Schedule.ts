@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-14 17:51:42
+ * @ version: 2020-04-18 14:19:11
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -72,12 +72,14 @@ export function SchedulerLock(name?: string, lockTimeOut?: number, waitLockInter
                 // tslint:disable-next-line: no-invalid-this
                 const redisOptions = this.app.config("SchedulerLock", "db") || this.app.config("redis", "db");
                 if (helper.isEmpty(redisOptions)) {
-                    throw Error("Missing redis server configuration. Please write a configuration item with the key name 'SchedulerLock' or 'redis' in the db.ts file.");
+                    logger.warn("Missing redis server configuration. Please write a configuration item with the key name 'SchedulerLock' or 'redis' in the db.ts file.");
+                    return;
                 }
                 const lockerCls = Locker.getInstance(redisOptions);
                 let lockerFlag = false;
                 if (!lockerCls) {
-                    return Promise.reject(`Redis connection failed. The method ${methodName} is not executed.`);
+                    logger.warn(`Redis connection failed. The method ${methodName} is not executed.`);
+                    return;
                 }
                 if (waitLockInterval || waitLockTimeOut) {
                     lockerFlag = await lockerCls.waitLock(name,
@@ -110,7 +112,8 @@ export function SchedulerLock(name?: string, lockTimeOut?: number, waitLockInter
                         }
                     }
                 } else {
-                    return Promise.reject(`Redis lock ${name} acquisition failed. The method ${methodName} is not executed.`);
+                    logger.warn(`Redis lock ${name} acquisition failed. The method ${methodName} is not executed.`);
+                    return;
                 }
             }
         };
@@ -146,7 +149,6 @@ const execInjectSchedule = function (target: any, container: Container, method: 
                 } catch (e) {
                     logger.error(e);
                 }
-
             }).start();
         }
     });

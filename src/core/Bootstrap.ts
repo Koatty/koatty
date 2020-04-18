@@ -2,16 +2,16 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-16 23:38:43
+ * @ version: 2020-04-18 16:33:31
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { IOCContainer } from "./Container";
-import { Loader } from "../util/Loader";
 import { Router } from "./Router";
 import { Koatty } from '../Koatty';
+import { Loader } from "../util/Loader";
 const pkg = require("../../package.json");
 import { INJECT_TAG, COMPONENT_SCAN, CONFIGUATION_SCAN } from "./Constants";
 
