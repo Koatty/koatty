@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-04-14 17:39:46
+ * @ version: 2020-04-16 23:42:21
  */
 import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, BeforeEach, After, RequestBody, Get, Validated, Valid, Helper, Post, RequestParam } from "../../../src/index";
 import { App } from '../App';
@@ -28,7 +28,7 @@ export class IndexController extends AdminController {
 
     __before() {
         console.log(this.app.test);
-        console.log('__before');
+        console.log('__before', this.app.env);
         return Promise.resolve();
     }
 
