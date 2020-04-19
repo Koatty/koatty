@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-16 23:39:01
+ * @ version: 2020-04-19 10:23:28
  */
 import * as helper from "think_lib";
 import logger from "think_logger";
@@ -126,6 +126,17 @@ export function CacheAble(cacheName: string, paramKey?: number | number[], timeo
         return descriptor;
     };
 }
+/**
+ * Decorate this method to support caching. Reids server config from db.ts.
+ * The cache method returns a value to ensure that the next time the method is executed with the same parameters,
+ * the results can be obtained directly from the cache without the need to execute the method again.
+ *
+ * @export
+ * @param {string} cacheName cache name
+ * @param {(number | number[])} [paramKey] The index of the arguments.
+ * @param {number} [timeout=3600] cache timeout
+ * @returns {MethodDecorator}
+ */
 export const Cacheable = CacheAble;
 
 /**

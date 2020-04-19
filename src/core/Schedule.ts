@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-18 14:19:11
+ * @ version: 2020-04-19 10:21:00
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -47,7 +47,7 @@ export function Scheduled(cron: string): MethodDecorator {
 }
 
 /**
- * Schedule redis-based distributed locks. Reids server config from db.ts.
+ * Redis-based distributed locks. Reids server config from db.ts.
  *
  * @export
  * @param {string} [name] The locker name. If name is duplicated, lock sharing contention will result.
@@ -59,6 +59,10 @@ export function Scheduled(cron: string): MethodDecorator {
  */
 export function SchedulerLock(name?: string, lockTimeOut?: number, waitLockInterval?: number, waitLockTimeOut?: number): MethodDecorator {
     return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
+        const type = IOCContainer.getType(target);
+        if (type === "CONTROLLER") {
+            throw Error("SchedulerLock decorator cannot be used in the controller class.");
+        }
         const { value, configurable, enumerable } = descriptor;
         if (helper.isEmpty(name)) {
             const identifier = IOCContainer.getIdentifier(target) || (target.constructor ? target.constructor.name : "");
@@ -120,6 +124,19 @@ export function SchedulerLock(name?: string, lockTimeOut?: number, waitLockInter
         return descriptor;
     };
 }
+
+/**
+ * Redis-based distributed locks. Reids server config from db.ts.
+ *
+ * @export
+ * @param {string} [name] The locker name. If name is duplicated, lock sharing contention will result.
+ * @param {number} [lockTimeOut] Automatic release of lock within a limited maximum time.
+ * @param {number} [waitLockInterval] Try to acquire lock every interval time(millisecond).
+ * @param {number} [waitLockTimeOut] When using more than TimeOut(millisecond) still fails to get the lock and return failure.
+ *
+ * @returns {MethodDecorator}
+ */
+export const Lock = SchedulerLock;
 
 /**
  * 
