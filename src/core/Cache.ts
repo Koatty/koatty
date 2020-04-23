@@ -2,11 +2,11 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-19 10:23:28
+ * @ version: 2020-04-23 12:37:16
  */
 import * as helper from "think_lib";
 import logger from "think_logger";
-import { Locker } from "../util/Locker";
+const store = require("think_store");
 import { IOCContainer } from './Container';
 
 
@@ -44,29 +44,13 @@ export function CacheAble(cacheName: string, paramKey?: number | number[], timeo
                 }
 
                 // tslint:disable-next-line: one-variable-per-declaration
-                let lockerCls, client, isError = false;
+                let cacheStore;
                 if (cacheFlag) {
-                    lockerCls = Locker.getInstance(redisOptions);
-                    if (!lockerCls) {
+                    cacheStore = store.getInstance(redisOptions);
+                    if (!cacheStore || !helper.isFunction(cacheStore.get)) {
                         cacheFlag = false;
-                        isError = true;
-                        // logger.error(`Redis connection failed. @CacheAble is not executed.`);
-                    } else {
-                        // client = await lockerCls.defineCommand().catch((err: any) => {
-                        //     cacheFlag = false;
-                        //     isError = true;
-                        //     // logger.error(`Redis connection error. @CacheAble is not executed.`);
-                        // });
-                        client = lockerCls.store;
-                        if (!client || !helper.isFunction(client.hget)) {
-                            cacheFlag = false;
-                            isError = true;
-                            // logger.error(`Redis connection error. @CacheAble is not executed.`);
-                        }
+                        logger.error(`Redis connection failed. @CacheAble is not executed.`);
                     }
-                }
-                if (isError) {
-                    logger.error(`Redis connection failed. @CacheAble is not executed.`);
                 }
 
                 if (cacheFlag) {
@@ -79,7 +63,7 @@ export function CacheAble(cacheName: string, paramKey?: number | number[], timeo
                                     if (typeof props[it] === "object") {
                                         key = `${key}${helper.murmurHash(JSON.stringify(props[it]))}`;
                                     } else {
-                                        key = `${key}${props[it]}`;
+                                        key = `${key}${props[it] || ''}`;
                                     }
                                 }
                             });
@@ -95,12 +79,12 @@ export function CacheAble(cacheName: string, paramKey?: number | number[], timeo
                     }
 
                     if (!helper.isTrueEmpty(key)) {
-                        res = await client.get(`${cacheName}:${key}`).catch((): any => null);
+                        res = await cacheStore.get(`${cacheName}:${key}`).catch((): any => null);
                     } else {
-                        res = await client.get(cacheName).catch((): any => null);
+                        res = await cacheStore.get(cacheName).catch((): any => null);
                     }
                     try {
-                        res = JSON.parse(res || "[]");
+                        res = JSON.parse(res || "");
                     } catch (e) {
                         res = null;
                     }
@@ -110,9 +94,9 @@ export function CacheAble(cacheName: string, paramKey?: number | number[], timeo
                         res = await value.apply(this, props);
                         if (!helper.isEmpty(res)) {
                             if (!helper.isTrueEmpty(key)) {
-                                client.set(`${cacheName}:${key}`, JSON.stringify(res), timeout).catch((): any => null);
+                                cacheStore.set(`${cacheName}:${key}`, JSON.stringify(res), timeout).catch((): any => null);
                             } else {
-                                client.set(cacheName, JSON.stringify(res), timeout).catch((): any => null);
+                                cacheStore.set(cacheName, JSON.stringify(res), timeout).catch((): any => null);
                             }
                         }
                     }
@@ -173,30 +157,15 @@ export function CacheEvict(cacheName: string, paramKey?: number | number[], even
                     cacheFlag = false;
                     logger.error("Missing redis server configuration. Please write a configuration item with the key name 'CacheAble' or 'redis' in the db.ts file.");
                 }
+
                 // tslint:disable-next-line: one-variable-per-declaration
-                let lockerCls, client, isError = false;
+                let cacheStore;
                 if (cacheFlag) {
-                    lockerCls = Locker.getInstance(redisOptions);
-                    if (!lockerCls) {
+                    cacheStore = store.getInstance(redisOptions);
+                    if (!cacheStore || !helper.isFunction(cacheStore.rm)) {
                         cacheFlag = false;
-                        isError = true;
-                        // logger.error(`Redis connection failed. @CacheEvict is not executed.`);
-                    } else {
-                        // client = await lockerCls.defineCommand().catch((err: any) => {
-                        //     cacheFlag = false;
-                        //     isError = true;
-                        //     // logger.error(`Redis connection error. @CacheEvict is not executed.`);
-                        // });
-                        client = lockerCls.store;
-                        if (!client || !helper.isFunction(client.hget)) {
-                            cacheFlag = false;
-                            isError = true;
-                            // logger.error(`Redis connection error. @CacheEvict is not executed.`);
-                        }
+                        logger.error(`Redis connection failed. @CacheAble is not executed.`);
                     }
-                }
-                if (isError) {
-                    logger.error(`Redis connection failed. @CacheEvict is not executed.`);
                 }
 
                 if (cacheFlag) {
@@ -208,7 +177,7 @@ export function CacheEvict(cacheName: string, paramKey?: number | number[], even
                                     if (typeof props[it] === "object") {
                                         key = `${key}${helper.murmurHash(JSON.stringify(props[it]))}`;
                                     } else {
-                                        key = `${key}${props[it]}`;
+                                        key = `${key}${props[it] || ''}`;
                                     }
                                 }
                             });
@@ -225,9 +194,9 @@ export function CacheEvict(cacheName: string, paramKey?: number | number[], even
 
                     if (eventTime === "Before") {
                         if (!helper.isTrueEmpty(key)) {
-                            await client.del(`${cacheName}:${key}`).catch((): any => null);
+                            await cacheStore.rm(`${cacheName}:${key}`).catch((): any => null);
                         } else {
-                            await client.del(cacheName).catch((): any => null);
+                            await cacheStore.rm(cacheName).catch((): any => null);
                         }
                         // tslint:disable-next-line: no-invalid-this
                         return value.apply(this, props);
@@ -235,9 +204,9 @@ export function CacheEvict(cacheName: string, paramKey?: number | number[], even
                         // tslint:disable-next-line: no-invalid-this
                         const res = await value.apply(this, props);
                         if (!helper.isTrueEmpty(key)) {
-                            await client.del(`${cacheName}:${key}`).catch((): any => null);
+                            await cacheStore.rm(`${cacheName}:${key}`).catch((): any => null);
                         } else {
-                            await client.del(cacheName).catch((): any => null);
+                            await cacheStore.rm(cacheName).catch((): any => null);
                         }
                         return res;
                     }

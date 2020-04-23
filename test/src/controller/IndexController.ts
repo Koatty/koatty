@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-04-16 23:42:21
+ * @ version: 2020-04-20 13:42:46
  */
 import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, BeforeEach, After, RequestBody, Get, Validated, Valid, Helper, Post, RequestParam } from "../../../src/index";
 import { App } from '../App';
@@ -34,7 +34,7 @@ export class IndexController extends AdminController {
 
     @GetMapping("/")
     @Before(TestAspect)
-    async default(@Get("name") name: string) {
+    async default(@Get("name") name = '666') {
         return this.ok("", { name });
     }
 

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-14 20:29:24
+ * @ version: 2020-04-23 12:47:42
  */
 
 const store = require("think_store");
@@ -69,6 +69,7 @@ export class Locker {
             conn_timeout: 1000
         };
         this.store = store.getInstance(this.options);
+        this.client = null;
     }
 
     /**
@@ -79,10 +80,9 @@ export class Locker {
      */
     async defineCommand() {
         try {
-            const client = await this.store.connect(this.options);
-            //定义lua脚本让它原子化执行
-            if (client && !client.lua_unlock) {
-                client.defineCommand('lua_unlock', {
+            if (!this.client || !this.client.lua_unlock) {
+                //定义lua脚本让它原子化执行
+                this.client = await this.store.command('lua_unlock', {
                     numberOfKeys: 1,
                     lua: `
                     local remote_value = redis.call("get",KEYS[1])
@@ -96,7 +96,7 @@ export class Locker {
                     end
                 `});
             }
-            return client;
+            return this.client;
         } catch (e) {
             // logger.error(e);
             return null;
