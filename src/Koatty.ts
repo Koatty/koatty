@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-20 12:44:35
+ * @ version: 2020-04-23 19:21:20
  */
 
 import * as path from "path";
@@ -292,7 +292,7 @@ export class Koatty extends Koa {
      */
     private captureError(): void {
         const configs = this.getMap("configs") || {};
-        //日志
+        //logger
         if (configs.config) {
             process.env.LOGS = configs.config.logs || false;
             process.env.LOGS_PATH = configs.config.logs_path || this.root_path + "/logs";
