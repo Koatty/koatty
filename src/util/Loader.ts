@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-18 16:33:33
+ * @ version: 2020-04-26 11:41:37
  */
 import * as globby from "globby";
 import * as path from "path";
@@ -10,7 +10,7 @@ import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { Base } from "../core/Base";
 import { requireDefault } from "./Lib";
-import { injectValue } from '../core/Autowired';
+import { injectValue } from '../core/Value';
 import { injectSchedule } from '../core/Schedule';
 import { Container, IOCContainer } from "../core/Container";
 import { BaseController } from "../controller/BaseController";
