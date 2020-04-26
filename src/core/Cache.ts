@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-23 12:37:16
+ * @ version: 2020-04-26 13:39:47
  */
 import * as helper from "think_lib";
 import logger from "think_logger";
@@ -92,12 +92,15 @@ export function CacheAble(cacheName: string, paramKey?: number | number[], timeo
                     if (helper.isEmpty(res)) {
                         // tslint:disable-next-line: no-invalid-this
                         res = await value.apply(this, props);
-                        if (!helper.isEmpty(res)) {
-                            if (!helper.isTrueEmpty(key)) {
-                                cacheStore.set(`${cacheName}:${key}`, JSON.stringify(res), timeout).catch((): any => null);
-                            } else {
-                                cacheStore.set(cacheName, JSON.stringify(res), timeout).catch((): any => null);
-                            }
+                        // prevent cache penetration
+                        if (helper.isEmpty(res)) {
+                            res = "";
+                            timeout = 60;
+                        }
+                        if (!helper.isTrueEmpty(key)) {
+                            cacheStore.set(`${cacheName}:${key}`, JSON.stringify(res), timeout).catch((): any => null);
+                        } else {
+                            cacheStore.set(cacheName, JSON.stringify(res), timeout).catch((): any => null);
                         }
                     }
                     return res;
