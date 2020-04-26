@@ -1978,9 +1978,9 @@ think_static@^2.x.x:
     think_lib "^2.x.x"
 
 think_store@^4.x.x:
-  version "4.0.6"
-  resolved "https://registry.yarnpkg.com/think_store/-/think_store-4.0.6.tgz#78b81e271a6f207fb407e108e9250fa5305e2df9"
-  integrity sha512-ZSni15fgJFguBb3fzD+ZjC6b8r4sefX9nmsItc2bAOliv8Evps2hOXqNbvYTt5UUokvwMLn/3ywiMzV00cQgdw==
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/think_store/-/think_store-4.1.0.tgz#a41c31881a3383de0b2a5a13d7dff7da7c4da962"
+  integrity sha512-svkk9e5ZqYtt2yJ1Qu+ySphCCYKF1Hw4wqU/5YGvWF8Xs92GM23fTLyKOtxAQB5aFPQ5KH8mgp9gD4OQP4qo2A==
   dependencies:
     generic-pool "^3.7.1"
     ioredis "^4.16.0"
