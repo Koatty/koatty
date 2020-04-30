@@ -61,6 +61,7 @@
   ],
   "include": [
     "src",
-    "src/**/*.json"
+    "src/**/*.json",
+    "test/src/middleware/Static.ts"
   ]
 }

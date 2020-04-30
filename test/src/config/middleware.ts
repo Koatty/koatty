@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-02-24 16:06:59
+ * @ version: 2020-04-30 15:09:26
  */
 
 export default {

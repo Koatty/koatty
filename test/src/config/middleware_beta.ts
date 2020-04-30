@@ -2,15 +2,15 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-01 19:07:09
+ * @ version: 2020-04-30 15:02:27
  */
 
 export default {
-    list: ['Models'], //加载的中间件列表
+    list: ['Static', 'Models'], //加载的中间件列表
     config: { //中间件配置
-        Static: {
-            cache: false
-        },
+        // Static: {
+        //     cache: false
+        // },
 
         Trace: {
             timeout: 30

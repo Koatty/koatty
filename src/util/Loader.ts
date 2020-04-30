@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-26 11:41:37
+ * @ version: 2020-04-30 14:54:44
  */
 import * as globby from "globby";
 import * as path from "path";
@@ -83,7 +83,7 @@ export class Loader {
     public static async loadMiddlewares(app: any, container: Container, loadPath?: string | string[]) {
         const middlewareConf = app.config(undefined, "middleware") || { config: {}, list: [] };
         //default middleware list
-        const defaultList = ["Static", "Payload"];
+        const defaultList = ["Payload"];
         //Mount default middleware
         Loader.loadDirectory(loadPath || "./middleware", app.think_path);
         //Mount application middleware

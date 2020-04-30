@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-30 11:52:19
+ * @ version: 2020-04-30 13:16:37
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -110,7 +110,6 @@ export class Container implements IContainer {
                 configurable: false,
                 enumerable: false
             });
-            console.log(target);
             // inject autowired
             injectAutowired(target, target.prototype, this);
 
