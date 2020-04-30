@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-18 16:13:16
+ * @ version: 2020-04-30 11:43:24
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -101,8 +101,17 @@ export class Container implements IContainer {
             if (!ref) {
                 this.saveClass(options.type, target, identifier);
             }
-            // define app
-            helper.define(target.prototype, "app", this.app);
+            // define app as getter
+            const app = this.app;
+            Reflect.defineProperty(target.prototype, "app", {
+                // tslint:disable-next-line-literal-shorthand
+                get() {
+                    return app;
+                },
+                configurable: false,
+                enumerable: false
+            });
+            console.log(target);
             // inject autowired
             injectAutowired(target, target.prototype, this);
 
