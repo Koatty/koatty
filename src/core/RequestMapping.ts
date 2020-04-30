@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-30 10:49:56
+ * @ version: 2020-05-01 01:49:08
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -278,7 +278,9 @@ export function RequestBody(): ParameterDecorator {
  * @returns
  */
 export function Body(): ParameterDecorator {
-    return Inject((ctx: any) => ctx.request.body, "Body");
+    return Inject((ctx: any) => {
+        return ctx.bodyParser();
+    }, "Body");
 }
 
 /**
