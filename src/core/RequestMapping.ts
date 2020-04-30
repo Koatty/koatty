@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-29 04:23:48
+ * @ version: 2020-04-30 10:49:56
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -244,113 +244,6 @@ const Inject = (fn: Function, name: string): ParameterDecorator => {
 };
 
 /**
- * Get parsed request body.
- *
- * @export
- * @returns
- */
-export function RequestBody(): ParameterDecorator {
-    return Inject((ctx: any) => ctx.request.body, "RequestBody");
-}
-
-/**
- * Get post or get parameters, post priority
- *
- * @export
- * @param {string} [name]
- * @returns {ParameterDecorator}
- */
-export function RequestParam(name?: string): ParameterDecorator {
-    if (name) {
-        return Inject((ctx: any) => {
-            const data: any = { ...ctx._get, ...ctx._post };
-            return data[name];
-        }, "RequestParam");
-    } else {
-        return Inject((ctx: any) => {
-            const data: any = { ...ctx._get, ...ctx._post };
-            return data;
-        }, "RequestParam");
-    }
-}
-
-/**
- * Get parsed query-string.
- *
- * @export
- * @param {string} [name] params name
- * @returns
- */
-export function PathVariable(name?: string): ParameterDecorator {
-    if (name) {
-        return Inject((ctx: any) => {
-            return ctx.querys(name);
-        }, "PathVariable");
-    } else {
-        return Inject((ctx: any) => {
-            return ctx.querys();
-        }, "PathVariable");
-    }
-}
-
-/**
- * Get parsed query-string.
- *
- * @export
- * @param {string} [name]
- * @returns
- */
-export function Get(name?: string): ParameterDecorator {
-    if (name) {
-        return Inject((ctx: any) => {
-            return ctx.querys(name);
-        }, "Get");
-    } else {
-        return Inject((ctx: any) => {
-            return ctx.querys();
-        }, "Get");
-    }
-}
-
-/**
- * Get parsed POST/PUT... body.
- *
- * @export
- * @param {string} [name]
- * @returns
- */
-export function Post(name?: string): ParameterDecorator {
-    if (name) {
-        return Inject((ctx: any) => {
-            return ctx.post(name);
-        }, "Post");
-    } else {
-        return Inject((ctx: any) => {
-            return ctx.post();
-        }, "Post");
-    }
-}
-
-/**
- * Get parsed upload file object.
- *
- * @export
- * @param {string} [name]
- * @returns
- */
-export function File(name?: string): ParameterDecorator {
-    if (name) {
-        return Inject((ctx: any) => {
-            return ctx.file(name);
-        }, "File");
-    } else {
-        return Inject((ctx: any) => {
-            return ctx.file();
-        }, "File");
-    }
-}
-
-/**
  * Get request header.
  *
  * @export
@@ -358,15 +251,24 @@ export function File(name?: string): ParameterDecorator {
  * @returns
  */
 export function Header(name?: string): ParameterDecorator {
-    if (name) {
-        return Inject((ctx: any) => {
+    return Inject((ctx: any) => {
+        if (name !== undefined) {
             return ctx.get(name);
-        }, "Header");
-    } else {
-        return Inject((ctx: any) => {
-            return ctx.headers;
-        }, "Header");
-    }
+        }
+        return ctx.headers;
+    }, "Header");
+}
+
+/**
+ * Get parsed request body.
+ *
+ * @export
+ * @returns
+ */
+export function RequestBody(): ParameterDecorator {
+    return Inject((ctx: any) => {
+        return ctx.bodyParser();
+    }, "RequestBody");
 }
 
 /**
@@ -378,3 +280,116 @@ export function Header(name?: string): ParameterDecorator {
 export function Body(): ParameterDecorator {
     return Inject((ctx: any) => ctx.request.body, "Body");
 }
+
+/**
+ * Get post or get parameters, post priority
+ *
+ * @export
+ * @param {string} [name]
+ * @returns {ParameterDecorator}
+ */
+export function RequestParam(name?: string): ParameterDecorator {
+    return Inject((ctx: any) => {
+        return ctx.bodyParser().then((body: any) => {
+            const getParams = ctx.queryParser() || {};
+            const postParams = (body.post ? body.post : body) || {};
+            if (name !== undefined) {
+                return postParams[name] === undefined ? getParams[name] : postParams[name];
+            }
+            return { ...getParams, ...postParams };
+        });
+    }, "RequestParam");
+}
+
+/**
+ * Get post or get parameters, post priority
+ *
+ * @export
+ * @param {string} [name]
+ * @returns {ParameterDecorator}
+ */
+export function Param(name?: string): ParameterDecorator {
+    return Inject((ctx: any) => {
+        return ctx.bodyParser().then((body: any) => {
+            const getParams = ctx.queryParser() || {};
+            const postParams = (body.post ? body.post : body) || {};
+            if (name !== undefined) {
+                return postParams[name] === undefined ? getParams[name] : postParams[name];
+            }
+            return { ...getParams, ...postParams };
+        });
+    }, "Param");
+}
+
+/**
+ * Get parsed query-string.
+ *
+ * @export
+ * @param {string} [name] params name
+ * @returns
+ */
+export function PathVariable(name?: string): ParameterDecorator {
+    return Inject((ctx: any) => {
+        const getParams = ctx.queryParser() || {};
+        if (name === undefined) {
+            return getParams;
+        }
+        return getParams[name];
+    }, "PathVariable");
+}
+
+/**
+ * Get parsed query-string.
+ *
+ * @export
+ * @param {string} [name]
+ * @returns
+ */
+export function Get(name?: string): ParameterDecorator {
+    return Inject((ctx: any) => {
+        const getParams = ctx.queryParser() || {};
+        if (name === undefined) {
+            return getParams;
+        }
+        return getParams[name];
+    }, "Get");
+}
+
+/**
+ * Get parsed POST/PUT... body.
+ *
+ * @export
+ * @param {string} [name]
+ * @returns
+ */
+export function Post(name?: string): ParameterDecorator {
+    return Inject((ctx: any) => {
+        return ctx.bodyParser().then((body: any) => {
+            const params = body.post ? body.post : body;
+            if (name === undefined) {
+                return params;
+            }
+            return params[name];
+        });
+    }, "Post");
+}
+
+/**
+ * Get parsed upload file object.
+ *
+ * @export
+ * @param {string} [name]
+ * @returns
+ */
+export function File(name?: string): ParameterDecorator {
+    return Inject((ctx: any) => {
+        return ctx.bodyParser().then((body: any) => {
+            const params = body.file || {};
+            if (name === undefined) {
+                return params;
+            }
+            return params[name];
+        });
+    }, "File");
+}
+

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-16 23:41:21
+ * @ version: 2020-04-30 09:19:23
  */
 import KoaRouter from "@koa/router";
 import * as Koa from "koa";
@@ -203,7 +203,7 @@ export class Router {
                 for (const it in ctlRouters) {
                     // tslint:disable-next-line: no-unused-expression
                     app.app_debug && logger.custom("think", "", `Register request mapping: [${ctlRouters[it].requestMethod}] : ["${ctlRouters[it].path}" => ${n}.${ctlRouters[it].method}]`);
-                    kRouter[ctlRouters[it].requestMethod](ctlRouters[it].path, async function (ctx: Koa.Context): Promise<any> {
+                    kRouter[ctlRouters[it].requestMethod](ctlRouters[it].path, function (ctx: Koa.Context): Promise<any> {
                         const router = ctlRouters[it];
                         return execRouter(n, router, ctx, container, ctlParams[router.method]);
                     });
