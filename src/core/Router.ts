@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-30 09:19:23
+ * @ version: 2020-04-30 11:04:03
  */
 import KoaRouter from "@koa/router";
 import * as Koa from "koa";
@@ -122,7 +122,7 @@ async function getParamter(params: any[], valids: any, dtoCheck: boolean, ctx: K
     const props: any[] = params.map(async function (v: any, k: number) {
         let value: any = null;
         if (v.fn && helper.isFunction(v.fn)) {
-            value = v.fn(ctx);
+            value = await v.fn(ctx);
         }
         if (v.isDto) {
             // DTO class
