@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-18 16:33:31
+ * @ version: 2020-05-01 12:15:56
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -64,10 +64,10 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         let componentMetas = [];
         const componentMeta = IOCContainer.getClassMetadata(INJECT_TAG, COMPONENT_SCAN, target);
         if (componentMeta) {
-            if (!helper.isArray(componentMeta)) {
-                componentMetas.push(componentMeta);
-            } else {
+            if (helper.isArray(componentMeta)) {
                 componentMetas = componentMeta;
+            } else {
+                componentMetas.push(componentMeta);
             }
         }
         if (componentMetas.length < 1) {
