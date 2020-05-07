@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-26 11:57:09
+ * @ version: 2020-05-07 17:53:23
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "koa";
@@ -10,7 +10,6 @@ import * as helper from "think_lib";
 import { Koatty } from "../Koatty";
 import { ObjectDefinitionOptions } from "../core/IContainer";
 import { Value } from '../core/Value';
-import logger from 'think_logger';
 
 /**
  *
@@ -25,7 +24,7 @@ interface BaseControllerInterface {
     readonly assign: (name?: string, value?: any) => Promise<any>;
     readonly deny: (code?: number) => void;
     readonly expires: (timeout: number) => void;
-    readonly fail: (errmsg?: Error | string, data?: any, code?: number) => void;
+    readonly fail: (errmsg?: Error | string, data?: any, code?: string) => void;
     readonly header: (name: string, value?: any) => any;
     readonly isAjax: () => boolean;
     readonly isGet: () => boolean;
@@ -35,11 +34,10 @@ interface BaseControllerInterface {
     readonly isPost: () => boolean;
     readonly json: (data: any) => void;
     readonly jsonp: (data: any) => void;
-    readonly ok: (errmsg?: Error | string, data?: any, code?: number) => void;
-    readonly redirect: (urls: string, alt?: string) => Promise<any>;
+    readonly ok: (msg?: Error | string, data?: any, code?: string) => void;
+    readonly redirect: (urls: string, alt?: string) => void;
     readonly render: (templateFile?: string, charset?: string, contentType?: string) => Promise<any>;
     readonly resType: (contentType?: string, encoding?: string | boolean) => string;
-    readonly body: (data: any, contentType?: string, encoding?: string) => Promise<any>;
 }
 
 /**
@@ -167,15 +165,21 @@ export class BaseController implements BaseControllerInterface {
     }
 
     /**
-     * Set headers.
+     * Get/Set headers.
      *
      * @public
-     * @param {string} name
+     * @param {string} [name]
      * @param {*} [value]
      * @returns {*}
      * @memberof BaseController
      */
-    public header(name: string, value?: any): any {
+    public header(name?: string, value?: any): any {
+        if (name === undefined) {
+            return this.ctx.headers;
+        }
+        if (value === undefined) {
+            return this.ctx.get(name);
+        }
         return this.ctx.set(name, value);
     }
 
@@ -219,12 +223,11 @@ export class BaseController implements BaseControllerInterface {
      *
      * @param {string} urls
      * @param {string} [alt]
-     * @returns {Promise<any>}
+     * @returns {void}
      * @memberof BaseController
      */
-    public redirect(urls: string, alt?: string) {
-        this.ctx.redirect(urls, alt);
-        return this.app.prevent();
+    public redirect(urls: string, alt?: string): void {
+        return this.ctx.redirect(urls, alt);
     }
 
     /**
@@ -234,25 +237,8 @@ export class BaseController implements BaseControllerInterface {
      * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public deny(code = 403) {
+    public deny(code = 403): Promise<any> {
         return this.ctx.throw(code);
-    }
-
-    /**
-     * Set response Body content
-     *
-     * @param {*} data
-     * @param {string} [contentType]
-     * @param {string} [encoding]
-     * @returns {Promise<any>}
-     * @memberof BaseController
-     */
-    public body(data: any, contentType?: string, encoding?: string) {
-        contentType = contentType || "text/plain";
-        encoding = encoding || this.encoding || "utf-8";
-        this.resType(contentType, encoding);
-        this.ctx.body = data;
-        return this.app.prevent();
     }
 
     /**
@@ -262,8 +248,9 @@ export class BaseController implements BaseControllerInterface {
      * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public json(data: any) {
-        return this.body(data, "application/json");
+    public json(data: any): Promise<any> {
+        this.ctx.type = "application/json";
+        return data;
     }
 
     /**
@@ -273,60 +260,44 @@ export class BaseController implements BaseControllerInterface {
      * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public jsonp(data: any) {
+    public jsonp(data: any): Promise<any> {
         let callback = this.ctx.querys("callback") || "callback";
         //过滤callback值里的非法字符
         callback = callback.replace(/[^\w\.]/g, "");
         if (callback) {
             data = `${callback}(${(data !== undefined ? JSON.stringify(data) : "")})`;
         }
-        return this.body(data, "application/json");
+        return this.json(data);
     }
 
     /**
      * Response to normalize json format content for success
      *
-     * @param {string} [errmsg]
+     * @param {string} [msg]
      * @param {*} [data]
-     * @param {number} [code=200]
+     * @param {string} [code="1"]
      * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public ok(errmsg?: string, data?: any, code = 200) {
-        const obj: any = {
-            "status": 1,
-            "code": code,
-            "message": errmsg || ""
-        };
-        if (data !== undefined) {
-            obj.data = data;
-        } else {
-            obj.data = {};
-        }
-        return this.body(obj, "application/json");
+    public ok(msg?: string, data?: any, code = "1"): Promise<any> {
+        this.ctx.code = code;
+        this.ctx.msg = msg || "";
+        return this.json(data);
     }
 
     /**
      * Response to normalize json format content for fail
      *
-     * @param {*} [errmsg]
+     * @param {string} [errmsg]
      * @param {*} [data]
-     * @param {number} [code=500]
+     * @param {string} [code="0"]
      * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public fail(errmsg?: any, data?: any, code = 500) {
-        const obj: any = {
-            "status": 0,
-            "code": code,
-            "message": (helper.isError(errmsg) ? errmsg.message : errmsg) || "error"
-        };
-        if (data !== undefined) {
-            obj.data = data;
-        } else {
-            obj.data = {};
-        }
-        return this.body(obj, "application/json");
+    public fail(errmsg?: any, data?: any, code = "0"): Promise<any> {
+        this.ctx.code = code;
+        this.ctx.msg = (helper.isError(errmsg) ? errmsg.message : errmsg) || "error";
+        return this.json(data);
     }
 
     /**

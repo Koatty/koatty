@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-23 12:47:42
+ * @ version: 2020-05-07 02:07:37
  */
 
 const store = require("think_store");
@@ -24,7 +24,7 @@ export interface RedisOptions {
  * @returns
  */
 const delay = function (ms: number) {
-    return new Promise((resolve: any) => setTimeout(resolve, ms));
+    return new Promise((resolve: Function) => setTimeout(() => resolve(), 1000));
 };
 
 export class Locker {

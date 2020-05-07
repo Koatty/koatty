@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-04-14 19:56:11
+ * @ version: 2020-05-07 15:32:59
  */
 import { Service, Base, Autowired, Scheduled, Cacheable, SchedulerLock } from "../../../src/index";
 import { App } from '../App';
@@ -17,11 +17,16 @@ export class TestService extends CommonService {
         //property
     }
 
-    @Cacheable("test")
+    // @Cacheable("test")
     async test(aa: TestDto) {
         // return Promise.reject("aa");
         console.log('TestService.test');
         return Promise.resolve(aa);
+    }
+    async test1(name: string) {
+        // throw Error('TestService.test1');
+        // console.log('TestService.test1');
+        return name;
     }
 
     @Scheduled("0 * * * * *")
