@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-26 11:57:09
+ * @ version: 2020-05-07 18:06:01
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "koa";
@@ -167,15 +167,21 @@ export class BaseController implements BaseControllerInterface {
     }
 
     /**
-     * Set headers.
+     * Get/Set headers.
      *
      * @public
-     * @param {string} name
+     * @param {string} [name]
      * @param {*} [value]
      * @returns {*}
      * @memberof BaseController
      */
-    public header(name: string, value?: any): any {
+    public header(name?: string, value?: any): any {
+        if (name === undefined) {
+            return this.ctx.headers;
+        }
+        if (value === undefined) {
+            return this.ctx.get(name);
+        }
         return this.ctx.set(name, value);
     }
 
