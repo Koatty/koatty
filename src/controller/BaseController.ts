@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-07 17:53:23
+ * @ version: 2020-05-10 01:13:34
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "koa";
@@ -21,23 +21,16 @@ interface BaseControllerInterface {
     encoding: string;
     __before: () => Promise<any>;
     __after: () => Promise<any>;
-    readonly assign: (name?: string, value?: any) => Promise<any>;
     readonly deny: (code?: number) => void;
     readonly expires: (timeout: number) => void;
-    readonly fail: (errmsg?: Error | string, data?: any, code?: string) => void;
+    readonly fail: (msg?: Error | string, data?: any, code?: number) => void;
     readonly header: (name: string, value?: any) => any;
-    readonly isAjax: () => boolean;
     readonly isGet: () => boolean;
-    readonly isJsonp: () => boolean;
     readonly isMethod: (method: string) => boolean;
-    readonly isPjax: () => boolean;
     readonly isPost: () => boolean;
-    readonly json: (data: any) => void;
-    readonly jsonp: (data: any) => void;
-    readonly ok: (msg?: Error | string, data?: any, code?: string) => void;
+    readonly ok: (msg?: string, data?: any, code?: number) => void;
     readonly redirect: (urls: string, alt?: string) => void;
-    readonly render: (templateFile?: string, charset?: string, contentType?: string) => Promise<any>;
-    readonly resType: (contentType?: string, encoding?: string | boolean) => string;
+    readonly type: (contentType?: string, encoding?: string | boolean) => string;
 }
 
 /**
@@ -131,40 +124,6 @@ export class BaseController implements BaseControllerInterface {
     }
 
     /**
-     * Whether it is an AJAX request
-     *
-     * @public
-     * @returns {boolean}
-     * @memberof BaseController
-     */
-    public isAjax(): boolean {
-        return this.ctx.headers["x-requested-with"] === "XMLHttpRequest";
-    }
-
-    /**
-     * Whether it is a PJAX request
-     *
-     * @public
-     * @returns {boolean}
-     * @memberof BaseController
-     */
-    public isPjax(): boolean {
-        return this.ctx.headers["x-pjax"] || this.ctx.headers["X-Pjax"] || false;
-    }
-
-    /**
-     * Whether it is jsonp call
-     *
-     * @public
-     * @param {string} [name="jsonpcallback"]
-     * @returns {boolean}
-     * @memberof BaseController
-     */
-    public isJsonp(name = "jsonpcallback"): boolean {
-        return !!this.ctx.query[name];
-    }
-
-    /**
      * Get/Set headers.
      *
      * @public
@@ -192,7 +151,7 @@ export class BaseController implements BaseControllerInterface {
      * @returns {string}
      * @memberof BaseController
      */
-    public resType(contentType?: string, encoding?: string | boolean): string {
+    public type(contentType?: string, encoding?: string | boolean): string {
         if (!contentType) {
             return (this.ctx.headers["content-type"] || "").split(";")[0].trim();
         }
@@ -242,94 +201,45 @@ export class BaseController implements BaseControllerInterface {
     }
 
     /**
-     * Respond to json formatted content
-     *
-     * @param {*} data
-     * @returns {Promise<any>}
-     * @memberof BaseController
-     */
-    public json(data: any): Promise<any> {
-        this.ctx.type = "application/json";
-        return data;
-    }
-
-    /**
-     * Respond to jsonp formatted content
-     *
-     * @param {*} data
-     * @returns {Promise<any>}
-     * @memberof BaseController
-     */
-    public jsonp(data: any): Promise<any> {
-        let callback = this.ctx.querys("callback") || "callback";
-        //过滤callback值里的非法字符
-        callback = callback.replace(/[^\w\.]/g, "");
-        if (callback) {
-            data = `${callback}(${(data !== undefined ? JSON.stringify(data) : "")})`;
-        }
-        return this.json(data);
-    }
-
-    /**
      * Response to normalize json format content for success
      *
      * @param {string} [msg]
      * @param {*} [data]
-     * @param {string} [code="1"]
+     * @param {number} [code=200]
      * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public ok(msg?: string, data?: any, code = "1"): Promise<any> {
-        this.ctx.code = code;
-        this.ctx.msg = msg || "";
-        return this.json(data);
+    public ok(msg?: string, data?: any, code = 200): Promise<any> {
+        this.ctx.type = "application/json";
+        const obj: any = {
+            "status": code,
+            "message": msg || ""
+        };
+        if (data !== undefined) {
+            obj.data = data;
+        }
+        return obj;
     }
 
     /**
      * Response to normalize json format content for fail
      *
-     * @param {string} [errmsg]
+     * @param {string} [msg]
      * @param {*} [data]
-     * @param {string} [code="0"]
+     * @param {number} [code=500]
      * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public fail(errmsg?: any, data?: any, code = "0"): Promise<any> {
-        this.ctx.code = code;
-        this.ctx.msg = (helper.isError(errmsg) ? errmsg.message : errmsg) || "error";
-        return this.json(data);
-    }
-
-    /**
-     * Template assignment, dependent on middleware `think_view`
-     *
-     * @param {string} [name]
-     * @param {*} [value]
-     * @returns {Promise<any>}
-     * @memberof BaseController
-     */
-    public assign(name?: string, value?: any): Promise<any> {
-        if (!this.ctx.assign) {
-            return this.ctx.throw("500", "The think_view middleware is not installed or configured incorrectly.");
+    public fail(msg?: any, data?: any, code = 500): Promise<any> {
+        this.ctx.type = "application/json";
+        const obj: any = {
+            "status": code,
+            "message": msg || ""
+        };
+        if (data !== undefined) {
+            obj.data = data;
         }
-        return this.ctx.assign(name, value);
-    }
-
-    /**
-     * Positioning, rendering, output templates, dependent on middleware `think_view`
-     *
-     * @param {string} [templateFile]
-     * @param {string} [charset]
-     * @param {string} [contentType]
-     * @returns {Promise<any>}
-     * @memberof BaseController
-     */
-    public render(templateFile?: string, charset?: string, contentType?: string): Promise<any> {
-        if (!this.ctx.render) {
-            return this.ctx.throw("500", "The think_view middleware is not installed or configured incorrectly.");
-        }
-        charset = charset || this.encoding || "utf-8";
-        return this.ctx.render(templateFile, null, charset, contentType);
+        return obj;
     }
 
 }
