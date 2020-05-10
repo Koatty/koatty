@@ -2,18 +2,18 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-01 12:15:56
+ * @ version: 2020-05-10 11:59:47
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
-import { IOCContainer } from "./Container";
+import { IOCContainer, TAGGED_CLS } from "think_container";
 import { Router } from "./Router";
 import { Koatty } from '../Koatty';
 import { Loader } from "../util/Loader";
 const pkg = require("../../package.json");
-import { INJECT_TAG, COMPONENT_SCAN, CONFIGUATION_SCAN } from "./Constants";
+import { COMPONENT_SCAN, CONFIGUATION_SCAN } from "./Constants";
 
 /**
  * execute event as async
@@ -62,7 +62,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
 
         logger.custom("think", "", "ComponentScan ...");
         let componentMetas = [];
-        const componentMeta = IOCContainer.getClassMetadata(INJECT_TAG, COMPONENT_SCAN, target);
+        const componentMeta = IOCContainer.getClassMetadata(TAGGED_CLS, COMPONENT_SCAN, target);
         if (componentMeta) {
             if (helper.isArray(componentMeta)) {
                 componentMetas = componentMeta;
@@ -74,7 +74,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
             componentMetas = [app.app_path];
         }
         // configuationMetas
-        const configuationMeta = IOCContainer.getClassMetadata(INJECT_TAG, CONFIGUATION_SCAN, target);
+        const configuationMeta = IOCContainer.getClassMetadata(TAGGED_CLS, CONFIGUATION_SCAN, target);
         let configuationMetas = [];
         if (configuationMeta) {
             if (helper.isArray(configuationMeta)) {
@@ -176,7 +176,7 @@ export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
 
     return (target: any) => {
         scanPath = scanPath || "";
-        IOCContainer.saveClassMetadata(INJECT_TAG, COMPONENT_SCAN, scanPath, target);
+        IOCContainer.saveClassMetadata(TAGGED_CLS, COMPONENT_SCAN, scanPath, target);
     };
 }
 
@@ -192,6 +192,6 @@ export function ConfiguationScan(scanPath?: string | string[]): ClassDecorator {
 
     return (target: any) => {
         scanPath = scanPath || "";
-        IOCContainer.saveClassMetadata(INJECT_TAG, CONFIGUATION_SCAN, scanPath, target);
+        IOCContainer.saveClassMetadata(TAGGED_CLS, CONFIGUATION_SCAN, scanPath, target);
     };
 }

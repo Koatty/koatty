@@ -2,13 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-16 23:35:25
+ * @ version: 2020-05-10 11:32:45
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 // import * as helper from "think_lib";
-import { IOCContainer } from './Container';
-import { NAMED_TAG } from "./Constants";
+import { IOCContainer } from 'think_container';
+import { CONTROLLER_ROUTER } from "./Constants";
 
 /**
  * Indicates that an decorated class is a "component".
@@ -35,7 +35,7 @@ export function Controller(path = ""): ClassDecorator {
     return (target: any) => {
         const identifier = IOCContainer.getIdentifier(target);
         IOCContainer.saveClass("CONTROLLER", target, identifier);
-        IOCContainer.savePropertyData(NAMED_TAG, path, target, identifier);
+        IOCContainer.savePropertyData(CONTROLLER_ROUTER, path, target, identifier);
     };
 }
 

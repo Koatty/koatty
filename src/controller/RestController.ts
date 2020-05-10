@@ -2,10 +2,10 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-15 16:10:54
+ * @ version: 2020-05-10 11:46:10
  */
 import * as helper from "think_lib";
-import { Container } from "../core/Container";
+import { Container } from "think_container";
 import { BaseController } from "./BaseController";
 import { GetMapping, PathVariable, PostMapping, DeleteMapping, PutMapping, RequestBody } from "../core/RequestMapping";
 

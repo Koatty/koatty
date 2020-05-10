@@ -2,12 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-01 01:49:08
+ * @ version: 2020-05-10 11:33:00
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import * as helper from "think_lib";
-import { IOCContainer } from './Container';
+import { IOCContainer } from 'think_container';
 import { paramterTypes } from "think_validtion";
 import { ROUTER_KEY, PARAM_KEY } from "./Constants";
 

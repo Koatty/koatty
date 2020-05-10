@@ -2,9 +2,9 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-14 14:43:13
+ * @ version: 2020-05-10 11:36:32
  */
-import { IOCContainer } from '../core/Container';
+import { IOCContainer } from 'think_container';
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
 

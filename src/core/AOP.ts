@@ -2,11 +2,11 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-16 23:33:43
+ * @ version: 2020-05-10 11:30:28
  */
 import * as helper from "think_lib";
 import logger from 'think_logger';
-import { IOCContainer } from './Container';
+import { IOCContainer } from 'think_container';
 
 
 /**

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-23 19:21:20
+ * @ version: 2020-05-10 11:51:00
  */
 
 import * as path from "path";
@@ -11,7 +11,7 @@ import KoaRouter from "@koa/router";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { PREVENT_NEXT_PROCESS } from "./core/Constants";
-import { Container } from "./core/Container";
+import { Container } from "think_container";
 const pkg = require("../package.json");
 
 /**

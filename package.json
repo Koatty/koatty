@@ -1,6 +1,6 @@
 {
     "name": "koatty",
-    "version": "1.21.1",
+    "version": "2.0.0",
     "description": "Koa2 + Typescript = koatty. Use Typescript's decorator implement auto injection just like SpringBoot.",
     "scripts": {
         "build": "del-cli --force dist && tsc",
@@ -41,8 +41,8 @@
         "@types/koa__router": "^8.x.x",
         "@types/node": "^12.x.x",
         "del-cli": "^3.0.0",
-        "ts-node": "^8.9.0",
-        "tslint": "^6.1.1",
+        "ts-node": "^8.10.1",
+        "tslint": "^6.1.2",
         "tslint-config-alloy": "^0.2.1",
         "typescript": "^3.8.3"
     },
@@ -52,13 +52,14 @@
         "globby": "^11.0.0",
         "koa": "^2.11.0",
         "reflect-metadata": "^0.1.13",
+        "think_container": "^1.x.x",
         "think_lib": "^2.x.x",
         "think_logger": "^2.x.x",
         "think_payload": "^3.x.x",
         "think_store": "^4.x.x",
-        "think_trace": "^2.x.x",
+        "think_trace": "^3.x.x",
         "think_validtion": "^1.x.x",
-        "tslib": "^1.11.1"
+        "tslib": "^1.11.2"
     },
     "maintainers": [
         {

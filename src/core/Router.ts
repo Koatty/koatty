@@ -2,15 +2,15 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-30 11:04:03
+ * @ version: 2020-05-10 11:49:33
  */
 import KoaRouter from "@koa/router";
 import * as Koa from "koa";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { Koatty } from "../Koatty";
-import { Container, IOCContainer } from "./Container";
-import { NAMED_TAG, ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY, PARAM_CHECK_KEY } from "./Constants";
+import { Container, IOCContainer } from "think_container";
+import { CONTROLLER_ROUTER, ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY, PARAM_CHECK_KEY } from "./Constants";
 import { recursiveGetMetadata } from "../util/Lib";
 import { convertParamsType, ValidatorFuncs, plainToClass, ClassValidator } from 'think_validtion';
 
@@ -39,7 +39,7 @@ import { convertParamsType, ValidatorFuncs, plainToClass, ClassValidator } from 
  */
 function injectRouter(target: any, instance?: any) {
     // Controller router path
-    const metaDatas = IOCContainer.listPropertyData(NAMED_TAG, target);
+    const metaDatas = IOCContainer.listPropertyData(CONTROLLER_ROUTER, target);
     let path = "";
     const identifier = IOCContainer.getIdentifier(target);
     if (metaDatas) {
@@ -230,27 +230,34 @@ export class Router {
      */
     async execRouter(identifier: string, router: any, ctx: Koa.Context, container: Container, ctlParams: any) {
         const ctl: any = container.get(identifier, "CONTROLLER", [ctx]);
-        // const ctl: any = container.get(identifier, "CONTROLLER");
-        if (!ctx || !ctl.init) {
-            return ctx.throw(404, `Controller ${identifier} not found.`);
-        }
-        // pre-method
-        if (ctl.__before) {
-            logger.info(`Execute the aspect __before()`);
-            await ctl.__before();
-        }
-        // inject param
-        let args = [];
-        if (ctlParams) {
-            args = await getParamter(ctlParams.data || [], ctlParams.valids || {}, ctlParams.dtoCheck, ctx);
-        }
         try {
-            return ctl[router.method](...args);
+            // const ctl: any = container.get(identifier, "CONTROLLER");
+            if (!ctx || !ctl.init) {
+                return ctx.throw(404, `Controller ${identifier} not found.`);
+            }
+            // pre-method
+            if (ctl.__before) {
+                logger.info(`Execute the aspect ${identifier}.__before()`);
+                await ctl.__before();
+            }
+            // inject param
+            let args = [];
+            if (ctlParams) {
+                args = await getParamter(ctlParams.data || [], ctlParams.valids || {}, ctlParams.dtoCheck, ctx);
+            }
+            // method
+            const res = await ctl[router.method](...args);
+            return (res === undefined ? "" : res);
+        } catch (err) {
+            if (!helper.isError(err)) {
+                throw Error(`${err} at ${identifier}.${router.method}`);
+            }
+            throw err;
         } finally {
             // after-method
             if (ctl.__after) {
-                logger.info(`Execute the aspect __after()`);
-                await ctl.__after();
+                logger.info(`Execute the aspect ${identifier}.__after()`);
+                await ctl.__after().catch((e: any) => logger.error(e));
             }
         }
     }
