@@ -2,18 +2,17 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-21 09:13:37
+ * @ version: 2020-05-10 12:21:34
  */
 import { Bootstrap, ComponentScan, Autowired, Koatty, ConfiguationScan, Logger, Helper } from '../../src/index';
 import * as path from "path";
 
 @Bootstrap((app: any) => {
     //调整libuv线程池大小
-    process.env.UV_THREADPOOL_SIZE = "128";
+    // process.env.UV_THREADPOOL_SIZE = "128";
     //忽略https自签名验证
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-    //运行环境
-    process.env.KOATTY_ENV = 'alpha';
+    // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
     console.log("bootFunc");
 })
 // @ComponentScan('./test')

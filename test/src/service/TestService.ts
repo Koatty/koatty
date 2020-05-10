@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-05-10 01:09:52
+ * @ version: 2020-05-10 12:17:22
  */
 import { Service, Base, Autowired, Scheduled, Cacheable, SchedulerLock } from "../../../src/index";
 import { App } from '../App';
@@ -30,7 +30,7 @@ export class TestService extends CommonService {
     }
 
     @Scheduled("0 * * * * *")
-    @SchedulerLock()
+    // @SchedulerLock()
     scheduleTest() {
         console.log('TestService.scheduleTest');
         return;

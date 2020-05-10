@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-10 11:36:40
+ * @ version: 2020-05-10 13:12:39
  */
 import * as globby from "globby";
 import * as path from "path";
@@ -54,17 +54,28 @@ export class Loader {
         const tempConfig: any = {};
         // tslint:disable-next-line: no-unused-expression
         process.env.APP_DEBUG && logger.custom("think", "", `Load configuation path: ${app.app_path}${loadPath || "/config"}`);
+
         Loader.loadDirectory(loadPath || "./config", app.app_path, function (name: string, exp: any) {
-            if (process.env.KOATTY_ENV && name.indexOf(`_${process.env.KOATTY_ENV}`) > -1) {
-                tempConfig[name] = exp;
+            // tslint:disable-next-line: one-variable-per-declaration
+            let type = "", t = "";
+            if (process.env.NODE_ENV && name.indexOf("_") > -1) {
+                t = name.slice(name.lastIndexOf("_") + 1);
+                if (t && process.env.NODE_ENV.indexOf(t) === 0) {
+                    type = t;
+                }
+            }
+            if (type) {
+                tempConfig[`${name.replace(`_${t}`, "")}^${type}`] = exp;
             } else {
                 appConfig[name] = exp;
             }
         });
         // load env configuation
-        for (const n in appConfig) {
-            if (n && tempConfig[`${n}_${process.env.KOATTY_ENV}`]) {
-                appConfig[n] = helper.extend(appConfig[n], tempConfig[`${n}_${process.env.KOATTY_ENV}`], true);
+        // tslint:disable-next-line: forin
+        for (const n in tempConfig) {
+            const na = n.split("^")[0];
+            if (appConfig[na]) {
+                appConfig[na] = helper.extend(appConfig[na], tempConfig[n], true);
             }
         }
 

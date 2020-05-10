@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-10 11:51:00
+ * @ version: 2020-05-10 13:04:59
  */
 
 import * as path from "path";
@@ -120,14 +120,18 @@ export class Koatty extends Koa {
         this.app_debug = !!(this.options.app_debug || this.app_debug);
 
         const env = JSON.stringify(process.execArgv);
-        if ((env.indexOf("--production") > -1) || (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "pro")) {
+        if ((env.indexOf("--production") > -1) || ((process.env.NODE_ENV || "").indexOf("pro") > -1)) {
             this.app_debug = false;
         }
+
         if (env.indexOf("ts-node") > -1 || env.indexOf("--debug") > -1) {
             this.app_debug = true;
         }
         if (this.app_debug) {
+            process.env.NODE_ENV = process.env.NODE_ENV || "development";
             process.env.APP_DEBUG = "true";
+        } else {
+            process.env.NODE_ENV = process.env.NODE_ENV || "production";
         }
 
         // check env

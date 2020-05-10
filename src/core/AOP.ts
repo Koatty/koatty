@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-10 11:30:28
+ * @ version: 2020-05-10 13:14:19
  */
 import * as helper from "think_lib";
 import logger from 'think_logger';
@@ -115,18 +115,18 @@ export function Before(aopName: string | Function): MethodDecorator {
  * @param {string} [aopName]
  * @returns {Function}
  */
-export function BeforeEach(aopName?: string | Function): ClassDecorator {
-    return (target: any) => {
-        // only used in Controller
-        const type = IOCContainer.getType(target);
-        if (type !== "CONTROLLER") {
-            throw Error("BeforeEach decorator is only used in the controller class.");
-        }
-        if (aopName && aopName !== "__before") {
-            defineNewProperty(target, "__before", aopName);
-        }
-    };
-}
+// export function BeforeEach(aopName?: string | Function): ClassDecorator {
+//     return (target: any) => {
+//         // only used in Controller
+//         const type = IOCContainer.getType(target);
+//         if (type !== "CONTROLLER") {
+//             throw Error("BeforeEach decorator is only used in the controller class.");
+//         }
+//         if (aopName && aopName !== "__before") {
+//             defineNewProperty(target, "__before", aopName);
+//         }
+//     };
+// }
 
 /**
  * Executed after specifying the pointcut method.
@@ -177,15 +177,15 @@ export function After(aopName: string | Function): MethodDecorator {
  * @param {string} aopName
  * @returns {Function}
  */
-export function AfterEach(aopName?: string | Function): ClassDecorator {
-    return (target: any) => {
-        // only used in Controller
-        const type = IOCContainer.getType(target);
-        if (type !== "CONTROLLER") {
-            throw Error("AfterEach decorator is only used in the controller class.");
-        }
-        if (aopName && aopName !== "__after") {
-            defineNewProperty(target, "__after", aopName);
-        }
-    };
-}
+// export function AfterEach(aopName?: string | Function): ClassDecorator {
+//     return (target: any) => {
+//         // only used in Controller
+//         const type = IOCContainer.getType(target);
+//         if (type !== "CONTROLLER") {
+//             throw Error("AfterEach decorator is only used in the controller class.");
+//         }
+//         if (aopName && aopName !== "__after") {
+//             defineNewProperty(target, "__after", aopName);
+//         }
+//     };
+// }

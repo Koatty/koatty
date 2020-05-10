@@ -2,14 +2,13 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-03-19 14:09:55
+ * @ version: 2020-05-10 13:15:26
  */
-import { Controller, BaseController, Autowired, Logger, Helper, RequestBody, BeforeEach } from "../../../src/index";
+import { Controller, BaseController, Autowired, Logger, Helper, RequestBody } from "../../../src/index";
 import { App } from '../App';
 import { CommonService } from '../service/CommonService';
 
 @Controller()
-// @BeforeEach("TestAspect")
 export class AdminController extends BaseController {
     app: App;
     // Mo: { rel: false; sortby: any; field: any[]; ispage: boolean; pagesize: number; page: number; };

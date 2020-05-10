@@ -2,9 +2,9 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-05-10 01:11:09
+ * @ version: 2020-05-10 13:15:50
  */
-import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, BeforeEach, After, RequestBody, Get, Validated, Valid, Helper, Post, RequestParam } from "../../../src/index";
+import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, After, RequestBody, Get, Validated, Valid, Helper, Post, RequestParam } from "../../../src/index";
 import { App } from '../App';
 import { AdminController } from "./AdminController";
 import { TestService } from "../service/TestService";
@@ -13,7 +13,6 @@ import { TestModel } from '../model/TestModel';
 import { TestAspect } from '../aspect/TestAspect';
 
 @Controller("/")
-@BeforeEach()
 export class IndexController extends AdminController {
     app: App;
     pageInfo: { 'appName': string; 'appVersion': string; 'appKeywords': string; 'appDescription': string; };
