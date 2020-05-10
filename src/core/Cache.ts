@@ -2,12 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-26 13:39:47
+ * @ version: 2020-05-10 11:32:37
  */
 import * as helper from "think_lib";
 import logger from "think_logger";
 const store = require("think_store");
-import { IOCContainer } from './Container';
+import { IOCContainer } from 'think_container';
 
 
 /**

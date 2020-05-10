@@ -2,12 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-23 03:20:08
+ * @ version: 2020-05-10 11:33:37
  */
 import * as helper from "think_lib";
 import { ValidRules, ClassValidator, paramterTypes } from 'think_validtion';
 import { PARAM_RULE_KEY, PARAM_CHECK_KEY } from './Constants';
-import { IOCContainer } from './Container';
+import { IOCContainer } from 'think_container';
 export {
     ClassValidator, FunctionValidator,
     IsDefined, IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsEmail, IsIP, IsPhoneNumber, IsUrl, IsHash, IsNotEmpty, Equals, NotEquals, Contains, IsIn, IsNotIn, IsDate,
