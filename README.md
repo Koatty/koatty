@@ -102,8 +102,8 @@ export class IndexController extends BaseController {
 
     @RequestMapping("/", RequestMethod.ALL)
     async default(@PathVariable("test") @Valid("IsNotEmpty") test: string) {
-        const info = await this.testService.sayHello();
-        return this.ok(test, info);
+        const info = await this.testService.sayHello().catch((err: any) => this.fail(err.message));
+        return info;
     }
 
     @PostMapping("/test")
