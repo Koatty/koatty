@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-11 14:58:01
+ * @ version: 2020-05-13 23:32:43
  */
 import * as globby from "globby";
 import * as path from "path";
@@ -58,10 +58,17 @@ export class Loader {
         Loader.loadDirectory(loadPath || "./config", app.app_path, function (name: string, exp: any) {
             // tslint:disable-next-line: one-variable-per-declaration
             let type = "", t = "";
-            if (process.env.NODE_ENV && name.indexOf("_") > -1) {
+            if (name.indexOf("_") > -1) {
                 t = name.slice(name.lastIndexOf("_") + 1);
-                if (t && process.env.NODE_ENV.indexOf(t) === 0) {
-                    type = t;
+                if (process.env.KOATTY_ENV) {
+                    if (t && process.env.KOATTY_ENV.indexOf(t) === 0) {
+                        type = t;
+                    }
+                }
+                if (type === "" && process.env.NODE_ENV) {
+                    if (t && process.env.NODE_ENV.indexOf(t) === 0) {
+                        type = t;
+                    }
                 }
             }
             if (type) {
