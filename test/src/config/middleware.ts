@@ -2,14 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-10 02:12:30
+ * @ version: 2020-05-11 13:54:18
  */
 
 export default {
-    list: ['Models', 'Zadtest'], //加载的中间件列表
+    list: ['ModelsMiddleware', 'ZadtestMiddleware'], //加载的中间件列表
     config: { //中间件配置
 
-        Trace: {
+        TraceMiddleware: {
             timeout: 30
         }
     }

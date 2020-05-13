@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-10 11:32:37
+ * @ version: 2020-05-11 10:48:08
  */
 import * as helper from "think_lib";
 import logger from "think_logger";
@@ -23,8 +23,8 @@ import { IOCContainer } from 'think_container';
  */
 export function CacheAble(cacheName: string, paramKey?: number | number[], timeout = 3600): MethodDecorator {
     return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
-        const type = IOCContainer.getType(target);
-        if (type === "CONTROLLER") {
+        const componentType = IOCContainer.getType(target);
+        if (componentType === "CONTROLLER") {
             throw Error("CacheAble decorator cannot be used in the controller class.");
         }
         let identifier = IOCContainer.getIdentifier(target);
@@ -142,8 +142,8 @@ export type eventTimes = "Before" | "After";
  */
 export function CacheEvict(cacheName: string, paramKey?: number | number[], eventTime: eventTimes = "Before") {
     return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
-        const type = IOCContainer.getType(target);
-        if (type === "CONTROLLER") {
+        const componentType = IOCContainer.getType(target);
+        if (componentType === "CONTROLLER") {
             throw Error("CacheEvict decorator cannot be used in the controller class.");
         }
         const identifier = IOCContainer.getIdentifier(target);

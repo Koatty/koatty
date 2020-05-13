@@ -719,10 +719,10 @@ inherits@2, inherits@2.0.4:
   resolved "https://r.cnpmjs.org/inherits/download/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
   integrity sha1-D6LGT5MpF8NDOg3tVTY6rjdBa3w=
 
-ioredis@^4.16.0:
-  version "4.16.0"
-  resolved "https://registry.yarnpkg.com/ioredis/-/ioredis-4.16.0.tgz#44d51288e20da14e5b6f687b2db0312e69106556"
-  integrity sha512-tlalhtuvnxXJNtrPjec1nGicuOCpi9ErYV/fRfwaWSzktX9ESrzHlcFwj1pVAL326E8dmt7h9pPQZyyVPPksRA==
+ioredis@^4.16.3:
+  version "4.16.3"
+  resolved "https://registry.yarnpkg.com/ioredis/-/ioredis-4.16.3.tgz#6a6b85830206fd98353b7ff8536521f17943be53"
+  integrity sha512-Ejvcs2yW19Vq8AipvbtfcX3Ig8XG9EAyFOvGbhI/Q1QoVOK9ZdgY092kdOyOWIYBnPHjfjMJhU9qhsnp0i0K1w==
   dependencies:
     cluster-key-slot "^1.1.0"
     debug "^4.1.1"
@@ -1001,6 +1001,11 @@ moment-timezone@^0.5.x:
   resolved "https://r.cnpmjs.org/moment/download/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha1-DQVdU/UFKqZTyfbraLtdEr9cK1s=
 
+moment@^2.25.3:
+  version "2.25.3"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.25.3.tgz#252ff41319cf41e47761a1a88cab30edfe9808c0"
+  integrity sha512-PuYv0PHxZvzc15Sp8ybUCoQ+xpyPWvjOuK72a5ovzp2LI32rJXOiIfyoFoYvG3s6EwwrdkMyWuRiEHSZRLJNdg==
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://r.cnpmjs.org/ms/download/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -1011,10 +1016,10 @@ ms@^2.1.1:
   resolved "https://r.cnpmjs.org/ms/download/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha1-0J0fNXtEP0kzgqjrPM0YOHKuYAk=
 
-murmurhash@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/murmurhash/-/murmurhash-0.0.2.tgz#6f07bd8a1105e709c26fc89420cb5930c24585fe"
-  integrity sha1-bwe9ihEF5wnCb8iUIMtZMMJFhf4=
+murmurhash@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/murmurhash/-/murmurhash-1.0.0.tgz#d0e4556892317d984af632b6a88d5605beef26a7"
+  integrity sha512-u/NfpXS+viMWAupgU6IkwAVWkVnpvzS+D9bDxNuNRUoQ0BRMZ1DK/dPH6Qrknn7RxMHVQBpYBQQigUt7of6RiQ==
 
 negotiator@0.6.2:
   version "0.6.2"
@@ -1341,13 +1346,14 @@ think_container@^1.x.x:
     tslib "^1.11.2"
 
 think_lib@^2.x.x:
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/think_lib/-/think_lib-2.5.1.tgz#e806f06967c2d18c96deffe963618d24317775ed"
-  integrity sha512-d8dX1SCuuYNO9c0rK+9mTY1G/nUOKQtH+AFsZGQVkNHNr+/mhWYZHyNHcqPY4w0TDclz0/TheQFOwaUMQ/FvBQ==
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/think_lib/-/think_lib-2.6.0.tgz#d7959976f0e19fd9c0b76a3a7b0b396c6e58911f"
+  integrity sha512-vEtmdGahwkwYynh1jCNWBK9ckFdhHJ8r1T6Oe5SNbdIfHnGvqM7R9xZXhYB4qFjxTDupG6UtQkwt7l71Lh3heQ==
   dependencies:
     co "^4.6.0"
     lodash "^4.17.15"
-    murmurhash "^0.0.2"
+    moment "^2.25.3"
+    murmurhash "^1.0.0"
 
 think_logger@^2.x.x:
   version "2.2.0"
@@ -1357,9 +1363,9 @@ think_logger@^2.x.x:
     think_lib "^2.x.x"
 
 think_payload@^3.x.x:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/think_payload/-/think_payload-3.0.0.tgz#5553017850eabb36d0696aa34c2bf994a6b99d3b"
-  integrity sha512-3nxh9VN87990GCUN1OyD64znlCDlbVHfucZZphQx54ESdav8h30bStokCKiuoxzUUXLAh02if5VpOLOOGBrcHA==
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/think_payload/-/think_payload-3.1.0.tgz#c0d5ecd635160775be2e65f55f0816fe44d18ee9"
+  integrity sha512-iqcb/1gx1T+isE7hy60+he0uH6fVdSjoFAyVC34EqEKeZ2GLtYTZWwUUasQ0FDRnKw3y8MVu0SSDAbcyCn11fA==
   dependencies:
     formidable "^1.2.2"
     inflation "^2.0.0"
@@ -1369,20 +1375,20 @@ think_payload@^3.x.x:
     think_logger "^2.x.x"
     xml2js "^0.4.23"
 
-think_store@^4.x.x:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/think_store/-/think_store-4.1.0.tgz#a41c31881a3383de0b2a5a13d7dff7da7c4da962"
-  integrity sha512-svkk9e5ZqYtt2yJ1Qu+ySphCCYKF1Hw4wqU/5YGvWF8Xs92GM23fTLyKOtxAQB5aFPQ5KH8mgp9gD4OQP4qo2A==
+think_store@^3.x.x:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/think_store/-/think_store-3.4.0.tgz#11916b594cbaa355a2db76a04a5290fa54b7145a"
+  integrity sha512-cITw59DT6Ac1TGB8GDLERUU9cNPycsk0QPgE/sEED4k0Skv8pTtkOC2i1XBY3THbSwzU/axo4WRRwhBM9i9GUg==
   dependencies:
     generic-pool "^3.7.1"
-    ioredis "^4.16.0"
+    ioredis "^4.16.3"
     think_lib "^2.x.x"
     think_logger "^2.x.x"
 
 think_trace@^3.x.x:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/think_trace/-/think_trace-3.0.2.tgz#549b4a38792b6f4967b74bd7951ff8a596a16ca6"
-  integrity sha512-k1HxjUGZVPEUyf5ZvPYcN1wt0WfAe8fQw3aLy9Y5q98SE+cNgtvozL0lSP6NnhTiqD0fI1VKRncnVqbNbf0Omg==
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/think_trace/-/think_trace-3.1.0.tgz#9985fd05dede951b1cc057e8a61d68d729ce549d"
+  integrity sha512-NfojWBVGye5eqHr+9eIaVqhmk1xMaVOPcFv3FIfp/2dFVjapD8ahTawB0Pz3sB5+eU1y7K7R4YBmcoaH/oDycw==
   dependencies:
     think_lib "^2.x.x"
     think_logger "^2.x.x"

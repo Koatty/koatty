@@ -2,14 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-10 11:46:01
+ * @ version: 2020-05-11 12:04:49
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "koa";
 import * as helper from "think_lib";
 import { Koatty } from "../Koatty";
 import { ObjectDefinitionOptions } from "think_container";
-import { Value } from '../core/Value';
 
 /**
  *
@@ -18,17 +17,19 @@ import { Value } from '../core/Value';
 interface BaseControllerInterface {
     app: Koatty;
     ctx: Koa.Context;
-    encoding: string;
+
     __before: () => Promise<any>;
     __after: () => Promise<any>;
+    readonly body: (data: any, contentType?: string, encoding?: string) => Promise<any>;
     readonly deny: (code?: number) => void;
     readonly expires: (timeout: number) => void;
-    readonly fail: (msg?: Error | string, data?: any, code?: number) => void;
+    readonly fail: (msg?: Error | string, data?: any, code?: number) => Promise<any>;
     readonly header: (name: string, value?: any) => any;
+    readonly json: (data: any) => Promise<any>;
     readonly isGet: () => boolean;
     readonly isMethod: (method: string) => boolean;
     readonly isPost: () => boolean;
-    readonly ok: (msg?: string, data?: any, code?: number) => void;
+    readonly ok: (msg?: string, data?: any, code?: number) => Promise<any>;
     readonly redirect: (urls: string, alt?: string) => void;
     readonly type: (contentType?: string, encoding?: string | boolean) => string;
 }
@@ -43,8 +44,7 @@ interface BaseControllerInterface {
 export class BaseController implements BaseControllerInterface {
     public app: Koatty;
     public ctx: Koa.Context;
-    @Value("encoding")
-    public encoding: string;
+
     protected _options: ObjectDefinitionOptions;
 
     /**
@@ -201,6 +201,34 @@ export class BaseController implements BaseControllerInterface {
     }
 
     /**
+     * Set response Body content
+     *
+     * @param {*} data
+     * @param {string} [contentType]
+     * @param {string} [encoding]
+     * @returns {Promise<any>}
+     * @memberof BaseController
+     */
+    public body(data: any, contentType?: string, encoding?: string) {
+        contentType = contentType || "text/plain";
+        encoding = encoding || this.app.config("encoding") || "utf-8";
+        this.type(contentType, encoding);
+        this.ctx.body = data;
+        return this.app.prevent();
+    }
+
+    /**
+     * Respond to json formatted content
+     *
+     * @param {*} data
+     * @returns {Promise<any>}
+     * @memberof BaseController
+     */
+    public json(data: any) {
+        return this.body(data, "application/json");
+    }
+
+    /**
      * Response to normalize json format content for success
      *
      * @param {string} [msg]
@@ -218,7 +246,7 @@ export class BaseController implements BaseControllerInterface {
         if (data !== undefined) {
             obj.data = data;
         }
-        return obj;
+        return this.json(obj);
     }
 
     /**
@@ -239,7 +267,7 @@ export class BaseController implements BaseControllerInterface {
         if (data !== undefined) {
             obj.data = data;
         }
-        return obj;
+        return this.json(obj);
     }
 
 }

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-10 11:33:25
+ * @ version: 2020-05-11 10:46:31
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -35,10 +35,6 @@ export function Scheduled(cron: string): MethodDecorator {
     }
 
     return (target, propertyKey: string, descriptor: PropertyDescriptor) => {
-        const type = IOCContainer.getType(target);
-        if (type === "CONTROLLER") {
-            throw Error("Scheduled decorator cannot be used in the controller class.");
-        }
         IOCContainer.attachPropertyData(SCHEDULE_KEY, {
             cron,
             method: propertyKey
@@ -59,8 +55,8 @@ export function Scheduled(cron: string): MethodDecorator {
  */
 export function SchedulerLock(name?: string, lockTimeOut?: number, waitLockInterval?: number, waitLockTimeOut?: number): MethodDecorator {
     return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
-        const type = IOCContainer.getType(target);
-        if (type === "CONTROLLER") {
+        const componentType = IOCContainer.getType(target);
+        if (componentType === "CONTROLLER") {
             throw Error("SchedulerLock decorator cannot be used in the controller class.");
         }
         const { value, configurable, enumerable } = descriptor;

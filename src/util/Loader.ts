@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-10 13:12:39
+ * @ version: 2020-05-11 14:58:01
  */
 import * as globby from "globby";
 import * as path from "path";
@@ -94,7 +94,7 @@ export class Loader {
     public static async loadMiddlewares(app: any, container: Container, loadPath?: string | string[]) {
         const middlewareConf = app.config(undefined, "middleware") || { config: {}, list: [] };
         //default middleware list
-        const defaultList = ["Payload"];
+        const defaultList = ["PayloadMiddleware"];
         //Mount default middleware
         Loader.loadDirectory(loadPath || "./middleware", app.think_path);
         //Mount application middleware
@@ -113,7 +113,7 @@ export class Loader {
         });
 
         const middlewareConfList = middlewareConf.list;
-        const bandList = ["Trace", ...defaultList];
+        const bandList = ["TraceMiddleware", ...defaultList];
         middlewareConfList.map((item: any) => {
             if (!bandList.includes(item)) {
                 defaultList.push(item);
@@ -123,7 +123,7 @@ export class Loader {
         //de-duplication
         const appMList = [...new Set(defaultList)];
         //Mount the middleware on first
-        appMList.unshift("Trace");
+        appMList.unshift("TraceMiddleware");
 
         //Automatically call middleware
         let handle: any;
