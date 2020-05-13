@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-10 11:59:47
+ * @ version: 2020-05-11 13:59:27
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -22,17 +22,13 @@ import { COMPONENT_SCAN, CONFIGUATION_SCAN } from "./Constants";
  * @param {string} eventName
  */
 const asyncEvent = async function (app: Koatty, eventName: string) {
-    try {
-        const ls: any[] = app.listeners(eventName);
-        for (const func of ls) {
-            if (helper.isFunction(func)) {
-                await func();
-            }
+    const ls: any[] = app.listeners(eventName);
+    for (const func of ls) {
+        if (helper.isFunction(func)) {
+            await func();
         }
-        return;
-    } catch (err) {
-        logger.error(err);
     }
+    return;
 };
 
 /**

@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-10 11:50:16
+ * @ version: 2020-05-11 15:07:28
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -21,11 +21,15 @@ import { Container, IOCContainer, TAGGED_ARGS } from "think_container";
  */
 export function Value(key: string, type?: string): PropertyDecorator {
     return (target: any, propertyKey: string) => {
+        // ###############
+        // PropertyDecorator is executed before ClassDecorator, resulting in that componentType cannot be obtained here...
+        // ###############
+        // const componentType = IOCContainer.getType(target);
+        // if (componentType === "MIDDLEWARE") {
+        //     throw Error("Value decorator cannot be used in the middleware class. Please use app.config() to get the configuration.");
+        // }
+
         // identifier = identifier || helper.camelCase(propertyKey, { pascalCase: true });
-        const componentType = IOCContainer.getType(target);
-        if (componentType === "MIDDLEWARE") {
-            throw Error("Value decorator cannot be used in the middleware class. Please use app.config() to get the configuration.");
-        }
         key = key || propertyKey;
         IOCContainer.savePropertyData(TAGGED_ARGS, `${key || ""}|${type || "config"}`, target, propertyKey);
     };
@@ -49,6 +53,10 @@ export const Config = Value;
  * @param {Container} container
  */
 export function injectValue(target: any, instance: any, container: Container) {
+    const componentType = IOCContainer.getType(target);
+    if (componentType === "MIDDLEWARE") {
+        throw Error("Value decorator cannot be used in the middleware class. Please use app.config() to get the configuration.");
+    }
     const metaData = recursiveGetMetadata(TAGGED_ARGS, target);
     const app = container.getApp();
     // tslint:disable-next-line: forin
