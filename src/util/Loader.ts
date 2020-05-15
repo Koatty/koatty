@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-13 23:32:43
+ * @ version: 2020-05-14 00:21:35
  */
 import * as globby from "globby";
 import * as path from "path";
@@ -60,15 +60,8 @@ export class Loader {
             let type = "", t = "";
             if (name.indexOf("_") > -1) {
                 t = name.slice(name.lastIndexOf("_") + 1);
-                if (process.env.KOATTY_ENV) {
-                    if (t && process.env.KOATTY_ENV.indexOf(t) === 0) {
-                        type = t;
-                    }
-                }
-                if (type === "" && process.env.NODE_ENV) {
-                    if (t && process.env.NODE_ENV.indexOf(t) === 0) {
-                        type = t;
-                    }
+                if (t && (app.env || "").indexOf(t) === 0) {
+                    type = t;
                 }
             }
             if (type) {

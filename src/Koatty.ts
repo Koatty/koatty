@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-10 14:51:35
+ * @ version: 2020-05-14 09:54:05
  */
 
 import * as path from "path";
@@ -88,6 +88,7 @@ interface ListenOptions {
  * @implements {BaseApp}
  */
 export class Koatty extends Koa {
+    public env: string;
     public root_path: string;
     public app_path: string;
     public think_path: string;
@@ -128,10 +129,10 @@ export class Koatty extends Koa {
             this.app_debug = true;
         }
         if (this.app_debug) {
-            process.env.NODE_ENV = process.env.NODE_ENV || "development";
+            process.env.NODE_ENV = "development";
             process.env.APP_DEBUG = "true";
         } else {
-            process.env.NODE_ENV = process.env.NODE_ENV || "production";
+            process.env.NODE_ENV = "production";
         }
 
         // check env
@@ -143,6 +144,8 @@ export class Koatty extends Koa {
         helper.define(this, "root_path", root_path);
         helper.define(this, "app_path", app_path);
         helper.define(this, "think_path", think_path);
+        // app.env
+        this.env = process.env.KOATTY_ENV || process.env.NODE_ENV;
 
         process.env.ROOT_PATH = this.root_path;
         process.env.APP_PATH = this.app_path;

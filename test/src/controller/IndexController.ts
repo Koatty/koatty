@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-05-13 23:55:20
+ * @ version: 2020-05-13 23:57:56
  */
 import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, After, RequestBody, Get, Validated, Valid, Helper, Post, RequestParam } from "../../../src/index";
 import { App } from '../App';
@@ -44,7 +44,6 @@ export class IndexController extends AdminController {
     @Validated()
     async test(@Post() aa: TestDto) {
         // console.log(Helper.isFunction(TestModel));
-        console.log(111111);
         const info = await this.testService.test(aa).catch((e: any) => {
             return this.fail(e.message || e);
         });
