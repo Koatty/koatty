@@ -4,7 +4,7 @@
     "description": "Koa2 + Typescript = koatty. Use Typescript's decorator implement auto injection just like SpringBoot.",
     "scripts": {
         "build": "del-cli --force dist && tsc",
-        "prepublishOnly": "npm test",
+        "prepublishOnly": "npm test && npm run build",
         "test": "tslint 'src/**/*.ts'"
     },
     "main": "./dist/index.js",
