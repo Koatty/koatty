@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-18 09:27:31
+ * @ version: 2020-05-18 11:18:01
  */
 import * as globby from "globby";
 import * as path from "path";
@@ -126,9 +126,8 @@ export class Loader {
         appMList.unshift("TraceMiddleware");
 
         //Automatically call middleware
-        let handle: any;
         for (const key of appMList) {
-            handle = container.get(key, "MIDDLEWARE");
+            const handle: any = container.get(key, "MIDDLEWARE");
             if (!handle) {
                 throw new Error(`middleware ${key} load error.`);
                 return;

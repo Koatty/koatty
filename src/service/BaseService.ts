@@ -2,9 +2,8 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-18 00:22:44
+ * @ version: 2020-05-18 11:24:49
  */
-import * as path from "path";
 import { Koatty } from "../Koatty";
 import { IService } from "./IService";
 import { ObjectDefinitionOptions } from "think_container";
