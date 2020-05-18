@@ -2,13 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-14 00:21:35
+ * @ version: 2020-05-18 09:27:31
  */
 import * as globby from "globby";
 import * as path from "path";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
-import { Base } from "../core/Base";
+import { BaseService } from "../service/BaseService";
 import { requireDefault } from "./Lib";
 import { injectValue } from '../core/Value';
 import { injectSchedule } from '../core/Schedule';
@@ -201,8 +201,8 @@ export class Loader {
                 // registering to IOC
                 container.reg(item.target, { scope: "Singleton", type: "SERVICE" });
                 const ctl = container.getInsByClass(item.target);
-                if (!(ctl instanceof Base)) {
-                    throw new Error(`class ${item.id} does not inherit from Base`);
+                if (!(ctl instanceof BaseService)) {
+                    throw new Error(`class ${item.id} does not inherit from BaseService`);
                 }
             }
         });

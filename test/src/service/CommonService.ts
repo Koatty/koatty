@@ -2,15 +2,15 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-11-25 15:26:48
+ * @ version: 2020-05-18 09:28:05
  */
-import { Service, Base, Value, Autowired, Logger, Helper } from "../../../src/index";
+import { Service, BaseService, Value, Autowired, Logger, Helper } from "../../../src/index";
 import { App } from '../App';
 
 export interface MoInterface { rel: boolean; sortby: any; field: any[]; ispage: boolean; pagesize: number; page: number; }
 
 @Service()
-export class CommonService extends Base {
+export class CommonService extends BaseService {
     app: App;
 
     protected Model: any;

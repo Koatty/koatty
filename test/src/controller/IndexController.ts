@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-05-13 23:57:56
+ * @ version: 2020-05-18 11:02:46
  */
 import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, After, RequestBody, Get, Validated, Valid, Helper, Post, RequestParam } from "../../../src/index";
 import { App } from '../App';
@@ -49,7 +49,7 @@ export class IndexController extends AdminController {
         });
         // return new Promise((resolve: Function) => setTimeout(() => resolve(1), 200));
         // throw Error("test");
-        return this.ok("success", info, 1);
+        return this.ok("success", info);
 
     }
 

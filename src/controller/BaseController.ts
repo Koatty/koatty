@@ -2,37 +2,15 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-11 12:04:49
+ * @ version: 2020-05-18 11:00:43
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "koa";
+import * as path from "path";
 import * as helper from "think_lib";
 import { Koatty } from "../Koatty";
+import { IController } from "./IController";
 import { ObjectDefinitionOptions } from "think_container";
-
-/**
- *
- * @interface BaseControllerInterface
- */
-interface BaseControllerInterface {
-    app: Koatty;
-    ctx: Koa.Context;
-
-    __before: () => Promise<any>;
-    __after: () => Promise<any>;
-    readonly body: (data: any, contentType?: string, encoding?: string) => Promise<any>;
-    readonly deny: (code?: number) => void;
-    readonly expires: (timeout: number) => void;
-    readonly fail: (msg?: Error | string, data?: any, code?: number) => Promise<any>;
-    readonly header: (name: string, value?: any) => any;
-    readonly json: (data: any) => Promise<any>;
-    readonly isGet: () => boolean;
-    readonly isMethod: (method: string) => boolean;
-    readonly isPost: () => boolean;
-    readonly ok: (msg?: string, data?: any, code?: number) => Promise<any>;
-    readonly redirect: (urls: string, alt?: string) => void;
-    readonly type: (contentType?: string, encoding?: string | boolean) => string;
-}
 
 /**
  * Base controller
@@ -41,7 +19,7 @@ interface BaseControllerInterface {
  * @class BaseController
  * @implements {BaseControllerInterface}
  */
-export class BaseController implements BaseControllerInterface {
+export class BaseController implements IController {
     public app: Koatty;
     public ctx: Koa.Context;
 
