@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-26 13:39:47
+ * @ version: 2020-05-18 14:20:36
  */
 import * as helper from "think_lib";
 import logger from "think_logger";
@@ -56,23 +56,21 @@ export function CacheAble(cacheName: string, paramKey?: number | number[], timeo
                 if (cacheFlag) {
                     // tslint:disable-next-line: one-variable-per-declaration
                     let key = "", res;
-                    if (helper.isNumber(paramKey)) {
-                        if (helper.isArray(paramKey)) {
-                            (<number[]>paramKey).map((it: any) => {
-                                if (!helper.isTrueEmpty(props[it])) {
-                                    if (typeof props[it] === "object") {
-                                        key = `${key}${helper.murmurHash(JSON.stringify(props[it]))}`;
-                                    } else {
-                                        key = `${key}${props[it] || ''}`;
-                                    }
+                    if (helper.isArray(paramKey)) {
+                        (<number[]>paramKey).map((it: any) => {
+                            if (!helper.isTrueEmpty(props[it])) {
+                                if (typeof props[it] === "object") {
+                                    key = `${key}${helper.murmurHash(JSON.stringify(props[it]))}`;
+                                } else {
+                                    key = `${key}${props[it] || ''}`;
                                 }
-                            });
-                        } else {
-                            if (typeof props[(<number>paramKey)] === "object") {
-                                key = helper.murmurHash(JSON.stringify(props[(<number>paramKey)]));
-                            } else {
-                                key = props[(<number>paramKey)] || "";
                             }
+                        });
+                    } else if (helper.isNumber(paramKey)) {
+                        if (typeof props[(<number>paramKey)] === "object") {
+                            key = helper.murmurHash(JSON.stringify(props[(<number>paramKey)]));
+                        } else {
+                            key = props[(<number>paramKey)] || "";
                         }
                     } else {
                         key = `${identifier}:${methodName}`;
@@ -173,23 +171,21 @@ export function CacheEvict(cacheName: string, paramKey?: number | number[], even
 
                 if (cacheFlag) {
                     let key = "";
-                    if (helper.isNumber(paramKey)) {
-                        if (helper.isArray(paramKey)) {
-                            (<number[]>paramKey).map((it: any) => {
-                                if (!helper.isTrueEmpty(props[it])) {
-                                    if (typeof props[it] === "object") {
-                                        key = `${key}${helper.murmurHash(JSON.stringify(props[it]))}`;
-                                    } else {
-                                        key = `${key}${props[it] || ''}`;
-                                    }
+                    if (helper.isArray(paramKey)) {
+                        (<number[]>paramKey).map((it: any) => {
+                            if (!helper.isTrueEmpty(props[it])) {
+                                if (typeof props[it] === "object") {
+                                    key = `${key}${helper.murmurHash(JSON.stringify(props[it]))}`;
+                                } else {
+                                    key = `${key}${props[it] || ''}`;
                                 }
-                            });
-                        } else {
-                            if (typeof props[(<number>paramKey)] === "object") {
-                                key = helper.murmurHash(JSON.stringify(props[(<number>paramKey)]));
-                            } else {
-                                key = props[(<number>paramKey)] || "";
                             }
+                        });
+                    } else if (helper.isNumber(paramKey)) {
+                        if (typeof props[(<number>paramKey)] === "object") {
+                            key = helper.murmurHash(JSON.stringify(props[(<number>paramKey)]));
+                        } else {
+                            key = props[(<number>paramKey)] || "";
                         }
                     } else {
                         key = `${identifier}:${methodName}`;
