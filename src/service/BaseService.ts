@@ -2,9 +2,11 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-10 11:32:08
+ * @ version: 2020-05-18 00:22:44
  */
+import * as path from "path";
 import { Koatty } from "../Koatty";
+import { IService } from "./IService";
 import { ObjectDefinitionOptions } from "think_container";
 
 /**
@@ -13,7 +15,7 @@ import { ObjectDefinitionOptions } from "think_container";
  * @export
  * @class Base
  */
-export class Base {
+export class BaseService implements IService {
     public app: Koatty;
     protected _options: ObjectDefinitionOptions;
 
@@ -36,4 +38,5 @@ export class Base {
     protected init(...arg: any[]): void {
 
     }
+
 }
