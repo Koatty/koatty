@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-11 13:59:27
+ * @ version: 2020-05-14 09:43:22
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -134,7 +134,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         app.listen({ port, hostname }, function () {
             logger.custom("think", "", `Nodejs Version: ${process.version}`);
             logger.custom("think", "", `${pkg.name} Version: v${pkg.version}`);
-            logger.custom("think", "", `App Enviroment: ${app.app_debug ? "debug mode" : "production mode"}`);
+            logger.custom("think", "", `App Enviroment: ${app.env}`);
             logger.custom("think", "", `Server running at http://${hostname || "localhost"}:${port}/`);
             logger.custom("think", "", "====================================");
             // tslint:disable-next-line: no-unused-expression

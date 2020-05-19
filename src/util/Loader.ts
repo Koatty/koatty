@@ -2,13 +2,13 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-13 23:32:43
+ * @ version: 2020-05-18 11:18:01
  */
 import * as globby from "globby";
 import * as path from "path";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
-import { Base } from "../core/Base";
+import { BaseService } from "../service/BaseService";
 import { requireDefault } from "./Lib";
 import { injectValue } from '../core/Value';
 import { injectSchedule } from '../core/Schedule';
@@ -60,15 +60,8 @@ export class Loader {
             let type = "", t = "";
             if (name.indexOf("_") > -1) {
                 t = name.slice(name.lastIndexOf("_") + 1);
-                if (process.env.KOATTY_ENV) {
-                    if (t && process.env.KOATTY_ENV.indexOf(t) === 0) {
-                        type = t;
-                    }
-                }
-                if (type === "" && process.env.NODE_ENV) {
-                    if (t && process.env.NODE_ENV.indexOf(t) === 0) {
-                        type = t;
-                    }
+                if (t && (app.env || "").indexOf(t) === 0) {
+                    type = t;
                 }
             }
             if (type) {
@@ -133,9 +126,8 @@ export class Loader {
         appMList.unshift("TraceMiddleware");
 
         //Automatically call middleware
-        let handle: any;
         for (const key of appMList) {
-            handle = container.get(key, "MIDDLEWARE");
+            const handle: any = container.get(key, "MIDDLEWARE");
             if (!handle) {
                 throw new Error(`middleware ${key} load error.`);
                 return;
@@ -208,8 +200,8 @@ export class Loader {
                 // registering to IOC
                 container.reg(item.target, { scope: "Singleton", type: "SERVICE" });
                 const ctl = container.getInsByClass(item.target);
-                if (!(ctl instanceof Base)) {
-                    throw new Error(`class ${item.id} does not inherit from Base`);
+                if (!(ctl instanceof BaseService)) {
+                    throw new Error(`class ${item.id} does not inherit from BaseService`);
                 }
             }
         });

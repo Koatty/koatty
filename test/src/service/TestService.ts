@@ -2,9 +2,9 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-05-10 12:17:22
+ * @ version: 2020-05-18 10:47:35
  */
-import { Service, Base, Autowired, Scheduled, Cacheable, SchedulerLock } from "../../../src/index";
+import { Service, BaseService, Autowired, Scheduled, Cacheable, SchedulerLock } from "../../../src/index";
 import { App } from '../App';
 import { CommonService, MoInterface } from './CommonService';
 import { TestDto } from '../model/TestDto';
@@ -21,9 +21,9 @@ export class TestService extends CommonService {
     async test(aa: TestDto) {
         // return Promise.reject("aa");
         console.log('TestService.test');
-        return Promise.reject('aa');
+        return aa;
     }
-    async test1(name: string) {
+    async test1(name: string, age?: number) {
         // throw Error('TestService.test1');
         // console.log('TestService.test1');
         return name;

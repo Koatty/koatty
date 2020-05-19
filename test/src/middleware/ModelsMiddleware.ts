@@ -2,14 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-11 13:50:46
+ * @ version: 2020-05-18 11:16:41
  */
-import { Middleware, Helper, Value, GetMapping } from "../../../src/index";
+import { Middleware, Helper, Value, GetMapping, IMiddleware } from "../../../src/index";
 
 const defaultOptions = {};
 
 @Middleware()
-export class ModelsMiddleware {
+export class ModelsMiddleware implements IMiddleware {
     @Value("test")
     config: any;
 

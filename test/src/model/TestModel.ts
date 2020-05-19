@@ -2,9 +2,9 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-11-18 21:04:23
+ * @ version: 2020-05-18 09:32:15
  */
-import { Autowired, Component, Service, Base, Value } from '../../../src/index';
+import { Autowired, Component, Service, BaseService, Value } from '../../../src/index';
 import { BaseModel } from './BaseModel';
 
 @Component()
