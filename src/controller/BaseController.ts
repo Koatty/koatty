@@ -2,11 +2,10 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-18 11:00:43
+ * @ version: 2020-05-20 15:45:24
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "koa";
-import * as path from "path";
 import * as helper from "think_lib";
 import { Koatty } from "../Koatty";
 import { IController } from "./IController";
@@ -121,6 +120,24 @@ export class BaseController implements IController {
     }
 
     /**
+     * Get post or get parameters, post priority
+     *
+     * @param {string} [name]
+     * @returns
+     * @memberof BaseController
+     */
+    public param(name?: string) {
+        return this.ctx.bodyParser().then((body: any) => {
+            const getParams = this.ctx.queryParser() || {};
+            const postParams = (body.post ? body.post : body) || {};
+            if (name !== undefined) {
+                return postParams[name] === undefined ? getParams[name] : postParams[name];
+            }
+            return { ...getParams, ...postParams };
+        });
+    }
+
+    /**
      * Set response content-type
      *
      * @public
@@ -129,12 +146,9 @@ export class BaseController implements IController {
      * @returns {string}
      * @memberof BaseController
      */
-    public type(contentType?: string, encoding?: string | boolean): string {
-        if (!contentType) {
-            return (this.ctx.headers["content-type"] || "").split(";")[0].trim();
-        }
-        if (encoding !== false && contentType.toLowerCase().indexOf("charset=") === -1) {
-            contentType += "; charset=" + (encoding || this.app.config("encoding"));
+    public type(contentType: string, encoding?: string | boolean): string {
+        if (encoding !== false && !contentType.includes("charset")) {
+            contentType = `; charset=${encoding || this.app.config("encoding")}`;
         }
         this.ctx.type = contentType;
         return contentType;
@@ -216,7 +230,6 @@ export class BaseController implements IController {
      * @memberof BaseController
      */
     public ok(msg?: string, data?: any, code = 200): Promise<any> {
-        this.ctx.type = "application/json";
         const obj: any = {
             "status": code,
             "message": msg || ""
@@ -237,7 +250,6 @@ export class BaseController implements IController {
      * @memberof BaseController
      */
     public fail(msg?: any, data?: any, code = 500): Promise<any> {
-        this.ctx.type = "application/json";
         const obj: any = {
             "status": code,
             "message": msg || ""

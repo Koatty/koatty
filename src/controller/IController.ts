@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-18 00:54:16
+ * @ version: 2020-05-20 14:41:56
  */
 // tslint:disable-next-line: no-implicit-dependencies
 import * as Koa from "koa";
@@ -25,6 +25,7 @@ export interface IController {
     readonly isMethod: (method: string) => boolean;
     readonly isPost: () => boolean;
     readonly ok: (msg?: string, data?: any, code?: number) => Promise<any>;
+    readonly param: (name?: string) => any;
     readonly redirect: (urls: string, alt?: string) => void;
     readonly type: (contentType?: string, encoding?: string | boolean) => string;
 }

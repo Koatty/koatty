@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-05-18 11:02:46
+ * @ version: 2020-05-19 14:31:04
  */
 import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, After, RequestBody, Get, Validated, Valid, Helper, Post, RequestParam } from "../../../src/index";
 import { App } from '../App';
@@ -37,7 +37,7 @@ export class IndexController extends AdminController {
         const info = await this.testService.test1(name);
         // throw Error("default");
         console.log('success');
-        return info;
+        return this.body(info);
     }
 
     @PostMapping("/test")

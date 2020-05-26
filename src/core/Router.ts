@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-10 11:49:33
+ * @ version: 2020-05-19 18:23:19
  */
 import KoaRouter from "@koa/router";
 import * as Koa from "koa";
@@ -195,10 +195,11 @@ export class Router {
             const kRouter: any = new KoaRouter(options);
             // tslint:disable-next-line: forin
             for (const n in controllers) {
+                const ctl = app.Container.getClass(n, "CONTROLLER");
                 // inject router
-                const ctlRouters = injectRouter(controllers[n]);
+                const ctlRouters = injectRouter(ctl);
                 // inject param
-                const ctlParams = injectParam(controllers[n]);
+                const ctlParams = injectParam(ctl);
                 // tslint:disable-next-line: forin
                 for (const it in ctlRouters) {
                     // tslint:disable-next-line: no-unused-expression
