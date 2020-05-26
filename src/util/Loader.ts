@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-18 11:18:01
+ * @ version: 2020-05-19 18:28:27
  */
 import * as globby from "globby";
 import * as path from "path";
@@ -130,11 +130,9 @@ export class Loader {
             const handle: any = container.get(key, "MIDDLEWARE");
             if (!handle) {
                 throw new Error(`middleware ${key} load error.`);
-                return;
             }
             if (!helper.isFunction(handle.run)) {
                 throw new Error(`middleware ${key} must be implements method 'run'.`);
-                return;
             }
             if (middlewareConf.config[key] === false) {
                 return;
@@ -142,10 +140,12 @@ export class Loader {
             // tslint:disable-next-line: no-unused-expression
             process.env.APP_DEBUG && logger.custom("think", "", `Load middleware: ${key}`);
             const result = await handle.run(middlewareConf.config[key] || {}, app);
-            if (handle.run.length < 3) {
-                app.use(result);
-            } else {
-                app.useExp(result);
+            if (helper.isFunction(result)) {
+                if (result.length < 3) {
+                    app.use(result);
+                } else {
+                    app.useExp(result);
+                }
             }
         }
         // app.setMap("middlewares", middlewares);
@@ -232,7 +232,7 @@ export class Loader {
                 if (!(ctl instanceof BaseController)) {
                     throw new Error(`class ${item.id} does not inherit from BaseController`);
                 }
-                controllers[item.id] = item.target;
+                controllers[item.id] = 1;
             }
         });
 
