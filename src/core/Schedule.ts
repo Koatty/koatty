@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-06-05 09:31:14
+ * @ version: 2020-06-05 09:42:38
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -152,7 +152,6 @@ const execInjectSchedule = function (target: any, container: Container, method: 
             // tslint:disable-next-line: no-unused-expression
             process.env.APP_DEBUG && logger.custom("think", "", `Register inject ${identifier} schedule key: ${method} => value: ${cron}`);
             new CronJob(cron, async function () {
-
                 logger.info(`The schedule job ${name} started.`);
                 try {
                     const res = await instance[method]();
