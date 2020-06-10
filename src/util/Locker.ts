@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-07 02:07:37
+ * @ version: 2020-06-05 09:40:35
  */
 
 const store = require("think_store");
@@ -81,7 +81,7 @@ export class Locker {
     async defineCommand() {
         try {
             if (!this.client || !this.client.lua_unlock) {
-                //定义lua脚本让它原子化执行
+                //Lua scripts execute atomically
                 this.client = await this.store.command('lua_unlock', {
                     numberOfKeys: 1,
                     lua: `
@@ -98,7 +98,7 @@ export class Locker {
             }
             return this.client;
         } catch (e) {
-            // logger.error(e);
+            logger.error(e);
             return null;
         }
     }
@@ -117,17 +117,15 @@ export class Locker {
             key = `${this.options.key_prefix}${key}`;
             const value = crypto.randomBytes(16).toString('hex');
             const result = await client.set(key, value, 'NX', 'PX', expire);
-            // logger.info('redis.set=='+result);
             if (result === null) {
-                // logger.error('lock error: key already exists');
+                logger.error('lock error: key already exists');
                 return false;
             }
 
             this.lockMap.set(key, { value, expire, time: Date.now() });
-            // logger.info('this.lockMap='+JSON.stringify(this.lockMap));
             return true;
         } catch (e) {
-            // logger.error(e);
+            logger.error(e);
             return false;
         }
     }
@@ -148,18 +146,19 @@ export class Locker {
             const start_time = Date.now();
             let result;
             while ((Date.now() - start_time) < waitTime) {
-                result = await this.lock(key, expire).catch(() => { });
-                // logger.info('waitLock='+result);
+                result = await this.lock(key, expire).catch((err: any) => {
+                    logger.error(err.stack || err.message);
+                });
                 if (result) {
                     return true;
                 } else {
                     await delay(interval);
                 }
             }
-            // throw new Error('waitLock timeout');
+            logger.error('waitLock timeout');
             return false;
         } catch (e) {
-            // logger.error(e);
+            logger.error(e);
             return false;
         }
     }
@@ -192,7 +191,6 @@ export class Locker {
             const { value } = this.lockMap.get(key);
             await client.lua_unlock(key, value);
             this.lockMap.delete(key);
-
             return true;
         } catch (e) {
             logger.error(e);
