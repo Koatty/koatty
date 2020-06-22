@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-30 14:54:44
+ * @ version: 2020-06-22 11:13:27
  */
 import * as globby from "globby";
 import * as path from "path";
@@ -127,7 +127,7 @@ export class Loader {
                 return;
             }
             if (middlewareConf.config[key] === false) {
-                return;
+                continue;
             }
             // tslint:disable-next-line: no-unused-expression
             process.env.APP_DEBUG && logger.custom("think", "", `Load middleware: ${key}`);
