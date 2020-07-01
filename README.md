@@ -83,7 +83,14 @@ koatty middleware -o typeorm test
 
 ```
 
-### 5.Define TestController
+### 5.Create a DTOClass
+
+```shell
+koatty dto test
+
+```
+
+### 6.Define TestController
 
 ```javascript
 import { Controller, BaseController, Autowired, GetMapping, RequestBody, PathVariable, PostMapping, RequestMapping, RequestMethod, Valid } from "koatty";
