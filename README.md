@@ -64,7 +64,7 @@ koatty service test
 
 ```
 
-### 3.Create a Middleware
+### 3.Create a Middleware （Optional）
 
 ```shell
 koatty middleware test
@@ -83,7 +83,7 @@ koatty middleware -o typeorm test
 
 ```
 
-### 5.Create a DTOClass
+### 5.Create a DTOClass （Optional）
 
 ```shell
 koatty dto test
@@ -116,7 +116,7 @@ export class IndexController extends BaseController {
     }
 
     @PostMapping("/test")
-    @Validated()
+    @Validated() //need DTOClass
     test(@RequestBody() body: TestDTO) {
         return this.ok("test", body);
     }
