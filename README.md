@@ -70,7 +70,7 @@ koatty service test
 koatty middleware test
 
 ```
-### 4.Create a Model
+### 4.Create a Model（Optional）
 
 Supports [thinkorm](https://github.com/thinkkoa/thinkorm) and [typeorm](https://github.com/typeorm/typeorm). Please expand other ORM by yourself.
 
