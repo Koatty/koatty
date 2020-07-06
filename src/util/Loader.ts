@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-06-19 17:30:24
+ * @ version: 2020-07-06 11:18:01
  */
 import * as globby from "globby";
 import * as path from "path";
@@ -43,8 +43,8 @@ export class Loader {
     public static loadConfigs(app: any, loadPath?: string | string[]) {
         const config: any = {};
         // tslint:disable-next-line: no-unused-expression
-        process.env.APP_DEBUG && logger.custom("think", "", `Load configuation path: ${app.think_path}/config`);
-        Loader.loadDirectory("./config", app.think_path, function (name: string, exp: any) {
+        process.env.APP_DEBUG && logger.custom("think", "", `Load configuation path: ${app.thinkPath}/config`);
+        Loader.loadDirectory("./config", app.thinkPath, function (name: string, exp: any) {
             config[name] = exp;
         });
         const appConfig: any = {};
@@ -53,9 +53,9 @@ export class Loader {
         }
         const tempConfig: any = {};
         // tslint:disable-next-line: no-unused-expression
-        process.env.APP_DEBUG && logger.custom("think", "", `Load configuation path: ${app.app_path}${loadPath || "/config"}`);
+        process.env.APP_DEBUG && logger.custom("think", "", `Load configuation path: ${app.appPath}${loadPath || "/config"}`);
 
-        Loader.loadDirectory(loadPath || "./config", app.app_path, function (name: string, exp: any) {
+        Loader.loadDirectory(loadPath || "./config", app.appPath, function (name: string, exp: any) {
             // tslint:disable-next-line: one-variable-per-declaration
             let type = "", t = "";
             if (name.indexOf("_") > -1) {
@@ -96,7 +96,7 @@ export class Loader {
         //default middleware list
         const defaultList = ["PayloadMiddleware"];
         //Mount default middleware
-        Loader.loadDirectory(loadPath || "./middleware", app.think_path);
+        Loader.loadDirectory(loadPath || "./middleware", app.thinkPath);
         //Mount application middleware
         // const middlewares: any = {};
         const appMeddlewares = IOCContainer.listClass("MIDDLEWARE") || [];

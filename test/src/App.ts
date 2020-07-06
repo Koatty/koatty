@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-10 12:21:34
+ * @ version: 2020-07-06 11:15:36
  */
 import { Bootstrap, ComponentScan, Autowired, Koatty, ConfiguationScan, Logger, Helper } from '../../src/index';
 import * as path from "path";
@@ -18,15 +18,15 @@ import * as path from "path";
 // @ComponentScan('./test')
 // @ConfiguationScan('./test/config')
 export class App extends Koatty {
-    root_path: string;
+    rootPath: string;
     mm1: any;
     mm2: any;
     test: string;
 
     public init() {
-        this.root_path = path.dirname(__dirname);
-        // this.app_path = `${this.root_path}${path.sep}src`;
-        // this.app_debug = false; //线上环境请将debug模式关闭，即：app_debug:false
+        this.rootPath = path.dirname(__dirname);
+        // this.appPath = `${this.rootPath}${path.sep}src`;
+        // this.appDebug = false; //线上环境请将debug模式关闭，即：appDebug:false
     }
 }
 
