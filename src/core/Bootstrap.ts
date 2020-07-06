@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-14 09:43:22
+ * @ version: 2020-07-06 11:22:58
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -11,8 +11,8 @@ import * as logger from "think_logger";
 import { IOCContainer, TAGGED_CLS } from "think_container";
 import { Router } from "./Router";
 import { Koatty } from '../Koatty';
+import { startHTTP } from './Server';
 import { Loader } from "../util/Loader";
-const pkg = require("../../package.json");
 import { COMPONENT_SCAN, CONFIGUATION_SCAN } from "./Constants";
 
 /**
@@ -28,7 +28,7 @@ const asyncEvent = async function (app: Koatty, eventName: string) {
             await func();
         }
     }
-    return;
+    return app.removeAllListeners(eventName);
 };
 
 /**
@@ -67,7 +67,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
             }
         }
         if (componentMetas.length < 1) {
-            componentMetas = [app.app_path];
+            componentMetas = [app.appPath];
         }
         // configuationMetas
         const configuationMeta = IOCContainer.getClassMetadata(TAGGED_CLS, CONFIGUATION_SCAN, target);
@@ -93,9 +93,6 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
 
         logger.custom("think", "", "LoadConfiguation ...");
         Loader.loadConfigs(app, configuationMetas);
-        //Contriner
-        IOCContainer.setApp(app);
-        helper.define(app, "Container", IOCContainer);
 
         logger.custom("think", "", "LoadMiddlewares ...");
         await Loader.loadMiddlewares(app, IOCContainer);
@@ -119,32 +116,23 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         // app.emit("appStart");
         await asyncEvent(app, "appStart");
 
+        //Set IOC.app
+        IOCContainer.setApp(app);
+
         logger.custom("think", "", "LoadRouters ...");
         const routerConf = app.config(undefined, "router") || {};
-        const router = new Router(app, IOCContainer, routerConf);
+        const router = new Router(app, routerConf);
         router.loadRouter();
 
-        logger.custom("think", "", "====================================");
-        //Start app
-        IOCContainer.setApp(app);
-        logger.custom("think", "", "Listening ...");
-        const port = app.config("app_port");
-        const hostname = app.config("app_hostname") || "";
+        //Start HTTP server
+        startHTTP(app);
 
-        app.listen({ port, hostname }, function () {
-            logger.custom("think", "", `Nodejs Version: ${process.version}`);
-            logger.custom("think", "", `${pkg.name} Version: v${pkg.version}`);
-            logger.custom("think", "", `App Enviroment: ${app.env}`);
-            logger.custom("think", "", `Server running at http://${hostname || "localhost"}:${port}/`);
-            logger.custom("think", "", "====================================");
-            // tslint:disable-next-line: no-unused-expression
-            app.app_debug && logger.warn(`Running in debug mode, please modify the app_debug value to false when production env.`);
-        });
     } catch (err) {
         logger.error(err);
         process.exit();
     }
 };
+
 
 /**
  * Bootstrap appliction
