@@ -94,6 +94,9 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         logger.custom("think", "", "LoadConfiguation ...");
         Loader.loadConfigs(app, configuationMetas);
 
+        //Set IOC.app
+        IOCContainer.setApp(app);
+
         logger.custom("think", "", "LoadMiddlewares ...");
         await Loader.loadMiddlewares(app, IOCContainer);
 
@@ -115,9 +118,6 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         logger.custom("think", "", "Emit App Started ...");
         // app.emit("appStart");
         await asyncEvent(app, "appStart");
-
-        //Set IOC.app
-        IOCContainer.setApp(app);
 
         logger.custom("think", "", "LoadRouters ...");
         const routerConf = app.config(undefined, "router") || {};

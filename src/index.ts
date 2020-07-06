@@ -14,7 +14,6 @@ export * from "./controller/RestController";
 export * from "./core/AOP";
 export * from "./core/Bootstrap";
 export * from "./core/Component";
-export * from "./core/Component";
 export * from "./core/RequestMapping";
 export { Value, Config } from "./core/Value";
 export * from "./middleware/IMiddleware";
