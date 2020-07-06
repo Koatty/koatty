@@ -11,7 +11,7 @@ import * as logger from "think_logger";
 import { BaseService } from "../service/BaseService";
 import { requireDefault } from "./Lib";
 import { injectValue } from '../core/Value';
-import { injectSchedule } from '../core/Schedule';
+import { injectSchedule } from 'think_schedule';
 import { Container, IOCContainer } from "think_container";
 import { BaseController } from "../controller/BaseController";
 
