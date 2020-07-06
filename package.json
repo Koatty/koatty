@@ -36,7 +36,6 @@
     },
     "homepage": "https://github.com/thinkkoa/koatty",
     "devDependencies": {
-        "@types/cron": "^1.x.x",
         "@types/koa": "^2.x.x",
         "@types/koa__router": "^8.x.x",
         "@types/node": "^12.x.x",
@@ -44,21 +43,21 @@
         "ts-node": "^8.10.2",
         "tslint": "^6.1.2",
         "tslint-config-alloy": "^0.2.1",
-        "typescript": "^3.9.5"
+        "typescript": "^3.9.6"
     },
     "dependencies": {
         "@koa/router": "^9.0.1",
-        "cron": "^1.8.2",
         "globby": "^11.0.1",
         "koa": "^2.13.0",
         "reflect-metadata": "^0.1.13",
-        "think_container": "^1.x.x",
-        "think_lib": "^2.x.x",
-        "think_logger": "^2.x.x",
-        "think_payload": "^3.x.x",
-        "think_store": "^3.x.x",
-        "think_trace": "^3.x.x",
-        "think_validtion": "^1.x.x",
+        "think_container": "^1.1.2",
+        "think_lib": "^2.6.0",
+        "think_logger": "^2.2.4",
+        "think_payload": "^3.1.0",
+        "think_schedule": "^1.0.0",
+        "think_store": "^3.4.0",
+        "think_trace": "^3.1.0",
+        "think_validtion": "1.8.0",
         "tslib": "^2.0.0"
     },
     "maintainers": [

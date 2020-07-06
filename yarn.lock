@@ -82,14 +82,6 @@
     "@types/keygrip" "*"
     "@types/node" "*"
 
-"@types/cron@^1.x.x":
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/@types/cron/-/cron-1.7.1.tgz#752e47ebbe26e83d9e40f2dd6a3f679f2eec54b8"
-  integrity sha512-48brwgU18DqA0mQX1As5OcJEo1yNjaXMM6Mk4r8K1dOzLJRQ37FE/kCivKx7ClKEHfhX2FdcxKzJ1B744a+V3A==
-  dependencies:
-    "@types/node" "*"
-    moment ">=2.14.0"
-
 "@types/events@*":
   version "3.0.0"
   resolved "https://r.cnpmjs.org/@types/events/download/@types/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
@@ -982,7 +974,7 @@ moment-timezone@^0.5.x:
   dependencies:
     moment ">= 2.9.0"
 
-"moment@>= 2.9.0", moment@>=2.14.0:
+"moment@>= 2.9.0":
   version "2.24.0"
   resolved "https://r.cnpmjs.org/moment/download/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha1-DQVdU/UFKqZTyfbraLtdEr9cK1s=
@@ -1303,17 +1295,17 @@ supports-color@^5.3.0:
   dependencies:
     has-flag "^3.0.0"
 
-think_container@^1.x.x:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/think_container/-/think_container-1.0.4.tgz#49e9c6a5efc246e68a830fdf8b81c923a24b5f4a"
-  integrity sha512-vS3wx9EsKLaD1lkgTFxQgPHn6bhAwi8Wn1oxHGLwhMkE6bWl51ppVmHcApvlHKVpk24jbI4OTWK8aslcz2kPmA==
+think_container@^1.1.2, think_container@^1.x.x:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/think_container/-/think_container-1.1.2.tgz#dc3a6ac1bec703763ec26a733997e2c7c7047487"
+  integrity sha512-8f55QqY8LIy6KRa67GtkqTOcU0EAPkFyDB5oVk52KszFlNlhigb+cVH8vqmoplyNLnQfOKk0+22BcMxHX6AEDQ==
   dependencies:
     reflect-metadata "^0.1.13"
-    think_lib "^2.x.x"
-    think_logger "^2.x.x"
-    tslib "^1.11.2"
+    think_lib "^2.6.0"
+    think_logger "^2.2.4"
+    tslib "^2.0.0"
 
-think_lib@^2.x.x:
+think_lib@^2.6.0, think_lib@^2.x.x:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/think_lib/-/think_lib-2.6.0.tgz#d7959976f0e19fd9c0b76a3a7b0b396c6e58911f"
   integrity sha512-vEtmdGahwkwYynh1jCNWBK9ckFdhHJ8r1T6Oe5SNbdIfHnGvqM7R9xZXhYB4qFjxTDupG6UtQkwt7l71Lh3heQ==
@@ -1323,6 +1315,13 @@ think_lib@^2.x.x:
     moment "^2.25.3"
     murmurhash "^1.0.0"
 
+think_logger@^2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/think_logger/-/think_logger-2.2.4.tgz#58688602d8a65ff4c5afdf40f383bcb7889f63f1"
+  integrity sha512-2jwU8AmRwv/FTEYFC/nmd5QP3id7woXEubbFJgZv++V6WX5rPmVeN2tqWSiypMECySXQLMksO8VCxxmI4cSe/Q==
+  dependencies:
+    think_lib "^2.x.x"
+
 think_logger@^2.x.x:
   version "2.2.0"
   resolved "https://r.cnpmjs.org/think_logger/download/think_logger-2.2.0.tgz#a1c2747c5bf4e87ffd768c6fe39de09afadd3511"
@@ -1330,7 +1329,7 @@ think_logger@^2.x.x:
   dependencies:
     think_lib "^2.x.x"
 
-think_payload@^3.x.x:
+think_payload@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/think_payload/-/think_payload-3.1.0.tgz#c0d5ecd635160775be2e65f55f0816fe44d18ee9"
   integrity sha512-iqcb/1gx1T+isE7hy60+he0uH6fVdSjoFAyVC34EqEKeZ2GLtYTZWwUUasQ0FDRnKw3y8MVu0SSDAbcyCn11fA==
@@ -1343,7 +1342,20 @@ think_payload@^3.x.x:
     think_logger "^2.x.x"
     xml2js "^0.4.23"
 
-think_store@^3.x.x:
+think_schedule@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/think_schedule/-/think_schedule-1.0.0.tgz#a0d23789c0d9659a7c1be865b8609d1b19e8fd3c"
+  integrity sha512-aoGkDwuUcFoywZrGlXR5Vc20oPQ7q6lcABQe06v5+SqB69+q2F4Syg6s5W7fzJajtvIe5RGAbX+VKDNLEQB1ew==
+  dependencies:
+    cron "^1.8.2"
+    reflect-metadata "^0.1.13"
+    think_container "^1.x.x"
+    think_lib "^2.x.x"
+    think_logger "^2.x.x"
+    think_store "^3.4.0"
+    tslib "^2.0.0"
+
+think_store@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/think_store/-/think_store-3.4.0.tgz#11916b594cbaa355a2db76a04a5290fa54b7145a"
   integrity sha512-cITw59DT6Ac1TGB8GDLERUU9cNPycsk0QPgE/sEED4k0Skv8pTtkOC2i1XBY3THbSwzU/axo4WRRwhBM9i9GUg==
@@ -1353,7 +1365,7 @@ think_store@^3.x.x:
     think_lib "^2.x.x"
     think_logger "^2.x.x"
 
-think_trace@^3.x.x:
+think_trace@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/think_trace/-/think_trace-3.1.0.tgz#9985fd05dede951b1cc057e8a61d68d729ce549d"
   integrity sha512-NfojWBVGye5eqHr+9eIaVqhmk1xMaVOPcFv3FIfp/2dFVjapD8ahTawB0Pz3sB5+eU1y7K7R4YBmcoaH/oDycw==
@@ -1361,16 +1373,17 @@ think_trace@^3.x.x:
     think_lib "^2.x.x"
     think_logger "^2.x.x"
 
-think_validtion@^1.x.x:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/think_validtion/-/think_validtion-1.7.0.tgz#79bff324121a265a73184f07702fb825fb4e463d"
-  integrity sha512-UwAjGES+E/1FoX/4yyLvkPkIzyZ17RQVR8sm1KFM4pGjQi1uVI/03vlHGp4zrGVyRwPJr3j6IYeLigS0Rid79Q==
+think_validtion@1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/think_validtion/-/think_validtion-1.8.0.tgz#44027c362c199a3200ff4810a5a8e2e32c753659"
+  integrity sha512-rdHfcfBF6G+Vt1Z3RtNO1+HIfqZmEG+zEXayebf3PJuHg62iKMalnv8p8Ne7/Ck+g8EaqV7OrpVnM6LdmAMi9w==
   dependencies:
     class-validator "^0.12.2"
     reflect-metadata "^0.1.13"
-    think_lib "^2.x.x"
-    think_logger "^2.x.x"
-    tslib "^1.11.2"
+    think_container "^1.1.2"
+    think_lib "^2.6.0"
+    think_logger "^2.2.4"
+    tslib "^2.0.0"
 
 to-regex-range@^5.0.1:
   version "5.0.1"
@@ -1400,7 +1413,7 @@ ts-node@^8.10.2:
     source-map-support "^0.5.17"
     yn "3.1.1"
 
-tslib@>=1.9.0, tslib@^1.11.2:
+tslib@>=1.9.0:
   version "1.11.2"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.11.2.tgz#9c79d83272c9a7aaf166f73915c9667ecdde3cc9"
   integrity sha512-tTSkux6IGPnUGUd1XAZHcpu85MOkIl5zX49pO+jfsie3eP0B6pyhOlLXm3cAC6T7s+euSDDUUV+Acop5WmtkVg==
@@ -1474,10 +1487,10 @@ type-is@^1.6.16:
     media-typer "0.3.0"
     mime-types "~2.1.24"
 
-typescript@^3.9.5:
-  version "3.9.5"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.5.tgz#586f0dba300cde8be52dd1ac4f7e1009c1b13f36"
-  integrity sha512-hSAifV3k+i6lEoCJ2k6R2Z/rp/H3+8sdmcn5NrS3/3kE7+RyZXm9aqvxWqjEXHAd8b0pShatpcdMTvEdvAJltQ==
+typescript@^3.9.6:
+  version "3.9.6"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.6.tgz#8f3e0198a34c3ae17091b35571d3afd31999365a"
+  integrity sha512-Pspx3oKAPJtjNwE92YS05HQoY7z2SFyOpHo9MqJor3BXAGNaPUs83CuVp9VISFkSjyRfiTpmKuAYGJB7S7hOxw==
 
 unpipe@1.0.0:
   version "1.0.0"
