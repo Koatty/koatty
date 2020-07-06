@@ -2,10 +2,10 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-10 11:46:10
+ * @ version: 2020-07-06 11:19:16
  */
 import * as helper from "think_lib";
-import { Container } from "think_container";
+import { Container, IOCContainer } from "think_container";
 import { BaseController } from "./BaseController";
 import { GetMapping, PathVariable, PostMapping, DeleteMapping, PutMapping, RequestBody } from "../core/RequestMapping";
 
@@ -27,7 +27,7 @@ export class RestController extends BaseController {
      * @memberof BaseController
      */
     protected init(): void {
-        this.container = this.app.Container;
+        this.container = IOCContainer;
     }
 
     /**

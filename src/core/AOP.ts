@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-10 13:14:19
+ * @ version: 2020-07-06 11:19:30
  */
 import * as helper from "think_lib";
 import logger from 'think_logger';
@@ -30,11 +30,11 @@ function defineNewProperty(clazz: Function, protoName: string, methodName: strin
                 let aspect, name = "";
                 if (helper.isFunction(methodName)) {
                     // tslint:disable-next-line: no-invalid-this
-                    aspect = this.app.Container.getInsByClass(methodName);
+                    aspect = IOCContainer.getInsByClass(methodName);
                     name = IOCContainer.getIdentifier(<Function>methodName) || (<Function>methodName).name || "";
                 } else {
                     // tslint:disable-next-line: no-invalid-this
-                    aspect = this.app.Container.get(methodName, "COMPONENT");
+                    aspect = IOCContainer.get(<string>methodName, "COMPONENT");
                     name = <string>methodName;
                 }
                 if (aspect && helper.isFunction(aspect.run)) {
@@ -88,11 +88,11 @@ export function Before(aopName: string | Function): MethodDecorator {
                 let aspect, name = "";
                 if (helper.isFunction(aopName)) {
                     // tslint:disable-next-line: no-invalid-this
-                    aspect = this.app.Container.getInsByClass(aopName);
+                    aspect = IOCContainer.getInsByClass(aopName);
                     name = IOCContainer.getIdentifier(<Function>aopName) || (<Function>aopName).name || "";
                 } else {
                     // tslint:disable-next-line: no-invalid-this
-                    aspect = this.app.Container.get(aopName, "COMPONENT");
+                    aspect = IOCContainer.get(<string>aopName, "COMPONENT");
                     name = <string>aopName;
                 }
                 if (aspect && helper.isFunction(aspect.run)) {
@@ -150,11 +150,11 @@ export function After(aopName: string | Function): MethodDecorator {
                 let aspect, name = "";
                 if (helper.isFunction(aopName)) {
                     // tslint:disable-next-line: no-invalid-this
-                    aspect = this.app.Container.getInsByClass(aopName);
+                    aspect = IOCContainer.getInsByClass(aopName);
                     name = IOCContainer.getIdentifier(<Function>aopName) || (<Function>aopName).name || "";
                 } else {
                     // tslint:disable-next-line: no-invalid-this
-                    aspect = this.app.Container.get(aopName, "COMPONENT");
+                    aspect = IOCContainer.get(<string>aopName, "COMPONENT");
                     name = <string>aopName;
                 }
                 if (aspect && helper.isFunction(aspect.run)) {
