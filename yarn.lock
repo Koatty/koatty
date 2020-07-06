@@ -1295,6 +1295,17 @@ supports-color@^5.3.0:
   dependencies:
     has-flag "^3.0.0"
 
+think_cacheable@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/think_cacheable/-/think_cacheable-1.0.0.tgz#cb06d08b0a7138a1446f972929f63c22172973f4"
+  integrity sha512-2I8gtUlViCnGa4CqUQ+u8G5KeU78Sa/T+k11JZQUCrBfeRWH/DiYefNxtqD/Dm4vwNMce0+IKKIbUmfNlD17Jg==
+  dependencies:
+    think_container "^1.1.2"
+    think_lib "^2.x.x"
+    think_logger "^2.x.x"
+    think_store "^3.4.0"
+    tslib "^2.0.0"
+
 think_container@^1.1.2, think_container@^1.x.x:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/think_container/-/think_container-1.1.2.tgz#dc3a6ac1bec703763ec26a733997e2c7c7047487"
