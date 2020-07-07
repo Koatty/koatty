@@ -124,6 +124,10 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         const router = new Router(app, routerConf);
         router.loadRouter();
 
+
+        logger.custom("think", "", "====================================");
+        //Start app
+        logger.custom("think", "", "Listening ...");
         //Start HTTP server
         startHTTP(app);
 
