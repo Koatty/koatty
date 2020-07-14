@@ -12,7 +12,7 @@ import { IOCContainer, TAGGED_CLS } from "think_container";
 import { Router } from "./Router";
 import { Koatty } from '../Koatty';
 import { startHTTP } from './Server';
-import { Loader } from "../util/Loader";
+import { Loader } from "./Loader";
 import { COMPONENT_SCAN, CONFIGUATION_SCAN } from "./Constants";
 
 /**
@@ -94,6 +94,8 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         logger.custom("think", "", "LoadConfiguation ...");
         Loader.loadConfigs(app, configuationMetas);
 
+        // execute Plugin
+
         //Set IOC.app
         IOCContainer.setApp(app);
 
@@ -126,8 +128,6 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
 
 
         logger.custom("think", "", "====================================");
-        //Start app
-        logger.custom("think", "", "Listening ...");
         //Start HTTP server
         startHTTP(app);
 

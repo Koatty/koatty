@@ -6,7 +6,7 @@
  */
 
 import * as path from "path";
-import Koa from "koa";
+import Koa, { ParameterizedContext, DefaultState, DefaultContext, Next } from "koa";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { Container } from "think_container";
@@ -37,16 +37,16 @@ const checkEnv = () => {
  * 
  * @param {function} fn 
  * @returns 
- * @memberof ThinkKoa
+ * @memberof Koatty
  */
 const parseExp = function (fn: Function) {
-    return function (ctx: any, next: any) {
+    return function (ctx: Koa.Context, next: Function) {
         if (fn.length < 3) {
             fn(ctx.req, ctx.res);
             return next();
         } else {
             return new Promise((resolve, reject) => {
-                fn(ctx.req, ctx.res, (err: any) => {
+                fn(ctx.req, ctx.res, (err: Error) => {
                     if (err) {
                         reject(err);
                     } else {
@@ -183,13 +183,17 @@ export class Koatty extends Koa {
     /**
      * Use the given koa middleware `fn`.
      * support generator func
-     * @param {any} fn
+     * @param {Function} fn
      * @returns {any}
-     * @memberof ThinkKoa
+     * @memberof Koatty
      */
     public use(fn: any): any {
+        if (!helper.isFunction) {
+            logger.error("The paramer is not a function.");
+            return;
+        }
         if (helper.isGenerator(fn)) {
-            fn = helper.generatorToPromise(fn);
+            fn = helper.generatorToPromise(<GeneratorFunction>fn);
         }
         return super.use(fn);
     }
@@ -199,9 +203,13 @@ export class Koatty extends Koa {
      * 
      * @param {function} fn 
      * @returns {any}
-     * @memberof ThinkKoa
+     * @memberof Koatty
      */
     public useExp(fn: Function): any {
+        if (!helper.isFunction) {
+            logger.error("The paramer is not a function.");
+            return;
+        }
         fn = parseExp(fn);
         return this.use(fn);
     }
@@ -211,7 +219,7 @@ export class Koatty extends Koa {
      * Prevent next process
      * 
      * @returns {any}
-     * @memberof ThinkKoa
+     * @memberof Koatty
      */
     public prevent() {
         return Promise.reject(new Error(PREVENT_NEXT_PROCESS));
@@ -222,7 +230,7 @@ export class Koatty extends Koa {
      * 
      * @param {any} err 
      * @returns {any}
-     * @memberof ThinkKoa
+     * @memberof Koatty
      */
     public isPrevent(err: any) {
         return helper.isError(err) && err.message === PREVENT_NEXT_PROCESS;
@@ -233,7 +241,7 @@ export class Koatty extends Koa {
      * 
      * @param {any} name 
      * @param {string} [type="config"] 
-     * @memberof ThinkKoa
+     * @memberof Koatty
      */
     public config(name: string, type = "config") {
         try {
@@ -294,7 +302,7 @@ export class Koatty extends Koa {
     /**
      * registration exception handling
      * 
-     * @memberof ThinkKoa
+     * @memberof Koatty
      */
     private captureError(): void {
         const configs = this.getMap("configs") || {};

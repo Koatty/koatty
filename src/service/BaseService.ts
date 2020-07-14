@@ -5,8 +5,8 @@
  * @ version: 2020-05-18 11:24:49
  */
 import { Koatty } from "../Koatty";
-import { IService } from "./IService";
 import { ObjectDefinitionOptions } from "think_container";
+import { IService } from '../core/Component';
 
 /**
  * Base class
