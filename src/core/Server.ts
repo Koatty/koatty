@@ -1,7 +1,7 @@
 /*
  * @Author: richen
  * @Date: 2020-07-06 15:53:37
- * @LastEditTime: 2020-07-14 17:29:43
+ * @LastEditTime: 2020-07-16 14:47:37
  * @Description:
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
@@ -32,7 +32,7 @@ function listening(app: Koatty, options: ListeningOptions) {
         logger.custom("think", "", `Server running at http://${options.hostname}:${options.port}/`);
         logger.custom("think", "", "====================================");
         // tslint:disable-next-line: no-unused-expression
-        app.appDebug && logger.warn(`Running in debug mode, please modify the 'appDebug' value to false when production env.`);
+        app.appDebug && logger.warn(`Running in debug mode.`);
     };
 }
 

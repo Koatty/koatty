@@ -102,6 +102,8 @@ export function Service(identifier?: string): ClassDecorator {
  */
 export interface IService {
     app: Koatty;
+
+    // readonly init: (...arg: any[]) => void;
 }
 
 /**
@@ -111,9 +113,19 @@ export interface IService {
  * @param {string} [identifier]
  * @returns {ClassDecorator}
  */
-// export function Plugin(identifier?: string): ClassDecorator {
-//     return (target: any) => {
-//         identifier = identifier || IOCContainer.getIdentifier(target);
-//         IOCContainer.saveClass("COMPONENT", target, `${identifier}_Plugin`);
-//     };
-// }
+export function Plugin(identifier?: string): ClassDecorator {
+    return (target: any) => {
+        identifier = identifier || IOCContainer.getIdentifier(target);
+        // 
+        if (!identifier.endsWith("Plugin")) {
+            throw Error("Plugin class name must be 'Plugin' suffix.");
+        }
+        IOCContainer.saveClass("COMPONENT", target, `${identifier}`);
+    };
+}
+/**
+ * Interface for Plugin
+ */
+export interface IPlugin {
+    run: (options: any, app: Koatty) => Promise<any>;
+}

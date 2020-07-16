@@ -90,16 +90,18 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
             }
         }, [...configuationMetas, `!${target.name || ".no"}.ts`]);
         exSet.clear();
-
-        logger.custom("think", "", "LoadConfiguation ...");
+        // Load configuration items
+        logger.custom("think", "", "Load Configuations ...");
         Loader.loadConfigs(app, configuationMetas);
 
         // execute Plugin
+        logger.custom("think", "", "Load Plugins ...");
+        await Loader.loadPlugins(app, IOCContainer);
 
         //Set IOC.app
         IOCContainer.setApp(app);
 
-        logger.custom("think", "", "LoadMiddlewares ...");
+        logger.custom("think", "", "Load Middlewares ...");
         await Loader.loadMiddlewares(app, IOCContainer);
 
         //Emit app ready
@@ -107,13 +109,13 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         // app.emit("appReady");
         await asyncEvent(app, "appReady");
 
-        logger.custom("think", "", "LoadComponents ...");
+        logger.custom("think", "", "Load Components ...");
         Loader.loadComponents(app, IOCContainer);
 
-        logger.custom("think", "", "LoadServices ...");
+        logger.custom("think", "", "Load Services ...");
         Loader.loadServices(app, IOCContainer);
 
-        logger.custom("think", "", "LoadControllers ...");
+        logger.custom("think", "", "Load Controllers ...");
         Loader.loadControllers(app, IOCContainer);
 
         //Emit app lazy loading
@@ -121,7 +123,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         // app.emit("appStart");
         await asyncEvent(app, "appStart");
 
-        logger.custom("think", "", "LoadRouters ...");
+        logger.custom("think", "", "Load Routers ...");
         const routerConf = app.config(undefined, "router") || {};
         const router = new Router(app, routerConf);
         router.loadRouter();
