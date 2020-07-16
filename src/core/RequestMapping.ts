@@ -7,8 +7,8 @@
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import * as helper from "think_lib";
-import { IOCContainer } from 'think_container';
-import { paramterTypes } from "think_validtion";
+import { IOCContainer } from 'koatty_container';
+import { paramterTypes } from "koatty_validtion";
 import { ROUTER_KEY, PARAM_KEY } from "./Constants";
 
 /**
@@ -202,7 +202,6 @@ export const HeadMapping = (
     return RequestMapping(path, RequestMethod.HEAD, routerOptions);
 };
 
-
 /**
  * 
  * @param fn 
@@ -224,7 +223,7 @@ const Inject = (fn: Function, name: string): ParameterDecorator => {
         let type = (paramtypes[descriptor] && paramtypes[descriptor].name) ? paramtypes[descriptor].name : "object";
         let isDto = false;
         //DTO class
-        if (!paramterTypes[type]) {
+        if (!(helper.toString(type) in paramterTypes)) {
             type = IOCContainer.getIdentifier(paramtypes[descriptor]);
             // reg to IOC container
             // IOCContainer.reg(type, paramtypes[descriptor]);

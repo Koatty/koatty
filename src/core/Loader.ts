@@ -11,8 +11,8 @@ import * as logger from "think_logger";
 import { BaseService } from "../service/BaseService";
 import { requireDefault } from "../util/Lib";
 import { injectValue } from './Value';
-import { injectSchedule } from 'think_schedule';
-import { Container, IOCContainer } from "think_container";
+import { injectSchedule } from 'koatty_schedule';
+import { Container, IOCContainer } from "koatty_container";
 import { BaseController } from "../controller/BaseController";
 
 /**

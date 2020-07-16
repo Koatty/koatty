@@ -12,6 +12,7 @@ import { TestDto } from '../model/TestDto';
 import { TestModel } from '../model/TestModel';
 import { TestAspect } from '../aspect/TestAspect';
 
+
 @Controller("/")
 export class IndexController extends AdminController {
     app: App;

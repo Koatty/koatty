@@ -9,7 +9,7 @@ import * as path from "path";
 import Koa, { ParameterizedContext, DefaultState, DefaultContext, Next } from "koa";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
-import { Container } from "think_container";
+import { Container } from "koatty_container";
 import { PREVENT_NEXT_PROCESS } from "./core/Constants";
 const pkg = require("../package.json");
 

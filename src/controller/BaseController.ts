@@ -8,7 +8,7 @@
 import * as Koa from "koa";
 import * as helper from "think_lib";
 import { Koatty } from "../Koatty";
-import { ObjectDefinitionOptions } from "think_container";
+import { ObjectDefinitionOptions } from "koatty_container";
 import { IController } from '../core/Component';
 
 /**

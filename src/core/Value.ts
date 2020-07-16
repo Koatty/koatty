@@ -9,7 +9,7 @@ import "reflect-metadata";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { recursiveGetMetadata } from "../util/Lib";
-import { Container, IOCContainer, TAGGED_ARGS } from "think_container";
+import { Container, IOCContainer, TAGGED_ARGS } from "koatty_container";
 
 /**
  * Indicates that an decorated configuations as a property.

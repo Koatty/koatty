@@ -5,7 +5,7 @@
  * @ version: 2020-07-06 11:19:16
  */
 import * as helper from "think_lib";
-import { Container, IOCContainer } from "think_container";
+import { Container, IOCContainer } from "koatty_container";
 import { BaseController } from "./BaseController";
 import { GetMapping, PathVariable, PostMapping, DeleteMapping, PutMapping, RequestBody } from "../core/RequestMapping";
 

@@ -5,7 +5,7 @@
  * @ version: 2020-05-18 11:24:49
  */
 import { Koatty } from "../Koatty";
-import { ObjectDefinitionOptions } from "think_container";
+import { ObjectDefinitionOptions } from "koatty_container";
 import { IService } from '../core/Component';
 
 /**

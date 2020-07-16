@@ -8,7 +8,7 @@
 import "reflect-metadata";
 // import * as helper from "think_lib";
 import * as Koa from "koa";
-import { IOCContainer } from 'think_container';
+import { IOCContainer } from 'koatty_container';
 import { CONTROLLER_ROUTER } from "./Constants";
 import { Koatty } from '../Koatty';
 

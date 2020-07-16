@@ -9,8 +9,8 @@ import * as Koa from "koa";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { Koatty } from "../Koatty";
-import { IOCContainer } from 'think_container';
-import { checkParams, PARAM_RULE_KEY, PARAM_CHECK_KEY } from 'think_validtion';
+import { IOCContainer } from 'koatty_container';
+import { checkParams, PARAM_RULE_KEY, PARAM_CHECK_KEY } from 'koatty_validtion';
 import { CONTROLLER_ROUTER, ROUTER_KEY, PARAM_KEY } from "./Constants";
 import { recursiveGetMetadata } from "../util/Lib";
 

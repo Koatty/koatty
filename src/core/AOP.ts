@@ -6,7 +6,7 @@
  */
 import * as helper from "think_lib";
 import logger from 'think_logger';
-import { IOCContainer } from 'think_container';
+import { IOCContainer } from 'koatty_container';
 
 
 /**

@@ -16,14 +16,14 @@ export * from "./core/Component";
 export * from "./core/RequestMapping";
 export { Value, Config } from "./core/Value";
 export * from "./service/BaseService";
-export * from "think_container";
-export { CacheAble, Cacheable, CacheEvict } from "think_cacheable";
-export { Scheduled, SchedulerLock, Lock } from "think_schedule";
+export * from "koatty_container";
+export { CacheAble, Cacheable, CacheEvict } from "koatty_cacheable";
+export { Scheduled, SchedulerLock, Lock } from "koatty_schedule";
 export {
     Valid, Validated, ClassValidator, FunctionValidator, IsDefined,
     IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsEmail,
     IsIP, IsPhoneNumber, IsUrl, IsHash, IsNotEmpty, Equals, NotEquals,
     Contains, IsIn, IsNotIn, IsDate, Min, Max, Length
-} from "think_validtion";
+} from "koatty_validtion";
 export const Helper = think_lib;
 export const Logger = think_logger;

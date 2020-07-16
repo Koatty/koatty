@@ -8,7 +8,7 @@
 import "reflect-metadata";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
-import { IOCContainer, TAGGED_CLS } from "think_container";
+import { IOCContainer, TAGGED_CLS } from "koatty_container";
 import { Router } from "./Router";
 import { Koatty } from '../Koatty';
 import { startHTTP } from './Server';
