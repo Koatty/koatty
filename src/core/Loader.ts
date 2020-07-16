@@ -2,17 +2,17 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-06-19 17:30:24
+ * @ version: 2020-07-06 11:18:01
  */
 import * as globby from "globby";
 import * as path from "path";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { BaseService } from "../service/BaseService";
-import { requireDefault } from "./Lib";
-import { injectValue } from '../core/Value';
-import { injectSchedule } from '../core/Schedule';
-import { Container, IOCContainer } from "think_container";
+import { requireDefault } from "../util/Lib";
+import { injectValue } from './Value';
+import { injectSchedule } from 'koatty_schedule';
+import { Container, IOCContainer } from "koatty_container";
 import { BaseController } from "../controller/BaseController";
 
 /**
@@ -43,8 +43,8 @@ export class Loader {
     public static loadConfigs(app: any, loadPath?: string | string[]) {
         const config: any = {};
         // tslint:disable-next-line: no-unused-expression
-        process.env.APP_DEBUG && logger.custom("think", "", `Load configuation path: ${app.think_path}/config`);
-        Loader.loadDirectory("./config", app.think_path, function (name: string, exp: any) {
+        process.env.APP_DEBUG && logger.custom("think", "", `Load configuation path: ${app.thinkPath}/config`);
+        Loader.loadDirectory("./config", app.thinkPath, function (name: string, exp: any) {
             config[name] = exp;
         });
         const appConfig: any = {};
@@ -53,9 +53,9 @@ export class Loader {
         }
         const tempConfig: any = {};
         // tslint:disable-next-line: no-unused-expression
-        process.env.APP_DEBUG && logger.custom("think", "", `Load configuation path: ${app.app_path}${loadPath || "/config"}`);
+        process.env.APP_DEBUG && logger.custom("think", "", `Load configuation path: ${app.appPath}${loadPath || "/config"}`);
 
-        Loader.loadDirectory(loadPath || "./config", app.app_path, function (name: string, exp: any) {
+        Loader.loadDirectory(loadPath || "./config", app.appPath, function (name: string, exp: any) {
             // tslint:disable-next-line: one-variable-per-declaration
             let type = "", t = "";
             if (name.indexOf("_") > -1) {
@@ -92,11 +92,13 @@ export class Loader {
      * @memberof Loader
      */
     public static async loadMiddlewares(app: any, container: Container, loadPath?: string | string[]) {
-        const middlewareConf = app.config(undefined, "middleware") || { config: {}, list: [] };
-        //default middleware list
-        const defaultList = ["PayloadMiddleware"];
+        let middlewareConf = app.config(undefined, "middleware");
+        if (helper.isEmpty(middlewareConf)) {
+            middlewareConf = { config: {}, list: [] };
+        }
+
         //Mount default middleware
-        Loader.loadDirectory(loadPath || "./middleware", app.think_path);
+        Loader.loadDirectory(loadPath || "./middleware", app.thinkPath);
         //Mount application middleware
         // const middlewares: any = {};
         const appMeddlewares = IOCContainer.listClass("MIDDLEWARE") || [];
@@ -107,23 +109,28 @@ export class Loader {
         }) => {
             item.id = (item.id || "").replace("MIDDLEWARE:", "");
             if (item.id && helper.isClass(item.target)) {
-                container.reg(item.target, { scope: "Prototype", type: "MIDDLEWARE" });
+                container.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
                 // middlewares[item.id] = item.target;
             }
         });
 
         const middlewareConfList = middlewareConf.list;
-        const bandList = ["TraceMiddleware", ...defaultList];
+        const defaultList: any[] = [];
+        const bandList = ["TraceMiddleware", "PayloadMiddleware"];
         middlewareConfList.map((item: any) => {
             if (!bandList.includes(item)) {
                 defaultList.push(item);
             }
         });
+        if (defaultList.length > middlewareConfList.length) {
+            logger.warn("Some middlewares is loaded but not allowed to execute.");
+        }
+        //Mount the middleware on first
+        defaultList.unshift("PayloadMiddleware");
+        defaultList.unshift("TraceMiddleware");
 
         //de-duplication
         const appMList = [...new Set(defaultList)];
-        //Mount the middleware on first
-        appMList.unshift("TraceMiddleware");
 
         //Automatically call middleware
         for (const key of appMList) {
@@ -152,29 +159,35 @@ export class Loader {
     }
 
     /**
-     * Load components
+     * Load controllers
      *
      * @static
      * @param {*} app
      * @param {Container} container
      * @memberof Loader
      */
-    public static loadComponents(app: any, container: Container) {
-        const componentList = IOCContainer.listClass("COMPONENT");
+    public static loadControllers(app: any, container: Container) {
+        const controllerList = IOCContainer.listClass("CONTROLLER");
 
-        componentList.map((item: any) => {
-            item.id = (item.id || "").replace("COMPONENT:", "");
+        const controllers: any = {};
+        controllerList.map((item: any) => {
+            item.id = (item.id || "").replace("CONTROLLER:", "");
             if (item.id && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
-                process.env.APP_DEBUG && logger.custom("think", "", `Load component: ${item.id}`);
+                process.env.APP_DEBUG && logger.custom("think", "", `Load controller: ${item.id}`);
                 // inject configuation
                 injectValue(item.target, item.target.prototype, container);
-                // inject schedule
-                injectSchedule(item.target, item.target.prototype, container);
                 // registering to IOC
-                container.reg(item.target, { scope: "Singleton", type: "COMPONENT" });
+                container.reg(item.id, item.target, { scope: "Prototype", type: "CONTROLLER", args: [] });
+                const ctl = container.getInsByClass(item.target);
+                if (!(ctl instanceof BaseController)) {
+                    throw new Error(`class ${item.id} does not inherit from BaseController`);
+                }
+                controllers[item.id] = 1;
             }
         });
+
+        app.setMap("controllers", controllers);
     }
 
     /**
@@ -198,7 +211,7 @@ export class Loader {
                 // inject schedule
                 injectSchedule(item.target, item.target.prototype, container);
                 // registering to IOC
-                container.reg(item.target, { scope: "Singleton", type: "SERVICE" });
+                container.reg(item.id, item.target, { scope: "Singleton", type: "SERVICE", args: [] });
                 const ctl = container.getInsByClass(item.target);
                 if (!(ctl instanceof BaseService)) {
                     throw new Error(`class ${item.id} does not inherit from BaseService`);
@@ -208,35 +221,80 @@ export class Loader {
     }
 
     /**
-     * Load controllers
+     * Load components
      *
      * @static
      * @param {*} app
      * @param {Container} container
      * @memberof Loader
      */
-    public static loadControllers(app: any, container: Container) {
-        const controllerList = IOCContainer.listClass("CONTROLLER");
+    public static loadComponents(app: any, container: Container) {
+        const componentList = IOCContainer.listClass("COMPONENT");
 
-        const controllers: any = {};
-        controllerList.map((item: any) => {
-            item.id = (item.id || "").replace("CONTROLLER:", "");
-            if (item.id && helper.isClass(item.target)) {
+        componentList.map((item: any) => {
+            item.id = (item.id || "").replace("COMPONENT:", "");
+            if (item.id && !(item.id).endsWith("Plugin") && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
-                process.env.APP_DEBUG && logger.custom("think", "", `Load controller: ${item.id}`);
+                process.env.APP_DEBUG && logger.custom("think", "", `Load component: ${item.id}`);
                 // inject configuation
                 injectValue(item.target, item.target.prototype, container);
+                // inject schedule
+                injectSchedule(item.target, item.target.prototype, container);
                 // registering to IOC
-                container.reg(item.target, { scope: "Prototype", type: "CONTROLLER" });
-                const ctl = container.getInsByClass(item.target);
-                if (!(ctl instanceof BaseController)) {
-                    throw new Error(`class ${item.id} does not inherit from BaseController`);
-                }
-                controllers[item.id] = 1;
+                container.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
+            }
+        });
+    }
+
+    /**
+     * Load plugins
+     *
+     * @static
+     * @param {*} app
+     * @param {Container} container
+     * @memberof Loader
+     */
+    public static async loadPlugins(app: any, container: Container) {
+        const componentList = IOCContainer.listClass("COMPONENT");
+
+        let pluginsConf = app.config(undefined, "plugin");
+        if (helper.isEmpty(pluginsConf)) {
+            pluginsConf = { config: {}, list: [] };
+        }
+
+        const pluginList = [];
+        componentList.map(async (item: any) => {
+            item.id = (item.id || "").replace("COMPONENT:", "");
+            if (item.id && (item.id).endsWith("Plugin") && helper.isClass(item.target)) {
+                // tslint:disable-next-line: no-unused-expression
+                process.env.APP_DEBUG && logger.custom("think", "", `Load plugin: ${item.id}`);
+                // inject configuation
+                injectValue(item.target, item.target.prototype, container);
+                // inject schedule
+                injectSchedule(item.target, item.target.prototype, container);
+                // registering to IOC
+                container.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
+                pluginList.push(item.id);
             }
         });
 
-        app.setMap("controllers", controllers);
+        const pluginConfList = pluginsConf.list;
+        if (pluginList.length > pluginConfList.length) {
+            logger.warn("Some plugins is loaded but not allowed to execute.");
+        }
+        for (const key of pluginConfList) {
+            const handle = container.get(key, "COMPONENT");
+            if (!helper.isFunction(handle.run)) {
+                throw new Error(`plugin ${key} must be implements method 'run'.`);
+            }
+            if (pluginsConf.config[key] === false) {
+                return;
+            }
+            // tslint:disable-next-line: no-unused-expression
+            process.env.APP_DEBUG && logger.custom("think", "", `Execute plugin: ${key}`);
+            // sync exec 
+            await handle.run(pluginsConf.config[key] || {}, app);
+        }
     }
 
     /**

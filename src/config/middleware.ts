@@ -6,7 +6,7 @@
  */
 
 export default {
-    list: [], //加载的中间件列表
+    list: [], //加载的中间件列表,执行顺序按照数组元素顺序
     config: { //中间件配置
 
         "Trace": {

@@ -13,7 +13,7 @@ export class ZadtestMiddleware implements IMiddleware {
     run(options: any, app: any) {
         //应用启动执行一次
         app.once('appReady', async () => {
-            app.test = 'wwwwwwwww';
+            // app.test = 'wwwwwwwww';
             console.log('Zadtest Middleware');
         });
         return function (ctx: any, next: any) {

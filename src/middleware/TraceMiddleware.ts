@@ -4,9 +4,8 @@
  * @ license: MIT
  * @ version: 2020-05-18 11:17:26
  */
-import { Middleware } from "../core/Component";
+import { Middleware, IMiddleware } from "../core/Component";
 import { Koatty } from "../Koatty";
-import { IMiddleware } from './IMiddleware';
 const traces = require("think_trace");
 
 @Middleware()

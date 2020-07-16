@@ -2,15 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-14 09:54:05
+ * @ version: 2020-07-06 11:21:37
  */
 
 import * as path from "path";
-import Koa from "koa";
-import KoaRouter from "@koa/router";
+import Koa, { ParameterizedContext, DefaultState, DefaultContext, Next } from "koa";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
-import { Container } from "think_container";
+import { Container } from "koatty_container";
 import { PREVENT_NEXT_PROCESS } from "./core/Constants";
 const pkg = require("../package.json");
 
@@ -38,16 +37,16 @@ const checkEnv = () => {
  * 
  * @param {function} fn 
  * @returns 
- * @memberof ThinkKoa
+ * @memberof Koatty
  */
 const parseExp = function (fn: Function) {
-    return function (ctx: any, next: any) {
+    return function (ctx: Koa.Context, next: Function) {
         if (fn.length < 3) {
             fn(ctx.req, ctx.res);
             return next();
         } else {
             return new Promise((resolve, reject) => {
-                fn(ctx.req, ctx.res, (err: any) => {
+                fn(ctx.req, ctx.res, (err: Error) => {
                     if (err) {
                         reject(err);
                     } else {
@@ -64,9 +63,9 @@ const parseExp = function (fn: Function) {
  * @interface InitOptions
  */
 interface InitOptions {
-    root_path?: string;
-    app_path?: string;
-    app_debug?: boolean;
+    rootPath?: string;
+    appPath?: string;
+    appDebug?: boolean;
 }
 
 interface ListenOptions {
@@ -89,13 +88,13 @@ interface ListenOptions {
  */
 export class Koatty extends Koa {
     public env: string;
-    public root_path: string;
-    public app_path: string;
-    public think_path: string;
-    public app_debug: boolean;
+    public rootPath: string;
+    public appPath: string;
+    public thinkPath: string;
+    public appDebug: boolean;
     public options: InitOptions;
-    public Container: Container;
-    public Router: KoaRouter;
+    public container: Container;
+
     private handelMap: Map<string, any>;
 
     protected constructor(options: InitOptions) {
@@ -118,17 +117,17 @@ export class Koatty extends Koa {
      */
     private initialize() {
         //development env is default
-        this.app_debug = !!(this.options.app_debug || this.app_debug);
+        this.appDebug = !!(this.options.appDebug || this.appDebug);
 
         const env = JSON.stringify(process.execArgv);
         if ((env.indexOf("--production") > -1) || ((process.env.NODE_ENV || "").indexOf("pro") > -1)) {
-            this.app_debug = false;
+            this.appDebug = false;
         }
 
         if (env.indexOf("ts-node") > -1 || env.indexOf("--debug") > -1) {
-            this.app_debug = true;
+            this.appDebug = true;
         }
-        if (this.app_debug) {
+        if (this.appDebug) {
             process.env.NODE_ENV = "development";
             process.env.APP_DEBUG = "true";
         } else {
@@ -138,18 +137,18 @@ export class Koatty extends Koa {
         // check env
         checkEnv();
         // define path  
-        const root_path = (this.options && this.options.root_path) || this.root_path || process.cwd();
-        const app_path = this.app_path || (this.options && this.options.app_path) || path.resolve(root_path, env.indexOf("ts-node") > -1 ? "src" : "dist");
-        const think_path = __dirname;
-        helper.define(this, "root_path", root_path);
-        helper.define(this, "app_path", app_path);
-        helper.define(this, "think_path", think_path);
+        const rootPath = (this.options && this.options.rootPath) || this.rootPath || process.cwd();
+        const appPath = this.appPath || (this.options && this.options.appPath) || path.resolve(rootPath, env.indexOf("ts-node") > -1 ? "src" : "dist");
+        const thinkPath = __dirname;
+        helper.define(this, "rootPath", rootPath);
+        helper.define(this, "appPath", appPath);
+        helper.define(this, "thinkPath", thinkPath);
         // app.env
         this.env = process.env.KOATTY_ENV || process.env.NODE_ENV;
 
-        process.env.ROOT_PATH = this.root_path;
-        process.env.APP_PATH = this.app_path;
-        process.env.THINK_PATH = this.think_path;
+        process.env.ROOT_PATH = this.rootPath;
+        process.env.APP_PATH = this.appPath;
+        process.env.THINK_PATH = this.thinkPath;
 
         // Compatible with old version
         Reflect.defineProperty(this, "_caches", {
@@ -184,13 +183,17 @@ export class Koatty extends Koa {
     /**
      * Use the given koa middleware `fn`.
      * support generator func
-     * @param {any} fn
+     * @param {Function} fn
      * @returns {any}
-     * @memberof ThinkKoa
+     * @memberof Koatty
      */
     public use(fn: any): any {
+        if (!helper.isFunction) {
+            logger.error("The paramer is not a function.");
+            return;
+        }
         if (helper.isGenerator(fn)) {
-            fn = helper.generatorToPromise(fn);
+            fn = helper.generatorToPromise(<GeneratorFunction>fn);
         }
         return super.use(fn);
     }
@@ -200,9 +203,13 @@ export class Koatty extends Koa {
      * 
      * @param {function} fn 
      * @returns {any}
-     * @memberof ThinkKoa
+     * @memberof Koatty
      */
     public useExp(fn: Function): any {
+        if (!helper.isFunction) {
+            logger.error("The paramer is not a function.");
+            return;
+        }
         fn = parseExp(fn);
         return this.use(fn);
     }
@@ -212,7 +219,7 @@ export class Koatty extends Koa {
      * Prevent next process
      * 
      * @returns {any}
-     * @memberof ThinkKoa
+     * @memberof Koatty
      */
     public prevent() {
         return Promise.reject(new Error(PREVENT_NEXT_PROCESS));
@@ -223,7 +230,7 @@ export class Koatty extends Koa {
      * 
      * @param {any} err 
      * @returns {any}
-     * @memberof ThinkKoa
+     * @memberof Koatty
      */
     public isPrevent(err: any) {
         return helper.isError(err) && err.message === PREVENT_NEXT_PROCESS;
@@ -234,7 +241,7 @@ export class Koatty extends Koa {
      * 
      * @param {any} name 
      * @param {string} [type="config"] 
-     * @memberof ThinkKoa
+     * @memberof Koatty
      */
     public config(name: string, type = "config") {
         try {
@@ -295,14 +302,14 @@ export class Koatty extends Koa {
     /**
      * registration exception handling
      * 
-     * @memberof ThinkKoa
+     * @memberof Koatty
      */
     private captureError(): void {
         const configs = this.getMap("configs") || {};
         //logger
         if (configs.config) {
             process.env.LOGS = configs.config.logs || false;
-            process.env.LOGS_PATH = configs.config.logs_path || this.root_path + "/logs";
+            process.env.LOGS_PATH = configs.config.logs_path || this.rootPath + "/logs";
             process.env.LOGS_LEVEL = configs.config.logs_level || [];
         }
 

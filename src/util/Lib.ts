@@ -4,7 +4,7 @@
  * @ license: MIT
  * @ version: 2020-05-10 11:36:32
  */
-import { IOCContainer } from 'think_container';
+import { IOCContainer } from 'koatty_container';
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
 

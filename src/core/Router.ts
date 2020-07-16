@@ -2,17 +2,17 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-19 18:23:19
+ * @ version: 2020-07-06 14:23:43
  */
 import KoaRouter from "@koa/router";
 import * as Koa from "koa";
 import * as helper from "think_lib";
 import * as logger from "think_logger";
 import { Koatty } from "../Koatty";
-import { Container, IOCContainer } from "think_container";
-import { CONTROLLER_ROUTER, ROUTER_KEY, PARAM_KEY, PARAM_RULE_KEY, PARAM_CHECK_KEY } from "./Constants";
+import { IOCContainer } from 'koatty_container';
+import { checkParams, PARAM_RULE_KEY, PARAM_CHECK_KEY } from 'koatty_validtion';
+import { CONTROLLER_ROUTER, ROUTER_KEY, PARAM_KEY } from "./Constants";
 import { recursiveGetMetadata } from "../util/Lib";
-import { convertParamsType, ValidatorFuncs, plainToClass, ClassValidator } from 'think_validtion';
 
 /**
  * Http timeout timer
@@ -29,15 +29,16 @@ import { convertParamsType, ValidatorFuncs, plainToClass, ClassValidator } from 
 //     });
 // };
 
+
 /**
  *
  *
- * @export
+ * @param {Koatty} app
  * @param {*} target
  * @param {*} [instance]
- * @returns
+ * @returns {*} 
  */
-function injectRouter(target: any, instance?: any) {
+function injectRouter(app: Koatty, target: any, instance?: any) {
     // Controller router path
     const metaDatas = IOCContainer.listPropertyData(CONTROLLER_ROUTER, target);
     let path = "";
@@ -69,12 +70,12 @@ function injectRouter(target: any, instance?: any) {
 /**
  *
  *
- * @export
+ * @param {Koatty} app
  * @param {*} target
  * @param {*} [instance]
- * @returns
+ * @returns {*} 
  */
-function injectParam(target: any, instance?: any) {
+function injectParam(app: Koatty, target: any, instance?: any) {
     instance = instance || target.prototype;
     // const methods = getMethodNames(target);
     const metaDatas = recursiveGetMetadata(PARAM_KEY, target);
@@ -111,37 +112,29 @@ function injectParam(target: any, instance?: any) {
 /**
  * Convert paramter types and valid check.
  *
- * @param {any[]} params
- * @param {*} valids
- * @param {boolean} dtoCheck
+ * @param {Koatty} app
  * @param {Koa.Context} ctx
+ * @param {any[]} params
  * @returns
  */
-async function getParamter(params: any[], valids: any, dtoCheck: boolean, ctx: Koa.Context) {
+async function getParamter(app: Koatty, ctx: Koa.Context, ctlParams: any = {}) {
     //convert type
+    const params = ctlParams.data || [];
+    const validRules = ctlParams.valids || {};
+    const dtoCheck = ctlParams.dtoCheck || false;
     const props: any[] = params.map(async function (v: any, k: number) {
         let value: any = null;
         if (v.fn && helper.isFunction(v.fn)) {
             value = await v.fn(ctx);
         }
-        if (v.isDto) {
-            // DTO class
-            const clazz = IOCContainer.getClass(v.type, "COMPONENT");
-            if (clazz) {
-                if (dtoCheck) {
-                    value = await ClassValidator.valid(clazz, value, true);
-                } else {
-                    value = plainToClass(clazz, value, true);
-                }
-            }
-        } else {
-            value = convertParamsType(value, v.type);
-            //@Valid()
-            if (valids[k] && valids[k].type && valids[k].rule) {
-                ValidatorFuncs(`${k}`, value, valids[k].type, valids[k].rule, valids[k].message, false);
-            }
-        }
-        return value;
+        //check params
+        return checkParams(value, {
+            index: k,
+            isDto: v.isDto,
+            type: v.type,
+            validRules,
+            dtoCheck
+        });
     });
     return Promise.all(props);
 }
@@ -151,12 +144,10 @@ async function getParamter(params: any[], valids: any, dtoCheck: boolean, ctx: K
  */
 export class Router {
     app: Koatty;
-    container: Container;
     options: any;
 
-    constructor(app: Koatty, container: Container, options?: any) {
+    constructor(app: Koatty, options?: any) {
         this.app = app;
-        this.container = container;
         // prefix: string;
         // /**
         //  * Methods which should be supported by the router.
@@ -187,26 +178,24 @@ export class Router {
     loadRouter() {
         try {
             const app = this.app;
-            const options = this.options;
             const execRouter = this.execRouter;
-            const container = this.container;
 
             const controllers = app.getMap("controllers") || {};
-            const kRouter: any = new KoaRouter(options);
+            const kRouter: any = new KoaRouter(this.options);
             // tslint:disable-next-line: forin
             for (const n in controllers) {
-                const ctl = app.Container.getClass(n, "CONTROLLER");
+                const ctl = IOCContainer.getClass(n, "CONTROLLER");
                 // inject router
-                const ctlRouters = injectRouter(ctl);
+                const ctlRouters = injectRouter(app, ctl);
                 // inject param
-                const ctlParams = injectParam(ctl);
+                const ctlParams = injectParam(app, ctl);
                 // tslint:disable-next-line: forin
                 for (const it in ctlRouters) {
                     // tslint:disable-next-line: no-unused-expression
-                    app.app_debug && logger.custom("think", "", `Register request mapping: [${ctlRouters[it].requestMethod}] : ["${ctlRouters[it].path}" => ${n}.${ctlRouters[it].method}]`);
+                    app.appDebug && logger.custom("think", "", `Register request mapping: [${ctlRouters[it].requestMethod}] : ["${ctlRouters[it].path}" => ${n}.${ctlRouters[it].method}]`);
                     kRouter[ctlRouters[it].requestMethod](ctlRouters[it].path, function (ctx: Koa.Context): Promise<any> {
                         const router = ctlRouters[it];
-                        return execRouter(n, router, ctx, container, ctlParams[router.method]);
+                        return execRouter(app, ctx, n, router, ctlParams[router.method]);
                     });
                 }
             }
@@ -221,16 +210,16 @@ export class Router {
     /**
      * Execute controller
      *
+     * @param {Koatty} app
+     * @param {Koa.Context} ctx
      * @param {string} identifier
      * @param {*} router
-     * @param {Koa.Context} ctx
-     * @param {Container} container
      * @param {*} ctlParams
      * @returns
      * @memberof Router
      */
-    async execRouter(identifier: string, router: any, ctx: Koa.Context, container: Container, ctlParams: any) {
-        const ctl: any = container.get(identifier, "CONTROLLER", [ctx]);
+    async execRouter(app: Koatty, ctx: Koa.Context, identifier: string, router: any, ctlParams: any) {
+        const ctl: any = IOCContainer.get(identifier, "CONTROLLER", [ctx]);
         try {
             // const ctl: any = container.get(identifier, "CONTROLLER");
             if (!ctx || !ctl.init) {
@@ -244,7 +233,7 @@ export class Router {
             // inject param
             let args = [];
             if (ctlParams) {
-                args = await getParamter(ctlParams.data || [], ctlParams.valids || {}, ctlParams.dtoCheck, ctx);
+                args = await getParamter(app, ctx, ctlParams);
             }
             // method
             const res = await ctl[router.method](...args);

@@ -4,13 +4,14 @@
  * @ license: Apache License 2.0
  * @ version: 2020-05-19 14:31:04
  */
-import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, After, RequestBody, Get, Validated, Valid, Helper, Post, RequestParam } from "../../../src/index";
+import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, After, RequestBody, Get, Validated, Valid, Helper, Post, RequestParam, IOCContainer } from "../../../src/index";
 import { App } from '../App';
 import { AdminController } from "./AdminController";
 import { TestService } from "../service/TestService";
 import { TestDto } from '../model/TestDto';
 import { TestModel } from '../model/TestModel';
 import { TestAspect } from '../aspect/TestAspect';
+
 
 @Controller("/")
 export class IndexController extends AdminController {
@@ -36,7 +37,6 @@ export class IndexController extends AdminController {
     async default(@Get("name") name = '666') {
         const info = await this.testService.test1(name);
         // throw Error("default");
-        console.log('success');
         return this.body(info);
     }
 
