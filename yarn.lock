@@ -908,7 +908,7 @@ lodash.flatten@^4.4.0:
   resolved "https://registry.yarnpkg.com/lodash.flatten/-/lodash.flatten-4.4.0.tgz#f31c22225a9632d2bbf8e4addbef240aa765a61f"
   integrity sha1-8xwiIlqWMtK7+OSt2+8kCqdlph8=
 
-lodash@^4.17.15:
+lodash@^4.17.15, lodash@^4.17.19:
   version "4.17.19"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
   integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
@@ -1029,6 +1029,11 @@ moment@^2.25.3:
   version "2.25.3"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.25.3.tgz#252ff41319cf41e47761a1a88cab30edfe9808c0"
   integrity sha512-PuYv0PHxZvzc15Sp8ybUCoQ+xpyPWvjOuK72a5ovzp2LI32rJXOiIfyoFoYvG3s6EwwrdkMyWuRiEHSZRLJNdg==
+
+moment@^2.27.0:
+  version "2.27.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.27.0.tgz#8bff4e3e26a236220dfe3e36de756b6ebaa0105d"
+  integrity sha512-al0MUK7cpIcglMv3YF13qSgdAIqxHTO7brRtaz3DlSULbqfazqkc5kEjNrLDOM7fsjshoFIihnU8snrP7zUvhQ==
 
 ms@2.0.0:
   version "2.0.0"
@@ -1341,7 +1346,17 @@ supports-color@^5.3.0:
   dependencies:
     has-flag "^3.0.0"
 
-think_lib@^2.6.0, think_lib@^2.x.x:
+think_lib@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/think_lib/-/think_lib-2.6.1.tgz#ae73e14cc51abbaebdf2fa4887f4a38d7e0180c2"
+  integrity sha512-QzTouDSuCRUSPgKnC6n+mj5AL5qq0W412HYbtC9Cx9k8rHEYiuxErJRBQoL4X4psTUPaoBvhVCsWgzsY9vB0/Q==
+  dependencies:
+    co "^4.6.0"
+    lodash "^4.17.19"
+    moment "^2.27.0"
+    murmurhash "^1.0.0"
+
+think_lib@^2.x.x:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/think_lib/-/think_lib-2.6.0.tgz#d7959976f0e19fd9c0b76a3a7b0b396c6e58911f"
   integrity sha512-vEtmdGahwkwYynh1jCNWBK9ckFdhHJ8r1T6Oe5SNbdIfHnGvqM7R9xZXhYB4qFjxTDupG6UtQkwt7l71Lh3heQ==
