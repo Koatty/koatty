@@ -54,7 +54,7 @@
         "koatty_schedule": "^1.0.0",
         "koatty_validtion": "^1.8.2",
         "reflect-metadata": "^0.1.13",
-        "think_lib": "^2.6.1",
+        "think_lib": "^2.6.2",
         "think_logger": "^2.2.4",
         "think_payload": "^3.1.0",
         "think_store": "^3.4.0",
