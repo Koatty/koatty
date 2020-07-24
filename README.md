@@ -21,7 +21,7 @@ Use Typescript's decorator implement IOC and AOP, just like SpringBoot.
 - **New:** koatty-cloud for nacos
 - **New:** koatty grpc server/client by think_grpc middleware.
 - **New:** koatty-cloud for SpringCloud
-- **New:** HTTP/2
+- **New:** HTTP/2 ✔️ 
 - **New:** GraphQL
 - **New:** SSR 
 
