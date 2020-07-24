@@ -11,7 +11,7 @@ import * as logger from "think_logger";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
 import { Router } from "./Router";
 import { Koatty } from '../Koatty';
-import { startHTTP } from './Server';
+import { startHTTP, startHTTP2 } from './Server';
 import { Loader } from "./Loader";
 import { COMPONENT_SCAN, CONFIGUATION_SCAN } from "./Constants";
 
@@ -131,7 +131,12 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
 
         logger.custom("think", "", "====================================");
         //Start HTTP server
-        startHTTP(app);
+        const enableHttp2 = app.config("enable_http2") || false;
+        if (enableHttp2) {
+            startHTTP2(app);
+        } else {
+            startHTTP(app);
+        }
 
     } catch (err) {
         logger.error(err);
