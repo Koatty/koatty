@@ -1,7 +1,7 @@
 /*
  * @Author: richen
  * @Date: 2020-07-06 15:53:37
- * @LastEditTime: 2020-07-16 14:47:37
+ * @LastEditTime: 2020-07-24 11:06:52
  * @Description:
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
@@ -15,6 +15,7 @@ const pkg = require("../../package.json");
 interface ListeningOptions {
     hostname: string;
     port: number;
+    listenUrl: string;
 }
 
 /**
@@ -29,7 +30,7 @@ function listening(app: Koatty, options: ListeningOptions) {
         logger.custom("think", "", `Nodejs Version: ${process.version}`);
         logger.custom("think", "", `${pkg.name} Version: v${pkg.version}`);
         logger.custom("think", "", `App Enviroment: ${app.env}`);
-        logger.custom("think", "", `Server running at http://${options.hostname}:${options.port}/`);
+        logger.custom("think", "", `Server running at ${options.listenUrl}`);
         logger.custom("think", "", "====================================");
         // tslint:disable-next-line: no-unused-expression
         app.appDebug && logger.warn(`Running in debug mode.`);
@@ -45,7 +46,7 @@ export function startHTTP(app: Koatty) {
     const port = app.config("app_port") || 3000;
     const hostname = app.config("app_hostname") || "localhost";
 
-    app.listen({ port, hostname }, listening(app, { hostname, port }));
+    app.listen({ port, hostname }, listening(app, { hostname, port, listenUrl: `http://${hostname}:${port}/` }));
 }
 
 /**
@@ -68,7 +69,7 @@ export function startHTTP2(app: Koatty) {
     };
 
     const server = http2.createSecureServer(options, app.callback());
-    server.listen(port, hostname, 0, listening(app, { hostname, port }));
+    server.listen(port, hostname, 0, listening(app, { hostname, port, listenUrl: `https://${hostname}:${port}/` }));
 }
 
 /**
