@@ -40,7 +40,7 @@ const checkEnv = () => {
  * @memberof Koatty
  */
 const parseExp = function (fn: Function) {
-    return function (ctx: Koa.Context, next: Function) {
+    return function (ctx: KoattyContext, next: Function) {
         if (fn.length < 3) {
             fn(ctx.req, ctx.res);
             return next();
@@ -80,6 +80,30 @@ interface ListenOptions {
 }
 
 /**
+ * Koatty Context.
+ *
+ * @export
+ * @interface KoattyContext
+ * @extends {Koa.Context}
+ */
+export interface KoattyContext extends Koa.Context {
+
+    /**
+     * Request body parser
+     *
+     * @memberof KoattyContext
+     */
+    bodyParser: () => Promise<Object>;
+
+    /**
+     * QueryString parser
+     *
+     * @memberof KoattyContext
+     */
+    queryParser: () => Object;
+}
+
+/**
  * Application
  * @export
  * @class Koatty
@@ -94,6 +118,7 @@ export class Koatty extends Koa {
     public appDebug: boolean;
     public options: InitOptions;
     public container: Container;
+    public context: KoattyContext;
 
     private handelMap: Map<string, any>;
 
@@ -136,6 +161,8 @@ export class Koatty extends Koa {
 
         // check env
         checkEnv();
+        //catch error
+        this.captureError();
         // define path  
         const rootPath = (this.options && this.options.rootPath) || this.rootPath || process.cwd();
         const appPath = this.appPath || (this.options && this.options.appPath) || path.resolve(rootPath, env.indexOf("ts-node") > -1 ? "src" : "dist");
@@ -290,8 +317,6 @@ export class Koatty extends Koa {
         host: "127.0.0.1",
         port: 3000
     }, listeningListener?: any) {
-        //catch error
-        this.captureError();
         //start server
         return super.listen(opts, listeningListener).on("clientError", function (err: any, sock: any) {
             // logger.error("Bad request, HTTP parse error");
@@ -305,14 +330,6 @@ export class Koatty extends Koa {
      * @memberof Koatty
      */
     private captureError(): void {
-        const configs = this.getMap("configs") || {};
-        //logger
-        if (configs.config) {
-            process.env.LOGS = configs.config.logs || false;
-            process.env.LOGS_PATH = configs.config.logs_path || this.rootPath + "/logs";
-            process.env.LOGS_LEVEL = configs.config.logs_level || [];
-        }
-
         //koa error
         this.removeAllListeners("error");
         this.on("error", (err: any) => {

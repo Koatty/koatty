@@ -4,10 +4,8 @@
  * @ license: MIT
  * @ version: 2020-05-20 15:45:24
  */
-// tslint:disable-next-line: no-implicit-dependencies
-import * as Koa from "koa";
 import * as helper from "think_lib";
-import { Koatty } from "../Koatty";
+import { Koatty, KoattyContext } from "../Koatty";
 import { ObjectDefinitionOptions } from "koatty_container";
 import { IController } from '../core/Component';
 
@@ -20,17 +18,17 @@ import { IController } from '../core/Component';
  */
 export class BaseController implements IController {
     public app: Koatty;
-    public ctx: Koa.Context;
+    public ctx: KoattyContext;
 
     protected _options: ObjectDefinitionOptions;
 
     /**
      * instance of BaseController.
      * @param {Koatty} app
-     * @param {Koa.Context} ctx
+     * @param {KoattyContext} ctx
      * @memberof BaseController
      */
-    protected constructor(ctx: Koa.Context) {
+    protected constructor(ctx: KoattyContext) {
         this.ctx = ctx;
         this.init();
     }
@@ -128,7 +126,7 @@ export class BaseController implements IController {
      */
     public param(name?: string) {
         return this.ctx.bodyParser().then((body: any) => {
-            const getParams = this.ctx.queryParser() || {};
+            const getParams: any = this.ctx.queryParser() || {};
             const postParams = (body.post ? body.post : body) || {};
             if (name !== undefined) {
                 return postParams[name] === undefined ? getParams[name] : postParams[name];
