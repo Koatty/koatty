@@ -98,6 +98,8 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         logger.custom("think", "", "Load Plugins ...");
         await Loader.loadPlugins(app, IOCContainer);
 
+        //Set logger level
+        Loader.setLoggerLevel(app);
         //Set IOC.app
         IOCContainer.setApp(app);
 

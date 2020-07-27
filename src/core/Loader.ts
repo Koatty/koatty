@@ -14,6 +14,8 @@ import { injectValue } from './Value';
 import { injectSchedule } from 'koatty_schedule';
 import { Container, IOCContainer } from "koatty_container";
 import { BaseController } from "../controller/BaseController";
+import { IMiddleware } from './Component';
+import { Koatty } from '../Koatty';
 
 /**
  * 
@@ -25,6 +27,16 @@ function buildLoadDir(baseDir: string, dir: string) {
         return path.join(baseDir, dir);
     }
     return dir;
+}
+
+/**
+ *
+ *
+ * @interface ComponentItem
+ */
+interface ComponentItem {
+    id: string;
+    target: any;
 }
 
 /**
@@ -40,7 +52,7 @@ export class Loader {
      * @param {*} app
      * @memberof Loader
      */
-    public static loadConfigs(app: any, loadPath?: string | string[]) {
+    public static loadConfigs(app: Koatty, loadPath?: string | string[]) {
         const config: any = {};
         // tslint:disable-next-line: no-unused-expression
         process.env.APP_DEBUG && logger.custom("think", "", `Load configuation path: ${app.thinkPath}/config`);
@@ -83,6 +95,23 @@ export class Loader {
     }
 
     /**
+     * Set logger level
+     *
+     * @static
+     * @param {Koatty} app
+     * @memberof Loader
+     */
+    public static setLoggerLevel(app: Koatty) {
+        const configs = app.getMap("configs") || {};
+        //logger
+        if (configs.config) {
+            process.env.LOGS = configs.config.logs || false;
+            process.env.LOGS_PATH = configs.config.logs_path || app.rootPath + "/logs";
+            process.env.LOGS_LEVEL = configs.config.logs_level || ["info", "warn", "error"];
+        }
+    }
+
+    /**
      * Load middlewares
      * [async]
      * @static
@@ -91,7 +120,7 @@ export class Loader {
      * @param {(string | string[])} [loadPath]
      * @memberof Loader
      */
-    public static async loadMiddlewares(app: any, container: Container, loadPath?: string | string[]) {
+    public static async loadMiddlewares(app: Koatty, container: Container, loadPath?: string | string[]) {
         let middlewareConf = app.config(undefined, "middleware");
         if (helper.isEmpty(middlewareConf)) {
             middlewareConf = { config: {}, list: [] };
@@ -103,10 +132,7 @@ export class Loader {
         // const middlewares: any = {};
         const appMeddlewares = IOCContainer.listClass("MIDDLEWARE") || [];
 
-        appMeddlewares.map((item: {
-            id: string;
-            target: any;
-        }) => {
+        appMeddlewares.map((item: ComponentItem) => {
             item.id = (item.id || "").replace("MIDDLEWARE:", "");
             if (item.id && helper.isClass(item.target)) {
                 container.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
@@ -117,7 +143,7 @@ export class Loader {
         const middlewareConfList = middlewareConf.list;
         const defaultList: any[] = [];
         const bandList = ["TraceMiddleware", "PayloadMiddleware"];
-        middlewareConfList.map((item: any) => {
+        middlewareConfList.map((item: string) => {
             if (!bandList.includes(item)) {
                 defaultList.push(item);
             }
@@ -134,25 +160,32 @@ export class Loader {
 
         //Automatically call middleware
         for (const key of appMList) {
-            const handle: any = container.get(key, "MIDDLEWARE");
+            const handle: IMiddleware = container.get(key, "MIDDLEWARE");
             if (!handle) {
-                throw new Error(`middleware ${key} load error.`);
+                logger.error(`middleware ${key} load error.`);
+                continue;
             }
             if (!helper.isFunction(handle.run)) {
-                throw new Error(`middleware ${key} must be implements method 'run'.`);
+                logger.error(`middleware ${key} must be implements method 'run'.`);
+                continue;
             }
             if (middlewareConf.config[key] === false) {
                 continue;
             }
-            // tslint:disable-next-line: no-unused-expression
-            process.env.APP_DEBUG && logger.custom("think", "", `Load middleware: ${key}`);
-            const result = await handle.run(middlewareConf.config[key] || {}, app);
-            if (helper.isFunction(result)) {
-                if (result.length < 3) {
-                    app.use(result);
-                } else {
-                    app.useExp(result);
+
+            try {
+                // tslint:disable-next-line: no-unused-expression
+                process.env.APP_DEBUG && logger.custom("think", "", `Load middleware: ${key}`);
+                const result = await handle.run(middlewareConf.config[key] || {}, app);
+                if (helper.isFunction(result)) {
+                    if (result.length < 3) {
+                        app.use(result);
+                    } else {
+                        app.useExp(result);
+                    }
                 }
+            } catch (err) {
+                logger.error(`The middleware ${key} executes the 'run' method error.`, err);
             }
         }
         // app.setMap("middlewares", middlewares);
@@ -166,11 +199,11 @@ export class Loader {
      * @param {Container} container
      * @memberof Loader
      */
-    public static loadControllers(app: any, container: Container) {
+    public static loadControllers(app: Koatty, container: Container) {
         const controllerList = IOCContainer.listClass("CONTROLLER");
 
         const controllers: any = {};
-        controllerList.map((item: any) => {
+        controllerList.map((item: ComponentItem) => {
             item.id = (item.id || "").replace("CONTROLLER:", "");
             if (item.id && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
@@ -198,10 +231,10 @@ export class Loader {
      * @param {Container} container
      * @memberof Loader
      */
-    public static loadServices(app: any, container: Container) {
+    public static loadServices(app: Koatty, container: Container) {
         const serviceList = IOCContainer.listClass("SERVICE");
 
-        serviceList.map((item: any) => {
+        serviceList.map((item: ComponentItem) => {
             item.id = (item.id || "").replace("SERVICE:", "");
             if (item.id && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
@@ -228,10 +261,10 @@ export class Loader {
      * @param {Container} container
      * @memberof Loader
      */
-    public static loadComponents(app: any, container: Container) {
+    public static loadComponents(app: Koatty, container: Container) {
         const componentList = IOCContainer.listClass("COMPONENT");
 
-        componentList.map((item: any) => {
+        componentList.map((item: ComponentItem) => {
             item.id = (item.id || "").replace("COMPONENT:", "");
             if (item.id && !(item.id).endsWith("Plugin") && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
@@ -254,7 +287,7 @@ export class Loader {
      * @param {Container} container
      * @memberof Loader
      */
-    public static async loadPlugins(app: any, container: Container) {
+    public static async loadPlugins(app: Koatty, container: Container) {
         const componentList = IOCContainer.listClass("COMPONENT");
 
         let pluginsConf = app.config(undefined, "plugin");
@@ -263,7 +296,7 @@ export class Loader {
         }
 
         const pluginList = [];
-        componentList.map(async (item: any) => {
+        componentList.map(async (item: ComponentItem) => {
             item.id = (item.id || "").replace("COMPONENT:", "");
             if (item.id && (item.id).endsWith("Plugin") && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
@@ -285,15 +318,22 @@ export class Loader {
         for (const key of pluginConfList) {
             const handle = container.get(key, "COMPONENT");
             if (!helper.isFunction(handle.run)) {
-                throw new Error(`plugin ${key} must be implements method 'run'.`);
+                logger.error(`plugin ${key} must be implements method 'run'.`);
+                continue;
             }
             if (pluginsConf.config[key] === false) {
-                return;
+                continue;
             }
-            // tslint:disable-next-line: no-unused-expression
-            process.env.APP_DEBUG && logger.custom("think", "", `Execute plugin: ${key}`);
-            // sync exec 
-            await handle.run(pluginsConf.config[key] || {}, app);
+
+            try {
+                // tslint:disable-next-line: no-unused-expression
+                process.env.APP_DEBUG && logger.custom("think", "", `Execute plugin: ${key}`);
+                // sync exec 
+                const result = await handle.run(pluginsConf.config[key] || {}, app);
+            } catch (err) {
+                logger.error(`The plugin ${key} executes the 'run' method error.`, err);
+            }
+
         }
     }
 
