@@ -135,6 +135,8 @@ export class Loader {
         appMeddlewares.map((item: ComponentItem) => {
             item.id = (item.id || "").replace("MIDDLEWARE:", "");
             if (item.id && helper.isClass(item.target)) {
+                // inject configuation
+                injectValue(item.target, item.target.prototype, container);
                 container.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
                 // middlewares[item.id] = item.target;
             }
