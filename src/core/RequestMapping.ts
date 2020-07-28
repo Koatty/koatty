@@ -31,16 +31,16 @@ export interface RouterOption {
  * @export
  * @var RequestMethod
  */
-export const RequestMethod = {
-    GET: "get",
-    POST: "post",
-    PUT: "put",
-    DELETE: "delete",
-    PATCH: "patch",
-    ALL: "all",
-    OPTIONS: "options",
-    HEAD: "head"
-};
+export enum RequestMethod {
+    "GET" = "get",
+    "POST" = "post",
+    "PUT" = "put",
+    "DELETE" = "delete",
+    "PATCH" = "patch",
+    "ALL" = "all",
+    "OPTIONS" = "options",
+    "HEAD" = "head"
+}
 
 /**
  * Routes HTTP requests to the specified path.
@@ -54,7 +54,7 @@ export const RequestMethod = {
  */
 export const RequestMapping = (
     path = "/",
-    requestMethod = RequestMethod.GET,
+    method: RequestMethod = RequestMethod.GET,
     routerOptions: {
         routerName?: string;
     } = {}
@@ -68,7 +68,7 @@ export const RequestMapping = (
         // tslint:disable-next-line: no-object-literal-type-assertion
         IOCContainer.attachPropertyData(ROUTER_KEY, {
             path,
-            requestMethod,
+            requestMethod: (<string>method).toLowerCase(),
             routerName,
             method: key
         } as RouterOption, target, key);
