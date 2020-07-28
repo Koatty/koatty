@@ -45,16 +45,16 @@ export enum RequestMethod {
 /**
  * Routes HTTP requests to the specified path.
  *
- * @param {string} [path="/"] router path
- * @param {*} [requestMethod=RequestMethod.GET] http methods
+ * @param {string} [path="/"]
+ * @param {RequestMethod} [reqmethod=RequestMethod.GET]
  * @param {{
- *         routerName?: string; router name
+ *         routerName?: string;
  *     }} [routerOptions={}]
- * @returns {MethodDecorator}
+ * @returns {*}  {MethodDecorator}
  */
 export const RequestMapping = (
     path = "/",
-    method: RequestMethod = RequestMethod.GET,
+    reqmethod: RequestMethod = RequestMethod.GET,
     routerOptions: {
         routerName?: string;
     } = {}
@@ -68,7 +68,7 @@ export const RequestMapping = (
         // tslint:disable-next-line: no-object-literal-type-assertion
         IOCContainer.attachPropertyData(ROUTER_KEY, {
             path,
-            requestMethod: (<string>method).toLowerCase(),
+            requestMethod: reqmethod,
             routerName,
             method: key
         } as RouterOption, target, key);
