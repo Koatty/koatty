@@ -16,6 +16,7 @@ Use Typescript's decorator implement IOC and AOP.
 - **New:** think_apollo middleware supports Apollo Configuration Center. ✔️ 
 - **New:** bootFunc supports asynchronous. And the appRady/appStart event also supports asynchronous  ✔️ 1.15.0
 - **New:** @CacheAble, @CacheEvict supports redis-based caching  ✔️ 1.16.0
+- **New:** Support asynchronous loading configuration, support plug-in ✔️ 2.5.5
 - **New:** koatty for etcd (middleware)
 - **New:** koatty-cloud for trpc/Tars
 - **New:** koatty-cloud for nacos
