@@ -1403,10 +1403,10 @@ think_store@^3.4.0:
     think_lib "^2.x.x"
     think_logger "^2.x.x"
 
-think_trace@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/think_trace/-/think_trace-3.1.0.tgz#9985fd05dede951b1cc057e8a61d68d729ce549d"
-  integrity sha512-NfojWBVGye5eqHr+9eIaVqhmk1xMaVOPcFv3FIfp/2dFVjapD8ahTawB0Pz3sB5+eU1y7K7R4YBmcoaH/oDycw==
+think_trace@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/think_trace/-/think_trace-3.2.0.tgz#3e1eafa083ff5a073a8ed29226e5edb8e7af4aa9"
+  integrity sha512-ICBzPe8/W10UEXWzpqSnGNZcv2mhuc0vDuAJn8YTqKV9c0nKWL2UtYM5jqfLrcVpuPIwoVxKmjiRAMxPhbKD3w==
   dependencies:
     think_lib "^2.x.x"
     think_logger "^2.x.x"

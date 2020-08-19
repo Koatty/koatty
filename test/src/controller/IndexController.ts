@@ -37,7 +37,9 @@ export class IndexController extends AdminController {
     async default(@Get("name") name = '666') {
         const info = await this.testService.test1(name);
         // throw Error("default");
-        return this.body(info);
+        // return this.body(info);
+        this.ctx.type = "text/plain";
+        return "haha";
     }
 
     @PostMapping("/test")
