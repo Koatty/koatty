@@ -39,7 +39,7 @@ export class IndexController extends AdminController {
         // throw Error("default");
         // return this.body(info);
         this.type("text/plain");
-        this.type("text/html");
+        // this.type("text/html");
         return "haha";
     }
 
