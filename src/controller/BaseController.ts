@@ -146,7 +146,7 @@ export class BaseController implements IController {
      */
     public type(contentType: string, encoding?: string | boolean): string {
         if (encoding !== false && !contentType.includes("charset")) {
-            contentType = `; charset=${encoding || this.app.config("encoding")}`;
+            contentType = `${contentType}; charset=${encoding || this.app.config("encoding")}`;
         }
         this.ctx.type = contentType;
         return contentType;

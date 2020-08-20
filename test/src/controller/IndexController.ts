@@ -38,7 +38,8 @@ export class IndexController extends AdminController {
         const info = await this.testService.test1(name);
         // throw Error("default");
         // return this.body(info);
-        this.ctx.type = "text/plain";
+        this.type("text/plain");
+        this.type("text/html");
         return "haha";
     }
 
