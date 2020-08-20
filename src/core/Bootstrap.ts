@@ -142,7 +142,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
 
     } catch (err) {
         logger.error(err);
-        process.exit();
+        // process.exit();
     }
 };
 
