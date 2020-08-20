@@ -5,7 +5,7 @@
  * @ version: 2020-07-06 11:19:16
  */
 import * as helper from "think_lib";
-import { Container, IOCContainer } from "koatty_container";
+import { IOCContainer } from "koatty_container";
 import { BaseController } from "./BaseController";
 import { GetMapping, PathVariable, PostMapping, DeleteMapping, PutMapping, RequestBody } from "../core/RequestMapping";
 
@@ -18,7 +18,6 @@ import { GetMapping, PathVariable, PostMapping, DeleteMapping, PutMapping, Reque
  */
 export class RestController extends BaseController {
     private model: any;
-    private container: Container;
 
     /**
      * init
@@ -27,7 +26,7 @@ export class RestController extends BaseController {
      * @memberof BaseController
      */
     protected init(): void {
-        this.container = IOCContainer;
+
     }
 
     /**
@@ -48,7 +47,7 @@ export class RestController extends BaseController {
         }
         if (!this.model) {
             const resourceName = helper.camelCase(resource, true);
-            this.model = this.container.get(`${resourceName}Model`, "COMPONENT");
+            this.model = IOCContainer.get(`${resourceName}Model`, "COMPONENT");
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
             }
@@ -90,7 +89,7 @@ export class RestController extends BaseController {
         }
         if (!this.model) {
             const resourceName = helper.camelCase(resource, true);
-            this.model = this.container.get(`${resourceName}Model`, "COMPONENT");
+            this.model = IOCContainer.get(`${resourceName}Model`, "COMPONENT");
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
             }
@@ -122,7 +121,7 @@ export class RestController extends BaseController {
         }
         if (!this.model) {
             const resourceName = helper.camelCase(resource, true);
-            this.model = this.container.get(`${resourceName}Model`, "COMPONENT");
+            this.model = IOCContainer.get(`${resourceName}Model`, "COMPONENT");
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
             }
@@ -159,7 +158,7 @@ export class RestController extends BaseController {
         }
         if (!this.model) {
             const resourceName = helper.camelCase(resource, true);
-            this.model = this.container.get(`${resourceName}Model`, "COMPONENT");
+            this.model = IOCContainer.get(`${resourceName}Model`, "COMPONENT");
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
             }

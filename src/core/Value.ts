@@ -53,10 +53,10 @@ export const Config = Value;
  * @param {Container} container
  */
 export function injectValue(target: any, instance: any, container: Container) {
-    const componentType = IOCContainer.getType(target);
-    if (componentType === "MIDDLEWARE") {
-        throw Error("Value decorator cannot be used in the middleware class. Please use app.config() to get the configuration.");
-    }
+    // const componentType = IOCContainer.getType(target);
+    // if (componentType === "MIDDLEWARE") {
+    //     throw Error("Value decorator cannot be used in the middleware class. Please use app.config() to get the configuration.");
+    // }
     const metaData = recursiveGetMetadata(TAGGED_ARGS, target);
     const app = container.getApp();
     // tslint:disable-next-line: forin

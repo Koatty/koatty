@@ -10,9 +10,10 @@ import * as helper from "think_lib";
 import { IOCContainer } from 'koatty_container';
 import { paramterTypes } from "koatty_validtion";
 import { ROUTER_KEY, PARAM_KEY } from "./Constants";
+import { KoattyContext } from '../Koatty';
 
 /**
- *
+ * Koatty router options
  *
  * @export
  * @interface RouterOption
@@ -30,30 +31,30 @@ export interface RouterOption {
  * @export
  * @var RequestMethod
  */
-export const RequestMethod = {
-    GET: "get",
-    POST: "post",
-    PUT: "put",
-    DELETE: "delete",
-    PATCH: "patch",
-    ALL: "all",
-    OPTIONS: "options",
-    HEAD: "head"
-};
+export enum RequestMethod {
+    "GET" = "get",
+    "POST" = "post",
+    "PUT" = "put",
+    "DELETE" = "delete",
+    "PATCH" = "patch",
+    "ALL" = "all",
+    "OPTIONS" = "options",
+    "HEAD" = "head"
+}
 
 /**
  * Routes HTTP requests to the specified path.
  *
- * @param {string} [path="/"] router path
- * @param {*} [requestMethod=RequestMethod.GET] http methods
+ * @param {string} [path="/"]
+ * @param {RequestMethod} [reqmethod=RequestMethod.GET]
  * @param {{
- *         routerName?: string; router name
+ *         routerName?: string;
  *     }} [routerOptions={}]
- * @returns {MethodDecorator}
+ * @returns {*}  {MethodDecorator}
  */
 export const RequestMapping = (
     path = "/",
-    requestMethod = RequestMethod.GET,
+    reqmethod: RequestMethod = RequestMethod.GET,
     routerOptions: {
         routerName?: string;
     } = {}
@@ -67,7 +68,7 @@ export const RequestMapping = (
         // tslint:disable-next-line: no-object-literal-type-assertion
         IOCContainer.attachPropertyData(ROUTER_KEY, {
             path,
-            requestMethod,
+            requestMethod: reqmethod,
             routerName,
             method: key
         } as RouterOption, target, key);
@@ -207,7 +208,7 @@ export const HeadMapping = (
  * @param fn 
  */
 const Inject = (fn: Function, name: string): ParameterDecorator => {
-    return (target: any, propertyKey: string, descriptor: any) => {
+    return (target: Object, propertyKey: string, descriptor: number) => {
         const targetType = IOCContainer.getType(target);
         if (targetType !== "CONTROLLER") {
             throw Error(`${name} decorator is only used in controllers class.`);
@@ -250,7 +251,7 @@ const Inject = (fn: Function, name: string): ParameterDecorator => {
  * @returns
  */
 export function Header(name?: string): ParameterDecorator {
-    return Inject((ctx: any) => {
+    return Inject((ctx: KoattyContext) => {
         if (name !== undefined) {
             return ctx.get(name);
         }
@@ -265,7 +266,7 @@ export function Header(name?: string): ParameterDecorator {
  * @returns
  */
 export function RequestBody(): ParameterDecorator {
-    return Inject((ctx: any) => {
+    return Inject((ctx: KoattyContext) => {
         return ctx.bodyParser();
     }, "RequestBody");
 }
@@ -277,7 +278,7 @@ export function RequestBody(): ParameterDecorator {
  * @returns
  */
 export function Body(): ParameterDecorator {
-    return Inject((ctx: any) => {
+    return Inject((ctx: KoattyContext) => {
         return ctx.bodyParser();
     }, "Body");
 }
@@ -290,10 +291,12 @@ export function Body(): ParameterDecorator {
  * @returns {ParameterDecorator}
  */
 export function RequestParam(name?: string): ParameterDecorator {
-    return Inject((ctx: any) => {
-        return ctx.bodyParser().then((body: any) => {
-            const getParams = ctx.queryParser() || {};
-            const postParams = (body.post ? body.post : body) || {};
+    return Inject((ctx: KoattyContext) => {
+        return ctx.bodyParser().then((body: {
+            post: Object
+        }) => {
+            const getParams: any = ctx.queryParser() || {};
+            const postParams: any = (body.post ? body.post : body) || {};
             if (name !== undefined) {
                 return postParams[name] === undefined ? getParams[name] : postParams[name];
             }
@@ -310,10 +313,12 @@ export function RequestParam(name?: string): ParameterDecorator {
  * @returns {ParameterDecorator}
  */
 export function Param(name?: string): ParameterDecorator {
-    return Inject((ctx: any) => {
-        return ctx.bodyParser().then((body: any) => {
-            const getParams = ctx.queryParser() || {};
-            const postParams = (body.post ? body.post : body) || {};
+    return Inject((ctx: KoattyContext) => {
+        return ctx.bodyParser().then((body: {
+            post: Object
+        }) => {
+            const getParams: any = ctx.queryParser() || {};
+            const postParams: any = (body.post ? body.post : body) || {};
             if (name !== undefined) {
                 return postParams[name] === undefined ? getParams[name] : postParams[name];
             }
@@ -330,8 +335,8 @@ export function Param(name?: string): ParameterDecorator {
  * @returns
  */
 export function PathVariable(name?: string): ParameterDecorator {
-    return Inject((ctx: any) => {
-        const getParams = ctx.queryParser() || {};
+    return Inject((ctx: KoattyContext) => {
+        const getParams: any = ctx.queryParser() || {};
         if (name === undefined) {
             return getParams;
         }
@@ -347,8 +352,8 @@ export function PathVariable(name?: string): ParameterDecorator {
  * @returns
  */
 export function Get(name?: string): ParameterDecorator {
-    return Inject((ctx: any) => {
-        const getParams = ctx.queryParser() || {};
+    return Inject((ctx: KoattyContext) => {
+        const getParams: any = ctx.queryParser() || {};
         if (name === undefined) {
             return getParams;
         }
@@ -364,9 +369,11 @@ export function Get(name?: string): ParameterDecorator {
  * @returns
  */
 export function Post(name?: string): ParameterDecorator {
-    return Inject((ctx: any) => {
-        return ctx.bodyParser().then((body: any) => {
-            const params = body.post ? body.post : body;
+    return Inject((ctx: KoattyContext) => {
+        return ctx.bodyParser().then((body: {
+            post: Object
+        }) => {
+            const params: any = body.post ? body.post : body;
             if (name === undefined) {
                 return params;
             }
@@ -383,9 +390,11 @@ export function Post(name?: string): ParameterDecorator {
  * @returns
  */
 export function File(name?: string): ParameterDecorator {
-    return Inject((ctx: any) => {
-        return ctx.bodyParser().then((body: any) => {
-            const params = body.file || {};
+    return Inject((ctx: KoattyContext) => {
+        return ctx.bodyParser().then((body: {
+            file: Object
+        }) => {
+            const params: any = body.file || {};
             if (name === undefined) {
                 return params;
             }

@@ -4,7 +4,7 @@
  * @ license: MIT
  * @ version: 2020-05-18 11:16:41
  */
-import { Middleware, Helper, Value, GetMapping, IMiddleware } from "../../../src/index";
+import { Middleware, Helper, Value, GetMapping, IMiddleware, KoattyContext } from "../../../src/index";
 
 const defaultOptions = {};
 
@@ -20,7 +20,7 @@ export class ModelsMiddleware implements IMiddleware {
             console.log('Models Middleware');
             Helper.define(app, "mm2", 222);
         });
-        return function (ctx: any, next: any) {
+        return function (ctx: KoattyContext, next: Function) {
             console.log('111111');
             return next();
         };

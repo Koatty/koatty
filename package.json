@@ -1,6 +1,6 @@
 {
     "name": "koatty",
-    "version": "2.5.0",
+    "version": "2.5.6",
     "description": "Koa2 + Typescript = koatty. Use Typescript's decorator implement auto injection.",
     "scripts": {
         "build": "del-cli --force dist && tsc",
@@ -35,6 +35,12 @@
         "url": "https://github.com/thinkkoa/koatty/issues"
     },
     "homepage": "https://github.com/thinkkoa/koatty",
+    "maintainers": [
+        {
+            "name": "richenlin",
+            "email": "richenlin@gmail.com"
+        }
+    ],
     "devDependencies": {
         "@types/koa": "^2.x.x",
         "@types/koa__router": "^8.x.x",
@@ -46,7 +52,7 @@
         "typescript": "^3.9.7"
     },
     "dependencies": {
-        "@koa/router": "^9.3.1",
+        "@koa/router": "^9.4.0",
         "globby": "^11.0.1",
         "koa": "^2.13.0",
         "koatty_cacheable": "^1.0.0",
@@ -54,17 +60,10 @@
         "koatty_schedule": "^1.0.0",
         "koatty_validtion": "^1.8.2",
         "reflect-metadata": "^0.1.13",
-        "think_lib": "^2.6.2",
-        "think_logger": "^2.2.4",
+        "think_lib": "^2.6.3",
+        "think_logger": "^2.3.0",
         "think_payload": "^3.1.0",
-        "think_store": "^3.4.0",
-        "think_trace": "^3.1.0",
-        "tslib": "^2.0.0"
-    },
-    "maintainers": [
-        {
-            "name": "richenlin",
-            "email": "richenlin@gmail.com"
-        }
-    ]
+        "think_trace": "^3.2.0",
+        "tslib": "^2.0.1"
+    }
 }

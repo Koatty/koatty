@@ -4,7 +4,7 @@
  * @ license: MIT
  * @ version: 2020-05-18 11:16:44
  */
-import { Middleware, Helper, IMiddleware } from "../../../src/index";
+import { Middleware, Helper, IMiddleware, KoattyContext } from "../../../src/index";
 
 const defaultOptions = {};
 
@@ -16,7 +16,7 @@ export class ZadtestMiddleware implements IMiddleware {
             // app.test = 'wwwwwwwww';
             console.log('Zadtest Middleware');
         });
-        return function (ctx: any, next: any) {
+        return function (ctx: KoattyContext, next: Function) {
             console.log(222222);
             console.log(app.test);
             return next();

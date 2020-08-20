@@ -7,10 +7,9 @@
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 // import * as helper from "think_lib";
-import * as Koa from "koa";
 import { IOCContainer } from 'koatty_container';
 import { CONTROLLER_ROUTER } from "./Constants";
-import { Koatty } from '../Koatty';
+import { Koatty, KoattyContext } from '../Koatty';
 
 /**
  * Indicates that an decorated class is a "component".
@@ -45,7 +44,7 @@ export function Controller(path = ""): ClassDecorator {
  */
 export interface IController {
     app: Koatty;
-    ctx: Koa.Context;
+    ctx: KoattyContext;
 
     __before: () => Promise<any>;
     __after: () => Promise<any>;
@@ -81,7 +80,7 @@ export function Middleware(identifier?: string): ClassDecorator {
  * Interface for Middleware
  */
 export interface IMiddleware {
-    run: (options: any, app: Koatty) => (ctx: Koa.Context, next: any) => Promise<any>;
+    run: (options: any, app: Koatty) => ((ctx: KoattyContext, next: any) => Promise<any>);
 }
 
 /**
