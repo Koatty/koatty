@@ -17,12 +17,13 @@ Use Typescript's decorator implement IOC and AOP.
 - **New:** bootFunc supports asynchronous. And the appRady/appStart event also supports asynchronous  ✔️ 1.15.0
 - **New:** @CacheAble, @CacheEvict supports redis-based caching  ✔️ 1.16.0
 - **New:** Support asynchronous loading configuration, support plug-in ✔️ 2.5.5
-- **New:** koatty for etcd  ✔️
-- **New:** koatty-cloud for trpc/Tars
-- **New:** koatty-cloud for nacos
-- **New:** koatty grpc server/client by think_grpc middleware.
-- **New:** koatty-cloud for SpringCloud
 - **New:** HTTP/2 ✔️ 
+- **New:** koatty for etcd  ✔️
+- **New:** koatty grpc server/client by think_grpc.
+- **New:** koatty-cloud for trpc/Tars
+- **New:** koatty-cloud for consul
+- **New:** koatty-cloud for nacos
+- **New:** koatty-cloud for SpringCloud
 - **New:** GraphQL
 - **New:** SSR 
 
