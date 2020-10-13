@@ -5,7 +5,7 @@
  * @ version: 2020-05-18 10:43:05
  */
 import * as think_lib from "think_lib";
-import * as think_logger from "think_logger";
+import { DefaultLogger } from "./util/Logger";
 
 export * from "./Koatty";
 export * from "./controller/BaseController";
@@ -26,4 +26,4 @@ export {
     Contains, IsIn, IsNotIn, IsDate, Min, Max, Length
 } from "koatty_validtion";
 export const Helper = think_lib;
-export const Logger = think_logger;
+export const Logger = DefaultLogger;

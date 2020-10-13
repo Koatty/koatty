@@ -6,10 +6,9 @@
  */
 
 import * as path from "path";
-import Koa, { ParameterizedContext, DefaultState, DefaultContext, Next } from "koa";
+import Koa from "koa";
 import * as helper from "think_lib";
-import * as logger from "think_logger";
-import { Container } from "koatty_container";
+import { DefaultLogger as logger } from "./util/Logger";
 import { PREVENT_NEXT_PROCESS } from "./core/Constants";
 const pkg = require("../package.json");
 
@@ -27,7 +26,7 @@ const checkEnv = () => {
     nodeVersion = nodeVersion.slice(0, nodeVersion.lastIndexOf("."));
 
     if (helper.toNumber(node_engines) > helper.toNumber(nodeVersion)) {
-        logger.error(`Koatty need node version > ${node_engines}, current version is ${nodeVersion}, please upgrade it.`);
+        logger.Error(`Koatty need node version > ${node_engines}, current version is ${nodeVersion}, please upgrade it.`);
         process.exit(-1);
     }
 };
@@ -117,7 +116,6 @@ export class Koatty extends Koa {
     public thinkPath: string;
     public appDebug: boolean;
     public options: InitOptions;
-    public container: Container;
     public context: KoattyContext;
 
     private handelMap: Map<string, any>;
@@ -216,7 +214,7 @@ export class Koatty extends Koa {
      */
     public use(fn: any): any {
         if (!helper.isFunction) {
-            logger.error("The paramer is not a function.");
+            logger.Error("The paramer is not a function.");
             return;
         }
         if (helper.isGenerator(fn)) {
@@ -234,7 +232,7 @@ export class Koatty extends Koa {
      */
     public useExp(fn: Function): any {
         if (!helper.isFunction) {
-            logger.error("The paramer is not a function.");
+            logger.Error("The paramer is not a function.");
             return;
         }
         fn = parseExp(fn);
@@ -291,7 +289,7 @@ export class Koatty extends Koa {
                 return caches[type][name];
             }
         } catch (err) {
-            logger.error(err);
+            logger.Error(err);
             return null;
         }
     }
@@ -334,14 +332,14 @@ export class Koatty extends Koa {
         this.removeAllListeners("error");
         this.on("error", (err: any) => {
             if (!this.isPrevent(err)) {
-                logger.error(err);
+                logger.Error(err);
             }
             return;
         });
         //warning
         process.removeAllListeners("warning");
         process.on("warning", (warning) => {
-            logger.warn(helper.toString(warning));
+            logger.Warn(helper.toString(warning));
             return;
         });
 
@@ -349,7 +347,7 @@ export class Koatty extends Koa {
         process.removeAllListeners("unhandledRejection");
         process.on("unhandledRejection", (reason) => {
             if (!this.isPrevent(reason)) {
-                logger.error(helper.toString(reason));
+                logger.Error(helper.toString(reason));
             }
             return;
         });
@@ -357,11 +355,11 @@ export class Koatty extends Koa {
         process.removeAllListeners("uncaughtException");
         process.on("uncaughtException", (err) => {
             if (err.message.indexOf("EADDRINUSE") > -1) {
-                logger.error(helper.toString(err));
+                logger.Error(helper.toString(err));
                 process.exit(-1);
             }
             if (!this.isPrevent(err)) {
-                logger.error(helper.toString(err));
+                logger.Error(helper.toString(err));
             }
             return;
         });

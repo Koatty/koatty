@@ -16,7 +16,6 @@ export default {
 
     logs: true, //是否存储日志
     logs_path: process.env.ROOT_PATH + "/logs", //存储日志文件目录
-    logs_level: [] //日志存储级别, "debug", "info", "warn", "error", "success" or custom type
-
+    logs_level: "info, warn, error" //日志存储级别, "debug", "info", "warn", "error", "success" or custom type
 
 };

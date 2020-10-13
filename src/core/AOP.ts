@@ -5,7 +5,7 @@
  * @ version: 2020-07-06 11:19:30
  */
 import * as helper from "think_lib";
-import logger from 'think_logger';
+import { DefaultLogger as logger } from "../util/Logger";
 import { IOCContainer } from 'koatty_container';
 
 
@@ -38,7 +38,7 @@ function defineNewProperty(clazz: Function, protoName: string, methodName: strin
                     name = <string>methodName;
                 }
                 if (aspect && helper.isFunction(aspect.run)) {
-                    logger.info(`Execute the aspect ${name}`);
+                    logger.Info(`Execute the aspect ${name}`);
                     // tslint:disable-next-line: no-invalid-this
                     await Promise.resolve(Reflect.apply(aspect.run, this, props));
                 }
@@ -96,7 +96,7 @@ export function Before(aopName: string | Function): MethodDecorator {
                     name = <string>aopName;
                 }
                 if (aspect && helper.isFunction(aspect.run)) {
-                    logger.info(`Execute the aspect ${name}`);
+                    logger.Info(`Execute the aspect ${name}`);
                     // tslint:disable-next-line: no-invalid-this
                     await Promise.resolve(Reflect.apply(aspect.run, this, props));
                 }
@@ -158,7 +158,7 @@ export function After(aopName: string | Function): MethodDecorator {
                     name = <string>aopName;
                 }
                 if (aspect && helper.isFunction(aspect.run)) {
-                    logger.info(`Execute the aspect ${name}`);
+                    logger.Info(`Execute the aspect ${name}`);
                     // tslint:disable-next-line: no-invalid-this
                     await Promise.resolve(Reflect.apply(aspect.run, this, props));
                 }
