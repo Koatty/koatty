@@ -6,7 +6,7 @@
  */
 import KoaRouter from "@koa/router";
 import * as helper from "think_lib";
-import * as logger from "think_logger";
+import { DefaultLogger as logger } from "../util/Logger";
 import { Koatty, KoattyContext } from "../Koatty";
 import { IOCContainer } from 'koatty_container';
 import { checkParams, PARAM_RULE_KEY, PARAM_CHECK_KEY } from 'koatty_validtion';
@@ -52,7 +52,7 @@ function injectRouter(app: Koatty, target: any, instance?: any) {
     // tslint:disable-next-line: forin
     for (const metaKey in rmetaData) {
         // tslint:disable-next-line: no-unused-expression
-        process.env.APP_DEBUG && logger.custom("think", "", `Register inject method Router key: ${metaKey} => value: ${JSON.stringify(rmetaData[metaKey])}`);
+        process.env.APP_DEBUG && logger.Custom("think", "", `Register inject method Router key: ${metaKey} => value: ${JSON.stringify(rmetaData[metaKey])}`);
         //.sort((a, b) => b.priority - a.priority) 
         for (const val of rmetaData[metaKey]) {
             const tmp = {
@@ -84,7 +84,7 @@ function injectParam(app: Koatty, target: any, instance?: any) {
     for (const meta in metaDatas) {
         if (instance[meta] && instance[meta].length <= metaDatas[meta].length) {
             // tslint:disable-next-line: no-unused-expression
-            process.env.APP_DEBUG && logger.custom("think", "", `Register inject ${IOCContainer.getIdentifier(target)} param key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
+            process.env.APP_DEBUG && logger.Custom("think", "", `Register inject ${IOCContainer.getIdentifier(target)} param key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
 
             // cover to obj
             const data = (metaDatas[meta] || []).sort((a: any, b: any) => a.index - b.index);
@@ -174,10 +174,10 @@ export class Router {
      *
      * @memberof Router
      */
-    loadRouter() {
+    LoadRouter() {
         try {
             const app = this.app;
-            const execRouter = this.execRouter;
+            const execRouter = this.ExecRouter;
 
             const controllers = app.getMap("controllers") || {};
             const kRouter: any = new KoaRouter(this.options);
@@ -191,7 +191,7 @@ export class Router {
                 // tslint:disable-next-line: forin
                 for (const it in ctlRouters) {
                     // tslint:disable-next-line: no-unused-expression
-                    app.appDebug && logger.custom("think", "", `Register request mapping: [${ctlRouters[it].requestMethod}] : ["${ctlRouters[it].path}" => ${n}.${ctlRouters[it].method}]`);
+                    app.appDebug && logger.Custom("think", "", `Register request mapping: [${ctlRouters[it].requestMethod}] : ["${ctlRouters[it].path}" => ${n}.${ctlRouters[it].method}]`);
                     kRouter[ctlRouters[it].requestMethod](ctlRouters[it].path, function (ctx: KoattyContext): Promise<any> {
                         const router = ctlRouters[it];
                         return execRouter(app, ctx, n, router, ctlParams[router.method]);
@@ -202,7 +202,7 @@ export class Router {
             app.use(kRouter.routes()).use(kRouter.allowedMethods());
             helper.define(app, "Router", kRouter);
         } catch (err) {
-            logger.error(err);
+            logger.Error(err);
         }
     }
 
@@ -217,7 +217,7 @@ export class Router {
      * @returns
      * @memberof Router
      */
-    async execRouter(app: Koatty, ctx: KoattyContext, identifier: string, router: any, ctlParams: any) {
+    async ExecRouter(app: Koatty, ctx: KoattyContext, identifier: string, router: any, ctlParams: any) {
         const ctl: any = IOCContainer.get(identifier, "CONTROLLER", [ctx]);
         try {
             // const ctl: any = container.get(identifier, "CONTROLLER");
@@ -226,7 +226,7 @@ export class Router {
             }
             // pre-method
             if (ctl.__before) {
-                logger.info(`Execute the aspect ${identifier}.__before()`);
+                logger.Info(`Execute the aspect ${identifier}.__before()`);
                 await ctl.__before();
             }
             // inject param
@@ -245,8 +245,8 @@ export class Router {
         } finally {
             // after-method
             if (ctl.__after) {
-                logger.info(`Execute the aspect ${identifier}.__after()`);
-                await ctl.__after().catch((e: any) => logger.error(e));
+                logger.Info(`Execute the aspect ${identifier}.__after()`);
+                await ctl.__after().catch((e: any) => logger.Error(e));
             }
         }
     }

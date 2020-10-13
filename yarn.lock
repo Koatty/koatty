@@ -1371,10 +1371,10 @@ think_lib@^2.x.x:
     moment "^2.25.3"
     murmurhash "^1.0.0"
 
-think_logger@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/think_logger/-/think_logger-2.3.0.tgz#7c849952c1fa3148d51bfc5a0f01df2095c29282"
-  integrity sha512-UJRNlRG2hK1K6N+4a9FNVCI95tLVBWsPJn95OEMAF6LIpooDxzB4Z0UkbLTiH6vJx/hltqZhLYyD72rZ3c19Pg==
+think_logger@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/think_logger/-/think_logger-2.4.0.tgz#8688cf3eb6b65c443d01435dc5e293b590f2d0fd"
+  integrity sha512-uMovzNP+4apxbPJWcmjBZunV0lsETghSvBVVcr7RktyxleWkboNg3uHEAgmbozf/FAfCLGQ42AI3id7pBvMCDg==
   dependencies:
     think_lib "^2.x.x"
 

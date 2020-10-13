@@ -61,7 +61,7 @@
         "koatty_validtion": "^1.8.2",
         "reflect-metadata": "^0.1.13",
         "think_lib": "^2.6.3",
-        "think_logger": "^2.3.0",
+        "think_logger": "^2.4.0",
         "think_payload": "^3.1.0",
         "think_trace": "^3.2.0",
         "tslib": "^2.0.3"
