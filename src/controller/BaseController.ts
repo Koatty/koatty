@@ -14,7 +14,7 @@ import { IController } from '../core/Component';
  *
  * @export
  * @class BaseController
- * @implements {BaseControllerInterface}
+ * @implements {IController}
  */
 export class BaseController implements IController {
     public app: Koatty;

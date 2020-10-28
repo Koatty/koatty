@@ -6,7 +6,7 @@
  */
 
 export const COMPONENT_SCAN = 'COMPONENT_SCAN';
-export const CONFIGUATION_SCAN = 'CONFIGUATION_SCAN';
+export const CONFIGURATION_SCAN = 'CONFIGURATION_SCAN';
 export const PRIORITY_KEY = 'PRIORITY_KEY';
 
 export const PARAM_KEY = 'PARAM_KEY';

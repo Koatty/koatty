@@ -12,11 +12,11 @@ import { recursiveGetMetadata } from "../util/Lib";
 import { Container, IOCContainer, TAGGED_ARGS } from "koatty_container";
 
 /**
- * Indicates that an decorated configuations as a property.
+ * Indicates that an decorated configuration as a property.
  *
  * @export
- * @param {string} identifier configuations key
- * @param {string} [type] configuations type
+ * @param {string} identifier configuration key
+ * @param {string} [type] configuration type
  * @returns {PropertyDecorator}
  */
 export function Value(key: string, type?: string): PropertyDecorator {
@@ -35,11 +35,11 @@ export function Value(key: string, type?: string): PropertyDecorator {
     };
 }
 /**
- * Indicates that an decorated configuations as a property.
+ * Indicates that an decorated configuration as a property.
  *
  * @export
- * @param {string} identifier configuations key
- * @param {string} [type] configuations type
+ * @param {string} identifier configuration key
+ * @param {string} [type] configuration type
  * @returns {PropertyDecorator}
  */
 export const Config = Value;

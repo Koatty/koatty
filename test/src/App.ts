@@ -4,7 +4,7 @@
  * @ license: MIT
  * @ version: 2020-07-06 11:15:36
  */
-import { Bootstrap, ComponentScan, Autowired, Koatty, ConfiguationScan, Logger, Helper } from '../../src/index';
+import { Bootstrap, ComponentScan, Autowired, Koatty, ConfigurationScan, Logger, Helper } from '../../src/index';
 import * as path from "path";
 
 @Bootstrap((app: any) => {
@@ -16,7 +16,7 @@ import * as path from "path";
     console.log("bootFunc");
 })
 // @ComponentScan('./test')
-// @ConfiguationScan('./test/config')
+// @ConfigurationScan('./test/config')
 export class App extends Koatty {
     rootPath: string;
     mm1: any;

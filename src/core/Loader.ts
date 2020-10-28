@@ -55,7 +55,7 @@ export class Loader {
     public static LoadConfigs(app: Koatty, loadPath?: string | string[]) {
         const config: any = {};
         // tslint:disable-next-line: no-unused-expression
-        process.env.APP_DEBUG && logger.Custom("think", "", `Load configuation path: ${app.thinkPath}/config`);
+        process.env.APP_DEBUG && logger.Custom("think", "", `Load configuration path: ${app.thinkPath}/config`);
         Loader.LoadDirectory("./config", app.thinkPath, function (name: string, exp: any) {
             config[name] = exp;
         });
@@ -65,7 +65,7 @@ export class Loader {
         }
         const tempConfig: any = {};
         // tslint:disable-next-line: no-unused-expression
-        process.env.APP_DEBUG && logger.Custom("think", "", `Load configuation path: ${app.appPath}${loadPath || "/config"}`);
+        process.env.APP_DEBUG && logger.Custom("think", "", `Load configuration path: ${app.appPath}${loadPath || "/config"}`);
 
         Loader.LoadDirectory(loadPath || "./config", app.appPath, function (name: string, exp: any) {
             // tslint:disable-next-line: one-variable-per-declaration
@@ -82,7 +82,7 @@ export class Loader {
                 appConfig[name] = exp;
             }
         });
-        // load env configuation
+        // load env configuration
         // tslint:disable-next-line: forin
         for (const n in tempConfig) {
             const na = n.split("^")[0];
@@ -148,7 +148,7 @@ export class Loader {
         appMeddlewares.map((item: ComponentItem) => {
             item.id = (item.id || "").replace("MIDDLEWARE:", "");
             if (item.id && helper.isClass(item.target)) {
-                // inject configuation
+                // inject configuration
                 injectValue(item.target, item.target.prototype, container);
                 container.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
                 // middlewares[item.id] = item.target;
@@ -223,7 +223,7 @@ export class Loader {
             if (item.id && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
                 process.env.APP_DEBUG && logger.Custom("think", "", `Load controller: ${item.id}`);
-                // inject configuation
+                // inject configuration
                 injectValue(item.target, item.target.prototype, container);
                 // registering to IOC
                 container.reg(item.id, item.target, { scope: "Prototype", type: "CONTROLLER", args: [] });
@@ -254,7 +254,7 @@ export class Loader {
             if (item.id && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
                 process.env.APP_DEBUG && logger.Custom("think", "", `Load service: ${item.id}`);
-                // inject configuation
+                // inject configuration
                 injectValue(item.target, item.target.prototype, container);
                 // inject schedule
                 injectSchedule(item.target, item.target.prototype, container);
@@ -284,7 +284,7 @@ export class Loader {
             if (item.id && !(item.id).endsWith("Plugin") && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
                 process.env.APP_DEBUG && logger.Custom("think", "", `Load component: ${item.id}`);
-                // inject configuation
+                // inject configuration
                 injectValue(item.target, item.target.prototype, container);
                 // inject schedule
                 injectSchedule(item.target, item.target.prototype, container);
@@ -316,7 +316,7 @@ export class Loader {
             if (item.id && (item.id).endsWith("Plugin") && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
                 process.env.APP_DEBUG && logger.Custom("think", "", `Load plugin: ${item.id}`);
-                // inject configuation
+                // inject configuration
                 injectValue(item.target, item.target.prototype, container);
                 // inject schedule
                 injectSchedule(item.target, item.target.prototype, container);

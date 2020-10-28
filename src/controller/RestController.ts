@@ -37,17 +37,17 @@ export class RestController extends BaseController {
      * @returns
      * @memberof RestController
      */
-    @GetMapping("/:resource/:id")
-    async getResource(@PathVariable("id") id: number | string, @PathVariable("resource") resource: string) {
+    @GetMapping('/:resource/:id')
+    async getResource(@PathVariable('id') id: number | string, @PathVariable('resource') resource: string) {
         if (helper.isEmpty(id)) {
-            return this.fail("id is empty");
+            return this.fail('id is empty');
         }
         if (helper.isEmpty(resource)) {
-            return this.fail("resource is empty");
+            return this.fail('resource is empty');
         }
         if (!this.model) {
             const resourceName = helper.camelCase(resource, true);
-            this.model = IOCContainer.get(`${resourceName}Model`, "COMPONENT");
+            this.model = IOCContainer.get(`${resourceName}Model`, 'COMPONENT');
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
             }
@@ -57,13 +57,12 @@ export class RestController extends BaseController {
             if (id) {
                 const pk = await this.model.getPk();
                 const data = await this.model.where({ [pk]: id }).find();
-                return this.ok("success", data);
-            } else {
-                const data = await this.model.limit(10000).select();
-                return this.ok("success", data);
+                return this.ok('success', data);
             }
+            const data = await this.model.limit(10000).select();
+            return this.ok('success', data);
         } catch (err) {
-            return this.fail(err.message || "get resource error");
+            return this.fail(err.message || 'get resource error');
         }
     }
 
@@ -76,20 +75,20 @@ export class RestController extends BaseController {
      * @returns
      * @memberof RestController
      */
-    @PostMapping("/:resource/:id")
-    async postResource(@PathVariable("id") id: number | string, @PathVariable("resource") resource: string, @RequestBody() data: any) {
+    @PostMapping('/:resource/:id')
+    async postResource(@PathVariable('id') id: number | string, @PathVariable('resource') resource: string, @RequestBody() data: any) {
         if (helper.isEmpty(id)) {
-            return this.fail("id is empty");
+            return this.fail('id is empty');
         }
         if (helper.isEmpty(resource)) {
-            return this.fail("resource is empty");
+            return this.fail('resource is empty');
         }
         if (helper.isEmpty(data) || helper.isEmpty(data.post)) {
-            return this.fail("body is empty");
+            return this.fail('body is empty');
         }
         if (!this.model) {
             const resourceName = helper.camelCase(resource, true);
-            this.model = IOCContainer.get(`${resourceName}Model`, "COMPONENT");
+            this.model = IOCContainer.get(`${resourceName}Model`, 'COMPONENT');
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
             }
@@ -97,9 +96,9 @@ export class RestController extends BaseController {
 
         try {
             const res = await this.model.add(data.post);
-            return this.ok("success", res);
+            return this.ok('success', res);
         } catch (err) {
-            return this.fail(err.message || "post resource error");
+            return this.fail(err.message || 'post resource error');
         }
     }
 
@@ -111,17 +110,17 @@ export class RestController extends BaseController {
      * @returns
      * @memberof RestController
      */
-    @DeleteMapping("/:resource/:id")
-    async deleteResource(@PathVariable("id") id: number | string, @PathVariable("resource") resource: string) {
+    @DeleteMapping('/:resource/:id')
+    async deleteResource(@PathVariable('id') id: number | string, @PathVariable('resource') resource: string) {
         if (helper.isEmpty(id)) {
-            return this.fail("id is empty");
+            return this.fail('id is empty');
         }
         if (helper.isEmpty(resource)) {
-            return this.fail("resource is empty");
+            return this.fail('resource is empty');
         }
         if (!this.model) {
             const resourceName = helper.camelCase(resource, true);
-            this.model = IOCContainer.get(`${resourceName}Model`, "COMPONENT");
+            this.model = IOCContainer.get(`${resourceName}Model`, 'COMPONENT');
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
             }
@@ -130,9 +129,9 @@ export class RestController extends BaseController {
         try {
             const pk = await this.model.getPk();
             const rows = await this.model.where({ [pk]: id }).delete();
-            return this.ok("success", rows);
+            return this.ok('success', rows);
         } catch (err) {
-            return this.fail(err.message || "delete resource error");
+            return this.fail(err.message || 'delete resource error');
         }
     }
 
@@ -145,20 +144,20 @@ export class RestController extends BaseController {
      * @returns
      * @memberof RestController
      */
-    @PutMapping("/:resource/:id")
-    async putResource(@PathVariable("id") id: number | string, @PathVariable("resource") resource: string, @RequestBody() data: any) {
+    @PutMapping('/:resource/:id')
+    async putResource(@PathVariable('id') id: number | string, @PathVariable('resource') resource: string, @RequestBody() data: any) {
         if (helper.isEmpty(id)) {
-            return this.fail("id is empty");
+            return this.fail('id is empty');
         }
         if (helper.isEmpty(resource)) {
-            return this.fail("resource is empty");
+            return this.fail('resource is empty');
         }
         if (helper.isEmpty(data) || helper.isEmpty(data.post)) {
-            return this.fail("body is empty");
+            return this.fail('body is empty');
         }
         if (!this.model) {
             const resourceName = helper.camelCase(resource, true);
-            this.model = IOCContainer.get(`${resourceName}Model`, "COMPONENT");
+            this.model = IOCContainer.get(`${resourceName}Model`, 'COMPONENT');
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
             }
@@ -167,10 +166,9 @@ export class RestController extends BaseController {
         try {
             const pk = await this.model.getPk();
             const rows = await this.model.where({ [pk]: id }).update(data.post);
-            return this.ok("success", rows);
+            return this.ok('success', rows);
         } catch (err) {
-            return this.fail(err.message || "put resource error");
+            return this.fail(err.message || 'put resource error');
         }
     }
-
 }

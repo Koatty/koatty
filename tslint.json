@@ -68,6 +68,7 @@
         "ordered-imports": false,
         "no-empty": false,
         "eofline": false,
+        "trailing-comma": true,
         "no-var-requires": false,
         "no-magic-numbers": false,
         "only-arrow-functions": false,

@@ -78,8 +78,8 @@ function injectParam(app: Koatty, target: any, instance?: any) {
     instance = instance || target.prototype;
     // const methods = getMethodNames(target);
     const metaDatas = recursiveGetMetadata(PARAM_KEY, target);
-    const vaildMetaDatas = recursiveGetMetadata(PARAM_RULE_KEY, target);
-    const vaildatedMetaDatas = recursiveGetMetadata(PARAM_CHECK_KEY, target);
+    const validMetaDatas = recursiveGetMetadata(PARAM_RULE_KEY, target);
+    const validatedMetaDatas = recursiveGetMetadata(PARAM_CHECK_KEY, target);
     const argsMetaObj: any = {};
     for (const meta in metaDatas) {
         if (instance[meta] && instance[meta].length <= metaDatas[meta].length) {
@@ -88,19 +88,19 @@ function injectParam(app: Koatty, target: any, instance?: any) {
 
             // cover to obj
             const data = (metaDatas[meta] || []).sort((a: any, b: any) => a.index - b.index);
-            const vaildData = vaildMetaDatas[meta] || [];
-            const vaildMetaObj: any = {};
+            const validData = validMetaDatas[meta] || [];
+            const validMetaObj: any = {};
             data.map((v: any) => {
-                vaildData.map((it: any) => {
+                validData.map((it: any) => {
                     if (v.index === it.index) {
-                        vaildMetaObj[v.index] = it;
+                        validMetaObj[v.index] = it;
                     }
                 });
             });
             argsMetaObj[meta] = {
-                valids: vaildMetaObj,
+                valids: validMetaObj,
                 data,
-                dtoCheck: (vaildatedMetaDatas[meta] && vaildatedMetaDatas[meta].dtoCheck) ? true : false
+                dtoCheck: (validatedMetaDatas[meta] && validatedMetaDatas[meta].dtoCheck) ? true : false
             };
         }
     }

@@ -1,7 +1,7 @@
 /*
  * @Author: richen
  * @Date: 2020-07-06 15:53:37
- * @LastEditTime: 2020-10-13 11:05:06
+ * @LastEditTime: 2020-10-28 17:45:58
  * @Description:
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
@@ -29,7 +29,7 @@ function listening(app: Koatty, options: ListeningOptions) {
     return function () {
         logger.Custom("think", "", `Nodejs Version: ${process.version}`);
         logger.Custom("think", "", `${pkg.name} Version: v${pkg.version}`);
-        logger.Custom("think", "", `App Enviroment: ${app.env}`);
+        logger.Custom("think", "", `App Environment: ${app.env}`);
         logger.Custom("think", "", `Server running at ${options.listenUrl}`);
         logger.Custom("think", "", "====================================");
         // tslint:disable-next-line: no-unused-expression

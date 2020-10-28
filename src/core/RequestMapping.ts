@@ -46,7 +46,7 @@ export enum RequestMethod {
  * Routes HTTP requests to the specified path.
  *
  * @param {string} [path="/"]
- * @param {RequestMethod} [reqmethod=RequestMethod.GET]
+ * @param {RequestMethod} [reqMethod=RequestMethod.GET]
  * @param {{
  *         routerName?: string;
  *     }} [routerOptions={}]
@@ -54,7 +54,7 @@ export enum RequestMethod {
  */
 export const RequestMapping = (
     path = "/",
-    reqmethod: RequestMethod = RequestMethod.GET,
+    reqMethod: RequestMethod = RequestMethod.GET,
     routerOptions: {
         routerName?: string;
     } = {}
@@ -68,7 +68,7 @@ export const RequestMapping = (
         // tslint:disable-next-line: no-object-literal-type-assertion
         IOCContainer.attachPropertyData(ROUTER_KEY, {
             path,
-            requestMethod: reqmethod,
+            requestMethod: reqMethod,
             routerName,
             method: key
         } as RouterOption, target, key);
@@ -216,18 +216,18 @@ const Inject = (fn: Function, name: string): ParameterDecorator => {
         // 获取成员类型
         // const type = Reflect.getMetadata("design:type", target, propertyKey);
         // 获取成员参数类型
-        const paramtypes = Reflect.getMetadata("design:paramtypes", target, propertyKey);
+        const paramTypes = Reflect.getMetadata("design:paramtypes", target, propertyKey);
         // 获取成员返回类型
-        // const returntype = Reflect.getMetadata("design:returntype", target, propertyKey);
+        // const returnType = Reflect.getMetadata("design:returntype", target, propertyKey);
         // 获取所有元数据 key (由 TypeScript 注入)
         // const keys = Reflect.getMetadataKeys(target, propertyKey);
-        let type = (paramtypes[descriptor] && paramtypes[descriptor].name) ? paramtypes[descriptor].name : "object";
+        let type = (paramTypes[descriptor] && paramTypes[descriptor].name) ? paramTypes[descriptor].name : "object";
         let isDto = false;
         //DTO class
         if (!(helper.toString(type) in paramterTypes)) {
-            type = IOCContainer.getIdentifier(paramtypes[descriptor]);
+            type = IOCContainer.getIdentifier(paramTypes[descriptor]);
             // reg to IOC container
-            // IOCContainer.reg(type, paramtypes[descriptor]);
+            // IOCContainer.reg(type, paramTypes[descriptor]);
             isDto = true;
         }
 
