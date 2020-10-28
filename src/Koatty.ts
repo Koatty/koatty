@@ -176,6 +176,9 @@ export class Koatty extends Koa {
         process.env.THINK_PATH = this.thinkPath;
 
         // Compatible with old version
+        helper.define(this, 'root_path', rootPath);
+        helper.define(this, 'app_path', appPath);
+        helper.define(this, 'think_path', thinkPath);
         Reflect.defineProperty(this, "_caches", {
             value: {},
             writable: true,

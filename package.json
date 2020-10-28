@@ -1,6 +1,6 @@
 {
     "name": "koatty",
-    "version": "2.5.8",
+    "version": "2.5.10",
     "description": "Koa2 + Typescript = koatty. Use Typescript's decorator implement auto injection.",
     "scripts": {
         "build": "del-cli --force dist && tsc",
@@ -63,7 +63,7 @@
         "think_lib": "^2.6.3",
         "think_logger": "^2.4.0",
         "think_payload": "^3.1.0",
-        "think_trace": "^3.2.0",
+        "think_trace": "^3.3.0",
         "tslib": "^2.0.3"
     }
 }
