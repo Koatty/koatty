@@ -4,9 +4,10 @@
  * @ license: MIT
  * @ version: 2020-07-06 11:15:36
  */
-import { Bootstrap, ComponentScan, Autowired, Koatty, ConfigurationScan, Logger, Helper } from '../../src/index';
+import { Bootstrap, ComponentScan, Autowired, Koatty, ConfigurationScan, Logger, Helper, EnableScheduleLock, EnableCacheStore } from '../../src/index';
 import * as path from "path";
-
+@EnableCacheStore()
+// @EnableScheduleLock()
 @Bootstrap((app: any) => {
     //调整libuv线程池大小
     // process.env.UV_THREADPOOL_SIZE = "128";

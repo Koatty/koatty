@@ -12,10 +12,14 @@ import { BaseService } from "../service/BaseService";
 import { requireDefault } from "../util/Lib";
 import { injectValue } from './Value';
 import { injectSchedule } from 'koatty_schedule';
-import { Container, IOCContainer } from "koatty_container";
+import { Container, IOCContainer, TAGGED_CLS } from "koatty_container";
 import { BaseController } from "../controller/BaseController";
 import { IMiddleware, IPlugin } from './Component';
 import { Koatty } from '../Koatty';
+import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
+
+// AppReadyHookFunc
+type AppReadyHookFunc = (app: Koatty) => Promise<any>;
 
 /**
  * 
@@ -44,6 +48,67 @@ interface ComponentItem {
  */
 export class Loader {
 
+    /**
+     * get component metadata
+     *
+     * @static
+     * @param {*} target
+     * @param {string} appPath
+     * @returns {*}  {any[]}
+     * @memberof Loader
+     */
+    public static GetComponentMetas(target: any, appPath: string): any[] {
+        let componentMetas = [];
+        const componentMeta = IOCContainer.getClassMetadata(TAGGED_CLS, COMPONENT_SCAN, target);
+        if (componentMeta) {
+            if (helper.isArray(componentMeta)) {
+                componentMetas = componentMeta;
+            } else {
+                componentMetas.push(componentMeta);
+            }
+        }
+        if (componentMetas.length < 1) {
+            componentMetas = [appPath];
+        }
+        return componentMetas;
+    }
+
+    /**
+     * get configuration metadata
+     *
+     * @static
+     * @param {*} target
+     * @returns {*}  {any[]}
+     * @memberof Loader
+     */
+    public static GetConfigurationMetas(target: any): any[] {
+        const confMeta = IOCContainer.getClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, target);
+        let configurationMetas = [];
+        if (confMeta) {
+            if (helper.isArray(confMeta)) {
+                configurationMetas = confMeta;
+            } else {
+                configurationMetas.push(confMeta);
+            }
+        }
+        return configurationMetas;
+    }
+
+    /**
+     * Load app ready hook funcs
+     *
+     * @static
+     * @param {*} target
+     * @param {Koatty} app
+     * @memberof Loader
+     */
+    public static LoadAppReadyHooks(target: any, app: Koatty) {
+        const funcs = IOCContainer.getClassMetadata(TAGGED_CLS, APP_READY_HOOK, target);
+        funcs.map((element: AppReadyHookFunc): any => {
+            app.once('appReady', () => element(app));
+            return null;
+        });
+    }
 
     /**
      * Load configuration

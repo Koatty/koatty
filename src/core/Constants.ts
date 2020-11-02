@@ -15,3 +15,4 @@ export const ROUTER_KEY = 'ROUTER_KEY';
 export const SCHEDULE_KEY = 'SCHEDULE_KEY';
 
 export const PREVENT_NEXT_PROCESS = 'PREVENT_NEXT_PROCESS';
+export const APP_READY_HOOK = "APP_READY_HOOK";

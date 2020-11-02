@@ -40,7 +40,7 @@ export class IndexController extends AdminController {
         // return this.body(info);
         this.type("text/plain");
         // this.type("text/html");
-        return "haha";
+        return this.app.mm2;
     }
 
     @PostMapping("/test")

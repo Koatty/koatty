@@ -1,7 +1,7 @@
 /*
  * @Author: richen
  * @Date: 2020-07-06 15:53:37
- * @LastEditTime: 2020-10-28 17:45:58
+ * @LastEditTime: 2020-11-02 21:07:01
  * @Description:
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
@@ -43,8 +43,8 @@ function listening(app: Koatty, options: ListeningOptions) {
  * @param {Koatty} app
  */
 export function startHTTP(app: Koatty) {
-    const port = app.config("app_port") || 3000;
-    const hostname = app.config("app_hostname") || "localhost";
+    const port = process.env.PORT || process.env.main_port || app.config('app_port') || 3000;
+    const hostname = process.env.IP || process.env.HOSTNAME?.replace(/-/g, '.') || app.config('app_hostname') || 'localhost';
 
     logger.Custom("think", "", `Protocol: HTTP/1.1`);
     app.listen({ port, hostname }, listening(app, { hostname, port, listenUrl: `http://${hostname}:${port}/` }));
@@ -56,8 +56,8 @@ export function startHTTP(app: Koatty) {
  * @param {Koatty} app
  */
 export function startHTTP2(app: Koatty) {
-    const port = app.config("app_port") || 443;
-    const hostname = app.config("app_hostname") || "localhost";
+    const port = process.env.PORT || process.env.main_port || app.config('app_port') || 443;
+    const hostname = process.env.IP || process.env.HOSTNAME?.replace(/-/g, '.') || app.config('app_hostname') || 'localhost';
     const keyFile = app.config("key_file") || "";
     const crtFile = app.config("crt_file") || "";
     if (!helper.isFile(keyFile) || !helper.isFile(crtFile)) {

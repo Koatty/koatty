@@ -17,8 +17,8 @@ export * from "./core/RequestMapping";
 export { Value, Config } from "./core/Value";
 export * from "./service/BaseService";
 export * from "koatty_container";
-export { CacheAble, Cacheable, CacheEvict } from "koatty_cacheable";
-export { Scheduled, SchedulerLock, Lock } from "koatty_schedule";
+export { CacheAble, CacheEvict, EnableCacheStore } from "koatty_cacheable";
+export { Scheduled, SchedulerLock, Lock, EnableScheduleLock } from "koatty_schedule";
 export {
     Valid, Validated, ClassValidator, FunctionValidator, IsDefined,
     IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsEmail,

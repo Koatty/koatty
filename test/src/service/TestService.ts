@@ -4,7 +4,7 @@
  * @ license: Apache License 2.0
  * @ version: 2020-05-19 14:28:30
  */
-import { Service, BaseService, Autowired, Scheduled, Cacheable, SchedulerLock } from "../../../src/index";
+import { Service, BaseService, Autowired, Scheduled, CacheAble, SchedulerLock } from "../../../src/index";
 import { App } from '../App';
 import { CommonService, MoInterface } from './CommonService';
 import { TestDto } from '../model/TestDto';
@@ -17,7 +17,7 @@ export class TestService extends CommonService {
         //property
     }
 
-    // @Cacheable("test")
+    @CacheAble("test")
     async test(aa: TestDto) {
         // return Promise.reject("aa");
         console.log('TestService.test');

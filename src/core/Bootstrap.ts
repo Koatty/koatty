@@ -23,6 +23,8 @@ import { COMPONENT_SCAN, CONFIGURATION_SCAN } from "./Constants";
  */
 const asyncEvent = async function (app: Koatty, eventName: string) {
     const ls: any[] = app.listeners(eventName);
+    console.log(ls);
+
     // eslint-disable-next-line no-restricted-syntax
     for await (const func of ls) {
         if (helper.isFunction(func)) {
@@ -40,13 +42,13 @@ const asyncEvent = async function (app: Koatty, eventName: string) {
  * @returns {Promise<void>}
  */
 const executeBootstrap = async function (target: any, bootFunc: Function): Promise<void> {
+    const app = Reflect.construct(target, []);
     try {
         console.log('  ________    _       __   __ \n /_  __/ /_  (_)___  / /__/ /______  ____ _\n  / / / __ \\/ / __ \\/ //_/ //_/ __ \\/ __ `/\n / / / / / / / / / / ,< / /,</ /_/ / /_/ /\n/_/ /_/ /_/_/_/ /_/_/|_/_/ |_\\____/\\__,_/');
         console.log('                     https://ThinkKoa.org/');
         logger.Custom('think', '', '====================================');
         logger.Custom('think', '', 'Bootstrap');
 
-        const app = Reflect.construct(target, []);
         if (!(app instanceof Koatty)) {
             throw new Error(`class ${target.name} does not inherit from Koatty`);
         }
@@ -56,31 +58,15 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
             logger.Custom('think', '', 'Execute bootFunc ...');
             await bootFunc(app);
         }
+        // Set IOC.app
+        IOCContainer.setApp(app);
 
         logger.Custom('think', '', 'ComponentScan ...');
-        let componentMetas = [];
-        const componentMeta = IOCContainer.getClassMetadata(TAGGED_CLS, COMPONENT_SCAN, target);
-        if (componentMeta) {
-            if (helper.isArray(componentMeta)) {
-                componentMetas = componentMeta;
-            } else {
-                componentMetas.push(componentMeta);
-            }
-        }
-        if (componentMetas.length < 1) {
-            componentMetas = [app.appPath];
-        }
-        // configurationMetas
-        const configurationMeta = IOCContainer.getClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, target);
-        let configurationMetas = [];
-        if (configurationMeta) {
-            if (helper.isArray(configurationMeta)) {
-                configurationMetas = configurationMeta;
-            } else {
-                configurationMetas.push(configurationMeta);
-            }
-        }
-        // ComponentScan
+        // component metadata
+        const componentMetas = Loader.GetComponentMetas(target, app.appPath);
+        // configuration metadata
+        const configurationMetas = Loader.GetConfigurationMetas(target);
+        // load all bean
         const exSet = new Set();
         Loader.LoadDirectory(componentMetas, '', (fileName: string, target: any, fpath: string) => {
             if (target[fileName] && helper.isClass(target[fileName])) {
@@ -91,59 +77,61 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
             }
         }, [...configurationMetas, `!${target.name || '.no'}.ts`]);
         exSet.clear();
-        // Load configuration items
+
+        // Load configuration
         logger.Custom('think', '', 'Load Configurations ...');
         Loader.LoadConfigs(app, configurationMetas);
 
-        // execute Plugin
+        // Load Plugin
         logger.Custom('think', '', 'Load Plugins ...');
         await Loader.LoadPlugins(app, IOCContainer);
 
         // Set logger level
         Loader.SetLogger(app);
-        // Set IOC.app
-        IOCContainer.setApp(app);
 
+        // Load App ready hooks
+        Loader.LoadAppReadyHooks(target, app);
+
+        // Load Middleware
         logger.Custom('think', '', 'Load Middlewares ...');
         await Loader.LoadMiddlewares(app, IOCContainer);
 
-        // Emit app ready
+        // Emit app ready event
         logger.Custom('think', '', 'Emit App Ready ...');
         // app.emit("appReady");
         await asyncEvent(app, 'appReady');
-
+        // Load Components
         logger.Custom('think', '', 'Load Components ...');
         Loader.LoadComponents(app, IOCContainer);
-
+        // Load Services
         logger.Custom('think', '', 'Load Services ...');
         Loader.LoadServices(app, IOCContainer);
-
+        // Load Controllers
         logger.Custom('think', '', 'Load Controllers ...');
         Loader.LoadControllers(app, IOCContainer);
-
-        // Emit app lazy loading
-        logger.Custom('think', '', 'Emit App Started ...');
-        // app.emit("appStart");
-        await asyncEvent(app, 'appStart');
-
+        // Load Routers
         logger.Custom('think', '', 'Load Routers ...');
         const routerConf = app.config(undefined, 'router') || {};
         const router = new Router(app, routerConf);
         router.LoadRouter();
 
-
-        logger.Custom('think', '', '====================================');
-        // Start HTTP server
-        const enableHttp2 = app.config('enable_http2') || false;
-        if (enableHttp2) {
-            startHTTP2(app);
-        } else {
-            startHTTP(app);
-        }
+        // Emit app started event
+        logger.Custom('think', '', 'Emit App Start ...');
+        // app.emit("appStart");
+        await asyncEvent(app, 'appStart');
 
     } catch (err) {
         logger.Error(err);
-        // process.exit();
+        process.exit();
+    }
+
+    logger.Custom('think', '', '====================================');
+    // Start HTTP server
+    const enableHttp2 = app.config('enable_http2') || false;
+    if (enableHttp2) {
+        startHTTP2(app);
+    } else {
+        startHTTP(app);
     }
 };
 
@@ -157,10 +145,12 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
  */
 export function Bootstrap(bootFunc?: Function): ClassDecorator {
     return function (target: any) {
+        if (!(target.prototype instanceof Koatty)) {
+            throw new Error(`class does not inherit from Koatty`);
+        }
         executeBootstrap(target, bootFunc);
     };
 }
-
 
 /**
  * Define project scan path
@@ -173,6 +163,9 @@ export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
     logger.Custom('think', '', 'ComponentScan');
 
     return (target: any) => {
+        if (!(target.prototype instanceof Koatty)) {
+            throw new Error(`class does not inherit from Koatty`);
+        }
         scanPath = scanPath || '';
         IOCContainer.saveClassMetadata(TAGGED_CLS, COMPONENT_SCAN, scanPath, target);
     };
@@ -189,6 +182,9 @@ export function ConfigurationScan(scanPath?: string | string[]): ClassDecorator 
     logger.Custom('think', '', 'ConfigurationScan');
 
     return (target: any) => {
+        if (!(target.prototype instanceof Koatty)) {
+            throw new Error(`class does not inherit from Koatty`);
+        }
         scanPath = scanPath || '';
         IOCContainer.saveClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, scanPath, target);
     };

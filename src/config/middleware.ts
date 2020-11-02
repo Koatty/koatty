@@ -9,7 +9,7 @@ export default {
     list: [], //加载的中间件列表,执行顺序按照数组元素顺序
     config: { //中间件配置
 
-        "Trace": {
+        "TraceMiddleware": {
             "timeout": 30, //HTTP request timeout time(seconds)
             "error_code": 500, //default error code
             "error_no_key": "code", //key for custom error code
@@ -17,7 +17,7 @@ export default {
             "error_path": "" //template directory configuration. Place 404.html, 502.html, etc. in this directory, the framework will automatically render according to status (support template variables, rely on think_view middleware; if think_view middleware is not loaded, only output template content)
         },
 
-        "Payload": {
+        "PayloadMiddleware": {
             "extTypes": {
                 "json": ['application/json'],
                 "form": ['application/x-www-form-urlencoded'],
