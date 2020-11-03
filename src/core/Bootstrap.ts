@@ -23,8 +23,6 @@ import { COMPONENT_SCAN, CONFIGURATION_SCAN } from "./Constants";
  */
 const asyncEvent = async function (app: Koatty, eventName: string) {
     const ls: any[] = app.listeners(eventName);
-    console.log(ls);
-
     // eslint-disable-next-line no-restricted-syntax
     for await (const func of ls) {
         if (helper.isFunction(func)) {
