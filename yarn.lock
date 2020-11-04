@@ -840,35 +840,16 @@ koa@^2.13.0:
     type-is "^1.6.16"
     vary "^1.1.2"
 
-koatty@^2.5.12:
-  version "2.5.12"
-  resolved "https://registry.yarnpkg.com/koatty/-/koatty-2.5.12.tgz#5c14112c002aaaaef7aacd61b038513cb9c7892a"
-  integrity sha512-t1T4R+0Qfjap7DuL02qteDhZVZRYx6tNAUDf8AwYO62FXPCkKmqWwMtH/JVBfZ+eAVVYUhx9xMp7k5oUUi4QIw==
+koatty_cacheable@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/koatty_cacheable/-/koatty_cacheable-1.1.1.tgz#aa266a4abcfd7d8cfafecb1d5f63a0887ca9cc73"
+  integrity sha512-Y2w834SJatJ+GjdwQN3Yx0jsBJFQfTTQHsliauKfdtFcB/bZijbXhA9XtECR8W74qTvwuBizEsCJlmwdkulbpg==
   dependencies:
-    "@koa/router" "^9.4.0"
-    globby "^11.0.1"
-    koa "^2.13.0"
-    koatty_cacheable "^1.0.0"
-    koatty_container "^1.1.2"
-    koatty_schedule "^1.0.0"
-    koatty_validtion "^1.8.2"
-    reflect-metadata "^0.1.13"
-    think_lib "^2.6.3"
-    think_logger "^2.4.0"
-    think_payload "^3.1.0"
-    think_trace "^3.3.1"
-    tslib "^2.0.3"
-
-koatty_cacheable@^1.0.0, koatty_cacheable@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/koatty_cacheable/-/koatty_cacheable-1.1.0.tgz#5aab6448924551d898850a383e37ebfb3f6e6259"
-  integrity sha512-Yn1v4aJ3wwHpWbE4dN195tqy26mfAl3Yc35+djeWwD+T/E270GqpC0DndWfYudnCsADwthP/xSQ3ALgdTLGQkg==
-  dependencies:
-    koatty_container "^1.1.2"
+    koatty_container "^1.1.3"
     think_lib "^2.x.x"
     think_logger "^2.x.x"
     think_store "^3.4.0"
-    tslib "^2.0.0"
+    tslib "^2.0.3"
 
 koatty_container@^1.1.2, koatty_container@^1.1.3:
   version "1.1.3"
@@ -880,19 +861,18 @@ koatty_container@^1.1.2, koatty_container@^1.1.3:
     think_logger "^2.x.x"
     tslib "^2.0.0"
 
-koatty_schedule@^1.0.0, koatty_schedule@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/koatty_schedule/-/koatty_schedule-1.1.0.tgz#2a4713fdb3df3df7a961bb75b634f23a9bbffecc"
-  integrity sha512-ETyfPjKr9B0DwNEcxLIWuEBK/pK7Og+qWtHFMddLc9Nc1GXoyyiWO5dzRaVkIO+z9KK41jZdjBF/NwFpXjifeQ==
+koatty_schedule@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/koatty_schedule/-/koatty_schedule-1.1.2.tgz#f3694c712ae0f1dd7586dc6503cb7fc65796927f"
+  integrity sha512-xkGKFjJs7IIBepm/7z5tzTdZZ22ZaWbbv6tum23QecHXIH0qAKFB20k95108WIT9U0z1ezA5wP4AT0rWMG3Obg==
   dependencies:
     cron "^1.8.2"
-    koatty "^2.5.12"
     koatty_container "^1.1.2"
     reflect-metadata "^0.1.13"
     think_lib "^2.x.x"
     think_logger "^2.x.x"
     think_store "^3.4.0"
-    tslib "^2.0.0"
+    tslib "^2.0.3"
 
 koatty_validtion@^1.8.2:
   version "1.8.2"
@@ -1391,10 +1371,10 @@ think_lib@^2.x.x:
     moment "^2.25.3"
     murmurhash "^1.0.0"
 
-think_logger@^2.2.0, think_logger@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/think_logger/-/think_logger-2.4.0.tgz#8688cf3eb6b65c443d01435dc5e293b590f2d0fd"
-  integrity sha512-uMovzNP+4apxbPJWcmjBZunV0lsETghSvBVVcr7RktyxleWkboNg3uHEAgmbozf/FAfCLGQ42AI3id7pBvMCDg==
+think_logger@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/think_logger/-/think_logger-2.6.0.tgz#f618546733000274df69b479e15d1ac56b2f6b37"
+  integrity sha512-e4HZTXk1GVYUQ39TuTIjg0rOq92ZETZiTpzXzlpTlNlDoS3pso+LXuze+R6smzW3WZPdIsmKtXwtB1fP7oLb6Q==
   dependencies:
     think_lib "^2.x.x"
 
@@ -1428,7 +1408,7 @@ think_store@^3.4.0:
     think_lib "^2.x.x"
     think_logger "^2.x.x"
 
-think_trace@^3.3.1, think_trace@^3.3.3:
+think_trace@^3.3.3:
   version "3.3.3"
   resolved "https://registry.yarnpkg.com/think_trace/-/think_trace-3.3.3.tgz#8f2e012b01ac0d321d55a504263f0109ff583523"
   integrity sha512-5AK/G6T4AnYxk2W2DY+UR+u9mUfH4U7O58rDD9dNC0jWkS0sAEo0HHnwQnGXIumTOyEfOBCrkG6mBqQl5QPtYA==

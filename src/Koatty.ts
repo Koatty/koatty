@@ -384,7 +384,7 @@ export class Koatty extends Koa {
   //         throw Error("Cannot delete getter-only property");
   //     },
   //     construct(target, args, newTarget) {
-  //         Reflect.ownKeys(target.prototype).map((n) => {
+  //         Reflect.ownKeys(target.prototype).forEach((n) => {
   //             if (newTarget.prototype.hasOwnProperty(n) && !propertys.includes(helper.toString(n))) {
   //                 throw Error(`Cannot override the final method '${helper.toString(n)}'`);
   //             }

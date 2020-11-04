@@ -13,7 +13,7 @@ import { Router } from "./Router";
 import { Koatty } from '../Koatty';
 import { startHTTP, startHTTP2 } from './Server';
 import { Loader } from "./Loader";
-import { COMPONENT_SCAN, CONFIGURATION_SCAN } from "./Constants";
+import { COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
 
 /**
  * execute event as async
@@ -42,7 +42,7 @@ const asyncEvent = async function (app: Koatty, eventName: string) {
 const executeBootstrap = async function (target: any, bootFunc: Function): Promise<void> {
     const app = Reflect.construct(target, []);
     try {
-        console.log('  ________    _       __   __ \n /_  __/ /_  (_)___  / /__/ /______  ____ _\n  / / / __ \\/ / __ \\/ //_/ //_/ __ \\/ __ `/\n / / / / / / / / / / ,< / /,</ /_/ / /_/ /\n/_/ /_/ /_/_/_/ /_/_/|_/_/ |_\\____/\\__,_/');
+        console.log(LOGO);
         console.log('                     https://ThinkKoa.org/');
         logger.Custom('think', '', '====================================');
         logger.Custom('think', '', 'Bootstrap');
