@@ -121,18 +121,18 @@ async function getParamter(app: Koatty, ctx: KoattyContext, ctlParams: any = {})
     const params = ctlParams.data || [];
     const validRules = ctlParams.valids || {};
     const dtoCheck = ctlParams.dtoCheck || false;
-    const props: any[] = params.forEach(async function (v: any, k: number) {
+    const props: any[] = params.map(async (v: any, k: number) => {
         let value: any = null;
         if (v.fn && helper.isFunction(v.fn)) {
             value = await v.fn(ctx);
         }
-        //check params
+        // check params
         return checkParams(value, {
             index: k,
             isDto: v.isDto,
             type: v.type,
             validRules,
-            dtoCheck
+            dtoCheck,
         });
     });
     return Promise.all(props);

@@ -142,7 +142,7 @@ export class Koatty extends Koa {
         // development env is default
         this.appDebug = !!(this.options.appDebug || this.appDebug);
 
-        const env = JSON.stringify(process.execArgv);
+        const env = (process.execArgv || []).join(",");
         if ((env.indexOf('--production') > -1) || ((process.env.NODE_ENV || '').indexOf('pro') > -1)) {
             this.appDebug = false;
         }
@@ -384,7 +384,7 @@ export class Koatty extends Koa {
   //         throw Error("Cannot delete getter-only property");
   //     },
   //     construct(target, args, newTarget) {
-  //         Reflect.ownKeys(target.prototype).forEach((n) => {
+  //         Reflect.ownKeys(target.prototype).map((n) => {
   //             if (newTarget.prototype.hasOwnProperty(n) && !propertys.includes(helper.toString(n))) {
   //                 throw Error(`Cannot override the final method '${helper.toString(n)}'`);
   //             }

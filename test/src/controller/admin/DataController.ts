@@ -5,7 +5,6 @@
  * @ version: 2020-03-18 15:44:40
  */
 // tslint:disable-next-line: no-implicit-dependencies
-import * as globby from 'globby';
 import { Controller, GetMapping, Get, Autowired, Post, PostMapping, BaseController } from "../../../../src/index";
 import { App } from '../../App';
 import { AdminController } from "../AdminController";
