@@ -229,16 +229,16 @@ export class BaseController implements IController {
     }
 
     /**
-   * 格式化api接口数据格式
-   *
-   * @private
-   * @param {*} msg   待处理的接口数据信息｜接口msg
-   * @param {*} data    待返回的数据
-   * @param {number} defaultCode   默认错误码
-   * @returns {ApiOutput}   格式化之后的接口数据
-   * @memberof BaseController
-   */
-    private formatApiData(msg: any, data: any, defaultCode: number): ApiOutput {
+     * 格式化api接口数据格式
+     *
+     * @private
+     * @param {*} msg   待处理的接口数据信息｜接口msg
+     * @param {*} data    待返回的数据
+     * @param {number} defaultCode   默认错误码
+     * @returns {ApiOutput}   格式化之后的接口数据
+     * @memberof BaseController
+     */
+    protected formatApiData(msg: any, data: any, defaultCode: number): ApiOutput {
         let obj: any = {
             code: defaultCode,
             message: msg || '',
