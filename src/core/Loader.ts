@@ -255,19 +255,15 @@ export class Loader {
                 continue;
             }
 
-            try {
-                // tslint:disable-next-line: no-unused-expression
-                process.env.APP_DEBUG && logger.Custom("think", "", `Load middleware: ${key}`);
-                const result = await handle.run(middlewareConf.config[key] || {}, app);
-                if (helper.isFunction(result)) {
-                    if (result.length < 3) {
-                        app.use(result);
-                    } else {
-                        app.useExp(result);
-                    }
+            // tslint:disable-next-line: no-unused-expression
+            process.env.APP_DEBUG && logger.Custom("think", "", `Load middleware: ${key}`);
+            const result = await handle.run(middlewareConf.config[key] || {}, app);
+            if (helper.isFunction(result)) {
+                if (result.length < 3) {
+                    app.use(result);
+                } else {
+                    app.useExp(result);
                 }
-            } catch (err) {
-                logger.Error(`The middleware ${key} executes the 'run' method error.`, err);
             }
         }
         // app.setMap("middlewares", middlewares);
@@ -407,15 +403,10 @@ export class Loader {
                 continue;
             }
 
-            try {
-                // tslint:disable-next-line: no-unused-expression
-                process.env.APP_DEBUG && logger.Custom("think", "", `Execute plugin: ${key}`);
-                // sync exec 
-                const result = await handle.run(pluginsConf.config[key] || {}, app);
-            } catch (err) {
-                logger.Error(`The plugin ${key} executes the 'run' method error.`, err);
-            }
-
+            // tslint:disable-next-line: no-unused-expression
+            process.env.APP_DEBUG && logger.Custom("think", "", `Execute plugin: ${key}`);
+            // sync exec 
+            await handle.run(pluginsConf.config[key] || {}, app);
         }
     }
 

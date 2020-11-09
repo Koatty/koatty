@@ -38,9 +38,9 @@ export class IndexController extends AdminController {
         const info = await this.testService.test1(name);
         // throw Error("default");
         // return this.body(info);
-        this.type("text/plain");
+        // this.type("text/plain");
         // this.type("text/html");
-        return this.app.mm2;
+        return this.ok("sss");
     }
 
     @PostMapping("/test")
