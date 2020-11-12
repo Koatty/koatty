@@ -112,16 +112,16 @@ export class IndexController extends BaseController {
         this.cache = {};
     }
 
-    @RequestMapping("/", RequestMethod.ALL)
-    async default(@PathVariable("test") @Valid("IsNotEmpty") test: string) {
-        const info = await this.testService.sayHello().catch((err: any) => this.fail(err.message));
+    @RequestMapping("/:name", RequestMethod.ALL)
+    async default(@PathVariable("name") @Valid("IsNotEmpty") name: string) {
+        const info = await this.testService.sayHello(name).catch((err: any) => this.fail(err.message));
         return info;
     }
 
     @PostMapping("/test")
     @Validated() //need DTOClass
-    test(@RequestBody() body: TestDTO) {
-        return this.ok("test", body);
+    test(@RequestParam() params: TestDTO) {
+        return this.ok("test", params);
     }
 }
 ```
