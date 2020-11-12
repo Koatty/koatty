@@ -18,8 +18,28 @@ import { IMiddleware, IPlugin } from './Component';
 import { Koatty } from '../Koatty';
 import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 
-// AppReadyHookFunc
-type AppReadyHookFunc = (app: Koatty) => Promise<any>;
+// type AppReadyHookFunc
+export type AppReadyHookFunc = (app: Koatty) => Promise<any>;
+
+/**
+ * bind AppReadyHookFunc
+ * example:
+ * export function TestDecorator() {
+ *  return (target: any) => {
+ *   BindAppReadyHook((app: Koatty) => {
+ *      // todo
+ *      return Promise.resolve();
+ *   }, target)   
+ *  }
+ * }
+ *
+ * @export
+ * @param {AppReadyHookFunc} func
+ * @param {*} target 
+ */
+export function BindAppReadyHook(func: AppReadyHookFunc, target: any) {
+    IOCContainer.attachClassMetadata(TAGGED_CLS, APP_READY_HOOK, func, target);
+}
 
 /**
  * 
@@ -104,10 +124,12 @@ export class Loader {
      */
     public static LoadAppReadyHooks(target: any, app: Koatty) {
         const funcs = IOCContainer.getClassMetadata(TAGGED_CLS, APP_READY_HOOK, target);
-        funcs.map((element: AppReadyHookFunc): any => {
-            app.once('appReady', () => element(app));
-            return null;
-        });
+        if (helper.isArray(funcs)) {
+            funcs.forEach((element: AppReadyHookFunc): any => {
+                app.once('appReady', () => element(app));
+                return null;
+            });
+        }
     }
 
     /**
@@ -210,7 +232,7 @@ export class Loader {
         // const middlewares: any = {};
         const appMeddlewares = IOCContainer.listClass("MIDDLEWARE") || [];
 
-        appMeddlewares.map((item: ComponentItem) => {
+        appMeddlewares.forEach((item: ComponentItem) => {
             item.id = (item.id || "").replace("MIDDLEWARE:", "");
             if (item.id && helper.isClass(item.target)) {
                 // inject configuration
@@ -223,7 +245,7 @@ export class Loader {
         const middlewareConfList = middlewareConf.list;
         const defaultList: any[] = [];
         const bandList = ["TraceMiddleware", "PayloadMiddleware"];
-        middlewareConfList.map((item: string) => {
+        middlewareConfList.forEach((item: string) => {
             if (!bandList.includes(item)) {
                 defaultList.push(item);
             }
@@ -253,19 +275,15 @@ export class Loader {
                 continue;
             }
 
-            try {
-                // tslint:disable-next-line: no-unused-expression
-                process.env.APP_DEBUG && logger.Custom("think", "", `Load middleware: ${key}`);
-                const result = await handle.run(middlewareConf.config[key] || {}, app);
-                if (helper.isFunction(result)) {
-                    if (result.length < 3) {
-                        app.use(result);
-                    } else {
-                        app.useExp(result);
-                    }
+            // tslint:disable-next-line: no-unused-expression
+            process.env.APP_DEBUG && logger.Custom("think", "", `Load middleware: ${key}`);
+            const result = await handle.run(middlewareConf.config[key] || {}, app);
+            if (helper.isFunction(result)) {
+                if (result.length < 3) {
+                    app.use(result);
+                } else {
+                    app.useExp(result);
                 }
-            } catch (err) {
-                logger.Error(`The middleware ${key} executes the 'run' method error.`, err);
             }
         }
         // app.setMap("middlewares", middlewares);
@@ -283,7 +301,7 @@ export class Loader {
         const controllerList = IOCContainer.listClass("CONTROLLER");
 
         const controllers: any = {};
-        controllerList.map((item: ComponentItem) => {
+        controllerList.forEach((item: ComponentItem) => {
             item.id = (item.id || "").replace("CONTROLLER:", "");
             if (item.id && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
@@ -314,7 +332,7 @@ export class Loader {
     public static LoadServices(app: Koatty, container: Container) {
         const serviceList = IOCContainer.listClass("SERVICE");
 
-        serviceList.map((item: ComponentItem) => {
+        serviceList.forEach((item: ComponentItem) => {
             item.id = (item.id || "").replace("SERVICE:", "");
             if (item.id && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
@@ -344,7 +362,7 @@ export class Loader {
     public static LoadComponents(app: Koatty, container: Container) {
         const componentList = IOCContainer.listClass("COMPONENT");
 
-        componentList.map((item: ComponentItem) => {
+        componentList.forEach((item: ComponentItem) => {
             item.id = (item.id || "").replace("COMPONENT:", "");
             if (item.id && !(item.id).endsWith("Plugin") && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
@@ -376,7 +394,7 @@ export class Loader {
         }
 
         const pluginList = [];
-        componentList.map(async (item: ComponentItem) => {
+        componentList.forEach(async (item: ComponentItem) => {
             item.id = (item.id || "").replace("COMPONENT:", "");
             if (item.id && (item.id).endsWith("Plugin") && helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
@@ -405,15 +423,10 @@ export class Loader {
                 continue;
             }
 
-            try {
-                // tslint:disable-next-line: no-unused-expression
-                process.env.APP_DEBUG && logger.Custom("think", "", `Execute plugin: ${key}`);
-                // sync exec 
-                const result = await handle.run(pluginsConf.config[key] || {}, app);
-            } catch (err) {
-                logger.Error(`The plugin ${key} executes the 'run' method error.`, err);
-            }
-
+            // tslint:disable-next-line: no-unused-expression
+            process.env.APP_DEBUG && logger.Custom("think", "", `Execute plugin: ${key}`);
+            // sync exec 
+            await handle.run(pluginsConf.config[key] || {}, app);
         }
     }
 

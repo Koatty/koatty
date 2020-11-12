@@ -142,7 +142,7 @@ export class Koatty extends Koa {
         // development env is default
         this.appDebug = !!(this.options.appDebug || this.appDebug);
 
-        const env = JSON.stringify(process.execArgv);
+        const env = (process.execArgv || []).join(",");
         if ((env.indexOf('--production') > -1) || ((process.env.NODE_ENV || '').indexOf('pro') > -1)) {
             this.appDebug = false;
         }

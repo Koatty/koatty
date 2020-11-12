@@ -4,7 +4,7 @@
  * @ license: Apache License 2.0
  * @ version: 2020-05-19 14:31:04
  */
-import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, After, RequestBody, Get, Validated, Valid, Helper, Post, RequestParam, IOCContainer } from "../../../src/index";
+import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, After, RequestBody, Get, Validated, Valid, Helper, Post, RequestParam, IOCContainer, PathVariable } from "../../../src/index";
 import { App } from '../App';
 import { AdminController } from "./AdminController";
 import { TestService } from "../service/TestService";
@@ -32,15 +32,20 @@ export class IndexController extends AdminController {
         return Promise.resolve();
     }
 
-    @GetMapping("/")
+    @GetMapping("/:name")
     @Before(TestAspect)
-    async default(@Get("name") name = '666') {
+    async default(@Get("test") test = '666', @PathVariable("name") name: string) {
         const info = await this.testService.test1(name);
         // throw Error("default");
-        // return this.body(info);
-        this.type("text/plain");
+        return this.body(info);
+        // this.type("text/plain");
         // this.type("text/html");
-        return this.app.mm2;
+        console.log('PathVariable', name)
+        console.log('Get', test)
+        return this.fail({
+            code: 200,
+            message: "dsfsfs"
+        });
     }
 
     @PostMapping("/test")

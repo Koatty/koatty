@@ -7,7 +7,7 @@
 import * as helper from "think_lib";
 import { Koatty, KoattyContext } from "../Koatty";
 import { ObjectDefinitionOptions } from "koatty_container";
-import { IController } from '../core/Component';
+import { ApiInput, ApiOutput, IController } from '../core/Component';
 
 /**
  * Base controller
@@ -118,7 +118,7 @@ export class BaseController implements IController {
     }
 
     /**
-     * Get post or get parameters, post priority
+     * Get POST/GET parameters, the POST value is priority.
      *
      * @param {string} [name]
      * @returns
@@ -199,12 +199,13 @@ export class BaseController implements IController {
      * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public body(data: any, contentType?: string, encoding?: string) {
+    public body(data: any, contentType?: string, encoding?: string): Promise<any> {
         contentType = contentType || "text/plain";
         encoding = encoding || this.app.config("encoding") || "utf-8";
         this.type(contentType, encoding);
         this.ctx.body = data;
-        return this.app.prevent();
+        // return this.app.prevent();
+        return null;
     }
 
     /**
@@ -219,42 +220,58 @@ export class BaseController implements IController {
     }
 
     /**
-     * Response to normalize json format content for success
+     * 格式化api接口数据格式
      *
-     * @param {string} [msg]
-     * @param {*} [data]
-     * @param {number} [code=200]
-     * @returns {Promise<any>}
+     * @private
+     * @param {Error | string | ApiInput} msg   待处理的接口数据信息｜接口msg
+     * @param {*} data    待返回的数据
+     * @param {number} defaultCode   默认错误码
+     * @returns {ApiOutput}   格式化之后的接口数据
      * @memberof BaseController
      */
-    public ok(msg?: string, data?: any, code = 200): Promise<any> {
-        const obj: any = {
-            "status": code,
-            "message": msg || ""
+    protected formatApiData(msg: any, data: any, defaultCode: number): ApiOutput {
+        let obj: ApiOutput = {
+            code: defaultCode,
+            message: '',
+            data: null,
         };
-        if (data !== undefined) {
+        if (helper.isError(msg)) {
+            obj.code = msg.code || defaultCode;
+            obj.message = msg.message;
+        } else if (helper.isObject(msg)) {
+            obj = { ...obj, ...msg };
+        } else {
+            obj.message = msg;
             obj.data = data;
         }
+        return obj;
+    }
+
+    /**
+     * Response to normalize json format content for success
+     *
+     * @param {(string | ApiInput)} msg   待处理的message消息
+     * @param {*} [data]    待处理的数据
+     * @param {number} [code=200]    错误码，默认0
+     * @returns {Promise<ApiOutput>}
+     * @memberof BaseController
+     */
+    public ok(msg: string | ApiInput, data?: any, code = 0): Promise<ApiOutput> {
+        const obj: ApiOutput = this.formatApiData(msg, data, code);
         return this.json(obj);
     }
 
     /**
      * Response to normalize json format content for fail
      *
-     * @param {string} [msg]
-     * @param {*} [data]
-     * @param {number} [code=500]
-     * @returns {Promise<any>}
+     * @param {(string | ApiInput)} msg   待处理的message消息
+     * @param {*} [data]    待处理的数据
+     * @param {number} [code=500]    错误码，默认1
+     * @returns {Promise<ApiOutput>}
      * @memberof BaseController
      */
-    public fail(msg?: any, data?: any, code = 500): Promise<any> {
-        const obj: any = {
-            "status": code,
-            "message": msg || ""
-        };
-        if (data !== undefined) {
-            obj.data = data;
-        }
+    public fail(msg: Error | string | ApiInput, data?: any, code = 1): Promise<ApiOutput> {
+        const obj: ApiOutput = this.formatApiData(msg, data, code);
         return this.json(obj);
     }
 

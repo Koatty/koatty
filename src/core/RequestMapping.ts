@@ -260,75 +260,7 @@ export function Header(name?: string): ParameterDecorator {
 }
 
 /**
- * Get parsed request body.
- *
- * @export
- * @returns
- */
-export function RequestBody(): ParameterDecorator {
-    return Inject((ctx: KoattyContext) => {
-        return ctx.bodyParser();
-    }, "RequestBody");
-}
-
-/**
- * Get parsed request body.
- *
- * @export
- * @returns
- */
-export function Body(): ParameterDecorator {
-    return Inject((ctx: KoattyContext) => {
-        return ctx.bodyParser();
-    }, "Body");
-}
-
-/**
- * Get post or get parameters, post priority
- *
- * @export
- * @param {string} [name]
- * @returns {ParameterDecorator}
- */
-export function RequestParam(name?: string): ParameterDecorator {
-    return Inject((ctx: KoattyContext) => {
-        return ctx.bodyParser().then((body: {
-            post: Object
-        }) => {
-            const getParams: any = ctx.queryParser() || {};
-            const postParams: any = (body.post ? body.post : body) || {};
-            if (name !== undefined) {
-                return postParams[name] === undefined ? getParams[name] : postParams[name];
-            }
-            return { ...getParams, ...postParams };
-        });
-    }, "RequestParam");
-}
-
-/**
- * Get post or get parameters, post priority
- *
- * @export
- * @param {string} [name]
- * @returns {ParameterDecorator}
- */
-export function Param(name?: string): ParameterDecorator {
-    return Inject((ctx: KoattyContext) => {
-        return ctx.bodyParser().then((body: {
-            post: Object
-        }) => {
-            const getParams: any = ctx.queryParser() || {};
-            const postParams: any = (body.post ? body.post : body) || {};
-            if (name !== undefined) {
-                return postParams[name] === undefined ? getParams[name] : postParams[name];
-            }
-            return { ...getParams, ...postParams };
-        });
-    }, "Param");
-}
-
-/**
- * Get parsed query-string.
+ * Get path variable (take value from ctx.params).
  *
  * @export
  * @param {string} [name] params name
@@ -336,7 +268,7 @@ export function Param(name?: string): ParameterDecorator {
  */
 export function PathVariable(name?: string): ParameterDecorator {
     return Inject((ctx: KoattyContext) => {
-        const getParams: any = ctx.queryParser() || {};
+        const getParams: any = ctx.params || {};
         if (name === undefined) {
             return getParams;
         }
@@ -345,7 +277,7 @@ export function PathVariable(name?: string): ParameterDecorator {
 }
 
 /**
- * Get parsed query-string.
+ * Get query-string parameters (take value from ctx.query).
  *
  * @export
  * @param {string} [name]
@@ -353,7 +285,7 @@ export function PathVariable(name?: string): ParameterDecorator {
  */
 export function Get(name?: string): ParameterDecorator {
     return Inject((ctx: KoattyContext) => {
-        const getParams: any = ctx.queryParser() || {};
+        const getParams: any = ctx.query || {};
         if (name === undefined) {
             return getParams;
         }
@@ -403,3 +335,37 @@ export function File(name?: string): ParameterDecorator {
     }, "File");
 }
 
+
+/**
+ * Get request body (contains the values of @Post and @File).
+ *
+ * @export
+ * @returns
+ */
+export function RequestBody(): ParameterDecorator {
+    return Inject((ctx: KoattyContext) => {
+        return ctx.bodyParser();
+    }, "RequestBody");
+}
+
+/**
+ * Get POST/GET parameters, POST priority
+ *
+ * @export
+ * @param {string} [name]
+ * @returns {ParameterDecorator}
+ */
+export function RequestParam(name?: string): ParameterDecorator {
+    return Inject((ctx: KoattyContext) => {
+        return ctx.bodyParser().then((body: {
+            post: Object
+        }) => {
+            const getParams: any = ctx.queryParser() || {};
+            const postParams: any = (body.post ? body.post : body) || {};
+            if (name !== undefined) {
+                return postParams[name] === undefined ? getParams[name] : postParams[name];
+            }
+            return { ...getParams, ...postParams };
+        });
+    }, "RequestParam");
+}

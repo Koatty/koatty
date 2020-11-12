@@ -16,10 +16,11 @@ export class ZadtestMiddleware implements IMiddleware {
             // app.test = 'wwwwwwwww';
             console.log('Zadtest Middleware');
         });
-        return function (ctx: KoattyContext, next: Function) {
-            console.log(222222);
+        return async function (ctx: KoattyContext, next: Function) {
+            console.log('before');
             console.log(app.test);
-            return next();
+            await next();
+            console.log('after');
         };
     }
 }

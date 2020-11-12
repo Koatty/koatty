@@ -39,6 +39,25 @@ export function Controller(path = ""): ClassDecorator {
         IOCContainer.savePropertyData(CONTROLLER_ROUTER, path, target, identifier);
     };
 }
+
+/**
+ * Interface for Api output
+ */
+export interface ApiOutput {
+    code: number; // 错误码
+    message: string; // 消息内容
+    data: any; // 数据
+}
+
+/**
+ * Interface for Api input
+ */
+export interface ApiInput {
+    code?: number; // 错误码
+    message?: string; // 消息内容
+    data?: any; // 数据
+}
+
 /**
  * Interface for Controller
  */
@@ -51,13 +70,13 @@ export interface IController {
     readonly body: (data: any, contentType?: string, encoding?: string) => Promise<any>;
     readonly deny: (code?: number) => void;
     readonly expires: (timeout: number) => void;
-    readonly fail: (msg?: Error | string, data?: any, code?: number) => Promise<any>;
+    readonly fail: (msg?: Error | string | ApiInput, data?: any, ret?: number) => Promise<ApiOutput>;
     readonly header: (name: string, value?: any) => any;
     readonly json: (data: any) => Promise<any>;
     readonly isGet: () => boolean;
     readonly isMethod: (method: string) => boolean;
     readonly isPost: () => boolean;
-    readonly ok: (msg?: string, data?: any, code?: number) => Promise<any>;
+    readonly ok: (msg?: string | ApiInput, data?: any, ret?: number) => Promise<ApiOutput>;
     readonly param: (name?: string) => any;
     readonly redirect: (urls: string, alt?: string) => void;
     readonly type: (contentType?: string, encoding?: string | boolean) => string;
@@ -76,6 +95,7 @@ export function Middleware(identifier?: string): ClassDecorator {
         IOCContainer.saveClass("MIDDLEWARE", target, identifier);
     };
 }
+
 /**
  * Interface for Middleware
  */
@@ -96,6 +116,7 @@ export function Service(identifier?: string): ClassDecorator {
         IOCContainer.saveClass("SERVICE", target, identifier);
     };
 }
+
 /**
  * Interface for Service
  */

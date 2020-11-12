@@ -90,8 +90,8 @@ function injectParam(app: Koatty, target: any, instance?: any) {
             const data = (metaDatas[meta] || []).sort((a: any, b: any) => a.index - b.index);
             const validData = validMetaDatas[meta] || [];
             const validMetaObj: any = {};
-            data.map((v: any) => {
-                validData.map((it: any) => {
+            data.forEach((v: any) => {
+                validData.forEach((it: any) => {
                     if (v.index === it.index) {
                         validMetaObj[v.index] = it;
                     }
@@ -121,18 +121,18 @@ async function getParamter(app: Koatty, ctx: KoattyContext, ctlParams: any = {})
     const params = ctlParams.data || [];
     const validRules = ctlParams.valids || {};
     const dtoCheck = ctlParams.dtoCheck || false;
-    const props: any[] = params.map(async function (v: any, k: number) {
+    const props: any[] = params.map(async (v: any, k: number) => {
         let value: any = null;
         if (v.fn && helper.isFunction(v.fn)) {
             value = await v.fn(ctx);
         }
-        //check params
+        // check params
         return checkParams(value, {
             index: k,
             isDto: v.isDto,
             type: v.type,
             validRules,
-            dtoCheck
+            dtoCheck,
         });
     });
     return Promise.all(props);

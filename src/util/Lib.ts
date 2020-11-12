@@ -148,7 +148,7 @@ export function getMethodNames(target: any): string[] {
     }
 
     // leave out those methods on Object's prototype
-    enumerableOwnKeys.map((k) => {
+    enumerableOwnKeys.forEach((k) => {
         if (!result.includes(k)) {
             result.push(k);
         }
@@ -180,7 +180,7 @@ export function getPropertyNames(target: any): string[] {
     }
 
     // leave out those methods on Object's prototype
-    enumerableOwnKeys.map((k) => {
+    enumerableOwnKeys.forEach((k) => {
         if (!result.includes(k)) {
             result.push(k);
         }
