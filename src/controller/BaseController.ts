@@ -8,7 +8,6 @@ import * as helper from "think_lib";
 import { Koatty, KoattyContext } from "../Koatty";
 import { ObjectDefinitionOptions } from "koatty_container";
 import { ApiInput, ApiOutput, IController } from '../core/Component';
-import { Value } from '../core/Value';
 
 /**
  * Base controller
@@ -20,7 +19,6 @@ import { Value } from '../core/Value';
 export class BaseController implements IController {
     public app: Koatty;
     public ctx: KoattyContext;
-    private resConf: any;
 
     protected _options: ObjectDefinitionOptions;
 
@@ -32,14 +30,6 @@ export class BaseController implements IController {
      */
     protected constructor(ctx: KoattyContext) {
         this.ctx = ctx;
-        this.resConf = this.app.config("config.TraceMiddleware", "middleware");
-        if (!this.resConf) {
-            this.resConf = {
-                "error_code": 500, //default error code
-                "error_key": "code", //key for custom error code
-                "error_msg": "message", //key for custom error msg
-            };
-        }
         this.init();
     }
 
@@ -128,7 +118,7 @@ export class BaseController implements IController {
     }
 
     /**
-     * Get post or get parameters, post priority
+     * Get POST/GET parameters, the POST value is priority.
      *
      * @param {string} [name]
      * @returns
@@ -209,12 +199,13 @@ export class BaseController implements IController {
      * @returns {Promise<any>}
      * @memberof BaseController
      */
-    public body(data: any, contentType?: string, encoding?: string) {
+    public body(data: any, contentType?: string, encoding?: string): Promise<any> {
         contentType = contentType || "text/plain";
         encoding = encoding || this.app.config("encoding") || "utf-8";
         this.type(contentType, encoding);
         this.ctx.body = data;
-        return this.app.prevent();
+        // return this.app.prevent();
+        return null;
     }
 
     /**
@@ -232,22 +223,25 @@ export class BaseController implements IController {
      * 格式化api接口数据格式
      *
      * @private
-     * @param {*} msg   待处理的接口数据信息｜接口msg
+     * @param {Error | string | ApiInput} msg   待处理的接口数据信息｜接口msg
      * @param {*} data    待返回的数据
      * @param {number} defaultCode   默认错误码
      * @returns {ApiOutput}   格式化之后的接口数据
      * @memberof BaseController
      */
     protected formatApiData(msg: any, data: any, defaultCode: number): ApiOutput {
-        let obj: any = {
+        let obj: ApiOutput = {
             code: defaultCode,
-            message: msg || '',
+            message: '',
             data: null,
         };
-        if (typeof msg === 'object') {
+        if (helper.isError(msg)) {
+            obj.code = msg.code || defaultCode;
+            obj.message = msg.message;
+        } else if (helper.isObject(msg)) {
             obj = { ...obj, ...msg };
         } else {
-            obj[this.resConf.error_msg] = msg;
+            obj.message = msg;
             obj.data = data;
         }
         return obj;
