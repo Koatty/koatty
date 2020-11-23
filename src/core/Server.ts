@@ -1,13 +1,13 @@
 /*
  * @Author: richen
  * @Date: 2020-07-06 15:53:37
- * @LastEditTime: 2020-11-02 21:07:01
+ * @LastEditTime: 2020-11-23 09:23:11
  * @Description:
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
-import { Koatty } from "../Koatty";
-import http2 from "http2";
 import fs from "fs";
+import { createSecureServer } from 'http2';
+import { Koatty } from "../Koatty";
 import { DefaultLogger as logger } from "../util/Logger";
 import * as helper from "think_lib";
 const pkg = require("../../package.json");
@@ -25,7 +25,7 @@ interface ListeningOptions {
  * @param {ListeningOptions} options
  * @returns {*} 
  */
-function listening(app: Koatty, options: ListeningOptions) {
+const listening = (app: Koatty, options: ListeningOptions) => {
     return function () {
         logger.Custom("think", "", `Nodejs Version: ${process.version}`);
         logger.Custom("think", "", `${pkg.name} Version: v${pkg.version}`);
@@ -35,7 +35,7 @@ function listening(app: Koatty, options: ListeningOptions) {
         // tslint:disable-next-line: no-unused-expression
         app.appDebug && logger.Warn(`Running in debug mode.`);
     };
-}
+};
 
 /**
  * Start HTTP server.
@@ -71,7 +71,7 @@ export function startHTTP2(app: Koatty) {
     };
 
     logger.Custom("think", "", `Protocol: HTTP/2`);
-    const server = http2.createSecureServer(options, app.callback());
+    const server = createSecureServer(options, app.callback());
     server.listen(port, hostname, 0, listening(app, { hostname, port, listenUrl: `https://${hostname}:${port}/` }));
 }
 

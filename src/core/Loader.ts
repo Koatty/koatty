@@ -1,7 +1,7 @@
 /**
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: MIT
+ * @ license: BSD (3-Clause)
  * @ version: 2020-07-06 11:18:01
  */
 import * as globby from "globby";

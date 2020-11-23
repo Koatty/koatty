@@ -1,13 +1,15 @@
 /**
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: MIT
+ * @ license: BSD (3-Clause)
  * @ version: 2020-07-06 11:21:37
  */
 
 import * as path from "path";
 import Koa from "koa";
 import * as helper from "think_lib";
+import { IncomingMessage, ServerResponse } from 'http';
+import { Namespace } from 'cls-hooked';
 import { DefaultLogger as logger } from "./util/Logger";
 import { PREVENT_NEXT_PROCESS } from "./core/Constants";
 const pkg = require("../package.json");
@@ -100,6 +102,7 @@ export interface KoattyContext extends Koa.Context {
      * @memberof KoattyContext
      */
     queryParser: () => Object;
+
 }
 
 /**
@@ -116,7 +119,7 @@ export class Koatty extends Koa {
     public thinkPath: string;
     public appDebug: boolean;
     public options: InitOptions;
-    public context: KoattyContext;
+    public trace: Namespace;
 
     private handelMap: Map<string, any>;
 
@@ -218,12 +221,13 @@ export class Koatty extends Koa {
      */
     public use(fn: any): any {
         if (!helper.isFunction) {
-            logger.Error('The paramer is not a function.');
+            logger.Error('The paramter is not a function.');
             return;
         }
-        if (helper.isGenerator(fn)) {
-            fn = helper.generatorToPromise(<GeneratorFunction>fn);
-        }
+        // koa has convert
+        // if (helper.isGenerator(fn)) {
+        //     fn = helper.generatorToPromise(<GeneratorFunction>fn);
+        // }
         return super.use(fn);
     }
 
@@ -236,13 +240,12 @@ export class Koatty extends Koa {
      */
     public useExp(fn: Function): any {
         if (!helper.isFunction) {
-            logger.Error('The paramer is not a function.');
+            logger.Error('The paramter is not a function.');
             return;
         }
         fn = parseExp(fn);
         return this.use(fn);
     }
-
 
     /**
      * Prevent next process
@@ -326,6 +329,22 @@ export class Koatty extends Koa {
     }
 
     /**
+     *
+     *
+     * @param {IncomingMessage} req
+     * @param {ServerResponse} res
+     * @returns {*}  {KoattyContext}
+     * @memberof Koatty
+     */
+    public createContext(req: IncomingMessage, res: ServerResponse): any {
+        const context: any = super.createContext(req, res);
+        context.bodyParser = null;
+        context.queryParser = null;
+        const koattyContext: KoattyContext = context;
+        return koattyContext;
+    }
+
+    /**
      * registration exception handling
      *
      * @memberof Koatty
@@ -354,7 +373,7 @@ export class Koatty extends Koa {
             }
             return;
         });
-        // uncaugth exception
+        // uncaught exception
         process.removeAllListeners('uncaughtException');
         process.on('uncaughtException', (err) => {
             if (err.message.indexOf('EADDRINUSE') > -1) {

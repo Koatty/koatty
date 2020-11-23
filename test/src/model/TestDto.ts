@@ -2,7 +2,7 @@ import { Length, Min, Max, IsCnName, Contains, IsNotEmpty, IsDefined, Component 
 /**
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: MIT
+ * @ license: BSD (3-Clause)
  * @ version: 2020-04-14 18:21:20
  */
 @Component()
