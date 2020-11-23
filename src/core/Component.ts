@@ -6,7 +6,6 @@
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
-// import * as helper from "think_lib";
 import { IOCContainer } from 'koatty_container';
 import { CONTROLLER_ROUTER } from "./Constants";
 import { Koatty, KoattyContext } from '../Koatty';

@@ -60,10 +60,10 @@
         "koatty_schedule": "^1.x.x",
         "koatty_validtion": "^1.x.x",
         "reflect-metadata": "^0.1.13",
-        "think_lib": "^2.x.x",
-        "think_logger": "^2.x.x",
+        "koatty_lib": "^1.x.x",
+        "koatty_logger": "^1.x.x",
         "think_payload": "^3.x.x",
-        "think_trace": "^3.x.x",
+        "koatty_trace": "^1.x.x",
         "tslib": "^2.0.3"
     }
 }

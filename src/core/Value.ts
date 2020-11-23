@@ -6,8 +6,7 @@
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
-import * as helper from "think_lib";
-import { DefaultLogger as logger } from "../util/Logger";
+import { Logger } from "../util/Logger";
 import { recursiveGetMetadata } from "../util/Lib";
 import { Container, IOCContainer, TAGGED_ARGS } from "koatty_container";
 
@@ -62,7 +61,7 @@ export function injectValue(target: any, instance: any, container: Container) {
     // tslint:disable-next-line: forin
     for (const metaKey in metaData) {
         // tslint:disable-next-line: no-unused-expression
-        process.env.APP_DEBUG && logger.Custom("think", "", `Register inject ${IOCContainer.getIdentifier(target)} config key: ${metaKey} => value: ${metaData[metaKey]}`);
+        process.env.APP_DEBUG && Logger.Custom("think", "", `Register inject ${IOCContainer.getIdentifier(target)} config key: ${metaKey} => value: ${metaData[metaKey]}`);
         const propKeys = metaData[metaKey].split("|");
         const [propKey, type] = propKeys;
         Reflect.defineProperty(instance, metaKey, {

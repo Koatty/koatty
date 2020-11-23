@@ -6,8 +6,8 @@
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
-import * as helper from "think_lib";
-import { DefaultLogger as logger } from "../util/Logger";
+import { Helper } from "../util/Helper";
+import { Logger } from "../util/Logger";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
 import { Router } from "./Router";
 import { Koatty } from '../Koatty';
@@ -25,7 +25,7 @@ const asyncEvent = async function (app: Koatty, eventName: string) {
     const ls: any[] = app.listeners(eventName);
     // eslint-disable-next-line no-restricted-syntax
     for await (const func of ls) {
-        if (helper.isFunction(func)) {
+        if (Helper.isFunction(func)) {
             func();
         }
     }
@@ -44,22 +44,22 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
     try {
         console.log(LOGO);
         console.log('                     https://ThinkKoa.org/');
-        logger.Custom('think', '', '====================================');
-        logger.Custom('think', '', 'Bootstrap');
+        Logger.Custom('think', '', '====================================');
+        Logger.Custom('think', '', 'Bootstrap');
 
         if (!(app instanceof Koatty)) {
             throw new Error(`class ${target.name} does not inherit from Koatty`);
         }
 
         // exec bootFunc
-        if (helper.isFunction(bootFunc)) {
-            logger.Custom('think', '', 'Execute bootFunc ...');
+        if (Helper.isFunction(bootFunc)) {
+            Logger.Custom('think', '', 'Execute bootFunc ...');
             await bootFunc(app);
         }
         // Set IOC.app
         IOCContainer.setApp(app);
 
-        logger.Custom('think', '', 'ComponentScan ...');
+        Logger.Custom('think', '', 'ComponentScan ...');
         // component metadata
         const componentMetas = Loader.GetComponentMetas(target, app.appPath);
         // configuration metadata
@@ -67,7 +67,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         // load all bean
         const exSet = new Set();
         Loader.LoadDirectory(componentMetas, '', (fileName: string, target: any, fpath: string) => {
-            if (target[fileName] && helper.isClass(target[fileName])) {
+            if (target[fileName] && Helper.isClass(target[fileName])) {
                 if (exSet.has(fileName)) {
                     throw new Error(`A same name class already exists. Please modify the \`${fpath}\`'s class name and file name.`);
                 }
@@ -77,53 +77,53 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         exSet.clear();
 
         // Load configuration
-        logger.Custom('think', '', 'Load Configurations ...');
+        Logger.Custom('think', '', 'Load Configurations ...');
         Loader.LoadConfigs(app, configurationMetas);
 
         // Load Plugin
-        logger.Custom('think', '', 'Load Plugins ...');
+        Logger.Custom('think', '', 'Load Plugins ...');
         await Loader.LoadPlugins(app, IOCContainer);
 
-        // Set logger level
+        // Set Logger level
         Loader.SetLogger(app);
 
         // Load App ready hooks
         Loader.LoadAppReadyHooks(target, app);
 
         // Load Middleware
-        logger.Custom('think', '', 'Load Middlewares ...');
+        Logger.Custom('think', '', 'Load Middlewares ...');
         await Loader.LoadMiddlewares(app, IOCContainer);
 
         // Emit app ready event
-        logger.Custom('think', '', 'Emit App Ready ...');
+        Logger.Custom('think', '', 'Emit App Ready ...');
         // app.emit("appReady");
         await asyncEvent(app, 'appReady');
         // Load Components
-        logger.Custom('think', '', 'Load Components ...');
+        Logger.Custom('think', '', 'Load Components ...');
         Loader.LoadComponents(app, IOCContainer);
         // Load Services
-        logger.Custom('think', '', 'Load Services ...');
+        Logger.Custom('think', '', 'Load Services ...');
         Loader.LoadServices(app, IOCContainer);
         // Load Controllers
-        logger.Custom('think', '', 'Load Controllers ...');
+        Logger.Custom('think', '', 'Load Controllers ...');
         Loader.LoadControllers(app, IOCContainer);
         // Load Routers
-        logger.Custom('think', '', 'Load Routers ...');
+        Logger.Custom('think', '', 'Load Routers ...');
         const routerConf = app.config(undefined, 'router') || {};
         const router = new Router(app, routerConf);
         router.LoadRouter();
 
         // Emit app started event
-        logger.Custom('think', '', 'Emit App Start ...');
+        Logger.Custom('think', '', 'Emit App Start ...');
         // app.emit("appStart");
         await asyncEvent(app, 'appStart');
 
     } catch (err) {
-        logger.Error(err);
+        Logger.Error(err);
         process.exit();
     }
 
-    logger.Custom('think', '', '====================================');
+    Logger.Custom('think', '', '====================================');
     // Start HTTP server
     const enableHttp2 = app.config('enable_http2') || false;
     if (enableHttp2) {
@@ -158,7 +158,7 @@ export function Bootstrap(bootFunc?: Function): ClassDecorator {
  * @returns {ClassDecorator}
  */
 export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
-    logger.Custom('think', '', 'ComponentScan');
+    Logger.Custom('think', '', 'ComponentScan');
 
     return (target: any) => {
         if (!(target.prototype instanceof Koatty)) {
@@ -177,7 +177,7 @@ export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
  * @returns {ClassDecorator}
  */
 export function ConfigurationScan(scanPath?: string | string[]): ClassDecorator {
-    logger.Custom('think', '', 'ConfigurationScan');
+    Logger.Custom('think', '', 'ConfigurationScan');
 
     return (target: any) => {
         if (!(target.prototype instanceof Koatty)) {

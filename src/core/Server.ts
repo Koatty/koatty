@@ -1,15 +1,15 @@
 /*
  * @Author: richen
  * @Date: 2020-07-06 15:53:37
- * @LastEditTime: 2020-11-23 09:23:11
+ * @LastEditTime: 2020-11-23 14:36:10
  * @Description:
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
 import fs from "fs";
 import { createSecureServer } from 'http2';
 import { Koatty } from "../Koatty";
-import { DefaultLogger as logger } from "../util/Logger";
-import * as helper from "think_lib";
+import { Logger } from "../util/Logger";
+import { Helper } from "../util/Helper";
 const pkg = require("../../package.json");
 
 interface ListeningOptions {
@@ -27,13 +27,13 @@ interface ListeningOptions {
  */
 const listening = (app: Koatty, options: ListeningOptions) => {
     return function () {
-        logger.Custom("think", "", `Nodejs Version: ${process.version}`);
-        logger.Custom("think", "", `${pkg.name} Version: v${pkg.version}`);
-        logger.Custom("think", "", `App Environment: ${app.env}`);
-        logger.Custom("think", "", `Server running at ${options.listenUrl}`);
-        logger.Custom("think", "", "====================================");
+        Logger.Custom("think", "", `Nodejs Version: ${process.version}`);
+        Logger.Custom("think", "", `${pkg.name} Version: v${pkg.version}`);
+        Logger.Custom("think", "", `App Environment: ${app.env}`);
+        Logger.Custom("think", "", `Server running at ${options.listenUrl}`);
+        Logger.Custom("think", "", "====================================");
         // tslint:disable-next-line: no-unused-expression
-        app.appDebug && logger.Warn(`Running in debug mode.`);
+        app.appDebug && Logger.Warn(`Running in debug mode.`);
     };
 };
 
@@ -46,7 +46,7 @@ export function startHTTP(app: Koatty) {
     const port = process.env.PORT || process.env.main_port || app.config('app_port') || 3000;
     const hostname = process.env.IP || process.env.HOSTNAME?.replace(/-/g, '.') || app.config('app_hostname') || 'localhost';
 
-    logger.Custom("think", "", `Protocol: HTTP/1.1`);
+    Logger.Custom("think", "", `Protocol: HTTP/1.1`);
     app.listen({ port, hostname }, listening(app, { hostname, port, listenUrl: `http://${hostname}:${port}/` }));
 }
 
@@ -60,8 +60,8 @@ export function startHTTP2(app: Koatty) {
     const hostname = process.env.IP || process.env.HOSTNAME?.replace(/-/g, '.') || app.config('app_hostname') || 'localhost';
     const keyFile = app.config("key_file") || "";
     const crtFile = app.config("crt_file") || "";
-    if (!helper.isFile(keyFile) || !helper.isFile(crtFile)) {
-        logger.Error("key_file, crt_file are not defined in the configuration");
+    if (!Helper.isFile(keyFile) || !Helper.isFile(crtFile)) {
+        Logger.Error("key_file, crt_file are not defined in the configuration");
         process.exit();
     }
     const options = {
@@ -70,7 +70,7 @@ export function startHTTP2(app: Koatty) {
         cert: fs.readFileSync(crtFile)
     };
 
-    logger.Custom("think", "", `Protocol: HTTP/2`);
+    Logger.Custom("think", "", `Protocol: HTTP/2`);
     const server = createSecureServer(options, app.callback());
     server.listen(port, hostname, 0, listening(app, { hostname, port, listenUrl: `https://${hostname}:${port}/` }));
 }

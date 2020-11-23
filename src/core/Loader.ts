@@ -6,8 +6,8 @@
  */
 import * as globby from "globby";
 import * as path from "path";
-import * as helper from "think_lib";
-import { DefaultLogger as logger } from "../util/Logger";
+import { Helper } from "../util/Helper";
+import { Logger } from "../util/Logger";
 import { BaseService } from "../service/BaseService";
 import { requireDefault } from "../util/Lib";
 import { injectValue } from './Value';
@@ -81,7 +81,7 @@ export class Loader {
         let componentMetas = [];
         const componentMeta = IOCContainer.getClassMetadata(TAGGED_CLS, COMPONENT_SCAN, target);
         if (componentMeta) {
-            if (helper.isArray(componentMeta)) {
+            if (Helper.isArray(componentMeta)) {
                 componentMetas = componentMeta;
             } else {
                 componentMetas.push(componentMeta);
@@ -105,7 +105,7 @@ export class Loader {
         const confMeta = IOCContainer.getClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, target);
         let configurationMetas = [];
         if (confMeta) {
-            if (helper.isArray(confMeta)) {
+            if (Helper.isArray(confMeta)) {
                 configurationMetas = confMeta;
             } else {
                 configurationMetas.push(confMeta);
@@ -124,7 +124,7 @@ export class Loader {
      */
     public static LoadAppReadyHooks(target: any, app: Koatty) {
         const funcs = IOCContainer.getClassMetadata(TAGGED_CLS, APP_READY_HOOK, target);
-        if (helper.isArray(funcs)) {
+        if (Helper.isArray(funcs)) {
             funcs.forEach((element: AppReadyHookFunc): any => {
                 app.once('appReady', () => element(app));
                 return null;
@@ -142,17 +142,17 @@ export class Loader {
     public static LoadConfigs(app: Koatty, loadPath?: string | string[]) {
         const config: any = {};
         // tslint:disable-next-line: no-unused-expression
-        process.env.APP_DEBUG && logger.Custom("think", "", `Load configuration path: ${app.thinkPath}/config`);
+        process.env.APP_DEBUG && Logger.Custom("think", "", `Load configuration path: ${app.thinkPath}/config`);
         Loader.LoadDirectory("./config", app.thinkPath, function (name: string, exp: any) {
             config[name] = exp;
         });
         const appConfig: any = {};
-        if (helper.isArray(loadPath)) {
+        if (Helper.isArray(loadPath)) {
             loadPath = loadPath.length > 0 ? loadPath : "";
         }
         const tempConfig: any = {};
         // tslint:disable-next-line: no-unused-expression
-        process.env.APP_DEBUG && logger.Custom("think", "", `Load configuration path: ${app.appPath}${loadPath || "/config"}`);
+        process.env.APP_DEBUG && Logger.Custom("think", "", `Load configuration path: ${app.appPath}${loadPath || "/config"}`);
 
         Loader.LoadDirectory(loadPath || "./config", app.appPath, function (name: string, exp: any) {
             // tslint:disable-next-line: one-variable-per-declaration
@@ -174,15 +174,15 @@ export class Loader {
         for (const n in tempConfig) {
             const na = n.split("^")[0];
             if (appConfig[na]) {
-                appConfig[na] = helper.extend(appConfig[na], tempConfig[n], true);
+                appConfig[na] = Helper.extend(appConfig[na], tempConfig[n], true);
             }
         }
 
-        app.setMap("configs", helper.extend(config, appConfig, true));
+        app.setMap("configs", Helper.extend(config, appConfig, true));
     }
 
     /**
-     * Set logger level
+     * Set Logger level
      *
      * @static
      * @param {Koatty} app
@@ -190,21 +190,21 @@ export class Loader {
      */
     public static SetLogger(app: Koatty) {
         const configs = app.getMap("configs") || {};
-        //logger
+        //Logger
         if (configs.config) {
             // if (app.appDebug) {
-            //     logger.setLevel("DEBUG");
+            //     Logger.setLevel("DEBUG");
             // } else {
-            //     logger.setLevel("INFO");
+            //     Logger.setLevel("INFO");
             // }
-            // logger.setLogFile(configs.config.logs || false);
-            // logger.setLogFileLevel(configs.config.logs_level || "INFO");
-            // logger.setLogFilePath(configs.config.logs_path || app.rootPath + "/logs");
+            // Logger.setLogFile(configs.config.logs || false);
+            // Logger.setLogFileLevel(configs.config.logs_level || "INFO");
+            // Logger.setLogFilePath(configs.config.logs_path || app.rootPath + "/logs");
 
             process.env.LOGS = configs.config.logs || false;
             process.env.LOGS_PATH = configs.config.logs_path || app.rootPath + "/logs";
             let level = configs.config.logs_level || "info, warn, error";
-            if (helper.isArray(level)) {
+            if (Helper.isArray(level)) {
                 level = level.join(',');
             }
             process.env.LOGS_LEVEL = level;
@@ -222,7 +222,7 @@ export class Loader {
      */
     public static async LoadMiddlewares(app: Koatty, container: Container, loadPath?: string | string[]) {
         let middlewareConf = app.config(undefined, "middleware");
-        if (helper.isEmpty(middlewareConf)) {
+        if (Helper.isEmpty(middlewareConf)) {
             middlewareConf = { config: {}, list: [] };
         }
 
@@ -234,7 +234,7 @@ export class Loader {
 
         appMeddlewares.forEach((item: ComponentItem) => {
             item.id = (item.id || "").replace("MIDDLEWARE:", "");
-            if (item.id && helper.isClass(item.target)) {
+            if (item.id && Helper.isClass(item.target)) {
                 // inject configuration
                 injectValue(item.target, item.target.prototype, container);
                 container.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
@@ -251,7 +251,7 @@ export class Loader {
             }
         });
         if (defaultList.length > middlewareConfList.length) {
-            logger.Warn("Some middlewares is loaded but not allowed to execute.");
+            Logger.Warn("Some middlewares is loaded but not allowed to execute.");
         }
         //Mount the middleware on first
         defaultList.unshift("PayloadMiddleware");
@@ -264,11 +264,11 @@ export class Loader {
         for (const key of appMList) {
             const handle: IMiddleware = container.get(key, "MIDDLEWARE");
             if (!handle) {
-                logger.Error(`middleware ${key} load error.`);
+                Logger.Error(`middleware ${key} load error.`);
                 continue;
             }
-            if (!helper.isFunction(handle.run)) {
-                logger.Error(`middleware ${key} must be implements method 'run'.`);
+            if (!Helper.isFunction(handle.run)) {
+                Logger.Error(`middleware ${key} must be implements method 'run'.`);
                 continue;
             }
             if (middlewareConf.config[key] === false) {
@@ -276,9 +276,9 @@ export class Loader {
             }
 
             // tslint:disable-next-line: no-unused-expression
-            process.env.APP_DEBUG && logger.Custom("think", "", `Load middleware: ${key}`);
+            process.env.APP_DEBUG && Logger.Custom("think", "", `Load middleware: ${key}`);
             const result = await handle.run(middlewareConf.config[key] || {}, app);
-            if (helper.isFunction(result)) {
+            if (Helper.isFunction(result)) {
                 if (result.length < 3) {
                     app.use(result);
                 } else {
@@ -303,9 +303,9 @@ export class Loader {
         const controllers: any = {};
         controllerList.forEach((item: ComponentItem) => {
             item.id = (item.id || "").replace("CONTROLLER:", "");
-            if (item.id && helper.isClass(item.target)) {
+            if (item.id && Helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
-                process.env.APP_DEBUG && logger.Custom("think", "", `Load controller: ${item.id}`);
+                process.env.APP_DEBUG && Logger.Custom("think", "", `Load controller: ${item.id}`);
                 // inject configuration
                 injectValue(item.target, item.target.prototype, container);
                 // registering to IOC
@@ -334,9 +334,9 @@ export class Loader {
 
         serviceList.forEach((item: ComponentItem) => {
             item.id = (item.id || "").replace("SERVICE:", "");
-            if (item.id && helper.isClass(item.target)) {
+            if (item.id && Helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
-                process.env.APP_DEBUG && logger.Custom("think", "", `Load service: ${item.id}`);
+                process.env.APP_DEBUG && Logger.Custom("think", "", `Load service: ${item.id}`);
                 // inject configuration
                 injectValue(item.target, item.target.prototype, container);
                 // inject schedule
@@ -364,9 +364,9 @@ export class Loader {
 
         componentList.forEach((item: ComponentItem) => {
             item.id = (item.id || "").replace("COMPONENT:", "");
-            if (item.id && !(item.id).endsWith("Plugin") && helper.isClass(item.target)) {
+            if (item.id && !(item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
-                process.env.APP_DEBUG && logger.Custom("think", "", `Load component: ${item.id}`);
+                process.env.APP_DEBUG && Logger.Custom("think", "", `Load component: ${item.id}`);
                 // inject configuration
                 injectValue(item.target, item.target.prototype, container);
                 // inject schedule
@@ -389,16 +389,16 @@ export class Loader {
         const componentList = IOCContainer.listClass("COMPONENT");
 
         let pluginsConf = app.config(undefined, "plugin");
-        if (helper.isEmpty(pluginsConf)) {
+        if (Helper.isEmpty(pluginsConf)) {
             pluginsConf = { config: {}, list: [] };
         }
 
         const pluginList = [];
         componentList.forEach(async (item: ComponentItem) => {
             item.id = (item.id || "").replace("COMPONENT:", "");
-            if (item.id && (item.id).endsWith("Plugin") && helper.isClass(item.target)) {
+            if (item.id && (item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
-                process.env.APP_DEBUG && logger.Custom("think", "", `Load plugin: ${item.id}`);
+                process.env.APP_DEBUG && Logger.Custom("think", "", `Load plugin: ${item.id}`);
                 // inject configuration
                 injectValue(item.target, item.target.prototype, container);
                 // inject schedule
@@ -411,12 +411,12 @@ export class Loader {
 
         const pluginConfList = pluginsConf.list;
         if (pluginList.length > pluginConfList.length) {
-            logger.Warn("Some plugins is loaded but not allowed to execute.");
+            Logger.Warn("Some plugins is loaded but not allowed to execute.");
         }
         for (const key of pluginConfList) {
             const handle: IPlugin = container.get(key, "COMPONENT");
-            if (!helper.isFunction(handle.run)) {
-                logger.Error(`plugin ${key} must be implements method 'run'.`);
+            if (!Helper.isFunction(handle.run)) {
+                Logger.Error(`plugin ${key} must be implements method 'run'.`);
                 continue;
             }
             if (pluginsConf.config[key] === false) {
@@ -424,7 +424,7 @@ export class Loader {
             }
 
             // tslint:disable-next-line: no-unused-expression
-            process.env.APP_DEBUG && logger.Custom("think", "", `Execute plugin: ${key}`);
+            process.env.APP_DEBUG && Logger.Custom("think", "", `Execute plugin: ${key}`);
             // sync exec 
             await handle.run(pluginsConf.config[key] || {}, app);
         }
@@ -476,7 +476,7 @@ export class Loader {
                 const exports = requireDefault(file);
 
                 const tkeys = Object.keys(exports);
-                if (!exports[fileName] && (tkeys[0] && helper.isClass(exports[tkeys[0]]) && tkeys[0] !== fileName)) {
+                if (!exports[fileName] && (tkeys[0] && Helper.isClass(exports[tkeys[0]]) && tkeys[0] !== fileName)) {
                     throw new Error(`The class name is not consistent with the file('${file}') name. Or you used 'export default'?`);
                     // continue;
                 }

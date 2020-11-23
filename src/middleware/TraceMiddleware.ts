@@ -6,11 +6,11 @@
  */
 import { Middleware, IMiddleware } from "../core/Component";
 import { Koatty } from "../Koatty";
-const traces = require("think_trace");
+import { trace } from "koatty_trace";
 
 @Middleware()
 export class TraceMiddleware implements IMiddleware {
     run(options: any, app: Koatty) {
-        return traces(options, app);
+        return trace(options, app);
     }
 }

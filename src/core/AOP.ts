@@ -4,8 +4,8 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-07-06 11:19:30
  */
-import * as helper from "think_lib";
-import { DefaultLogger as logger } from "../util/Logger";
+import { Helper } from "../util/Helper";
+import { Logger } from "../util/Logger";
 import { IOCContainer } from 'koatty_container';
 
 
@@ -28,7 +28,7 @@ function defineNewProperty(clazz: Function, protoName: string, methodName: strin
             if (methodName) {
                 // tslint:disable-next-line: one-variable-per-declaration
                 let aspect, name = "";
-                if (helper.isFunction(methodName)) {
+                if (Helper.isFunction(methodName)) {
                     // tslint:disable-next-line: no-invalid-this
                     aspect = IOCContainer.getInsByClass(methodName);
                     name = IOCContainer.getIdentifier(<Function>methodName) || (<Function>methodName).name || "";
@@ -37,8 +37,8 @@ function defineNewProperty(clazz: Function, protoName: string, methodName: strin
                     aspect = IOCContainer.get(<string>methodName, "COMPONENT");
                     name = <string>methodName;
                 }
-                if (aspect && helper.isFunction(aspect.run)) {
-                    logger.Info(`Execute the aspect ${name}`);
+                if (aspect && Helper.isFunction(aspect.run)) {
+                    Logger.Info(`Execute the aspect ${name}`);
                     // tslint:disable-next-line: no-invalid-this
                     await Promise.resolve(Reflect.apply(aspect.run, this, props));
                 }
@@ -86,7 +86,7 @@ export function Before(aopName: string | Function): MethodDecorator {
             async value(...props: any[]) {
                 // tslint:disable-next-line: one-variable-per-declaration
                 let aspect, name = "";
-                if (helper.isFunction(aopName)) {
+                if (Helper.isFunction(aopName)) {
                     // tslint:disable-next-line: no-invalid-this
                     aspect = IOCContainer.getInsByClass(aopName);
                     name = IOCContainer.getIdentifier(<Function>aopName) || (<Function>aopName).name || "";
@@ -95,8 +95,8 @@ export function Before(aopName: string | Function): MethodDecorator {
                     aspect = IOCContainer.get(<string>aopName, "COMPONENT");
                     name = <string>aopName;
                 }
-                if (aspect && helper.isFunction(aspect.run)) {
-                    logger.Info(`Execute the aspect ${name}`);
+                if (aspect && Helper.isFunction(aspect.run)) {
+                    Logger.Info(`Execute the aspect ${name}`);
                     // tslint:disable-next-line: no-invalid-this
                     await Promise.resolve(Reflect.apply(aspect.run, this, props));
                 }
@@ -148,7 +148,7 @@ export function After(aopName: string | Function): MethodDecorator {
             async value(...props: any[]) {
                 // tslint:disable-next-line: one-variable-per-declaration
                 let aspect, name = "";
-                if (helper.isFunction(aopName)) {
+                if (Helper.isFunction(aopName)) {
                     // tslint:disable-next-line: no-invalid-this
                     aspect = IOCContainer.getInsByClass(aopName);
                     name = IOCContainer.getIdentifier(<Function>aopName) || (<Function>aopName).name || "";
@@ -157,8 +157,8 @@ export function After(aopName: string | Function): MethodDecorator {
                     aspect = IOCContainer.get(<string>aopName, "COMPONENT");
                     name = <string>aopName;
                 }
-                if (aspect && helper.isFunction(aspect.run)) {
-                    logger.Info(`Execute the aspect ${name}`);
+                if (aspect && Helper.isFunction(aspect.run)) {
+                    Logger.Info(`Execute the aspect ${name}`);
                     // tslint:disable-next-line: no-invalid-this
                     await Promise.resolve(Reflect.apply(aspect.run, this, props));
                 }

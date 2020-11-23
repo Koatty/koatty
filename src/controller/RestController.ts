@@ -4,7 +4,7 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-07-06 11:19:16
  */
-import * as helper from "think_lib";
+import { Helper } from "../util/Helper";
 import { IOCContainer } from "koatty_container";
 import { BaseController } from "./BaseController";
 import { GetMapping, PathVariable, PostMapping, DeleteMapping, PutMapping, RequestBody } from "../core/RequestMapping";
@@ -39,14 +39,14 @@ export class RestController extends BaseController {
      */
     @GetMapping('/:resource/:id')
     async getResource(@PathVariable('id') id: number | string, @PathVariable('resource') resource: string) {
-        if (helper.isEmpty(id)) {
+        if (Helper.isEmpty(id)) {
             return this.fail('id is empty');
         }
-        if (helper.isEmpty(resource)) {
+        if (Helper.isEmpty(resource)) {
             return this.fail('resource is empty');
         }
         if (!this.model) {
-            const resourceName = helper.camelCase(resource, true);
+            const resourceName = Helper.camelCase(resource, true);
             this.model = IOCContainer.get(`${resourceName}Model`, 'COMPONENT');
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
@@ -77,17 +77,17 @@ export class RestController extends BaseController {
      */
     @PostMapping('/:resource/:id')
     async postResource(@PathVariable('id') id: number | string, @PathVariable('resource') resource: string, @RequestBody() data: any) {
-        if (helper.isEmpty(id)) {
+        if (Helper.isEmpty(id)) {
             return this.fail('id is empty');
         }
-        if (helper.isEmpty(resource)) {
+        if (Helper.isEmpty(resource)) {
             return this.fail('resource is empty');
         }
-        if (helper.isEmpty(data) || helper.isEmpty(data.post)) {
+        if (Helper.isEmpty(data) || Helper.isEmpty(data.post)) {
             return this.fail('body is empty');
         }
         if (!this.model) {
-            const resourceName = helper.camelCase(resource, true);
+            const resourceName = Helper.camelCase(resource, true);
             this.model = IOCContainer.get(`${resourceName}Model`, 'COMPONENT');
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
@@ -112,14 +112,14 @@ export class RestController extends BaseController {
      */
     @DeleteMapping('/:resource/:id')
     async deleteResource(@PathVariable('id') id: number | string, @PathVariable('resource') resource: string) {
-        if (helper.isEmpty(id)) {
+        if (Helper.isEmpty(id)) {
             return this.fail('id is empty');
         }
-        if (helper.isEmpty(resource)) {
+        if (Helper.isEmpty(resource)) {
             return this.fail('resource is empty');
         }
         if (!this.model) {
-            const resourceName = helper.camelCase(resource, true);
+            const resourceName = Helper.camelCase(resource, true);
             this.model = IOCContainer.get(`${resourceName}Model`, 'COMPONENT');
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);
@@ -146,17 +146,17 @@ export class RestController extends BaseController {
      */
     @PutMapping('/:resource/:id')
     async putResource(@PathVariable('id') id: number | string, @PathVariable('resource') resource: string, @RequestBody() data: any) {
-        if (helper.isEmpty(id)) {
+        if (Helper.isEmpty(id)) {
             return this.fail('id is empty');
         }
-        if (helper.isEmpty(resource)) {
+        if (Helper.isEmpty(resource)) {
             return this.fail('resource is empty');
         }
-        if (helper.isEmpty(data) || helper.isEmpty(data.post)) {
+        if (Helper.isEmpty(data) || Helper.isEmpty(data.post)) {
             return this.fail('body is empty');
         }
         if (!this.model) {
-            const resourceName = helper.camelCase(resource, true);
+            const resourceName = Helper.camelCase(resource, true);
             this.model = IOCContainer.get(`${resourceName}Model`, 'COMPONENT');
             if (!this.model || !this.model.pk) {
                 return this.fail(`the model: ${resourceName} not found.`);

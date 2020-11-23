@@ -5,8 +5,8 @@
  * @ version: 2020-07-06 14:23:43
  */
 import KoaRouter from "@koa/router";
-import * as helper from "think_lib";
-import { DefaultLogger as logger } from "../util/Logger";
+import { Helper } from "../util/Helper";
+import { Logger } from "../util/Logger";
 import { Koatty, KoattyContext } from "../Koatty";
 import { IOCContainer } from 'koatty_container';
 import { checkParams, PARAM_RULE_KEY, PARAM_CHECK_KEY } from 'koatty_validtion';
@@ -52,7 +52,7 @@ function injectRouter(app: Koatty, target: any, instance?: any) {
     // tslint:disable-next-line: forin
     for (const metaKey in rmetaData) {
         // tslint:disable-next-line: no-unused-expression
-        process.env.APP_DEBUG && logger.Custom("think", "", `Register inject method Router key: ${metaKey} => value: ${JSON.stringify(rmetaData[metaKey])}`);
+        process.env.APP_DEBUG && Logger.Custom("think", "", `Register inject method Router key: ${metaKey} => value: ${JSON.stringify(rmetaData[metaKey])}`);
         //.sort((a, b) => b.priority - a.priority) 
         for (const val of rmetaData[metaKey]) {
             const tmp = {
@@ -84,7 +84,7 @@ function injectParam(app: Koatty, target: any, instance?: any) {
     for (const meta in metaDatas) {
         if (instance[meta] && instance[meta].length <= metaDatas[meta].length) {
             // tslint:disable-next-line: no-unused-expression
-            process.env.APP_DEBUG && logger.Custom("think", "", `Register inject ${IOCContainer.getIdentifier(target)} param key: ${helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
+            process.env.APP_DEBUG && Logger.Custom("think", "", `Register inject ${IOCContainer.getIdentifier(target)} param key: ${Helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
 
             // cover to obj
             const data = (metaDatas[meta] || []).sort((a: any, b: any) => a.index - b.index);
@@ -123,7 +123,7 @@ async function getParamter(app: Koatty, ctx: KoattyContext, ctlParams: any = {})
     const dtoCheck = ctlParams.dtoCheck || false;
     const props: any[] = params.map(async (v: any, k: number) => {
         let value: any = null;
-        if (v.fn && helper.isFunction(v.fn)) {
+        if (v.fn && Helper.isFunction(v.fn)) {
             value = await v.fn(ctx);
         }
         // check params
@@ -191,7 +191,7 @@ export class Router {
                 // tslint:disable-next-line: forin
                 for (const it in ctlRouters) {
                     // tslint:disable-next-line: no-unused-expression
-                    app.appDebug && logger.Custom("think", "", `Register request mapping: [${ctlRouters[it].requestMethod}] : ["${ctlRouters[it].path}" => ${n}.${ctlRouters[it].method}]`);
+                    app.appDebug && Logger.Custom("think", "", `Register request mapping: [${ctlRouters[it].requestMethod}] : ["${ctlRouters[it].path}" => ${n}.${ctlRouters[it].method}]`);
                     kRouter[ctlRouters[it].requestMethod](ctlRouters[it].path, function (ctx: KoattyContext): Promise<any> {
                         const router = ctlRouters[it];
                         return execRouter(app, ctx, n, router, ctlParams[router.method]);
@@ -200,9 +200,9 @@ export class Router {
             }
 
             app.use(kRouter.routes()).use(kRouter.allowedMethods());
-            helper.define(app, "Router", kRouter);
+            Helper.define(app, "Router", kRouter);
         } catch (err) {
-            logger.Error(err);
+            Logger.Error(err);
         }
     }
 
@@ -226,7 +226,7 @@ export class Router {
             }
             // pre-method
             if (ctl.__before) {
-                logger.Info(`Execute the aspect ${identifier}.__before()`);
+                Logger.Info(`Execute the aspect ${identifier}.__before()`);
                 await ctl.__before();
             }
             // inject param
@@ -238,15 +238,15 @@ export class Router {
             const res = await ctl[router.method](...args);
             return (res === undefined ? "" : res);
         } catch (err) {
-            if (!helper.isError(err)) {
+            if (!Helper.isError(err)) {
                 throw Error(`${err} at ${identifier}.${router.method}`);
             }
             throw err;
         } finally {
             // after-method
             if (ctl.__after) {
-                logger.Info(`Execute the aspect ${identifier}.__after()`);
-                await ctl.__after().catch((e: any) => logger.Error(e));
+                Logger.Info(`Execute the aspect ${identifier}.__after()`);
+                await ctl.__after().catch((e: any) => Logger.Error(e));
             }
         }
     }

@@ -6,7 +6,7 @@
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
-import * as helper from "think_lib";
+import { Helper } from "../util/Helper";
 import { IOCContainer } from 'koatty_container';
 import { paramterTypes } from "koatty_validtion";
 import { ROUTER_KEY, PARAM_KEY } from "./Constants";
@@ -224,7 +224,7 @@ const Inject = (fn: Function, name: string): ParameterDecorator => {
         let type = (paramTypes[descriptor] && paramTypes[descriptor].name) ? paramTypes[descriptor].name : "object";
         let isDto = false;
         //DTO class
-        if (!(helper.toString(type) in paramterTypes)) {
+        if (!(Helper.toString(type) in paramterTypes)) {
             type = IOCContainer.getIdentifier(paramTypes[descriptor]);
             // reg to IOC container
             // IOCContainer.reg(type, paramTypes[descriptor]);
