@@ -6,8 +6,9 @@
  */
 
 import * as path from "path";
-import Koa, { EventEmitter } from "koa";
+import Koa from "koa";
 import { IncomingMessage, ServerResponse } from 'http';
+import { Namespace } from "cls-hooked";
 import { Helper } from "./util/Helper";
 import { Logger } from "./util/Logger";
 import { PREVENT_NEXT_PROCESS } from "./core/Constants";
@@ -82,17 +83,6 @@ interface ListenOptions {
     readableAll?: boolean;
     writableAll?: boolean;
     ipv6Only?: boolean;
-}
-
-/**
- *
- *
- * @interface Namespace
- */
-interface Namespace {
-    set<T>(key: string, value: T): T;
-    get(key: string): any;
-    bindEmitter(emitter: EventEmitter): void;
 }
 
 /**
@@ -313,34 +303,6 @@ export class Koatty extends Koa {
             Logger.Error(err);
             return null;
         }
-    }
-
-    /**
-     * Shorthand for:
-     * http.createServer(app.callback()).listen(...)
-     *
-     * opts {
-     * *   port?: number;
-     * *   host?: string;
-     * *   backlog?: number;
-     * *   path?: string;
-     * *   exclusive?: boolean;
-     * *   readableAll?: boolean;
-     * *   writableAll?: boolean;
-     * *   ipv6Only?: boolean; //default false
-     *
-     * }
-     */
-    // tslint:disable-next-line: no-object-literal-type-assertion
-    public listen(opts: any = <ListenOptions>{
-        host: '127.0.0.1',
-        port: 3000,
-    }, listeningListener?: any) {
-        // start server
-        return super.listen(opts, listeningListener).on('clientError', (err: any, sock: any) => {
-            // Logger.error("Bad request, HTTP parse error");
-            sock.end('400 Bad Request\r\n\r\n');
-        });
     }
 
     /**

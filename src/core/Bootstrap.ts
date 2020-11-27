@@ -11,7 +11,7 @@ import { Logger } from "../util/Logger";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
 import { Router } from "./Router";
 import { Koatty } from '../Koatty';
-import { startHTTP, startHTTP2 } from './Server';
+import { startHTTP, startHTTP2, StartSever } from './Server';
 import { Loader } from "./Loader";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
 
@@ -124,13 +124,8 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
     }
 
     Logger.Custom('think', '', '====================================');
-    // Start HTTP server
-    const enableHttp2 = app.config('enable_http2') || false;
-    if (enableHttp2) {
-        startHTTP2(app);
-    } else {
-        startHTTP(app);
-    }
+    // Start server
+    StartSever(app);
 };
 
 

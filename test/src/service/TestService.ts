@@ -32,7 +32,7 @@ export class TestService extends CommonService {
         // console.log('TestService.test1');
         // return Promise.reject("aaaaa");
         // throw Error("aaaaaa");
-        console.log(this.app.trace.get("traceId"));
+        // console.log(this.app.trace.get("traceId"));
         return pf.promise;
     }
 

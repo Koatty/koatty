@@ -65,6 +65,13 @@
     "@types/connect" "*"
     "@types/node" "*"
 
+"@types/cls-hooked@^4.3.1":
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/@types/cls-hooked/-/cls-hooked-4.3.1.tgz#0fdfd38f827aa77d15120871e9ca5c593840b2e1"
+  integrity sha512-nMjNjQAk9vAYnDEXRUxGSACarjPDRKVaZ8xrwKzRy1BmzG5tN3JUkuvdVwE8P2GBkSRokxVw+QUpuvFzvOsKpA==
+  dependencies:
+    "@types/node" "*"
+
 "@types/connect@*":
   version "3.4.33"
   resolved "https://r.cnpmjs.org/@types/connect/download/@types/connect-3.4.33.tgz#31610c901eca573b8713c3330abc6e6b9f588546"
@@ -337,7 +344,7 @@ clean-stack@^2.0.0:
 
 cls-hooked@^4.2.2:
   version "4.2.2"
-  resolved "http://mirrors.tencent.com/npm/cls-hooked/-/cls-hooked-4.2.2.tgz#ad2e9a4092680cdaffeb2d3551da0e225eae1908"
+  resolved "https://registry.yarnpkg.com/cls-hooked/-/cls-hooked-4.2.2.tgz#ad2e9a4092680cdaffeb2d3551da0e225eae1908"
   integrity sha512-J4Xj5f5wq/4jAvcdgoGsL3G103BtWpZrMo8NEinRltN+xpTZdI+M38pyQqhuFU/P792xkMFvnKSf+Lm81U1bxw==
   dependencies:
     async-hook-jl "^1.7.6"
@@ -896,9 +903,9 @@ koatty_lib@^1.x.x:
     tslib "^2.0.3"
 
 koatty_logger@^1.x.x:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/koatty_logger/-/koatty_logger-1.0.0.tgz#804644036b2c8544d444cc4f834e962ec0ccc932"
-  integrity sha512-r/GM+4d/TQVgkyEQ7hWlJj8k1evd98CGVLr9244HrE7uLLrnTGZocoNjAhs2bIlZlGxU+9UP7Kx5lhEmMWO+WQ==
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/koatty_logger/-/koatty_logger-1.0.4.tgz#f8d19450da05708e71b314fe5bd8368302ef6d3a"
+  integrity sha512-oyWhBUYrXgNMJex7uckPnKHe9XjUPYUMvJagvtsHGytDyRMqPfioXLX14T59Ps4HmuJ5Trafe9F8Rb3Thpc4XQ==
   dependencies:
     koatty_lib "^1.x.x"
 
@@ -916,13 +923,13 @@ koatty_schedule@^1.x.x:
     tslib "^2.0.3"
 
 koatty_trace@^1.x.x:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/koatty_trace/-/koatty_trace-1.0.2.tgz#e1132ed897d9eefe673710ce5c5d5a262c5aa1ac"
-  integrity sha512-HTL8M8XzgK3F7nY4yI9TvHGh8cong7act0IX1JTrHsL5VjJTJJ2ZS+fDHNysXJWSZHdnQ6ubPiPstIxPaGnXSQ==
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/koatty_trace/-/koatty_trace-1.0.4.tgz#d88bc8fc8e9e8452b83756cb0fbbba2b80fc7053"
+  integrity sha512-c1O9lTc2ZoZhr7i3hy6HplQOoPq2T4b7fsjnW7dVAvox/HSFVSnpEhyi/LJlSbDQbo6gu0hvJtYmdupe9r4dBQ==
   dependencies:
-    cls-hooked "^4.2.2"
     koatty_lib "^1.x.x"
     koatty_logger "^1.x.x"
+    uuid "^8.3.1"
 
 koatty_validtion@^1.x.x:
   version "1.8.2"
@@ -1582,6 +1589,11 @@ unpipe@1.0.0:
   version "1.0.0"
   resolved "https://r.cnpmjs.org/unpipe/download/unpipe-1.0.0.tgz#b2bf4ee8514aae6165b4817829d21b2ef49904ec"
   integrity sha1-sr9O6FFKrmFltIF4KdIbLvSZBOw=
+
+uuid@^8.3.1:
+  version "8.3.1"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.1.tgz#2ba2e6ca000da60fce5a196954ab241131e05a31"
+  integrity sha512-FOmRr+FmWEIG8uhZv6C2bTgEVXsHk08kE7mPlrBbEe+c3r9pjceVPgupIfNIhc4yx55H69OXANrUaSuu9eInKg==
 
 validate-npm-package-license@^3.0.1:
   version "3.0.4"
