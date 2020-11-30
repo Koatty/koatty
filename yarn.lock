@@ -909,6 +909,19 @@ koatty_logger@^1.x.x:
   dependencies:
     koatty_lib "^1.x.x"
 
+koatty_payload@^1.x.x:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/koatty_payload/-/koatty_payload-1.0.0.tgz#6be78d8845d4c62879fbee216dc04f85b9089107"
+  integrity sha512-2CFEGKS3d8fPNbeP2FiCJWhEw0Czng57XHjnJgemfCJKP0qfwQw4EpCE0kPtsnqvMcLd63UcCtNYXBgQ3ojrYQ==
+  dependencies:
+    formidable "^1.2.2"
+    inflation "^2.0.0"
+    koatty_lib "^1.x.x"
+    koatty_logger "^1.x.x"
+    on-finished "^2.3.0"
+    raw-body "^2.4.1"
+    xml2js "^0.4.23"
+
 koatty_schedule@^1.x.x:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/koatty_schedule/-/koatty_schedule-1.1.2.tgz#f3694c712ae0f1dd7586dc6503cb7fc65796927f"
@@ -1440,19 +1453,6 @@ think_logger@^2.x.x:
   dependencies:
     think_lib "^2.x.x"
 
-think_payload@^3.x.x:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/think_payload/-/think_payload-3.1.0.tgz#c0d5ecd635160775be2e65f55f0816fe44d18ee9"
-  integrity sha512-iqcb/1gx1T+isE7hy60+he0uH6fVdSjoFAyVC34EqEKeZ2GLtYTZWwUUasQ0FDRnKw3y8MVu0SSDAbcyCn11fA==
-  dependencies:
-    formidable "^1.2.2"
-    inflation "^2.0.0"
-    on-finished "^2.3.0"
-    raw-body "^2.4.1"
-    think_lib "^2.x.x"
-    think_logger "^2.x.x"
-    xml2js "^0.4.23"
-
 think_store@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/think_store/-/think_store-3.4.0.tgz#11916b594cbaa355a2db76a04a5290fa54b7145a"
@@ -1580,10 +1580,10 @@ type-is@^1.6.16:
     media-typer "0.3.0"
     mime-types "~2.1.24"
 
-typescript@^4.0.5:
-  version "4.0.5"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.0.5.tgz#ae9dddfd1069f1cb5beb3ef3b2170dd7c1332389"
-  integrity sha512-ywmr/VrTVCmNTJ6iV2LwIrfG1P+lv6luD8sUJs+2eI9NLGigaN+nUQc13iHqisq7bra9lnmUSYqbJvegraBOPQ==
+typescript@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.1.2.tgz#6369ef22516fe5e10304aae5a5c4862db55380e9"
+  integrity sha512-thGloWsGH3SOxv1SoY7QojKi0tc+8FnOmiarEGMbd/lar7QOEd3hvlx3Fp5y6FlDUGl9L+pd4n2e+oToGMmhRQ==
 
 unpipe@1.0.0:
   version "1.0.0"
