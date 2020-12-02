@@ -30,7 +30,7 @@ Use Typescript's decorator implement IOC and AOP.
 
 ## Documentation
 
-[koatty_doc_CN](https://thinkkoa.github.io/koatty_doc/) （In progress💪）
+[koatty_doc_CN](https://koatty.github.io/koatty_doc/) （In progress💪）
 
 [koatty_doc_EN] come soon...
 
