@@ -22,6 +22,6 @@ export {
     IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsEmail,
     IsIP, IsPhoneNumber, IsUrl, IsHash, IsNotEmpty, Equals, NotEquals,
     Contains, IsIn, IsNotIn, IsDate, Min, Max, Length
-} from "koatty_validtion";
+} from "koatty_validation";
 export { Helper } from "./util/Helper";
 export { Logger } from "./util/Logger";

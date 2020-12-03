@@ -8,7 +8,7 @@
 import "reflect-metadata";
 import { Helper } from "../util/Helper";
 import { IOCContainer } from 'koatty_container';
-import { paramterTypes } from "koatty_validtion";
+import { paramterTypes } from "koatty_validation";
 import { ROUTER_KEY, PARAM_KEY } from "./Constants";
 import { KoattyContext } from '../Koatty';
 

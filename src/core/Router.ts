@@ -9,7 +9,7 @@ import { Helper } from "../util/Helper";
 import { Logger } from "../util/Logger";
 import { Koatty, KoattyContext } from "../Koatty";
 import { IOCContainer } from 'koatty_container';
-import { checkParams, PARAM_RULE_KEY, PARAM_CHECK_KEY } from 'koatty_validtion';
+import { checkParams, PARAM_RULE_KEY, PARAM_CHECK_KEY } from 'koatty_validation';
 import { CONTROLLER_ROUTER, ROUTER_KEY, PARAM_KEY } from "./Constants";
 import { recursiveGetMetadata } from "../util/Lib";
 
