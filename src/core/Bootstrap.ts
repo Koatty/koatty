@@ -11,7 +11,7 @@ import { Logger } from "../util/Logger";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
 import { Router } from "./Router";
 import { Koatty } from '../Koatty';
-import { startHTTP, startHTTP2, StartSever } from './Server';
+import { StartSever } from './Server';
 import { Loader } from "./Loader";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
 
@@ -66,10 +66,10 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         const configurationMetas = Loader.GetConfigurationMetas(target);
         // load all bean
         const exSet = new Set();
-        Loader.LoadDirectory(componentMetas, '', (fileName: string, target: any, fpath: string) => {
+        Loader.LoadDirectory(componentMetas, '', (fileName: string, target: any, xpath: string) => {
             if (target[fileName] && Helper.isClass(target[fileName])) {
                 if (exSet.has(fileName)) {
-                    throw new Error(`A same name class already exists. Please modify the \`${fpath}\`'s class name and file name.`);
+                    throw new Error(`A same name class already exists. Please modify the \`${xpath}\`'s class name and file name.`);
                 }
                 exSet.add(fileName);
             }
@@ -130,7 +130,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
 
 
 /**
- * Bootstrap appliction
+ * Bootstrap application
  *
  * @export
  * @param {Function} [bootFunc]

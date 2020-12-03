@@ -10,7 +10,7 @@ export default {
     config: { //中间件配置
         "TraceMiddleware": {
             "timeout": 10, //HTTP request timeout time(seconds)
-            "error_code": 500, //default error status
+            "error_code": 1, //default error status
             "error_path": "" //template directory configuration. Place 404.html, 502.html, etc. in this directory, the framework will automatically render according to status (support template variables, rely on think_view middleware; if think_view middleware is not loaded, only output template content)
         },
 

@@ -2,7 +2,7 @@
  * @Author: richen
  * @Date: 2020-11-27 14:26:44
  * @LastEditors: linyyyang<linyyyang@tencent.com>
- * @LastEditTime: 2020-11-27 16:04:23
+ * @LastEditTime: 2020-12-01 21:01:16
  * @License: BSD (3-Clause)
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
@@ -20,7 +20,7 @@ import { Helper } from '../util/Helper';
  * @returns {*}  
  */
 export function TraceServerSetup(app: Koatty): Namespace {
-    const traceCls = createNamespace('tkoatty-debug-trace');
+    const traceCls = createNamespace('koatty-debug-trace');
     // app.trace = traceCls;
     Helper.define(app, 'trace', traceCls);
     return traceCls;
