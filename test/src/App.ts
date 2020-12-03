@@ -1,13 +1,13 @@
 /**
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: MIT
+ * @ license: BSD (3-Clause)
  * @ version: 2020-07-06 11:15:36
  */
 import { Bootstrap, ComponentScan, Autowired, Koatty, ConfigurationScan, Logger, Helper, EnableScheduleLock, EnableCacheStore } from '../../src/index';
 import * as path from "path";
 @EnableCacheStore()
-// @EnableScheduleLock()
+@EnableScheduleLock()
 @Bootstrap((app: any) => {
     //调整libuv线程池大小
     // process.env.UV_THREADPOOL_SIZE = "128";

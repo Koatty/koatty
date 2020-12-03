@@ -1,7 +1,7 @@
 /**
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: MIT
+ * @ license: BSD (3-Clause)
  * @ version: 2020-05-10 11:36:32
  */
 import { IOCContainer } from 'koatty_container';

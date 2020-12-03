@@ -1,14 +1,14 @@
 /**
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: MIT
+ * @ license: BSD (3-Clause)
  * @ version: 2020-05-10 11:33:00
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
-import * as helper from "think_lib";
+import { Helper } from "../util/Helper";
 import { IOCContainer } from 'koatty_container';
-import { paramterTypes } from "koatty_validtion";
+import { paramterTypes } from "koatty_validation";
 import { ROUTER_KEY, PARAM_KEY } from "./Constants";
 import { KoattyContext } from '../Koatty';
 
@@ -224,7 +224,7 @@ const Inject = (fn: Function, name: string): ParameterDecorator => {
         let type = (paramTypes[descriptor] && paramTypes[descriptor].name) ? paramTypes[descriptor].name : "object";
         let isDto = false;
         //DTO class
-        if (!(helper.toString(type) in paramterTypes)) {
+        if (!(Helper.toString(type) in paramterTypes)) {
             type = IOCContainer.getIdentifier(paramTypes[descriptor]);
             // reg to IOC container
             // IOCContainer.reg(type, paramTypes[descriptor]);

@@ -1,12 +1,9 @@
 /**
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: MIT
+ * @ license: BSD (3-Clause)
  * @ version: 2020-05-18 10:43:05
  */
-import * as think_lib from "think_lib";
-import { DefaultLogger } from "./util/Logger";
-
 export * from "./Koatty";
 export * from "./controller/BaseController";
 export * from "./controller/RestController";
@@ -25,6 +22,6 @@ export {
     IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsEmail,
     IsIP, IsPhoneNumber, IsUrl, IsHash, IsNotEmpty, Equals, NotEquals,
     Contains, IsIn, IsNotIn, IsDate, Min, Max, Length
-} from "koatty_validtion";
-export const Helper = think_lib;
-export const Logger = DefaultLogger;
+} from "koatty_validation";
+export { Helper } from "./util/Helper";
+export { Logger } from "./util/Logger";

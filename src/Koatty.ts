@@ -1,14 +1,16 @@
 /**
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: MIT
+ * @ license: BSD (3-Clause)
  * @ version: 2020-07-06 11:21:37
  */
 
 import * as path from "path";
 import Koa from "koa";
-import * as helper from "think_lib";
-import { DefaultLogger as logger } from "./util/Logger";
+import { IncomingMessage, ServerResponse } from 'http';
+import { Namespace } from "cls-hooked";
+import { Helper } from "./util/Helper";
+import { Logger } from "./util/Logger";
 import { PREVENT_NEXT_PROCESS } from "./core/Constants";
 const pkg = require("../package.json");
 
@@ -25,8 +27,8 @@ const checkEnv = () => {
     }
     nodeVersion = nodeVersion.slice(0, nodeVersion.lastIndexOf('.'));
 
-    if (helper.toNumber(nodeEngines) > helper.toNumber(nodeVersion)) {
-        logger.Error(`Koatty need node version > ${nodeEngines}, current version is ${nodeVersion}, please upgrade it.`);
+    if (Helper.toNumber(nodeEngines) > Helper.toNumber(nodeVersion)) {
+        Logger.Error(`Koatty need node version > ${nodeEngines}, current version is ${nodeVersion}, please upgrade it.`);
         process.exit(-1);
     }
 };
@@ -67,6 +69,11 @@ interface InitOptions {
     appDebug?: boolean;
 }
 
+/**
+ *
+ *
+ * @interface ListenOptions
+ */
 interface ListenOptions {
     port?: number;
     host?: string;
@@ -100,6 +107,7 @@ export interface KoattyContext extends Koa.Context {
      * @memberof KoattyContext
      */
     queryParser: () => Object;
+
 }
 
 /**
@@ -116,7 +124,7 @@ export class Koatty extends Koa {
     public thinkPath: string;
     public appDebug: boolean;
     public options: InitOptions;
-    public context: KoattyContext;
+    public trace: Namespace;
 
     private handelMap: Map<string, any>;
 
@@ -165,9 +173,9 @@ export class Koatty extends Koa {
         const rootPath = (this.options?.rootPath) || this.rootPath || process.cwd();
         const appPath = this.appPath || (this.options?.appPath) || path.resolve(rootPath, env.indexOf('ts-node') > -1 ? 'src' : 'dist');
         const thinkPath = __dirname;
-        helper.define(this, 'rootPath', rootPath);
-        helper.define(this, 'appPath', appPath);
-        helper.define(this, 'thinkPath', thinkPath);
+        Helper.define(this, 'rootPath', rootPath);
+        Helper.define(this, 'appPath', appPath);
+        Helper.define(this, 'thinkPath', thinkPath);
 
         // app.env
         this.env = process.env.KOATTY_ENV || process.env.NODE_ENV;
@@ -177,9 +185,9 @@ export class Koatty extends Koa {
         process.env.THINK_PATH = this.thinkPath;
 
         // Compatible with old version
-        helper.define(this, 'root_path', rootPath);
-        helper.define(this, 'app_path', appPath);
-        helper.define(this, 'think_path', thinkPath);
+        Helper.define(this, 'root_path', rootPath);
+        Helper.define(this, 'app_path', appPath);
+        Helper.define(this, 'think_path', thinkPath);
         Reflect.defineProperty(this, '_caches', {
             value: {},
             writable: true,
@@ -217,13 +225,14 @@ export class Koatty extends Koa {
      * @memberof Koatty
      */
     public use(fn: any): any {
-        if (!helper.isFunction) {
-            logger.Error('The paramer is not a function.');
+        if (!Helper.isFunction) {
+            Logger.Error('The paramter is not a function.');
             return;
         }
-        if (helper.isGenerator(fn)) {
-            fn = helper.generatorToPromise(<GeneratorFunction>fn);
-        }
+        // koa has convert
+        // if (Helper.isGenerator(fn)) {
+        //     fn = Helper.generatorToPromise(<GeneratorFunction>fn);
+        // }
         return super.use(fn);
     }
 
@@ -235,14 +244,13 @@ export class Koatty extends Koa {
      * @memberof Koatty
      */
     public useExp(fn: Function): any {
-        if (!helper.isFunction) {
-            logger.Error('The paramer is not a function.');
+        if (!Helper.isFunction) {
+            Logger.Error('The paramter is not a function.');
             return;
         }
         fn = parseExp(fn);
         return this.use(fn);
     }
-
 
     /**
      * Prevent next process
@@ -262,7 +270,7 @@ export class Koatty extends Koa {
      * @memberof Koatty
      */
     public isPrevent(err: any) {
-        return helper.isError(err) && err.message === PREVENT_NEXT_PROCESS;
+        return Helper.isError(err) && err.message === PREVENT_NEXT_PROCESS;
     }
 
     /**
@@ -280,7 +288,7 @@ export class Koatty extends Koa {
             if (name === undefined) {
                 return caches[type];
             }
-            if (helper.isString(name)) {
+            if (Helper.isString(name)) {
                 // name不含. 一级
                 if (name.indexOf('.') === -1) {
                     return caches[type][name];
@@ -292,37 +300,25 @@ export class Koatty extends Koa {
             return caches[type][name];
 
         } catch (err) {
-            logger.Error(err);
+            Logger.Error(err);
             return null;
         }
     }
 
     /**
-     * Shorthand for:
-     * http.createServer(app.callback()).listen(...)
      *
-     * opts {
-     * *   port?: number;
-     * *   host?: string;
-     * *   backlog?: number;
-     * *   path?: string;
-     * *   exclusive?: boolean;
-     * *   readableAll?: boolean;
-     * *   writableAll?: boolean;
-     * *   ipv6Only?: boolean; //default false
      *
-     * }
+     * @param {IncomingMessage} req
+     * @param {ServerResponse} res
+     * @returns {*}  {KoattyContext}
+     * @memberof Koatty
      */
-    // tslint:disable-next-line: no-object-literal-type-assertion
-    public listen(opts: any = <ListenOptions>{
-        host: '127.0.0.1',
-        port: 3000,
-    }, listeningListener?: any) {
-        // start server
-        return super.listen(opts, listeningListener).on('clientError', (err: any, sock: any) => {
-            // logger.error("Bad request, HTTP parse error");
-            sock.end('400 Bad Request\r\n\r\n');
-        });
+    public createContext(req: IncomingMessage, res: ServerResponse): any {
+        const context: any = super.createContext(req, res);
+        context.bodyParser = null;
+        context.queryParser = null;
+        const koattyContext: KoattyContext = context;
+        return koattyContext;
     }
 
     /**
@@ -335,14 +331,14 @@ export class Koatty extends Koa {
         this.removeAllListeners('error');
         this.on('error', (err: any) => {
             if (!this.isPrevent(err)) {
-                logger.Error(err);
+                Logger.Error(err);
             }
             return;
         });
         // warning
         process.removeAllListeners('warning');
         process.on('warning', (warning) => {
-            logger.Warn(helper.toString(warning));
+            Logger.Warn(Helper.toString(warning));
             return;
         });
 
@@ -350,19 +346,19 @@ export class Koatty extends Koa {
         process.removeAllListeners('unhandledRejection');
         process.on('unhandledRejection', (reason) => {
             if (!this.isPrevent(reason)) {
-                logger.Error(helper.toString(reason));
+                Logger.Error(Helper.toString(reason));
             }
             return;
         });
-        // uncaugth exception
+        // uncaught exception
         process.removeAllListeners('uncaughtException');
         process.on('uncaughtException', (err) => {
             if (err.message.indexOf('EADDRINUSE') > -1) {
-                logger.Error(helper.toString(err));
+                Logger.Error(Helper.toString(err));
                 process.exit(-1);
             }
             if (!this.isPrevent(err)) {
-                logger.Error(helper.toString(err));
+                Logger.Error(Helper.toString(err));
             }
             return;
         });
@@ -385,8 +381,8 @@ export class Koatty extends Koa {
   //     },
   //     construct(target, args, newTarget) {
   //         Reflect.ownKeys(target.prototype).map((n) => {
-  //             if (newTarget.prototype.hasOwnProperty(n) && !propertys.includes(helper.toString(n))) {
-  //                 throw Error(`Cannot override the final method '${helper.toString(n)}'`);
+  //             if (newTarget.prototype.hasOwnProperty(n) && !propertys.includes(Helper.toString(n))) {
+  //                 throw Error(`Cannot override the final method '${Helper.toString(n)}'`);
   //             }
   //         });
   //         return Reflect.construct(target, args, newTarget);

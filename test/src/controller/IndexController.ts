@@ -32,7 +32,7 @@ export class IndexController extends AdminController {
         return Promise.resolve();
     }
 
-    @GetMapping("/:name")
+    @GetMapping("/path/:name")
     @Before(TestAspect)
     async default(@Get("test") test = '666', @PathVariable("name") name: string) {
         const info = await this.testService.test1(name);
@@ -52,12 +52,13 @@ export class IndexController extends AdminController {
     @Validated()
     async test(@Post() aa: TestDto) {
         // console.log(Helper.isFunction(TestModel));
-        const info = await this.testService.test(aa).catch((e: any) => {
-            return this.fail(e.message || e);
-        });
+        // const info = await this.testService.test(aa).catch((e: any) => {
+        //     return this.fail(e.message || e);
+        // });
         // return new Promise((resolve: Function) => setTimeout(() => resolve(1), 200));
         // throw Error("test");
-        return this.ok("success", info);
+        console.log(this.app.trace.get('traceId'), '------------------------')
+        return this.ok("success", "");
 
     }
 

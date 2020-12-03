@@ -1,7 +1,7 @@
 /**
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: MIT
+ * @ license: BSD (3-Clause)
  * @ version: 2020-05-18 09:32:15
  */
 import { Autowired, Component, Service, BaseService, Value } from '../../../src/index';

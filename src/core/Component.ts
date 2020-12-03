@@ -1,12 +1,11 @@
 /**
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: MIT
+ * @ license: BSD (3-Clause)
  * @ version: 2020-05-10 11:32:45
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
-// import * as helper from "think_lib";
 import { IOCContainer } from 'koatty_container';
 import { CONTROLLER_ROUTER } from "./Constants";
 import { Koatty, KoattyContext } from '../Koatty';
@@ -78,6 +77,7 @@ export interface IController {
     readonly isPost: () => boolean;
     readonly ok: (msg?: string | ApiInput, data?: any, ret?: number) => Promise<ApiOutput>;
     readonly param: (name?: string) => any;
+    readonly prevent: () => Promise<never>;
     readonly redirect: (urls: string, alt?: string) => void;
     readonly type: (contentType?: string, encoding?: string | boolean) => string;
 }

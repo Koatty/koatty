@@ -1,10 +1,10 @@
 /**
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: MIT
+ * @ license: BSD (3-Clause)
  * @ version: 2020-05-20 15:45:24
  */
-import * as helper from "think_lib";
+import { Helper } from "../util/Helper";
 import { Koatty, KoattyContext } from "../Koatty";
 import { ObjectDefinitionOptions } from "koatty_container";
 import { ApiInput, ApiOutput, IController } from '../core/Component';
@@ -161,7 +161,7 @@ export class BaseController implements IController {
      * @memberof BaseController
      */
     public expires(timeout = 30): void {
-        timeout = helper.toNumber(timeout) * 1000;
+        timeout = Helper.toNumber(timeout) * 1000;
         const date = new Date(Date.now() + timeout);
         this.ctx.set("Cache-Control", `max-age=${timeout}`);
         return this.ctx.set("Expires", date.toUTCString());
@@ -235,10 +235,11 @@ export class BaseController implements IController {
             message: '',
             data: null,
         };
-        if (helper.isError(msg)) {
-            obj.code = msg.code || defaultCode;
-            obj.message = msg.message;
-        } else if (helper.isObject(msg)) {
+        if (Helper.isError(msg)) {
+            const { c, m } = <any>msg;
+            obj.code = c || defaultCode;
+            obj.message = m;
+        } else if (Helper.isObject(msg)) {
             obj = { ...obj, ...msg };
         } else {
             obj.message = msg;
@@ -275,6 +276,16 @@ export class BaseController implements IController {
         return this.json(obj);
     }
 
+    /**
+     * Prevent next process
+     *
+     * @returns {*}  
+     * @memberof BaseController
+     */
+    public prevent() {
+        return this.app.prevent();
+    }
+
 }
 
 
@@ -294,8 +305,8 @@ export class BaseController implements IController {
 //     },
 //     construct(target, args, newTarget) {
 //         Reflect.ownKeys(target.prototype).map((n) => {
-//             if (newTarget.prototype.hasOwnProperty(n) && !propertys.includes(helper.toString(n))) {
-//                 throw Error(`Cannot override the final method "${helper.toString(n)}"`);
+//             if (newTarget.prototype.hasOwnProperty(n) && !propertys.includes(Helper.toString(n))) {
+//                 throw Error(`Cannot override the final method "${Helper.toString(n)}"`);
 //             }
 //         });
 //         return Reflect.construct(target, args, newTarget);
