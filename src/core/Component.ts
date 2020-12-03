@@ -77,6 +77,7 @@ export interface IController {
     readonly isPost: () => boolean;
     readonly ok: (msg?: string | ApiInput, data?: any, ret?: number) => Promise<ApiOutput>;
     readonly param: (name?: string) => any;
+    readonly prevent: () => Promise<never>;
     readonly redirect: (urls: string, alt?: string) => void;
     readonly type: (contentType?: string, encoding?: string | boolean) => string;
 }

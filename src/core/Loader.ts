@@ -192,11 +192,11 @@ export class Loader {
         const configs = app.getMap("configs") || {};
         //Logger
         if (configs.config) {
-            Logger.setLogFile(configs.config.logs || false);
+            Logger.setLogFile(configs.config.logs_write || false);
             Logger.setLevel(configs.config.logs_level || "INFO");
             Logger.setLogFilePath(configs.config.logs_path || app.rootPath + "/logs");
             // 
-            process.env.LOGS = configs.config.logs || false;
+            process.env.LOGS_WRITE = configs.config.logs_write || false;
             process.env.LOGS_PATH = configs.config.logs_path || app.rootPath + "/logs";
             process.env.LOGS_LEVEL = configs.config.logs_level || "INFO";
         }

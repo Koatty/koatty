@@ -276,6 +276,16 @@ export class BaseController implements IController {
         return this.json(obj);
     }
 
+    /**
+     * Prevent next process
+     *
+     * @returns {*}  
+     * @memberof BaseController
+     */
+    public prevent() {
+        return this.app.prevent();
+    }
+
 }
 
 
