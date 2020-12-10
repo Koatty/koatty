@@ -220,16 +220,16 @@ export class Loader {
         //Mount default middleware
         Loader.LoadDirectory(loadPath || "./middleware", app.thinkPath);
         //Mount application middleware
-        // const middlewares: any = {};
-        const appMeddlewares = IOCContainer.listClass("MIDDLEWARE") || [];
+        // const middleware: any = {};
+        const appMiddleware = IOCContainer.listClass("MIDDLEWARE") || [];
 
-        appMeddlewares.forEach((item: ComponentItem) => {
+        appMiddleware.forEach((item: ComponentItem) => {
             item.id = (item.id || "").replace("MIDDLEWARE:", "");
             if (item.id && Helper.isClass(item.target)) {
                 // inject configuration
                 injectValue(item.target, item.target.prototype, container);
                 container.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
-                // middlewares[item.id] = item.target;
+                // middleware[item.id] = item.target;
             }
         });
 
@@ -242,7 +242,7 @@ export class Loader {
             }
         });
         if (defaultList.length > middlewareConfList.length) {
-            Logger.Warn("Some middlewares is loaded but not allowed to execute.");
+            Logger.Warn("Some middleware is loaded but not allowed to execute.");
         }
         //Mount the middleware on first
         defaultList.unshift("PayloadMiddleware");

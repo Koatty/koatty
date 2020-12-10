@@ -119,14 +119,14 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         // app.emit("appStart");
         await asyncEvent(app, 'appStart');
 
+        Logger.Custom('think', '', '====================================');
+        // Start server
+        StartSever(app);
+
     } catch (err) {
         Logger.Error(err);
         process.exit();
     }
-
-    Logger.Custom('think', '', '====================================');
-    // Start server
-    StartSever(app);
 };
 
 
