@@ -70,7 +70,7 @@ function ordinaryGetPrototypeOf(obj: any): any {
     // or ensure each class has a valid `constructor` property on its prototype that
     // points back to the constructor.
 
-    // If this is not the same as Function.[[Prototype]], then this is definately inherited.
+    // If this is not the same as Function.[[Prototype]], then this is definitely inherited.
     // This is the case when in ES6 or when using __proto__ in a compatible browser.
     if (proto !== functionPrototype) {
         return proto;
@@ -100,7 +100,7 @@ function ordinaryGetPrototypeOf(obj: any): any {
 }
 /**
  * get metadata value of a metadata key on the prototype chain of an object and property
- * @param metadataKey metadata's key
+ * @param metadataKey metadata key
  * @param target the target of metadataKey
  */
 export function recursiveGetMetadata(metadataKey: any, target: any, propertyKey?: string | symbol): any[] {
@@ -112,11 +112,11 @@ export function recursiveGetMetadata(metadataKey: any, target: any, propertyKey?
     let parent = ordinaryGetPrototypeOf(target);
     while (parent !== null) {
         // metadata = Reflect.getOwnMetadata(metadataKey, parent, propertyKey);
-        const pmetadata = IOCContainer.listPropertyData(metadataKey, parent);
-        if (pmetadata) {
-            for (const n in pmetadata) {
+        const pMetadata = IOCContainer.listPropertyData(metadataKey, parent);
+        if (pMetadata) {
+            for (const n in pMetadata) {
                 if (!metadata.hasOwnProperty(n)) {
-                    metadata[n] = pmetadata[n];
+                    metadata[n] = pMetadata[n];
                 }
             }
         }

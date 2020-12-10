@@ -289,7 +289,7 @@ export class BaseController implements IController {
 }
 
 
-// const propertys = ["constructor", "init"];
+// const properties = ["constructor", "init"];
 // export const BaseController = new Proxy(Base, {
 //     set(target, key, value, receiver) {
 //         if (Reflect.get(target, key, receiver) === undefined) {
@@ -305,7 +305,7 @@ export class BaseController implements IController {
 //     },
 //     construct(target, args, newTarget) {
 //         Reflect.ownKeys(target.prototype).map((n) => {
-//             if (newTarget.prototype.hasOwnProperty(n) && !propertys.includes(Helper.toString(n))) {
+//             if (newTarget.prototype.hasOwnProperty(n) && !properties.includes(Helper.toString(n))) {
 //                 throw Error(`Cannot override the final method "${Helper.toString(n)}"`);
 //             }
 //         });
