@@ -144,6 +144,7 @@ async function getParamter(app: Koatty, ctx: KoattyContext, ctlParams: any = {})
 export class Router {
     app: Koatty;
     options: any;
+    router: KoaRouter<any, {}>;
 
     constructor(app: Koatty, options?: any) {
         this.app = app;
@@ -167,6 +168,9 @@ export class Router {
         this.options = {
             ...options
         };
+        // initialize
+        this.router = new KoaRouter(this.options);
+        Helper.define(app, "Router", this.router);
     }
 
     /**
@@ -177,10 +181,10 @@ export class Router {
     LoadRouter() {
         try {
             const app = this.app;
+            const kRouter: any = this.router;
             const execRouter = this.ExecRouter;
 
             const controllers = app.getMap("controllers") || {};
-            const kRouter: any = new KoaRouter(this.options);
             // tslint:disable-next-line: forin
             for (const n in controllers) {
                 const ctl = IOCContainer.getClass(n, "CONTROLLER");
@@ -199,8 +203,12 @@ export class Router {
                 }
             }
 
-            app.use(kRouter.routes()).use(kRouter.allowedMethods());
-            Helper.define(app, "Router", kRouter);
+            // Load in the 'appStart' event to facilitate the expansion of middleware
+            // exp: in middleware
+            // app.Router.get('/xxx',  (ctx: Koa.Context): any => {...})
+            app.on('appStart', () => {
+                app.use(kRouter.routes()).use(kRouter.allowedMethods());
+            });
         } catch (err) {
             Logger.Error(err);
         }

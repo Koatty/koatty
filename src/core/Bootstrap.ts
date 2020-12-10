@@ -90,6 +90,9 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         // Load App ready hooks
         Loader.LoadAppReadyHooks(target, app);
 
+        // New router
+        const router = new Router(app, app.config(undefined, 'router') || {});
+
         // Load Middleware
         Logger.Custom('think', '', 'Load Middlewares ...');
         await Loader.LoadMiddlewares(app, IOCContainer);
@@ -109,8 +112,6 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         Loader.LoadControllers(app, IOCContainer);
         // Load Routers
         Logger.Custom('think', '', 'Load Routers ...');
-        const routerConf = app.config(undefined, 'router') || {};
-        const router = new Router(app, routerConf);
         router.LoadRouter();
 
         // Emit app started event
