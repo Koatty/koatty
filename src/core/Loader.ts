@@ -277,7 +277,7 @@ export class Loader {
                 }
             }
         }
-        // app.setMap("middlewares", middlewares);
+        // app.setMap("middlewares", middleware);
     }
 
     /**
