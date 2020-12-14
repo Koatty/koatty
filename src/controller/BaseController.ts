@@ -43,26 +43,26 @@ export class BaseController implements IController {
 
     }
 
-    /**
-     * Class pre-execution method, executed before each class member methods (except constructor, init, __after) are executed.
-     *
-     * @returns {Promise<any>}
-     * @memberof BaseController
-     */
-    public __before(): Promise<any> {
-        return Promise.resolve();
-    }
+    // /**
+    //  * Class pre-execution method, executed before each class member methods (except constructor, init, __after) are executed.
+    //  *
+    //  * @returns {Promise<any>}
+    //  * @memberof BaseController
+    //  */
+    // public __before(): Promise<any> {
+    //     return Promise.resolve();
+    // }
 
-    /**
-     * Class after-execution method,after each class member methods (except constructor, init, __before) are executed.
-     *
-     * @public
-     * @returns {*}
-     * @memberof BaseController
-     */
-    public __after(): Promise<any> {
-        return Promise.resolve();
-    }
+    // /**
+    //  * Class after-execution method,after each class member methods (except constructor, init, __before) are executed.
+    //  *
+    //  * @public
+    //  * @returns {*}
+    //  * @memberof BaseController
+    //  */
+    // public __after(): Promise<any> {
+    //     return Promise.resolve();
+    // }
 
     /**
      * Whether it is a GET request

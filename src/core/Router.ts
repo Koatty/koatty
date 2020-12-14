@@ -232,11 +232,11 @@ export class Router {
             if (!ctx || !ctl.init) {
                 return ctx.throw(404, `Controller ${identifier} not found.`);
             }
-            // pre-method
-            if (ctl.__before) {
-                Logger.Info(`Execute the aspect ${identifier}.__before()`);
-                await ctl.__before();
-            }
+            // // pre-method
+            // if (ctl.__before) {
+            //     Logger.Info(`Execute the aspect ${identifier}.__before()`);
+            //     await ctl.__before();
+            // }
             // inject param
             let args = [];
             if (ctlParams) {
@@ -250,12 +250,13 @@ export class Router {
                 throw Error(`${err} at ${identifier}.${router.method}`);
             }
             throw err;
-        } finally {
-            // after-method
-            if (ctl.__after) {
-                Logger.Info(`Execute the aspect ${identifier}.__after()`);
-                await ctl.__after().catch((e: any) => Logger.Error(e));
-            }
         }
+        //  finally {
+        //     // after-method
+        //     if (ctl.__after) {
+        //         Logger.Info(`Execute the aspect ${identifier}.__after()`);
+        //         await ctl.__after().catch((e: any) => Logger.Error(e));
+        //     }
+        // }
     }
 }
