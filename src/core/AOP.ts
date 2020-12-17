@@ -98,7 +98,7 @@ export function Before(aopName: string | Function): MethodDecorator {
                 if (aspect && Helper.isFunction(aspect.run)) {
                     Logger.Info(`Execute the aspect ${name}`);
                     // tslint:disable-next-line: no-invalid-this
-                    await Promise.resolve(Reflect.apply(aspect.run, this, props));
+                    await aspect.run(props);
                 }
                 // tslint:disable-next-line: no-invalid-this
                 return value.apply(this, props);
@@ -160,7 +160,7 @@ export function After(aopName: string | Function): MethodDecorator {
                 if (aspect && Helper.isFunction(aspect.run)) {
                     Logger.Info(`Execute the aspect ${name}`);
                     // tslint:disable-next-line: no-invalid-this
-                    await Promise.resolve(Reflect.apply(aspect.run, this, props));
+                    await aspect.run(props);
                 }
                 // tslint:disable-next-line: no-invalid-this
                 return value.apply(this, props);
