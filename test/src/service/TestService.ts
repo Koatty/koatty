@@ -4,7 +4,7 @@
  * @ license: Apache License 2.0
  * @ version: 2020-05-19 14:28:30
  */
-import { Service, BaseService, Autowired, Scheduled, CacheAble, SchedulerLock, Helper } from "../../../src/index";
+import { Service, BaseService, Autowired, Scheduled, CacheAble, SchedulerLock, Helper, Exception } from "../../../src/index";
 import { App } from '../App';
 import { CommonService, MoInterface } from './CommonService';
 import { TestDto } from '../model/TestDto';
@@ -34,6 +34,11 @@ export class TestService extends CommonService {
         // throw Error("aaaaaa");
         // console.log(this.app.trace.get("traceId"));
         return pf.promise;
+    }
+
+    async test2() {
+        throw new Exception("exception", 1, 502);
+
     }
 
     @Scheduled("0 * * * * *")

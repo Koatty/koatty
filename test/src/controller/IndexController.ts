@@ -26,14 +26,15 @@ export class IndexController extends AdminController {
         this.cache = {};
     }
 
-    __before() {
-        console.log(this.app.test);
-        console.log('__before', this.app.env);
-        return Promise.resolve();
-    }
 
     @GetMapping("/")
+    @Before(TestAspect)
     async default() {
+        const info = await this.testService.test2()
+        // .catch(err => {
+        //     this.fail(err);
+        //     return this.prevent();
+        // });
         return this.ok("Hello Koatty.");
     }
 
