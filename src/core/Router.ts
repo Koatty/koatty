@@ -4,14 +4,15 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-07-06 14:23:43
  */
+import util from "util";
 import KoaRouter from "@koa/router";
-import { Helper } from "../util/Helper";
+import { Helper, recursiveGetMetadata } from "../util/Helper";
 import { Logger } from "../util/Logger";
 import { Koatty, KoattyContext } from "../Koatty";
 import { IOCContainer } from 'koatty_container';
 import { checkParams, PARAM_RULE_KEY, PARAM_CHECK_KEY } from 'koatty_validation';
 import { CONTROLLER_ROUTER, ROUTER_KEY, PARAM_KEY } from "./Constants";
-import { recursiveGetMetadata } from "../util/Lib";
+import { Exception, isException, isPrevent } from "./Exception";
 
 /**
  * Http timeout timer
@@ -170,7 +171,6 @@ export class Router {
         };
         // initialize
         this.router = new KoaRouter(this.options);
-        Helper.define(app, "Router", this.router);
     }
 
     /**
@@ -245,9 +245,13 @@ export class Router {
             // method
             const res = await ctl[router.method](...args);
             return (res === undefined ? "" : res);
-        } catch (err) {
-            if (!Helper.isError(err)) {
-                throw Error(`${err} at ${identifier}.${router.method}`);
+        } catch (err: any) {
+            if (isPrevent(err)) {
+                // ctx.status = 200;
+                return;
+            }
+            if (!isException(err)) {
+                throw new Exception(err.message || util.inspect(err), err.code || 1, err.status || 500);
             }
             throw err;
         }

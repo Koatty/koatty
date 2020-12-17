@@ -6,16 +6,16 @@
  */
 import * as globby from "globby";
 import * as path from "path";
-import { Helper } from "../util/Helper";
+import { Helper, requireDefault } from "../util/Helper";
 import { Logger } from "../util/Logger";
 import { BaseService } from "../service/BaseService";
-import { requireDefault } from "../util/Lib";
 import { injectValue } from './Value';
 import { injectSchedule } from 'koatty_schedule';
 import { Container, IOCContainer, TAGGED_CLS } from "koatty_container";
 import { BaseController } from "../controller/BaseController";
 import { IMiddleware, IPlugin } from './Component';
 import { Koatty } from '../Koatty';
+import { TraceHandler } from "./Trace";
 import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 
 // type AppReadyHookFunc
@@ -234,23 +234,20 @@ export class Loader {
         });
 
         const middlewareConfList = middlewareConf.list;
-        const defaultList: any[] = [];
-        const bandList = ["TraceMiddleware", "PayloadMiddleware"];
+        const defaultList = ["StaticMiddleware", "PayloadMiddleware"];
         middlewareConfList.forEach((item: string) => {
-            if (!bandList.includes(item)) {
+            if (!defaultList.includes(item)) {
                 defaultList.push(item);
             }
         });
         if (defaultList.length > middlewareConfList.length) {
             Logger.Warn("Some middleware is loaded but not allowed to execute.");
         }
-        //Mount the middleware on first
-        defaultList.unshift("PayloadMiddleware");
-        defaultList.unshift("TraceMiddleware");
 
         //de-duplication
         const appMList = [...new Set(defaultList)];
-
+        // TraceHandler
+        app.use(TraceHandler(app));
         //Automatically call middleware
         for (const key of appMList) {
             const handle: IMiddleware = container.get(key, "MIDDLEWARE");

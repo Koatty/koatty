@@ -13,6 +13,7 @@ import { Router } from "./Router";
 import { Koatty } from '../Koatty';
 import { StartSever } from './Server';
 import { Loader } from "./Loader";
+import { TraceHandler } from "./Trace";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
 
 /**
@@ -91,7 +92,11 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         Loader.LoadAppReadyHooks(target, app);
 
         // New router
-        const router = new Router(app, app.config(undefined, 'router') || {});
+        const KoattyRouter = new Router(app, app.config(undefined, 'router') || {});
+        // Middleware may depend on
+        Helper.define(app, "Router", KoattyRouter.router);
+        // TraceHandler
+        app.use(TraceHandler(app));
 
         // Load Middleware
         Logger.Custom('think', '', 'Load Middlewares ...');
@@ -112,7 +117,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         Loader.LoadControllers(app, IOCContainer);
         // Load Routers
         Logger.Custom('think', '', 'Load Routers ...');
-        router.LoadRouter();
+        KoattyRouter.LoadRouter();
 
         // Emit app started event
         Logger.Custom('think', '', 'Emit App Start ...');
