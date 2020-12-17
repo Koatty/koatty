@@ -11,7 +11,7 @@ import { IncomingMessage, ServerResponse } from 'http';
 import { Namespace } from "cls-hooked";
 import { Helper } from "./util/Helper";
 import { Logger } from "./util/Logger";
-import { PREVENT_NEXT_PROCESS } from "./core/Constants";
+import { isPrevent } from "./core/Exception";
 const pkg = require("../package.json");
 
 /**
@@ -253,27 +253,6 @@ export class Koatty extends Koa {
     }
 
     /**
-     * Prevent next process
-     *
-     * @returns {any}
-     * @memberof Koatty
-     */
-    public prevent() {
-        return Promise.reject(new Error(PREVENT_NEXT_PROCESS));
-    }
-
-    /**
-     * Check is prevent error
-     *
-     * @param {any} err
-     * @returns {any}
-     * @memberof Koatty
-     */
-    public isPrevent(err: any) {
-        return Helper.isError(err) && err.message === PREVENT_NEXT_PROCESS;
-    }
-
-    /**
      * Read app configuration
      *
      * @param {any} name
@@ -330,7 +309,7 @@ export class Koatty extends Koa {
         // koa error
         this.removeAllListeners('error');
         this.on('error', (err: any) => {
-            if (!this.isPrevent(err)) {
+            if (!isPrevent(err)) {
                 Logger.Error(err);
             }
             return;
@@ -345,7 +324,7 @@ export class Koatty extends Koa {
         // promise reject error
         process.removeAllListeners('unhandledRejection');
         process.on('unhandledRejection', (reason) => {
-            if (!this.isPrevent(reason)) {
+            if (!isPrevent(reason)) {
                 Logger.Error(Helper.toString(reason));
             }
             return;
@@ -357,7 +336,7 @@ export class Koatty extends Koa {
                 Logger.Error(Helper.toString(err));
                 process.exit(-1);
             }
-            if (!this.isPrevent(err)) {
+            if (!isPrevent(err)) {
                 Logger.Error(Helper.toString(err));
             }
             return;
