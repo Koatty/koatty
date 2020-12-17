@@ -30,7 +30,7 @@ export class IndexController extends AdminController {
     @GetMapping("/")
     @Before(TestAspect)
     async default() {
-        const info = await this.testService.test2()
+        // const info = await this.testService.test2()
         // .catch(err => {
         //     this.fail(err);
         //     return this.prevent();

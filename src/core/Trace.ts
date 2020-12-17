@@ -28,10 +28,10 @@ export function TraceServerSetup(app: Koatty): Namespace {
 /**
  * debug/trace server handle binding
  *
- * @param {Koatty} app  app实例
- * @param {IncomingMessage | Http2ServerRequest} req  request对象
- * @param {ServerResponse | Http2ServerResponse} res  response对象
- * @param {boolean} openTrace 是否开启全链路debug/trace
+ * @param {Koatty} app  app instance
+ * @param {IncomingMessage | Http2ServerRequest} req  request
+ * @param {ServerResponse | Http2ServerResponse} res  response
+ * @param {boolean} openTrace enable full stack debug & trace
  */
 export function TraceBinding(
     app: Koatty,
@@ -39,13 +39,13 @@ export function TraceBinding(
     res: ServerResponse | Http2ServerResponse,
     openTrace: boolean,
 ) {
-    // 判断是否开启全链路debug/trace
+    // if enable full stack debug & trace
     if (openTrace) {
         app.trace.run(() => {
-            // 事件绑定
+            // event binding
             app.trace.bindEmitter(req);
             app.trace.bindEmitter(res);
-            // 执行app.callback
+            // execute app.callback
             app.callback()(req, res);
         });
     } else {
@@ -78,16 +78,16 @@ export function TraceHandler(app: Koatty) {
         ctx.set('X-Content-Type-Options', 'nosniff');
         ctx.set('X-XSS-Protection', '1;mode=block');
 
-        // 如果app有traceInstance，说明开启全链路debug/trace，生成traceId
+        // if enable full stack debug & trace，created traceId
         let currTraceId = '';
         if (app.trace) {
-            // 兼容不同的key
+            // some key
             const traceId = ctx.headers.traceId || ctx.query.traceId;
             const requestId = ctx.headers.requestId || ctx.query.requestId;
 
-            // 来源traceId
+            // traceId
             const parentId = traceId || requestId;
-            // 当前traceId，如果来源traceId不为空，则复用来源traceId
+            // current traceId
             currTraceId = parentId || `koatty-${UUID()}`;
             app.trace.set('parentId', parentId || '');
             app.trace.set('traceId', currTraceId);
