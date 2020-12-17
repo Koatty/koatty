@@ -64,8 +64,8 @@ export interface IController {
     app: Koatty;
     ctx: KoattyContext;
 
-    __before: () => Promise<any>;
-    __after: () => Promise<any>;
+    // __before: () => Promise<any>;
+    // __after: () => Promise<any>;
     readonly body: (data: any, contentType?: string, encoding?: string) => Promise<any>;
     readonly deny: (code?: number) => void;
     readonly expires: (timeout: number) => void;

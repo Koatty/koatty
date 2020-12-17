@@ -63,7 +63,7 @@
         "koatty_logger": "^1.x.x",
         "koatty_payload": "^1.x.x",
         "koatty_schedule": "^1.x.x",
-        "koatty_trace": "^1.x.x",
+        "koatty_static": "^1.x.x",
         "koatty_validation": "^1.x.x",
         "reflect-metadata": "^0.1.13",
         "tslib": "^2.0.3"

@@ -12,13 +12,13 @@ import { IOCContainer } from 'koatty_container';
 /**
  * Dynamically add methods for target class types
  *
- * @param {Function} clazz
+ * @param {Function} classes
  * @param {string} protoName
  * @param {(string | Function)} methodName
  */
-function defineNewProperty(clazz: Function, protoName: string, methodName: string | Function) {
-    const oldMethod = Reflect.get(clazz.prototype, protoName);
-    Reflect.defineProperty(clazz.prototype, protoName, {
+function defineNewProperty(classes: Function, protoName: string, methodName: string | Function) {
+    const oldMethod = Reflect.get(classes.prototype, protoName);
+    Reflect.defineProperty(classes.prototype, protoName, {
         writable: true,
         async value(...props: any[]) {
             if (oldMethod) {
@@ -70,7 +70,7 @@ export function Aspect(identifier?: string): ClassDecorator {
 }
 
 /**
- * Executed before specifying the pointcut method.
+ * Executed before specifying the PointCut method.
  *
  * @export
  * @param {(string | Function)} aopName
@@ -98,7 +98,7 @@ export function Before(aopName: string | Function): MethodDecorator {
                 if (aspect && Helper.isFunction(aspect.run)) {
                     Logger.Info(`Execute the aspect ${name}`);
                     // tslint:disable-next-line: no-invalid-this
-                    await Promise.resolve(Reflect.apply(aspect.run, this, props));
+                    await aspect.run(props);
                 }
                 // tslint:disable-next-line: no-invalid-this
                 return value.apply(this, props);
@@ -109,7 +109,7 @@ export function Before(aopName: string | Function): MethodDecorator {
 }
 
 /**
- * Executed after execution of each method of the specified pointcut class.
+ * Executed after execution of each method of the specified PointCut class.
  *
  * @export
  * @param {string} [aopName]
@@ -129,7 +129,7 @@ export function Before(aopName: string | Function): MethodDecorator {
 // }
 
 /**
- * Executed after specifying the pointcut method.
+ * Executed after specifying the PointCut method.
  *
  * @export
  * @param {(string | Function)} aopName
@@ -160,7 +160,7 @@ export function After(aopName: string | Function): MethodDecorator {
                 if (aspect && Helper.isFunction(aspect.run)) {
                     Logger.Info(`Execute the aspect ${name}`);
                     // tslint:disable-next-line: no-invalid-this
-                    await Promise.resolve(Reflect.apply(aspect.run, this, props));
+                    await aspect.run(props);
                 }
                 // tslint:disable-next-line: no-invalid-this
                 return value.apply(this, props);
@@ -171,7 +171,7 @@ export function After(aopName: string | Function): MethodDecorator {
 }
 
 /**
- * Executed after execution of each method of the specified pointcut class.
+ * Executed after execution of each method of the specified PointCut class.
  *
  * @export
  * @param {string} aopName

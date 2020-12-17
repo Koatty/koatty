@@ -6,16 +6,16 @@
  */
 import * as globby from "globby";
 import * as path from "path";
-import { Helper } from "../util/Helper";
+import { Helper, requireDefault } from "../util/Helper";
 import { Logger } from "../util/Logger";
 import { BaseService } from "../service/BaseService";
-import { requireDefault } from "../util/Lib";
 import { injectValue } from './Value';
 import { injectSchedule } from 'koatty_schedule';
 import { Container, IOCContainer, TAGGED_CLS } from "koatty_container";
 import { BaseController } from "../controller/BaseController";
 import { IMiddleware, IPlugin } from './Component';
 import { Koatty } from '../Koatty';
+import { TraceHandler } from "./Trace";
 import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 
 // type AppReadyHookFunc
@@ -220,37 +220,34 @@ export class Loader {
         //Mount default middleware
         Loader.LoadDirectory(loadPath || "./middleware", app.thinkPath);
         //Mount application middleware
-        // const middlewares: any = {};
-        const appMeddlewares = IOCContainer.listClass("MIDDLEWARE") || [];
+        // const middleware: any = {};
+        const appMiddleware = IOCContainer.listClass("MIDDLEWARE") || [];
 
-        appMeddlewares.forEach((item: ComponentItem) => {
+        appMiddleware.forEach((item: ComponentItem) => {
             item.id = (item.id || "").replace("MIDDLEWARE:", "");
             if (item.id && Helper.isClass(item.target)) {
                 // inject configuration
                 injectValue(item.target, item.target.prototype, container);
                 container.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
-                // middlewares[item.id] = item.target;
+                // middleware[item.id] = item.target;
             }
         });
 
         const middlewareConfList = middlewareConf.list;
-        const defaultList: any[] = [];
-        const bandList = ["TraceMiddleware", "PayloadMiddleware"];
+        const defaultList = ["StaticMiddleware", "PayloadMiddleware"];
         middlewareConfList.forEach((item: string) => {
-            if (!bandList.includes(item)) {
+            if (!defaultList.includes(item)) {
                 defaultList.push(item);
             }
         });
         if (defaultList.length > middlewareConfList.length) {
-            Logger.Warn("Some middlewares is loaded but not allowed to execute.");
+            Logger.Warn("Some middleware is loaded but not allowed to execute.");
         }
-        //Mount the middleware on first
-        defaultList.unshift("PayloadMiddleware");
-        defaultList.unshift("TraceMiddleware");
 
         //de-duplication
         const appMList = [...new Set(defaultList)];
-
+        // TraceHandler
+        app.use(TraceHandler(app));
         //Automatically call middleware
         for (const key of appMList) {
             const handle: IMiddleware = container.get(key, "MIDDLEWARE");
@@ -277,7 +274,7 @@ export class Loader {
                 }
             }
         }
-        // app.setMap("middlewares", middlewares);
+        // app.setMap("middlewares", middleware);
     }
 
     /**

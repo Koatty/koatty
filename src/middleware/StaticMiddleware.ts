@@ -6,11 +6,11 @@
  */
 import { Middleware, IMiddleware } from "../core/Component";
 import { Koatty } from "../Koatty";
-import { trace } from "koatty_trace";
+import { Static } from "koatty_static";
 
 @Middleware()
-export class TraceMiddleware implements IMiddleware {
+export class StaticMiddleware implements IMiddleware {
     run(options: any, app: Koatty) {
-        return trace(options, app);
+        return Static(options, app);
     }
 }

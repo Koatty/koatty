@@ -5,6 +5,7 @@
  * @ version: 2020-05-20 15:45:24
  */
 import { Helper } from "../util/Helper";
+import { prevent } from "../core/Exception";
 import { Koatty, KoattyContext } from "../Koatty";
 import { ObjectDefinitionOptions } from "koatty_container";
 import { ApiInput, ApiOutput, IController } from '../core/Component';
@@ -43,26 +44,26 @@ export class BaseController implements IController {
 
     }
 
-    /**
-     * Class pre-execution method, executed before each class member methods (except constructor, init, __after) are executed.
-     *
-     * @returns {Promise<any>}
-     * @memberof BaseController
-     */
-    public __before(): Promise<any> {
-        return Promise.resolve();
-    }
+    // /**
+    //  * Class pre-execution method, executed before each class member methods (except constructor, init, __after) are executed.
+    //  *
+    //  * @returns {Promise<any>}
+    //  * @memberof BaseController
+    //  */
+    // public __before(): Promise<any> {
+    //     return Promise.resolve();
+    // }
 
-    /**
-     * Class after-execution method,after each class member methods (except constructor, init, __before) are executed.
-     *
-     * @public
-     * @returns {*}
-     * @memberof BaseController
-     */
-    public __after(): Promise<any> {
-        return Promise.resolve();
-    }
+    // /**
+    //  * Class after-execution method,after each class member methods (except constructor, init, __before) are executed.
+    //  *
+    //  * @public
+    //  * @returns {*}
+    //  * @memberof BaseController
+    //  */
+    // public __after(): Promise<any> {
+    //     return Promise.resolve();
+    // }
 
     /**
      * Whether it is a GET request
@@ -220,7 +221,7 @@ export class BaseController implements IController {
     }
 
     /**
-     * 格式化api接口数据格式
+     * Format api interface data format
      *
      * @private
      * @param {Error | string | ApiInput} msg   待处理的接口数据信息｜接口msg
@@ -236,9 +237,9 @@ export class BaseController implements IController {
             data: null,
         };
         if (Helper.isError(msg)) {
-            const { c, m } = <any>msg;
-            obj.code = c || defaultCode;
-            obj.message = m;
+            const { code, message } = <any>msg;
+            obj.code = code || defaultCode;
+            obj.message = message;
         } else if (Helper.isObject(msg)) {
             obj = { ...obj, ...msg };
         } else {
@@ -265,9 +266,9 @@ export class BaseController implements IController {
     /**
      * Response to normalize json format content for fail
      *
-     * @param {(string | ApiInput)} msg   待处理的message消息
-     * @param {*} [data]    待处理的数据
-     * @param {number} [code=500]    错误码，默认1
+     * @param {(string | ApiInput)} msg   
+     * @param {*} [data]    
+     * @param {number} [code=1]    
      * @returns {Promise<ApiOutput>}
      * @memberof BaseController
      */
@@ -283,13 +284,13 @@ export class BaseController implements IController {
      * @memberof BaseController
      */
     public prevent() {
-        return this.app.prevent();
+        return prevent();
     }
 
 }
 
 
-// const propertys = ["constructor", "init"];
+// const properties = ["constructor", "init"];
 // export const BaseController = new Proxy(Base, {
 //     set(target, key, value, receiver) {
 //         if (Reflect.get(target, key, receiver) === undefined) {
@@ -305,7 +306,7 @@ export class BaseController implements IController {
 //     },
 //     construct(target, args, newTarget) {
 //         Reflect.ownKeys(target.prototype).map((n) => {
-//             if (newTarget.prototype.hasOwnProperty(n) && !propertys.includes(Helper.toString(n))) {
+//             if (newTarget.prototype.hasOwnProperty(n) && !properties.includes(Helper.toString(n))) {
 //                 throw Error(`Cannot override the final method "${Helper.toString(n)}"`);
 //             }
 //         });

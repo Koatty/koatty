@@ -13,6 +13,7 @@ import { Router } from "./Router";
 import { Koatty } from '../Koatty';
 import { StartSever } from './Server';
 import { Loader } from "./Loader";
+import { TraceHandler } from "./Trace";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
 
 /**
@@ -90,6 +91,11 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         // Load App ready hooks
         Loader.LoadAppReadyHooks(target, app);
 
+        // New router
+        const KoattyRouter = new Router(app, app.config(undefined, 'router') || {});
+        // Middleware may depend on
+        Helper.define(app, "Router", KoattyRouter.router);
+
         // Load Middleware
         Logger.Custom('think', '', 'Load Middlewares ...');
         await Loader.LoadMiddlewares(app, IOCContainer);
@@ -109,23 +115,21 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         Loader.LoadControllers(app, IOCContainer);
         // Load Routers
         Logger.Custom('think', '', 'Load Routers ...');
-        const routerConf = app.config(undefined, 'router') || {};
-        const router = new Router(app, routerConf);
-        router.LoadRouter();
+        KoattyRouter.LoadRouter();
 
         // Emit app started event
         Logger.Custom('think', '', 'Emit App Start ...');
         // app.emit("appStart");
         await asyncEvent(app, 'appStart');
 
+        Logger.Custom('think', '', '====================================');
+        // Start server
+        StartSever(app);
+
     } catch (err) {
         Logger.Error(err);
         process.exit();
     }
-
-    Logger.Custom('think', '', '====================================');
-    // Start server
-    StartSever(app);
 };
 
 

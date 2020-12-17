@@ -26,15 +26,21 @@ export class IndexController extends AdminController {
         this.cache = {};
     }
 
-    __before() {
-        console.log(this.app.test);
-        console.log('__before', this.app.env);
-        return Promise.resolve();
+
+    @GetMapping("/")
+    @Before(TestAspect)
+    async default() {
+        // const info = await this.testService.test2()
+        // .catch(err => {
+        //     this.fail(err);
+        //     return this.prevent();
+        // });
+        return this.ok("Hello Koatty.");
     }
 
     @GetMapping("/path/:name")
     @Before(TestAspect)
-    async default(@Get("test") test = '666', @PathVariable("name") name: string) {
+    async path(@Get("test") test = '666', @PathVariable("name") name: string) {
         const info = await this.testService.test1(name);
         // throw Error("default");
         return this.body(info);
@@ -57,7 +63,7 @@ export class IndexController extends AdminController {
         // });
         // return new Promise((resolve: Function) => setTimeout(() => resolve(1), 200));
         // throw Error("test");
-        console.log(this.app.trace.get('traceId'), '------------------------')
+        console.log(this.app.trace.get('traceId'), '------------------------');
         return this.ok("success", "");
 
     }

@@ -1,9 +1,8 @@
-/*
- * @Author: richen
- * @Date: 2020-10-12 16:56:12
- * @LastEditTime: 2020-11-23 10:49:51
- * @Description: 
- * @Copyright (c) - <richenlin(at)gmail.com>
+/**
+ * @ author: richen
+ * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
+ * @ license: BSD (3-Clause)
+ * @ version: 2020-05-10 11:49:15
  */
 
 export { DefaultLogger as Logger } from "koatty_logger";

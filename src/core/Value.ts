@@ -7,7 +7,7 @@
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import { Logger } from "../util/Logger";
-import { recursiveGetMetadata } from "../util/Lib";
+import { recursiveGetMetadata } from "../util/Helper";
 import { Container, IOCContainer, TAGGED_ARGS } from "koatty_container";
 
 /**

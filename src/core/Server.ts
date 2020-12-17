@@ -1,7 +1,7 @@
 /*
  * @Author: richen
  * @Date: 2020-07-06 15:53:37
- * @LastEditTime: 2020-11-27 16:16:25
+ * @LastEditTime: 2020-12-15 16:33:35
  * @Description:
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
@@ -10,7 +10,7 @@ import { createSecureServer } from 'http2';
 import { Koatty } from "../Koatty";
 import { Logger } from "../util/Logger";
 import { Helper } from "../util/Helper";
-import { TraceHandler, TraceServerSetup } from './Trace';
+import { TraceBinding, TraceServerSetup } from './Trace';
 import { createServer } from 'http';
 const pkg = require("../../package.json");
 
@@ -98,7 +98,7 @@ export function startHTTP(app: Koatty, openTrace: boolean) {
 
     Logger.Custom("think", "", `Protocol: HTTP/1.1`);
     const server = createServer((req, res) => {
-        TraceHandler(app, req, res, openTrace);
+        TraceBinding(app, req, res, openTrace);
     });
     server.listen({ port, host: hostname }, listening(app, { hostname, port, listenUrl: `http://${hostname}:${port}/` })).on('clientError', (err: any, sock: any) => {
         // Logger.error("Bad request, HTTP parse error");
@@ -130,7 +130,7 @@ export function startHTTP2(app: Koatty, openTrace: boolean) {
 
     Logger.Custom("think", "", `Protocol: HTTP/2`);
     const server = createSecureServer(options, (req, res) => {
-        TraceHandler(app, req, res, openTrace);
+        TraceBinding(app, req, res, openTrace);
     });
     server.listen(port, hostname, 0, listening(app, { hostname, port, listenUrl: `https://${hostname}:${port}/` })).on('clientError', (err: any, sock: any) => {
         // Logger.error("Bad request, HTTP parse error");

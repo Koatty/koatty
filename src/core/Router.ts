@@ -4,14 +4,15 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-07-06 14:23:43
  */
+import util from "util";
 import KoaRouter from "@koa/router";
-import { Helper } from "../util/Helper";
+import { Helper, recursiveGetMetadata } from "../util/Helper";
 import { Logger } from "../util/Logger";
 import { Koatty, KoattyContext } from "../Koatty";
 import { IOCContainer } from 'koatty_container';
 import { checkParams, PARAM_RULE_KEY, PARAM_CHECK_KEY } from 'koatty_validation';
 import { CONTROLLER_ROUTER, ROUTER_KEY, PARAM_KEY } from "./Constants";
-import { recursiveGetMetadata } from "../util/Lib";
+import { Exception, isException, isPrevent } from "./Exception";
 
 /**
  * Http timeout timer
@@ -144,6 +145,7 @@ async function getParamter(app: Koatty, ctx: KoattyContext, ctlParams: any = {})
 export class Router {
     app: Koatty;
     options: any;
+    router: KoaRouter<any, {}>;
 
     constructor(app: Koatty, options?: any) {
         this.app = app;
@@ -167,6 +169,8 @@ export class Router {
         this.options = {
             ...options
         };
+        // initialize
+        this.router = new KoaRouter(this.options);
     }
 
     /**
@@ -177,10 +181,10 @@ export class Router {
     LoadRouter() {
         try {
             const app = this.app;
+            const kRouter: any = this.router;
             const execRouter = this.ExecRouter;
 
             const controllers = app.getMap("controllers") || {};
-            const kRouter: any = new KoaRouter(this.options);
             // tslint:disable-next-line: forin
             for (const n in controllers) {
                 const ctl = IOCContainer.getClass(n, "CONTROLLER");
@@ -199,8 +203,12 @@ export class Router {
                 }
             }
 
-            app.use(kRouter.routes()).use(kRouter.allowedMethods());
-            Helper.define(app, "Router", kRouter);
+            // Load in the 'appStart' event to facilitate the expansion of middleware
+            // exp: in middleware
+            // app.Router.get('/xxx',  (ctx: Koa.Context): any => {...})
+            app.on('appStart', () => {
+                app.use(kRouter.routes()).use(kRouter.allowedMethods());
+            });
         } catch (err) {
             Logger.Error(err);
         }
@@ -224,11 +232,11 @@ export class Router {
             if (!ctx || !ctl.init) {
                 return ctx.throw(404, `Controller ${identifier} not found.`);
             }
-            // pre-method
-            if (ctl.__before) {
-                Logger.Info(`Execute the aspect ${identifier}.__before()`);
-                await ctl.__before();
-            }
+            // // pre-method
+            // if (ctl.__before) {
+            //     Logger.Info(`Execute the aspect ${identifier}.__before()`);
+            //     await ctl.__before();
+            // }
             // inject param
             let args = [];
             if (ctlParams) {
@@ -237,17 +245,22 @@ export class Router {
             // method
             const res = await ctl[router.method](...args);
             return (res === undefined ? "" : res);
-        } catch (err) {
-            if (!Helper.isError(err)) {
-                throw Error(`${err} at ${identifier}.${router.method}`);
+        } catch (err: any) {
+            if (isPrevent(err)) {
+                // ctx.status = 200;
+                return;
+            }
+            if (!isException(err)) {
+                throw new Exception(err.message || util.inspect(err), err.code || 1, err.status || 500);
             }
             throw err;
-        } finally {
-            // after-method
-            if (ctl.__after) {
-                Logger.Info(`Execute the aspect ${identifier}.__after()`);
-                await ctl.__after().catch((e: any) => Logger.Error(e));
-            }
         }
+        //  finally {
+        //     // after-method
+        //     if (ctl.__after) {
+        //         Logger.Info(`Execute the aspect ${identifier}.__after()`);
+        //         await ctl.__after().catch((e: any) => Logger.Error(e));
+        //     }
+        // }
     }
 }

@@ -17,10 +17,10 @@ export class ZadtestMiddleware implements IMiddleware {
             console.log('Zadtest Middleware');
         });
         return async function (ctx: KoattyContext, next: Function) {
-            console.log('before');
+            console.log('before ZadtestMiddleware');
             console.log(app.test);
             await next();
-            console.log('after');
+            console.log('after ZadtestMiddleware');
         };
     }
 }
