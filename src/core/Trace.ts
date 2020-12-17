@@ -227,7 +227,7 @@ function htmlRend(app: Koatty, ctx: KoattyContext, err: Exception) {
     const { code, message } = err;
     const res = `<!DOCTYPE html><html><head><title>Error - ${code || 1}</title><meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <style>body {padding: 50px 80px;font: 14px 'Microsoft YaHei','微软雅黑',Helvetica,Sans-serif;}h1, h2 {margin: 0;padding: 10px 0;}h1 {font-size: 2em;}h2 {font-size: 1.2em;font-weight: 200;color: #aaa;}pre {font-size: .8em;}</style>
-    </head><body><div id="error"><h1>Error</h1><p>Oops! Your visit is rejected!</p><h2>Message:</h2><pre><code>${message || ctx.message || ""}</code></pre></div></body></html>`;
+    </head><body><div id="error"><h1>Error</h1><p>Oops! Your visit is rejected!</p><h2>Message:</h2><pre><code>${Helper.escapeHtml(message) || ctx.message || ""}</code></pre></div></body></html>`;
 
     return ctx.res.end(res);
 }
@@ -251,7 +251,7 @@ function jsonRend(app: Koatty, ctx: KoattyContext, err: Exception) {
 }
 
 /**
- *
+ * 
  *
  * @param {Koatty} app
  * @param {KoattyContext} ctx
