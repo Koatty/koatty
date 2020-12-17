@@ -6,17 +6,17 @@
  */
 export default {
     /*app config*/
-    app_port: 3000, // 监听端口
+    app_port: 3000, // Listening port
     app_hostname: "", // Hostname
-    serve_mod: "http", // 服务模式 'http' | 'http2' | 'websocket' | 'rpc'
-    open_trace: false, // full stack debug & trace, default: false
-    // https certificate
-    key_file: "",
-    crt_file: "",
-    encoding: "utf-8", //输出数据的编码
+    serve_mod: "http", // Serve mode 'http' | 'http2' | 'websocket' | 'rpc'
+    open_trace: false, // Full stack debug & trace, default: false
+    http_timeout: 10, // HTTP request timeout time(seconds)
+    key_file: "", // HTTPS certificate key
+    crt_file: "", // HTTPS certificate crt
+    encoding: "utf-8", // Character Encoding
 
-    logs_write: true, //是否存储日志
-    logs_path: process.env.ROOT_PATH + "/logs", //存储日志文件目录
-    logs_level: "WARN" //日志存储级别, "DEBUG" | "INFO" | "WARN" | "ERROR"
+    logs_write: true, // Whether to store logs
+    logs_path: process.env.ROOT_PATH + "/logs", // Log file directory
+    logs_level: "WARN" // Log storage level, "DEBUG" | "INFO" | "WARN" | "ERROR"
 
 };

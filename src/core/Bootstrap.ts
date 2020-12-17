@@ -95,8 +95,6 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         const KoattyRouter = new Router(app, app.config(undefined, 'router') || {});
         // Middleware may depend on
         Helper.define(app, "Router", KoattyRouter.router);
-        // TraceHandler
-        app.use(TraceHandler(app));
 
         // Load Middleware
         Logger.Custom('think', '', 'Load Middlewares ...');
