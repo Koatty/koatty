@@ -6,13 +6,13 @@
  */
 import util from "util";
 import KoaRouter from "@koa/router";
-import { Helper, recursiveGetMetadata } from "../util/Helper";
+import { Helper, RecursiveGetMetadata } from "../util/Helper";
 import { Logger } from "../util/Logger";
 import { Koatty, KoattyContext } from "../Koatty";
 import { IOCContainer } from 'koatty_container';
 import { checkParams, PARAM_RULE_KEY, PARAM_CHECK_KEY } from 'koatty_validation';
 import { CONTROLLER_ROUTER, ROUTER_KEY, PARAM_KEY } from "./Constants";
-import { Exception, isException, isPrevent } from "./Exception";
+import { Exception, HttpStatusCode, isException, isPrevent } from "./Exception";
 
 /**
  * Http timeout timer
@@ -48,7 +48,7 @@ function injectRouter(app: Koatty, target: any, instance?: any) {
     }
     path = path.startsWith("/") || path === "" ? path : `/${path}`;
 
-    const rmetaData = recursiveGetMetadata(ROUTER_KEY, target);
+    const rmetaData = RecursiveGetMetadata(ROUTER_KEY, target);
     const router: any = {};
     // tslint:disable-next-line: forin
     for (const metaKey in rmetaData) {
@@ -77,10 +77,9 @@ function injectRouter(app: Koatty, target: any, instance?: any) {
  */
 function injectParam(app: Koatty, target: any, instance?: any) {
     instance = instance || target.prototype;
-    // const methods = getMethodNames(target);
-    const metaDatas = recursiveGetMetadata(PARAM_KEY, target);
-    const validMetaDatas = recursiveGetMetadata(PARAM_RULE_KEY, target);
-    const validatedMetaDatas = recursiveGetMetadata(PARAM_CHECK_KEY, target);
+    const metaDatas = RecursiveGetMetadata(PARAM_KEY, target);
+    const validMetaDatas = RecursiveGetMetadata(PARAM_RULE_KEY, target);
+    const validatedMetaDatas = RecursiveGetMetadata(PARAM_CHECK_KEY, target);
     const argsMetaObj: any = {};
     for (const meta in metaDatas) {
         if (instance[meta] && instance[meta].length <= metaDatas[meta].length) {

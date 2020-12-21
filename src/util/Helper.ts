@@ -120,7 +120,7 @@ function ordinaryGetPrototypeOf(obj: any): any {
  * @param metadataKey metadata key
  * @param target the target of metadataKey
  */
-export function recursiveGetMetadata(metadataKey: any, target: any, propertyKey?: string | symbol): any[] {
+export function RecursiveGetMetadata(metadataKey: any, target: any, propertyKey?: string | symbol): any[] {
     // get metadata value of a metadata key on the prototype
     // let metadata = Reflect.getOwnMetadata(metadataKey, target, propertyKey);
     const metadata = IOCContainer.listPropertyData(metadataKey, target) || {};
@@ -141,70 +141,6 @@ export function recursiveGetMetadata(metadataKey: any, target: any, propertyKey?
     }
     return metadata;
 }
-
-/**
- * Find all methods on a given object
- *
- * @param {*} target - object to enumerate on
- * @returns {string[]} - method names
- */
-export function getMethodNames(target: any): string[] {
-    const result: any[] = [];
-    const enumerableOwnKeys: any[] = Object.getOwnPropertyNames(new target());
-    // searching prototype chain for methods
-    let parent = ordinaryGetPrototypeOf(target);
-    while (parent && parent.constructor) {
-        const allOwnKeysOnPrototype: any[] = Object.getOwnPropertyNames(new parent());
-        // get methods from es6 class
-        allOwnKeysOnPrototype.forEach((k) => {
-            if (!result.includes(k)) {
-                result.push(k);
-            }
-        });
-        parent = ordinaryGetPrototypeOf(parent);
-    }
-
-    // leave out those methods on Object's prototype
-    enumerableOwnKeys.forEach((k) => {
-        if (!result.includes(k)) {
-            result.push(k);
-        }
-    });
-    return result;
-}
-
-/**
- * Find all property on a given object
- *
- * @export
- * @param {*} target
- * @returns {string[]}
- */
-export function getPropertyNames(target: any): string[] {
-    const result: any[] = [];
-    const enumerableOwnKeys: any[] = Object.getOwnPropertyNames(target);
-    // searching prototype chain for methods
-    let parent = ordinaryGetPrototypeOf(target);
-    while (parent) {
-        const allOwnKeysOnPrototype: any[] = Object.getOwnPropertyNames(parent);
-        // get methods from es6 class
-        allOwnKeysOnPrototype.forEach((k) => {
-            if (!result.includes(k)) {
-                result.push(k);
-            }
-        });
-        parent = ordinaryGetPrototypeOf(parent);
-    }
-
-    // leave out those methods on Object's prototype
-    enumerableOwnKeys.forEach((k) => {
-        if (!result.includes(k)) {
-            result.push(k);
-        }
-    });
-    return result;
-}
-
 
 /**
  * Generate UUID
