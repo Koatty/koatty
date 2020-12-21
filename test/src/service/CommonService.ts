@@ -15,6 +15,10 @@ export class CommonService extends BaseService {
 
     protected Model: any;
 
+    __before() {
+        console.log('CommonService.__before');
+    }
+
 
     /**
      * 列表查询

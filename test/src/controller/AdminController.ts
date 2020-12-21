@@ -25,4 +25,12 @@ export class AdminController extends BaseController {
         // this.Map = {};
     }
 
+    __before() {
+        console.log('AdminController.__before', this.ctx.URL);
+    }
+
+    adminTest() {
+        console.log('AdminController.adminTest()');
+    }
+
 }
