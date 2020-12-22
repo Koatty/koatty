@@ -142,6 +142,78 @@ export function RecursiveGetMetadata(metadataKey: any, target: any, propertyKey?
     return metadata;
 }
 
+
+/**
+ * Find all methods on a given ES6 class
+ *
+ * @param {*} target 
+ * @param {boolean} isSelfProperties 
+ * @returns {string[]}
+ */
+export function getMethodNames(target: any, isSelfProperties = false): string[] {
+    const result: any[] = [];
+    const enumerableOwnKeys: any[] = Object.getOwnPropertyNames(target.prototype);
+    if (!isSelfProperties) {
+        // searching prototype chain for methods
+        let parent = ordinaryGetPrototypeOf(target);
+        while (Helper.isClass(parent) && parent.constructor) {
+            const allOwnKeysOnPrototype: any[] = Object.getOwnPropertyNames(parent.prototype);
+            // get methods from es6 class
+            allOwnKeysOnPrototype.forEach((k) => {
+                if (!result.includes(k) && Helper.isFunction(parent.prototype[k])) {
+                    result.push(k);
+                }
+            });
+            parent = ordinaryGetPrototypeOf(parent);
+        }
+    }
+
+    // leave out those methods on Object's prototype
+    enumerableOwnKeys.forEach((k) => {
+        if (!result.includes(k) && Helper.isFunction(target.prototype[k])) {
+            result.push(k);
+        }
+    });
+    return result;
+}
+
+/**
+ * Find all property on a given ES6 class 
+ *
+ * @export
+ * @param {*} target
+ * @param {boolean} isSelfProperties 
+ * @returns {string[]}
+ */
+export function getPropertyNames(target: any, isSelfProperties = false): string[] {
+    const result: any[] = [];
+    const enumerableOwnKeys: any[] = Object.getOwnPropertyNames(target);
+    if (!isSelfProperties) {
+        // searching prototype chain for methods
+        let parent = ordinaryGetPrototypeOf(target);
+        while (Helper.isClass(parent) && parent.constructor) {
+            const allOwnKeysOnPrototype: any[] = Object.getOwnPropertyNames(parent);
+            // get methods from es6 class
+            allOwnKeysOnPrototype.forEach((k) => {
+                if (!result.includes(k) && !Helper.isFunction(parent.prototype[k])) {
+                    result.push(k);
+                }
+            });
+            parent = ordinaryGetPrototypeOf(parent);
+        }
+    }
+
+    // leave out those methods on Object's prototype
+    enumerableOwnKeys.forEach((k) => {
+        if (!result.includes(k) && !Helper.isFunction(target.prototype[k])) {
+            result.push(k);
+        }
+    });
+    return result;
+}
+
+
+
 /**
  * Generate UUID
  *

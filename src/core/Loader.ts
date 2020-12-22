@@ -15,6 +15,8 @@ import { BaseController } from "../controller/BaseController";
 import { IMiddleware, IPlugin } from './Component';
 import { Koatty } from '../Koatty';
 import { TraceHandler } from "./Trace";
+import { injectValue } from "./Value";
+import { injectAOP } from "./AOP";
 import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 
 // type AppReadyHookFunc
@@ -225,6 +227,10 @@ export class Loader {
         appMiddleware.forEach((item: ComponentItem) => {
             item.id = (item.id || "").replace("MIDDLEWARE:", "");
             if (item.id && Helper.isClass(item.target)) {
+                // inject configuration
+                injectValue(item.target, item.target.prototype, container);
+                // inject AOP
+                injectAOP(item.target, item.target.prototype, container);
                 container.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
                 // middleware[item.id] = item.target;
             }
@@ -292,6 +298,10 @@ export class Loader {
             if (item.id && Helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
                 process.env.APP_DEBUG && Logger.Custom("think", "", `Load controller: ${item.id}`);
+                // inject configuration
+                injectValue(item.target, item.target.prototype, container);
+                // inject AOP
+                injectAOP(item.target, item.target.prototype, container);
                 // registering to IOC
                 container.reg(item.id, item.target, { scope: "Prototype", type: "CONTROLLER", args: [] });
                 const ctl = container.getInsByClass(item.target);
@@ -321,6 +331,10 @@ export class Loader {
             if (item.id && Helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
                 process.env.APP_DEBUG && Logger.Custom("think", "", `Load service: ${item.id}`);
+                // inject configuration
+                injectValue(item.target, item.target.prototype, container);
+                // inject AOP
+                injectAOP(item.target, item.target.prototype, container);
                 // inject schedule
                 injectSchedule(item.target, item.target.prototype, container);
                 // registering to IOC
@@ -349,6 +363,10 @@ export class Loader {
             if (item.id && !(item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
                 process.env.APP_DEBUG && Logger.Custom("think", "", `Load component: ${item.id}`);
+                // inject configuration
+                injectValue(item.target, item.target.prototype, container);
+                // inject AOP
+                injectAOP(item.target, item.target.prototype, container);
                 // inject schedule
                 injectSchedule(item.target, item.target.prototype, container);
                 // registering to IOC
@@ -379,6 +397,10 @@ export class Loader {
             if (item.id && (item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
                 process.env.APP_DEBUG && Logger.Custom("think", "", `Load plugin: ${item.id}`);
+                // inject configuration
+                injectValue(item.target, item.target.prototype, container);
+                // inject AOP
+                injectAOP(item.target, item.target.prototype, container);
                 // inject schedule
                 injectSchedule(item.target, item.target.prototype, container);
                 // registering to IOC
