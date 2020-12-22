@@ -44,7 +44,6 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
     const app = Reflect.construct(target, []);
     try {
         console.log(LOGO);
-        console.log('                     https://ThinkKoa.org/');
         Logger.Custom('think', '', '====================================');
         Logger.Custom('think', '', 'Bootstrap');
 
