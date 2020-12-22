@@ -964,9 +964,9 @@ koatty_cacheable@^1.x.x:
     tslib "^2.0.3"
 
 koatty_container@^1.x.x:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/koatty_container/-/koatty_container-1.2.2.tgz#10c20eb5a41416fdc4815d33e0468b8a1af65ccb"
-  integrity sha512-M6qIXH7eVgKlOu52bk5volwf9ZteJ3IcHuM4hsB0DwrpTb2+5RRFuE1j6s/oekNFAY0TN6HCt51NovLbrTErlg==
+  version "1.3.10"
+  resolved "https://registry.yarnpkg.com/koatty_container/-/koatty_container-1.3.10.tgz#372052a11d7df467182416fe6e9851922fc409d0"
+  integrity sha512-ppl5ebnQPQmgG3+hoyV7gjPiJ4u6txLBQH6vAVxHa1fkeWShcIj6LHLLEGRbOJSDMcIlVeJsQv4n1tk4Ybjw7g==
   dependencies:
     koatty_lib "^1.x.x"
     koatty_logger "^1.x.x"
@@ -1019,9 +1019,9 @@ koatty_schedule@^1.x.x:
     tslib "^2.0.3"
 
 koatty_static@^1.x.x:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/koatty_static/-/koatty_static-1.0.0.tgz#9d542ce74a10dac14998aca5e992c2a521b12b28"
-  integrity sha512-bCo8/WgymJQRPnp1gcnXcutkuDMR88IS28ol6FjlL1G0pGEAlZF0uNbOu1/qPNkXizt8e+wp/AqG+/2QyKYyUQ==
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/koatty_static/-/koatty_static-1.1.0.tgz#7c5d38d7969e6763ae714fb9cb4f8b48216fdcae"
+  integrity sha512-FLovOg3X8e7hVuxXWM1WecTtNidPlRZ6p/RzrEngRacdmxdehrwHj8TIAKZaTvaaEXd+DrsbauRpY0HtJfHxug==
   dependencies:
     koa-static-cache "^5.1.4"
     koatty_lib "^1.x.x"
