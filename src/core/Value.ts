@@ -1,15 +1,14 @@
 /*
  * @Author: richen
  * @Date: 2020-12-18 10:37:03
- * @LastEditors: linyyyang<linyyyang@tencent.com>
- * @LastEditTime: 2020-12-21 17:34:27
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-12-22 17:03:55
  * @License: BSD (3-Clause)
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
 import { DefaultLogger as logger } from "koatty_logger";
-import { Container, IOCContainer } from "koatty_container";
+import { Container, IOCContainer, RecursiveGetMetadata } from "koatty_container";
 import { TAGGED_ARGS } from "./Constants";
-import { RecursiveGetMetadata } from "../util/Helper";
 
 /**
  * Indicates that an decorated configuration as a property.

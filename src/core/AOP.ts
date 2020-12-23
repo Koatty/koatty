@@ -6,9 +6,8 @@
  */
 import * as helper from "koatty_lib";
 import { DefaultLogger as logger } from "koatty_logger";
-import { Container, IOCContainer, TAGGED_CLS } from "koatty_container";
-import { TAGGED_AOP, TAGGED_NOAOP } from "./Constants";
-import { getMethodNames } from "../util/Helper";
+import { Container, getMethodNames, IOCContainer, TAGGED_CLS } from "koatty_container";
+import { TAGGED_AOP } from "./Constants";
 
 /**
  * defined AOP type
