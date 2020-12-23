@@ -6,29 +6,13 @@
  */
 import util from "util";
 import KoaRouter from "@koa/router";
-import { Helper, recursiveGetMetadata } from "../util/Helper";
+import { Helper } from "../util/Helper";
 import { Logger } from "../util/Logger";
 import { Koatty, KoattyContext } from "../Koatty";
-import { IOCContainer } from 'koatty_container';
+import { IOCContainer, RecursiveGetMetadata } from 'koatty_container';
 import { checkParams, PARAM_RULE_KEY, PARAM_CHECK_KEY } from 'koatty_validation';
 import { CONTROLLER_ROUTER, ROUTER_KEY, PARAM_KEY } from "./Constants";
 import { Exception, isException, isPrevent } from "./Exception";
-
-/**
- * Http timeout timer
- * @param tmr 
- * @param timeout 
- */
-// const timer = function (tmr: any, timeout: number) {
-//     return new Promise((resolve, reject) => {
-//         tmr = setTimeout(function () {
-//             const err: any = new Error("Request timeout");
-//             err.status = 408;
-//             reject(err);
-//         }, timeout);
-//     });
-// };
-
 
 /**
  *
@@ -48,7 +32,7 @@ function injectRouter(app: Koatty, target: any, instance?: any) {
     }
     path = path.startsWith("/") || path === "" ? path : `/${path}`;
 
-    const rmetaData = recursiveGetMetadata(ROUTER_KEY, target);
+    const rmetaData = RecursiveGetMetadata(ROUTER_KEY, target);
     const router: any = {};
     // tslint:disable-next-line: forin
     for (const metaKey in rmetaData) {
@@ -77,10 +61,9 @@ function injectRouter(app: Koatty, target: any, instance?: any) {
  */
 function injectParam(app: Koatty, target: any, instance?: any) {
     instance = instance || target.prototype;
-    // const methods = getMethodNames(target);
-    const metaDatas = recursiveGetMetadata(PARAM_KEY, target);
-    const validMetaDatas = recursiveGetMetadata(PARAM_RULE_KEY, target);
-    const validatedMetaDatas = recursiveGetMetadata(PARAM_CHECK_KEY, target);
+    const metaDatas = RecursiveGetMetadata(PARAM_KEY, target);
+    const validMetaDatas = RecursiveGetMetadata(PARAM_RULE_KEY, target);
+    const validatedMetaDatas = RecursiveGetMetadata(PARAM_CHECK_KEY, target);
     const argsMetaObj: any = {};
     for (const meta in metaDatas) {
         if (instance[meta] && instance[meta].length <= metaDatas[meta].length) {
@@ -232,11 +215,6 @@ export class Router {
             if (!ctx || !ctl.init) {
                 return ctx.throw(404, `Controller ${identifier} not found.`);
             }
-            // // pre-method
-            // if (ctl.__before) {
-            //     Logger.Info(`Execute the aspect ${identifier}.__before()`);
-            //     await ctl.__before();
-            // }
             // inject param
             let args = [];
             if (ctlParams) {
@@ -255,12 +233,5 @@ export class Router {
             }
             throw err;
         }
-        //  finally {
-        //     // after-method
-        //     if (ctl.__after) {
-        //         Logger.Info(`Execute the aspect ${identifier}.__after()`);
-        //         await ctl.__after().catch((e: any) => Logger.Error(e));
-        //     }
-        // }
     }
 }

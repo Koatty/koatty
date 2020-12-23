@@ -9,13 +9,14 @@ import * as path from "path";
 import { Helper, requireDefault } from "../util/Helper";
 import { Logger } from "../util/Logger";
 import { BaseService } from "../service/BaseService";
-import { injectValue } from './Value';
 import { injectSchedule } from 'koatty_schedule';
 import { Container, IOCContainer, TAGGED_CLS } from "koatty_container";
 import { BaseController } from "../controller/BaseController";
 import { IMiddleware, IPlugin } from './Component';
 import { Koatty } from '../Koatty';
 import { TraceHandler } from "./Trace";
+import { injectValue } from "./Value";
+import { injectAOP } from "./AOP";
 import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 
 // type AppReadyHookFunc
@@ -228,6 +229,8 @@ export class Loader {
             if (item.id && Helper.isClass(item.target)) {
                 // inject configuration
                 injectValue(item.target, item.target.prototype, container);
+                // inject AOP
+                injectAOP(item.target, item.target.prototype, container);
                 container.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
                 // middleware[item.id] = item.target;
             }
@@ -240,9 +243,9 @@ export class Loader {
                 defaultList.push(item);
             }
         });
-        if (defaultList.length > middlewareConfList.length) {
-            Logger.Warn("Some middleware is loaded but not allowed to execute.");
-        }
+        // if (defaultList.length > middlewareConfList.length) {
+        //     Logger.Warn("Some middleware is loaded but not allowed to execute.");
+        // }
 
         //de-duplication
         const appMList = [...new Set(defaultList)];
@@ -252,14 +255,15 @@ export class Loader {
         for (const key of appMList) {
             const handle: IMiddleware = container.get(key, "MIDDLEWARE");
             if (!handle) {
-                Logger.Error(`middleware ${key} load error.`);
+                Logger.Error(`Middleware ${key} load error.`);
                 continue;
             }
             if (!Helper.isFunction(handle.run)) {
-                Logger.Error(`middleware ${key} must be implements method 'run'.`);
+                Logger.Error(`Middleware ${key} must be implements method 'run'.`);
                 continue;
             }
             if (middlewareConf.config[key] === false) {
+                Logger.Warn(`Middleware ${key} is loaded but not allowed to execute.`);
                 continue;
             }
 
@@ -296,6 +300,8 @@ export class Loader {
                 process.env.APP_DEBUG && Logger.Custom("think", "", `Load controller: ${item.id}`);
                 // inject configuration
                 injectValue(item.target, item.target.prototype, container);
+                // inject AOP
+                injectAOP(item.target, item.target.prototype, container);
                 // registering to IOC
                 container.reg(item.id, item.target, { scope: "Prototype", type: "CONTROLLER", args: [] });
                 const ctl = container.getInsByClass(item.target);
@@ -327,6 +333,8 @@ export class Loader {
                 process.env.APP_DEBUG && Logger.Custom("think", "", `Load service: ${item.id}`);
                 // inject configuration
                 injectValue(item.target, item.target.prototype, container);
+                // inject AOP
+                injectAOP(item.target, item.target.prototype, container);
                 // inject schedule
                 injectSchedule(item.target, item.target.prototype, container);
                 // registering to IOC
@@ -357,6 +365,8 @@ export class Loader {
                 process.env.APP_DEBUG && Logger.Custom("think", "", `Load component: ${item.id}`);
                 // inject configuration
                 injectValue(item.target, item.target.prototype, container);
+                // inject AOP
+                injectAOP(item.target, item.target.prototype, container);
                 // inject schedule
                 injectSchedule(item.target, item.target.prototype, container);
                 // registering to IOC
@@ -389,6 +399,8 @@ export class Loader {
                 process.env.APP_DEBUG && Logger.Custom("think", "", `Load plugin: ${item.id}`);
                 // inject configuration
                 injectValue(item.target, item.target.prototype, container);
+                // inject AOP
+                injectAOP(item.target, item.target.prototype, container);
                 // inject schedule
                 injectSchedule(item.target, item.target.prototype, container);
                 // registering to IOC

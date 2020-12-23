@@ -4,16 +4,18 @@
  * @ license: Apache License 2.0
  * @ version: 2020-05-19 14:31:04
  */
-import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, After, RequestBody, Get, Validated, Valid, Helper, Post, RequestParam, IOCContainer, PathVariable } from "../../../src/index";
+import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, After, RequestBody, Get, Validated, Valid, Helper, Post, RequestParam, IOCContainer, PathVariable, BeforeEach } from "../../../src/index";
 import { App } from '../App';
 import { AdminController } from "./AdminController";
 import { TestService } from "../service/TestService";
 import { TestDto } from '../model/TestDto';
 import { TestModel } from '../model/TestModel';
 import { TestAspect } from '../aspect/TestAspect';
+import { Test2Aspect } from "../aspect/Test2Aspect";
 
 
 @Controller("/")
+@BeforeEach(TestAspect)
 export class IndexController extends AdminController {
     app: App;
     pageInfo: { 'appName': string; 'appVersion': string; 'appKeywords': string; 'appDescription': string; };
@@ -28,9 +30,9 @@ export class IndexController extends AdminController {
 
 
     @GetMapping("/")
-    @Before(TestAspect)
+    @Before(Test2Aspect)
     async default() {
-        // const info = await this.testService.test2()
+        const info = await this.testService.test2();
         // .catch(err => {
         //     this.fail(err);
         //     return this.prevent();

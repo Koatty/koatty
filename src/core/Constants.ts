@@ -17,4 +17,16 @@ export const SCHEDULE_KEY = 'SCHEDULE_KEY';
 export const PREVENT_NEXT_PROCESS = 'PREVENT_NEXT_PROCESS';
 export const APP_READY_HOOK = "APP_READY_HOOK";
 
-export const LOGO = '  ________    _       __   __ \n /_  __/ /_  (_)___  / /__/ /______  ____ _\n  / / / __ \\/ / __ \\/ //_/ //_/ __ \\/ __ `/\n / / / / / / / / / / ,< / /,</ /_/ / /_/ /\n/_/ /_/ /_/_/_/ /_/_/|_/_/ |_\\____/\\__,_/';
+export const TAGGED_AOP = 'TAGGED_AOP';
+export const TAGGED_ARGS = 'TAGGED_ARGS';
+
+// tslint:disable: no-irregular-whitespace
+export const LOGO = `
+
+██   ██  ██████   █████  ████████ ████████ ██    ██ 
+██  ██  ██    ██ ██   ██    ██       ██     ██  ██  
+█████   ██    ██ ███████    ██       ██      ████   
+██  ██  ██    ██ ██   ██    ██       ██       ██    
+██   ██  ██████  ██   ██    ██       ██       ██    
+                         https://github.com/koatty
+`;

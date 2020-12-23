@@ -37,8 +37,9 @@ export class TestService extends CommonService {
     }
 
     async test2() {
-        throw new Exception("exception", 1, HttpStatusCode.BAD_REQUEST);
-
+        // throw new Exception("exception", 1, HttpStatusCode.BAD_REQUEST);
+        console.log('TestService.test2');
+        return "";
     }
 
     @Scheduled("0 * * * * *")

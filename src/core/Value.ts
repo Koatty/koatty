@@ -1,14 +1,14 @@
-/**
- * @ author: richen
- * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: BSD (3-Clause)
- * @ version: 2020-05-11 15:07:28
+/*
+ * @Author: richen
+ * @Date: 2020-12-18 10:37:03
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-12-22 17:03:55
+ * @License: BSD (3-Clause)
+ * @Copyright (c) - <richenlin(at)gmail.com>
  */
-// tslint:disable-next-line: no-import-side-effect
-import "reflect-metadata";
-import { Logger } from "../util/Logger";
-import { recursiveGetMetadata } from "../util/Helper";
-import { Container, IOCContainer, TAGGED_ARGS } from "koatty_container";
+import { DefaultLogger as logger } from "koatty_logger";
+import { Container, IOCContainer, RecursiveGetMetadata } from "koatty_container";
+import { TAGGED_ARGS } from "./Constants";
 
 /**
  * Indicates that an decorated configuration as a property.
@@ -56,12 +56,16 @@ export function injectValue(target: any, instance: any, container: Container) {
     // if (componentType === "MIDDLEWARE") {
     //     throw Error("Value decorator cannot be used in the middleware class. Please use app.config() to get the configuration.");
     // }
-    const metaData = recursiveGetMetadata(TAGGED_ARGS, target);
     const app = container.getApp();
+    if (!app) {
+        return;
+    }
+    const metaData = RecursiveGetMetadata(TAGGED_ARGS, target);
+
     // tslint:disable-next-line: forin
     for (const metaKey in metaData) {
         // tslint:disable-next-line: no-unused-expression
-        process.env.APP_DEBUG && Logger.Custom("think", "", `Register inject ${IOCContainer.getIdentifier(target)} config key: ${metaKey} => value: ${metaData[metaKey]}`);
+        process.env.APP_DEBUG && logger.Custom("think", "", `Register inject ${IOCContainer.getIdentifier(target)} config key: ${metaKey} => value: ${metaData[metaKey]}`);
         const propKeys = metaData[metaKey].split("|");
         const [propKey, type] = propKeys;
         Reflect.defineProperty(instance, metaKey, {
