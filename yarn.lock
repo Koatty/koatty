@@ -928,7 +928,7 @@ koa-static-cache@^5.1.4:
     mime-types "^2.1.8"
     mz "^2.7.0"
 
-koa@^2.13.0:
+koa@^2.13.0, koa@^2.x.x:
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/koa/-/koa-2.13.0.tgz#25217e05efd3358a7e5ddec00f0a380c9b71b501"
   integrity sha512-i/XJVOfPw7npbMv67+bOeXr3gPqOAw6uh5wFyNs3QvJ47tUx3M3V9rIE0//WytY42MKz4l/MXKyGkQ2LQTfLUQ==
@@ -998,12 +998,13 @@ koatty_logger@^1.x.x:
     koatty_lib "^1.x.x"
 
 koatty_payload@^1.x.x:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/koatty_payload/-/koatty_payload-1.1.0.tgz#80b868b311d4b9dd768ed8604fb51d7ffaf97d1d"
-  integrity sha512-xNqq6Uq3R8QMyw3w1r983c4YqTSzrQivxeUidKHZpx58qdQLL6365Pr9ecP0dAFxPrI/iF0PZWt/it/Zs5N/9g==
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/koatty_payload/-/koatty_payload-1.2.4.tgz#c24d4f9b6443282fd512d6e1e84e28db9d169864"
+  integrity sha512-fdnf8slpv2e/c95xXoupXXPCADbc3l5fELst6574c3uqmn+EoGplmbpVCrIIyxza+/kcwdOrOMuObw5AURSkug==
   dependencies:
     formidable "^1.2.2"
     inflation "^2.0.0"
+    koa "^2.x.x"
     koatty_lib "^1.x.x"
     koatty_logger "^1.x.x"
     on-finished "^2.3.0"
@@ -1023,10 +1024,10 @@ koatty_schedule@^1.x.x:
     reflect-metadata "^0.1.13"
     tslib "^2.0.3"
 
-koatty_static@^1.x.x:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/koatty_static/-/koatty_static-1.1.0.tgz#7c5d38d7969e6763ae714fb9cb4f8b48216fdcae"
-  integrity sha512-FLovOg3X8e7hVuxXWM1WecTtNidPlRZ6p/RzrEngRacdmxdehrwHj8TIAKZaTvaaEXd+DrsbauRpY0HtJfHxug==
+koatty_static@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/koatty_static/-/koatty_static-1.2.4.tgz#41d8489b83f7dc797e5738150aabeb1a8ad75cf6"
+  integrity sha512-mOn2gVPfnGrX7G8nlxr7gdlnnxJerDYQ5j+vMdxhzJ9q/dwB7p9jHiws6y86IgA7BWTwDrR6M+j8SKq95C6/+w==
   dependencies:
     koa-static-cache "^5.1.4"
     koatty_lib "^1.x.x"

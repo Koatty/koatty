@@ -6,11 +6,11 @@
  */
 import { Middleware, IMiddleware } from "../core/Component";
 import { Koatty } from "../Koatty";
-import { payload } from "koatty_payload";
+import { Payload } from "koatty_payload";
 
 @Middleware()
 export class PayloadMiddleware implements IMiddleware {
     run(options: any, app: Koatty) {
-        return payload(options, app);
+        return Payload(options, app);
     }
 }

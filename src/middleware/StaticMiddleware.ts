@@ -6,11 +6,11 @@
  */
 import { Middleware, IMiddleware } from "../core/Component";
 import { Koatty } from "../Koatty";
-import { Static } from "koatty_static";
+import { KStatic } from "koatty_static";
 
 @Middleware()
 export class StaticMiddleware implements IMiddleware {
     run(options: any, app: Koatty) {
-        return Static(options, app);
+        return KStatic(options, app);
     }
 }

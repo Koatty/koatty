@@ -1,6 +1,6 @@
 {
     "name": "koatty",
-    "version": "3.0.12",
+    "version": "3.1.0",
     "description": "Koa2 + Typescript = koatty. Use Typescript's decorator implement auto injection.",
     "scripts": {
         "build": "del-cli --force dist && tsc",
@@ -30,7 +30,7 @@
         "name": "richenlin",
         "email": "richenlin@gmail.com"
     },
-    "license": "MIT",
+    "license": "BSD (3-Clause)",
     "bugs": {
         "url": "https://github.com/thinkkoa/koatty/issues"
     },

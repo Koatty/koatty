@@ -70,22 +70,6 @@ interface InitOptions {
 }
 
 /**
- *
- *
- * @interface ListenOptions
- */
-interface ListenOptions {
-    port?: number;
-    host?: string;
-    backlog?: number;
-    path?: string;
-    exclusive?: boolean;
-    readableAll?: boolean;
-    writableAll?: boolean;
-    ipv6Only?: boolean;
-}
-
-/**
  * Koatty Context.
  *
  * @export
