@@ -9,7 +9,6 @@ import * as path from "path";
 import { Helper, requireDefault } from "../util/Helper";
 import { Logger } from "../util/Logger";
 import { BaseService } from "../service/BaseService";
-import { injectSchedule } from 'koatty_schedule';
 import { Container, IOCContainer, TAGGED_CLS } from "koatty_container";
 import { BaseController } from "../controller/BaseController";
 import { IMiddleware, IPlugin } from './Component';
@@ -335,8 +334,6 @@ export class Loader {
                 injectValue(item.target, item.target.prototype, container);
                 // inject AOP
                 injectAOP(item.target, item.target.prototype, container);
-                // inject schedule
-                injectSchedule(item.target, item.target.prototype, container);
                 // registering to IOC
                 container.reg(item.id, item.target, { scope: "Singleton", type: "SERVICE", args: [] });
                 const ctl = container.getInsByClass(item.target);
@@ -368,7 +365,7 @@ export class Loader {
                 // inject AOP
                 injectAOP(item.target, item.target.prototype, container);
                 // inject schedule
-                injectSchedule(item.target, item.target.prototype, container);
+                // injectSchedule(item.target, item.target.prototype, container);
                 // registering to IOC
                 container.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
             }
@@ -401,8 +398,6 @@ export class Loader {
                 injectValue(item.target, item.target.prototype, container);
                 // inject AOP
                 injectAOP(item.target, item.target.prototype, container);
-                // inject schedule
-                injectSchedule(item.target, item.target.prototype, container);
                 // registering to IOC
                 container.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
                 pluginList.push(item.id);
