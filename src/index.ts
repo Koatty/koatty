@@ -16,11 +16,5 @@ export { AppReadyHookFunc, BindAppReadyHook } from "./core/Loader";
 export { Value, Config } from './core/Value';
 export * from "./service/BaseService";
 export * from "koatty_container";
-export {
-    Valid, Validated, ClassValidator, FunctionValidator, IsDefined,
-    IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsEmail,
-    IsIP, IsPhoneNumber, IsUrl, IsHash, IsNotEmpty, Equals, NotEquals,
-    Contains, IsIn, IsNotIn, IsDate, Min, Max, Length
-} from "koatty_validation";
 export { Helper } from "./util/Helper";
 export { Logger } from "./util/Logger";
