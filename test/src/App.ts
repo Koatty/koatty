@@ -4,9 +4,11 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-07-06 11:15:36
  */
-import { Bootstrap, ComponentScan, Autowired, Koatty, ConfigurationScan, Logger, Helper, EnableScheduleLock, EnableCacheStore } from '../../src/index';
+import { Bootstrap, ComponentScan, Autowired, Koatty, ConfigurationScan, Logger, Helper } from '../../src/index';
+// import { EnableCacheStore } from "koatty_cacheable";
+import { EnableScheduleLock } from "koatty_schedule";
 import * as path from "path";
-@EnableCacheStore()
+// @EnableCacheStore()
 @EnableScheduleLock()
 @Bootstrap((app: any) => {
     //调整libuv线程池大小

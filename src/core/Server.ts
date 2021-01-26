@@ -1,7 +1,7 @@
 /*
  * @Author: richen
  * @Date: 2020-07-06 15:53:37
- * @LastEditTime: 2020-12-15 16:33:35
+ * @LastEditTime: 2021-01-08 15:22:26
  * @Description:
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
@@ -12,6 +12,8 @@ import { Logger } from "../util/Logger";
 import { Helper } from "../util/Helper";
 import { TraceBinding, TraceServerSetup } from './Trace';
 import { createServer } from 'http';
+import { createTerminus } from "@godaddy/terminus";
+import { EventEmitter } from "events";
 const pkg = require("../../package.json");
 
 /**
@@ -58,6 +60,70 @@ const listening = (app: Koatty, options: ListeningOptions) => {
 };
 
 /**
+ * Execute event as async
+ *
+ * @param {Koatty} event
+ * @param {string} eventName
+ */
+export const asyncEvent = async function (event: EventEmitter, eventName: string) {
+    const ls: any[] = event.listeners(eventName);
+    // eslint-disable-next-line no-restricted-syntax
+    for await (const func of ls) {
+        if (Helper.isFunction(func)) {
+            func();
+        }
+    }
+    return event.removeAllListeners(eventName);
+};
+
+/**
+ * Bind event to the process
+ *
+ * @param {EventEmitter} event
+ * @param {string} eventName
+ */
+export const bindProcessEvent = function (event: EventEmitter, eventName: string) {
+    const ls: any[] = event.listeners(eventName);
+    for (const func of ls) {
+        if (Helper.isFunction(func)) {
+            process.addListener("beforeExit", func);
+        }
+    }
+    return event.removeAllListeners(eventName);
+};
+
+/**
+ * cleanup function, returning a promise (used to be onSigterm)
+ *
+ * @returns {*}  
+ */
+function onSignal() {
+    Logger.Info('Server is starting cleanup');
+    return asyncEvent(process, 'beforeExit');
+}
+
+/**
+ * called right before exiting
+ *
+ * @returns {*}  
+ */
+function onShutdown() {
+    Logger.Info('Cleanup finished, server is shutting down');
+    // todo Log report
+    return Promise.resolve();
+}
+
+/** @type {*} */
+const terminusOptions = {
+    // cleanup options
+    timeout: 2000,                   // [optional = 1000] number of milliseconds before forceful exiting
+    onSignal,                        // [optional] cleanup function, returning a promise (used to be onSigterm)
+    onShutdown,                      // [optional] called right before exiting
+    // both
+    logger: Logger.Error                           // [optional] logger function to be called with errors. Example logger call: ('error happened during shutdown', error). See terminus.js for more details.
+};
+
+/**
  *
  *
  * @export
@@ -100,6 +166,8 @@ export function startHTTP(app: Koatty, openTrace: boolean) {
     const server = createServer((req, res) => {
         TraceBinding(app, req, res, openTrace);
     });
+    // terminus
+    createTerminus(server, terminusOptions);
     server.listen({ port, host: hostname }, listening(app, { hostname, port, listenUrl: `http://${hostname}:${port}/` })).on('clientError', (err: any, sock: any) => {
         // Logger.error("Bad request, HTTP parse error");
         sock.end('400 Bad Request\r\n\r\n');
@@ -132,6 +200,8 @@ export function startHTTP2(app: Koatty, openTrace: boolean) {
     const server = createSecureServer(options, (req, res) => {
         TraceBinding(app, req, res, openTrace);
     });
+    // terminus
+    createTerminus(server, terminusOptions);
     server.listen(port, hostname, 0, listening(app, { hostname, port, listenUrl: `https://${hostname}:${port}/` })).on('clientError', (err: any, sock: any) => {
         // Logger.error("Bad request, HTTP parse error");
         sock.end('400 Bad Request\r\n\r\n');
@@ -159,4 +229,3 @@ export function startWebSocket(app: Koatty, openTrace: boolean) {
 export function startRPC(app: Koatty, openTrace: boolean) {
     //todo
 }
-

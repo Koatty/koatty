@@ -8,6 +8,7 @@ import * as helper from "koatty_lib";
 import { DefaultLogger as logger } from "koatty_logger";
 import { Container, getMethodNames, IOCContainer, TAGGED_CLS } from "koatty_container";
 import { TAGGED_AOP } from "./Constants";
+import { Koatty } from "../Koatty";
 
 /**
  * defined AOP type
@@ -18,6 +19,18 @@ import { TAGGED_AOP } from "./Constants";
 enum AOPType {
     "Before" = "Before",
     "After" = "After"
+}
+
+/**
+ * Aspect interface
+ *
+ * @export
+ * @interface IAspect
+ */
+export interface IAspect {
+    app: Koatty;
+
+    run: (...args: any[]) => Promise<any>;
 }
 
 /**

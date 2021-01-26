@@ -4,7 +4,9 @@
  * @ license: Apache License 2.0
  * @ version: 2020-05-19 14:28:30
  */
-import { Service, BaseService, Autowired, Scheduled, CacheAble, SchedulerLock, Helper, Exception, HttpStatusCode } from "../../../src/index";
+import { Service, BaseService, Autowired, Helper, Exception, HttpStatusCode, Value } from "../../../src/index";
+import { Scheduled, SchedulerLock } from "koatty_schedule";
+import { CacheAble } from "koatty_cacheable";
 import { App } from '../App';
 import { CommonService, MoInterface } from './CommonService';
 import { TestDto } from '../model/TestDto';
@@ -12,6 +14,8 @@ import { TestDto } from '../model/TestDto';
 @Service()
 export class TestService extends CommonService {
     app: App;
+    @Value("open_trace")
+    conf: any;
 
     init() {
         //property
@@ -46,6 +50,7 @@ export class TestService extends CommonService {
     // @SchedulerLock()
     scheduleTest() {
         console.log('TestService.scheduleTest');
+        console.log(this.conf);
         return;
     }
 }

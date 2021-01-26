@@ -11,6 +11,13 @@ import { IOCContainer } from 'koatty_container';
 import { paramterTypes } from "koatty_validation";
 import { ROUTER_KEY, PARAM_KEY } from "./Constants";
 import { KoattyContext } from '../Koatty';
+// Export Validation
+export {
+    Valid, Validated, ClassValidator, FunctionValidator, IsDefined,
+    IsCnName, IsIdNumber, IsZipCode, IsMobile, IsPlateNumber, IsEmail,
+    IsIP, IsPhoneNumber, IsUrl, IsHash, IsNotEmpty, Equals, NotEquals,
+    Contains, IsIn, IsNotIn, IsDate, Min, Max, Length
+} from "koatty_validation";
 
 /**
  * Koatty router options

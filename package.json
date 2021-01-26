@@ -1,6 +1,6 @@
 {
     "name": "koatty",
-    "version": "3.1.0",
+    "version": "3.2.0",
     "description": "Koa2 + Typescript = koatty. Use Typescript's decorator implement auto injection.",
     "scripts": {
         "build": "del-cli --force dist && tsc",
@@ -47,25 +47,26 @@
         "@types/koa__router": "^8.x.x",
         "@types/node": "^12.x.x",
         "del-cli": "^3.0.1",
+        "koatty_cacheable": "^1.x.x",
+        "koatty_schedule": "^1.x.x",
         "ts-node": "^9.1.1",
         "tslint": "^6.1.3",
         "tslint-config-alloy": "^0.2.1",
         "typescript": "^4.1.3"
     },
     "dependencies": {
+        "@godaddy/terminus": "^4.5.0",
         "@koa/router": "^10.0.0",
         "cls-hooked": "^4.2.2",
         "globby": "^11.0.1",
-        "koa": "^2.13.0",
-        "koatty_cacheable": "^1.x.x",
+        "koa": "^2.13.1",
         "koatty_container": "^1.x.x",
         "koatty_lib": "^1.x.x",
         "koatty_logger": "^1.x.x",
         "koatty_payload": "^1.x.x",
-        "koatty_schedule": "^1.x.x",
         "koatty_static": "^1.x.x",
         "koatty_validation": "^1.x.x",
         "reflect-metadata": "^0.1.13",
-        "tslib": "^2.0.3"
+        "tslib": "^2.1.0"
     }
 }

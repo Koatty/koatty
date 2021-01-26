@@ -4,7 +4,8 @@
  * @ license: Apache License 2.0
  * @ version: 2020-05-18 09:28:15
  */
-import { Service, BaseService, Autowired, Scheduled, SchedulerLock } from "../../../src/index";
+import { Service, BaseService, Autowired } from "../../../src/index";
+import { Scheduled, SchedulerLock } from "koatty_schedule";
 import { App } from '../App';
 import { TestModel } from "../model/TestModel";
 import { CommonService, MoInterface } from './CommonService';
