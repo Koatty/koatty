@@ -24,7 +24,7 @@ export type AppReadyHookFunc = (app: Koatty) => Promise<any>;
 /**
  * bind AppReadyHookFunc
  * example:
- * export function TestDecorator() {
+ * export function TestDecorator(): ClassDecorator {
  *  return (target: any) => {
  *   BindAppReadyHook((app: Koatty) => {
  *      // todo

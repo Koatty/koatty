@@ -11,27 +11,9 @@ import { Logger } from "../util/Logger";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
 import { Router } from "./Router";
 import { Koatty } from '../Koatty';
-import { StartSever } from './Server';
+import { asyncEvent, bindProcessEvent, StartSever } from './Server';
 import { Loader } from "./Loader";
-import { TraceHandler } from "./Trace";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
-
-/**
- * execute event as async
- *
- * @param {Koatty} app
- * @param {string} eventName
- */
-const asyncEvent = async function (app: Koatty, eventName: string) {
-    const ls: any[] = app.listeners(eventName);
-    // eslint-disable-next-line no-restricted-syntax
-    for await (const func of ls) {
-        if (Helper.isFunction(func)) {
-            func();
-        }
-    }
-    return app.removeAllListeners(eventName);
-};
 
 /**
  * execute bootstrap
@@ -120,6 +102,8 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         Logger.Custom('think', '', 'Emit App Start ...');
         // app.emit("appStart");
         await asyncEvent(app, 'appStart');
+        // binding event "appStop"
+        bindProcessEvent(app, 'appStop');
 
         Logger.Custom('think', '', '====================================');
         // Start server
