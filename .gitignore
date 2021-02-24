@@ -3,6 +3,6 @@
 node_modules
 coverage
 dist
-test/logs
+demo/logs
 npm-debug.log
 yarn-error.log
