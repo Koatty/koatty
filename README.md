@@ -1,32 +1,10 @@
 # koatty
+
 Koa2 + Typescript = koatty. 
 
 Use Typescript's decorator implement IOC and AOP.
 
 [![Version npm](https://img.shields.io/npm/v/koatty.svg?style=flat-square)](https://www.npmjs.com/package/koatty)[![npm Downloads](https://img.shields.io/npm/dm/koatty.svg?style=flat-square)](https://npmcharts.com/compare/koatty?minimal=true)
-
-
-## New features
-- **New:** @Scheduled("0 0/1 * * * ?") ✔️ 1.9.2
-- **New:** replace koa-router to @koa/router ✔️ 1.10.0
-- **New:** AOP：@Aspect()、@Before()、@After()、@BeforeEach()、@AfterEach()  ✔️ 1.11.2
-- **New:** @Validated: Use class-validator for entity class validation, and support auto create Apidoc.  ✔️ 1.12.4
-- **New:** SchedulerLock is redis-based distributed locks. ✔️ 1.14.8
-- **New:** @Transactional() with ThinkORM. ✔️ ThinkORM@4.4.8
-- **New:** think_apollo middleware supports Apollo Configuration Center. ✔️ 
-- **New:** bootFunc supports asynchronous. And the appRady/appStart event also supports asynchronous  ✔️ 1.15.0
-- **New:** @CacheAble, @CacheEvict supports redis-based caching  ✔️ 1.16.0
-- **New:** Support asynchronous loading configuration, support plug-in ✔️ 2.5.5
-- **New:** HTTP/2 ✔️ 
-- **New:** koatty for etcd  ✔️
-- **New:** koatty grpc server/client by think_grpc.
-- **New:** koatty-cloud for trpc/Tars
-- **New:** koatty-cloud for consul
-- **New:** koatty-cloud for nacos
-- **New:** koatty-cloud for SpringCloud
-- **New:** GraphQL
-- **New:** SSR 
-
 
 ## Documentation
 
