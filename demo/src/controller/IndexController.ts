@@ -4,7 +4,8 @@
  * @ license: Apache License 2.0
  * @ version: 2020-05-19 14:31:04
  */
-import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, After, RequestBody, Get, Validated, Valid, Helper, Post, RequestParam, IOCContainer, PathVariable, BeforeEach } from "../../../src/index";
+import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, After, RequestBody, Get, Helper, Post, RequestParam, IOCContainer, PathVariable, BeforeEach } from "../../../src/index";
+import {Validated, Valid} from "koatty_validation";
 import { App } from '../App';
 import { AdminController } from "./AdminController";
 import { TestService } from "../service/TestService";

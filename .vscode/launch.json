@@ -6,7 +6,7 @@
             "request": "launch",
             "name": "TS Program",
             "args": [
-                "${workspaceRoot}/test/src/App.ts"
+                "${workspaceRoot}/demo/src/App.ts"
             ],
             "runtimeArgs": [
                 "--nolazy",

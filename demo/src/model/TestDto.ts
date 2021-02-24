@@ -1,4 +1,5 @@
-import { Length, Min, Max, IsCnName, Contains, IsNotEmpty, IsDefined, Component } from '../../../src';
+import { Length, Min, Max, IsCnName, Contains, IsNotEmpty, IsDefined } from 'koatty_validation';
+import { Component } from '../../../src';
 /**
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
