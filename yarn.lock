@@ -23,10 +23,10 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@godaddy/terminus@^4.5.0":
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/@godaddy/terminus/-/terminus-4.5.0.tgz#618951107bb91fec68f194186f5c2c9392b8efa7"
-  integrity sha512-fARG14VkM3wgZbgT0G5rmXOmG6GLcRcPoTDS4/idaUJsaYuuuz5OqMSc22QZ94ixnMhr2V+vJ6JZQTlePDO01w==
+"@godaddy/terminus@^4.6.0":
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/@godaddy/terminus/-/terminus-4.6.0.tgz#1e746cf1715cf39866fd4a25569deb88774dda27"
+  integrity sha512-5OaPBRYIex8YcvK+Jk6/wUNulaQMWt1RWIpfYmRbP+1On5FRf3bumDWBni3V0RQRkm3JIvZiXbIndumEtasOMg==
   dependencies:
     stoppable "^1.1.0"
 
@@ -77,10 +77,10 @@
     "@types/connect" "*"
     "@types/node" "*"
 
-"@types/cls-hooked@^4.3.1":
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/@types/cls-hooked/-/cls-hooked-4.3.1.tgz#0fdfd38f827aa77d15120871e9ca5c593840b2e1"
-  integrity sha512-nMjNjQAk9vAYnDEXRUxGSACarjPDRKVaZ8xrwKzRy1BmzG5tN3JUkuvdVwE8P2GBkSRokxVw+QUpuvFzvOsKpA==
+"@types/cls-hooked@^4.3.3":
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/@types/cls-hooked/-/cls-hooked-4.3.3.tgz#c09e2f8dc62198522eaa18a5b6b873053154bd00"
+  integrity sha512-gNstDTb/ty5h6gJd6YpSPgsLX9LmRpaKJqGFp7MRlYxhwp4vXXKlJ9+bt1TZ9KbVNXE+Mbxy2AYXcpY21DDtJw==
   dependencies:
     "@types/node" "*"
 
@@ -700,10 +700,10 @@ globby@^10.0.1:
     merge2 "^1.2.3"
     slash "^3.0.0"
 
-globby@^11.0.1:
-  version "11.0.1"
-  resolved "https://registry.yarnpkg.com/globby/-/globby-11.0.1.tgz#9a2bf107a068f3ffeabc49ad702c79ede8cfd357"
-  integrity sha512-iH9RmgwCmUJHi2z5o2l3eTtGBtXek1OYlHrbcxOYugyHLmAsZrPj43OtHThd62Buh/Vv6VyCBD2bdyWcGNQqoQ==
+globby@^11.0.2:
+  version "11.0.2"
+  resolved "https://registry.yarnpkg.com/globby/-/globby-11.0.2.tgz#1af538b766a3b540ebfb58a32b2e2d5897321d83"
+  integrity sha512-2ZThXDvvV8fYFRVIxnrMQBipZQDr7MxKAmQK1vujaj9/7eF0efG7BPUKJ7jP7G5SLF37xKDXvO4S/KKLj/Z0og==
   dependencies:
     array-union "^2.1.0"
     dir-glob "^3.0.1"
@@ -1712,10 +1712,10 @@ type-is@^1.6.16:
     media-typer "0.3.0"
     mime-types "~2.1.24"
 
-typescript@^4.1.3:
-  version "4.1.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.1.3.tgz#519d582bd94cba0cf8934c7d8e8467e473f53bb7"
-  integrity sha512-B3ZIOf1IKeH2ixgHhj6la6xdwR9QrLC5d1VKeCSY4tvkqhF2eqd9O7txNlS0PO3GrBAFIdr3L1ndNwteUbZLYg==
+typescript@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.2.3.tgz#39062d8019912d43726298f09493d598048c1ce3"
+  integrity sha512-qOcYwxaByStAWrBf4x0fibwZvMRG+r4cQoTjbPtUlrWjBHbmCAww1i448U0GJ+3cNNEtebDteo/cHOR3xJ4wEw==
 
 unpipe@1.0.0:
   version "1.0.0"
