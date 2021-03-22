@@ -131,13 +131,17 @@ export function TraceHandler(app: Koatty) {
             if (ctx.body !== undefined && ctx.status === 404) {
                 ctx.status = 200;
             }
-            // error
-            if (ctx.status >= 400) {
-                ctx.throw(ctx.status, ctx.url);
-            }
+            // // error
+            // if (ctx.status >= 400) {
+            //     ctx.throw(ctx.status, ctx.message);
+            // }
             return null;
-        } catch (err) {
-            return catcher(app, ctx, err);
+        } catch (err: any) {
+            if (err instanceof Exception) {
+                return catcher(app, ctx, err);
+            }
+            app.emit('error', err, ctx);
+            return null;
         } finally {
             clearTimeout(response.timeout);
         }
@@ -154,11 +158,13 @@ export function TraceHandler(app: Koatty) {
  */
 function catcher(app: Koatty, ctx: KoattyContext, err: Exception) {
     try {
-        app.emit('error', err, ctx);
-        const { status } = err;
-        ctx.status = status || ctx.status || 500;
-        // ctx.message = ctx.message || '';
-
+        ctx.status = err.status || ctx.status || 500;
+        if (ctx.body) {
+            err.message = ctx.body;
+        } else {
+            err.message = err.message ?? ctx.message;
+        }
+    
         return responseBody(app, ctx, err);
     } catch (error) {
         Logger.Error(error);
@@ -178,14 +184,14 @@ function responseBody(app: Koatty, ctx: KoattyContext, err: Exception) {
     // accepted types
     switch (contentType) {
         case 'json':
-            return jsonRend(app, ctx, err);
+            return jsonRend(ctx, err);
             break;
         case 'html':
-            return htmlRend(app, ctx, err);
+            return htmlRend(ctx, err);
             break;
         case 'text':
         default:
-            return textRend(app, ctx, err);
+            return textRend(ctx, err);
             break;
     }
 }
@@ -198,10 +204,10 @@ function responseBody(app: Koatty, ctx: KoattyContext, err: Exception) {
  */
 function parseResContentType(ctx: KoattyContext) {
     let type = '';
-    if (ctx.response.type === "") {
+    if (ctx.request.type === "") {
         type = <string>ctx.accepts('json', 'html', 'text');
     } else {
-        type = ctx.response.is('json', 'html', 'text');
+        type = <string>ctx.request.is('json', 'html', 'text');
     }
     if (type) {
         return type;
@@ -212,12 +218,11 @@ function parseResContentType(ctx: KoattyContext) {
 /**
  *
  *
- * @param {Koatty} app
  * @param {KoattyContext} ctx
  * @param {Exception} err
  * @returns {*}  
  */
-function htmlRend(app: Koatty, ctx: KoattyContext, err: Exception) {
+function htmlRend(ctx: KoattyContext, err: Exception) {
     let contentType = 'text/html';
     if (ctx.encoding !== false && contentType.indexOf('charset=') === -1) {
         contentType = `${contentType}; charset=${ctx.encoding}`;
@@ -225,46 +230,48 @@ function htmlRend(app: Koatty, ctx: KoattyContext, err: Exception) {
     ctx.type = contentType;
 
     const { code, message } = err;
-    const res = `<!DOCTYPE html><html><head><title>Error - ${code || 1}</title><meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    const body = `<!DOCTYPE html><html><head><title>Error - ${code || 1}</title><meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <style>body {padding: 50px 80px;font: 14px 'Microsoft YaHei','微软雅黑',Helvetica,Sans-serif;}h1, h2 {margin: 0;padding: 10px 0;}h1 {font-size: 2em;}h2 {font-size: 1.2em;font-weight: 200;color: #aaa;}pre {font-size: .8em;}</style>
-    </head><body><div id="error"><h1>Error</h1><p>Oops! Your visit is rejected!</p><h2>Message:</h2><pre><code>${Helper.escapeHtml(message) || ctx.message || ""}</code></pre></div></body></html>`;
-
-    return ctx.res.end(res);
+    </head><body><div id="error"><h1>Error</h1><p>Oops! Your visit is rejected!</p><h2>Message:</h2><pre><code>${Helper.escapeHtml(message) || ""}</code></pre></div></body></html>`;
+    ctx.set("content-Length", `${body.length}`);
+    return ctx.res.end(body);
 }
 
 /**
  *
  *
- * @param {Koatty} app
  * @param {KoattyContext} ctx
  * @param {Exception} err
  * @returns {*}  
  */
-function jsonRend(app: Koatty, ctx: KoattyContext, err: Exception) {
+function jsonRend(ctx: KoattyContext, err: Exception) {
     let contentType = 'application/json';
     if (ctx.encoding !== false && contentType.indexOf('charset=') === -1) {
         contentType = `${contentType}; charset=${ctx.encoding}`;
     }
     ctx.type = contentType;
     const { code, message } = err;
-    return ctx.res.end(`{"code": ${code || 1},"message":"${message || ctx.message || ""}"}`);
+    const body = `{"code":${code || 1},"message":"${message || ""}"}`;
+    ctx.set("content-Length", `${body.length}`);
+    return ctx.res.end(`{"code":${code || 1},"message":"${message || ""}"}`);
 }
 
 /**
  * 
  *
- * @param {Koatty} app
  * @param {KoattyContext} ctx
  * @param {Exception} err
  * @returns {*}  
  */
-function textRend(app: Koatty, ctx: KoattyContext, err: Exception) {
+function textRend(ctx: KoattyContext, err: Exception) {
     let contentType = 'text/plain';
     if (ctx.encoding !== false && contentType.indexOf('charset=') === -1) {
         contentType = `${contentType}; charset=${ctx.encoding}`;
     }
     ctx.type = contentType;
     const { code, message } = err;
-    return ctx.res.end(`Error: code: ${code || 1}, message: ${message || ctx.message || ""} `);
+    const body = `{"code":${code || 1},"message":"${message || ""}"}`;
+    ctx.set("content-Length", `${body.length}`);
+    return ctx.res.end(body);
 }
 
