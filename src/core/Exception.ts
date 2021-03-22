@@ -38,7 +38,7 @@ export class Exception extends Error {
     public status: HttpStatusCode;
     public code: number;
 
-    constructor(message: string, code = 1, status?: HttpStatusCode) {
+    constructor(message: string, code = 1, status: HttpStatusCode = 500) {
         super(message);
         this.status = status;
         this.code = code;
