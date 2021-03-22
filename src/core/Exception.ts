@@ -11,7 +11,7 @@ import { PREVENT_NEXT_PROCESS } from "./Constants";
 /**
  * Prevent next process
  *
- * @returns {any}
+ * @returns {Promise.reject}
  */
 export function prevent() {
     return Promise.reject(new Error(PREVENT_NEXT_PROCESS));
@@ -20,10 +20,10 @@ export function prevent() {
 /**
  * Check is prevent error
  *
- * @param {any} err
- * @returns {any}
+ * @param {unknown} err
+ * @returns {unknown}
  */
-export function isPrevent(err: any) {
+export function isPrevent(err: unknown) {
     return Helper.isError(err) && err.message === PREVENT_NEXT_PROCESS;
 }
 
@@ -40,7 +40,7 @@ export class Exception extends Error {
 
     constructor(message: string, code = 1, status?: HttpStatusCode) {
         super(message);
-        this.status = status || 500;
+        this.status = status;
         this.code = code;
     }
 }
