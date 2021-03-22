@@ -187,7 +187,7 @@ export class Koatty extends Koa {
      * @param {*} value
      * @memberof Koatty
      */
-    setMap(key: string, value: any) {
+    setMap(key: string, value: unknown) {
         return this.handelMap.set(key, value);
     }
 
@@ -292,7 +292,7 @@ export class Koatty extends Koa {
     private captureError(): void {
         // koa error
         this.removeAllListeners('error');
-        this.on('error', (err: any) => {
+        this.on('error', (err: unknown) => {
             if (!isPrevent(err)) {
                 Logger.Error(err);
             }
