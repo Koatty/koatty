@@ -10,7 +10,7 @@ import { Namespace, createNamespace } from "cls-hooked";
 import { Koatty, KoattyContext } from '../Koatty';
 import { Helper, UUID } from '../util/Helper';
 import { Logger } from '../util/Logger';
-import { Exception } from './Exception';
+import { Exception, isException } from './Exception';
 
 /**
  * Create Namespace
@@ -137,7 +137,7 @@ export function TraceHandler(app: Koatty) {
             // }
             return null;
         } catch (err: any) {
-            if (err instanceof Exception) {
+            if (isException(err)) {
                 return catcher(app, ctx, err);
             }
             app.emit('error', err, ctx);

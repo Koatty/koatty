@@ -21,8 +21,8 @@ export class ZadtestMiddleware implements IMiddleware {
         //    ctx.body = "band!!!!!!";
         //    throw new Error("band");
         //    throw new Exception("band", 1, 403);
-        ctx.body = "sss";
-        ctx.throw(403);
+        // ctx.body = "sss";
+        ctx.throw(403, "ssss");
         };
     }
 }
