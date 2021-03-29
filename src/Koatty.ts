@@ -11,7 +11,7 @@ import { IncomingMessage, ServerResponse } from 'http';
 import { Namespace } from "cls-hooked";
 import { Helper } from "./util/Helper";
 import { Logger } from "./util/Logger";
-import { isPrevent } from "./core/Exception";
+import { Exception, HttpStatusCode, HttpStatusCodeMap, isPrevent } from "./core/Exception";
 const pkg = require("../package.json");
 
 /**
@@ -92,6 +92,16 @@ export interface KoattyContext extends Koa.Context {
      */
     queryParser: () => Object;
 
+
+    /**
+     * Replace ctx.throw
+     *
+     * @type {(status: number, message?: string)}
+     * @type {(message: string, code?: number, status?: HttpStatusCode)}
+     * @memberof KoattyContext
+     */
+    throw(status: number, message?: string): never;
+    throw(message: string, code?: number, status?: HttpStatusCode): never;
 }
 
 /**
@@ -280,6 +290,19 @@ export class Koatty extends Koa {
         const context: any = super.createContext(req, res);
         context.bodyParser = null;
         context.queryParser = null;
+        context.throw = function (message: string | number, code = 1, status?: HttpStatusCode) {
+            if (typeof message === "number") {
+                if (HttpStatusCodeMap.has(message)) {
+                    status = message;
+                    message = HttpStatusCodeMap.get(message);
+                }
+            }
+            if (typeof code === "string") {
+                message = code;
+                code = 1;
+            }
+            throw new Exception(<string>message, code, status);
+        };
         const koattyContext: KoattyContext = context;
         return koattyContext;
     }
