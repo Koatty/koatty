@@ -4,8 +4,8 @@
  * @ license: Apache License 2.0
  * @ version: 2020-05-19 14:31:04
  */
-import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, After, RequestBody, Get, Helper, Post, RequestParam, IOCContainer, PathVariable, BeforeEach } from "../../../src/index";
-import {Validated, Valid} from "koatty_validation";
+import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, After, RequestBody, Get, Helper, Post, RequestParam, IOCContainer, PathVariable, BeforeEach, Exception, prevent } from "../../../src/index";
+import { Validated, Valid } from "koatty_validation";
 import { App } from '../App';
 import { AdminController } from "./AdminController";
 import { TestService } from "../service/TestService";
@@ -33,12 +33,19 @@ export class IndexController extends AdminController {
     @GetMapping("/")
     @Before(Test2Aspect)
     async default() {
-        const info = await this.testService.test2();
-        // .catch(err => {
-        //     this.fail(err);
-        //     return this.prevent();
-        // });
-        return this.ok("Hello Koatty.");
+        const info = await this.testService.test2().catch(() => null);
+        // return { "aa": "band!!!!!!" };
+        // this.ctx.status = 403;
+        // this.fail("sfsdfsdfdsf");
+        // this.ctx.body = { "aa": "band!!!!!!" };
+        // throw new Error("band");
+        // throw new Exception("band", 1, 405);
+        // ctx.body = "sss";
+        this.ctx.throw(200, "ssss");
+        // return prevent();
+        // return new Promise((resolve: Function) => setTimeout(() => resolve(), 200));
+        // return "Hello Koatty.";
+        // return this.ok("Hello Koatty.");
     }
 
     @GetMapping("/path/:name")

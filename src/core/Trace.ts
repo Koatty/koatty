@@ -4,13 +4,14 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-12-10 11:49:15
  */
+import util from "util";
 import { IncomingMessage, ServerResponse } from 'http';
 import { Http2ServerRequest, Http2ServerResponse } from 'http2';
 import { Namespace, createNamespace } from "cls-hooked";
 import { Koatty, KoattyContext } from '../Koatty';
 import { Helper, UUID } from '../util/Helper';
 import { Logger } from '../util/Logger';
-import { Exception } from './Exception';
+import { Exception, HttpStatusCodeMap, isException, isPrevent } from './Exception';
 
 /**
  * Create Namespace
@@ -120,28 +121,25 @@ export function TraceHandler(app: Koatty) {
             response.timeout = null;
             // promise.race
             const res = await Promise.race([new Promise((resolve, reject) => {
-                const err: any = new Error('Request Timeout');
-                err.status = 408;
-                response.timeout = setTimeout(reject, timeout, err);
+                response.timeout = setTimeout(reject, timeout, new Exception('Request Timeout', 1, 408));
                 return;
             }), next()]);
+
             if (res && ctx.status !== 304) {
-                ctx.body = res;
+                ctx.body = res ?? "";
             }
-            if (ctx.body !== undefined && ctx.status === 404) {
-                ctx.status = 200;
-            }
-            // // error
-            // if (ctx.status >= 400) {
-            //     ctx.throw(ctx.status, ctx.message);
+
+            // if (ctx.body !== undefined && ctx.status === 404) {
+            //     ctx.status = 200;
             // }
+
             return null;
         } catch (err: any) {
-            if (err instanceof Exception) {
-                return catcher(app, ctx, err);
+            // skip prevent errors
+            if (isPrevent(err)) {
+                return null;
             }
-            app.emit('error', err, ctx);
-            return null;
+            return catcher(app, ctx, err);
         } finally {
             clearTimeout(response.timeout);
         }
@@ -158,14 +156,21 @@ export function TraceHandler(app: Koatty) {
  */
 function catcher(app: Koatty, ctx: KoattyContext, err: Exception) {
     try {
-        ctx.status = err.status || ctx.status || 500;
-        if (ctx.body) {
-            err.message = ctx.body;
-        } else {
-            err.message = err.message ?? ctx.message;
+        let body = ctx.body;
+        if (!body) {
+            body = err.message ?? ctx.message ?? "";
         }
-    
-        return responseBody(app, ctx, err);
+        // if (!(err instanceof Exception)) {
+        //     err = new Exception(body, err.code ?? 1, err.status ?? 500);
+        // }
+        ctx.status = ctx.status ?? 500;
+        if (err instanceof Exception) {
+            err.message = body;
+            ctx.status = err.status;
+            return responseBody(app, ctx, err);
+        }
+        app.emit('error', err, ctx);
+        return ctx.res.end(body);
     } catch (error) {
         Logger.Error(error);
         return null;
