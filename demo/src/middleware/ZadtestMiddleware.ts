@@ -4,7 +4,7 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-05-18 11:16:44
  */
-import { Middleware, Helper, IMiddleware, KoattyContext, Exception } from "../../../src/index";
+import { Middleware, Helper, IMiddleware, KoattyContext, Exception, prevent } from "../../../src/index";
 
 const defaultOptions = {};
 
@@ -17,12 +17,13 @@ export class ZadtestMiddleware implements IMiddleware {
         //     console.log('Zadtest Middleware');
         // });
         return async function (ctx: KoattyContext, next: Function) {
-        //    ctx.status = 403;
-        //    ctx.body = "band!!!!!!";
-        //    throw new Error("band");
-        //    throw new Exception("band", 1, 403);
-        // ctx.body = "sss";
-        ctx.throw(403, "ssss");
+            //    ctx.status = 403;
+            // ctx.body = "band!!!!!!";
+            // throw new Error("ZadtestMiddleware");
+            //    throw new Exception("band", 1, 403);
+            // ctx.body = "sss";
+            // ctx.throw(403, "ssss");
+            return next();
         };
     }
 }
