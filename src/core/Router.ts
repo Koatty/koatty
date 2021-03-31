@@ -4,7 +4,6 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-07-06 14:23:43
  */
-import util from "util";
 import KoaRouter from "@koa/router";
 import { Helper } from "../util/Helper";
 import { Logger } from "../util/Logger";
@@ -12,7 +11,7 @@ import { Koatty, KoattyContext } from "../Koatty";
 import { IOCContainer, RecursiveGetMetadata } from 'koatty_container';
 import { checkParams, PARAM_RULE_KEY, PARAM_CHECK_KEY } from 'koatty_validation';
 import { CONTROLLER_ROUTER, ROUTER_KEY, PARAM_KEY } from "./Constants";
-import { Exception, isException, isPrevent } from "./Exception";
+import { isPrevent } from "./Exception";
 
 /**
  *
@@ -210,28 +209,17 @@ export class Router {
      */
     async ExecRouter(app: Koatty, ctx: KoattyContext, identifier: string, router: any, ctlParams: any) {
         const ctl: any = IOCContainer.get(identifier, "CONTROLLER", [ctx]);
-        try {
-            // const ctl: any = container.get(identifier, "CONTROLLER");
-            if (!ctx || !ctl.init) {
-                return ctx.throw(404, `Controller ${identifier} not found.`);
-            }
-            // inject param
-            let args = [];
-            if (ctlParams) {
-                args = await getParamter(app, ctx, ctlParams);
-            }
-            // method
-            const res = await ctl[router.method](...args);
-            return (res === undefined ? "" : res);
-        } catch (err: any) {
-            if (isPrevent(err)) {
-                // ctx.status = 200;
-                return;
-            }
-            if (!isException(err)) {
-                throw new Exception(err.message || util.inspect(err), err.code || 1, err.status || 500);
-            }
-            throw err;
+
+        // const ctl: any = container.get(identifier, "CONTROLLER");
+        if (!ctx || !ctl.init) {
+            return ctx.throw(404, `Controller ${identifier} not found.`);
         }
+        // inject param
+        let args = [];
+        if (ctlParams) {
+            args = await getParamter(app, ctx, ctlParams);
+        }
+        // method
+        return ctl[router.method](...args);
     }
 }
