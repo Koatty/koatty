@@ -19,7 +19,7 @@ const pkg = require("../package.json");
  * @return {void} []
  */
 const checkEnv = () => {
-    let nodeEngines = pkg.engines.node.slice(1) || '10.0.0';
+    let nodeEngines = pkg.engines.node.slice(1) ?? '10.0.0';
     nodeEngines = nodeEngines.slice(0, nodeEngines.lastIndexOf('.'));
     let nodeVersion = process.version;
     if (nodeVersion[0] === 'v') {
@@ -124,7 +124,7 @@ export class Koatty extends Koa {
 
     protected constructor(options: InitOptions) {
         super();
-        this.options = options || {};
+        this.options = options ?? {};
         this.init();
         this.handelMap = new Map<string, any>();
         // initialize
@@ -142,10 +142,10 @@ export class Koatty extends Koa {
      */
     private initialize() {
         // development env is default
-        this.appDebug = !!(this.options.appDebug || this.appDebug);
+        this.appDebug = !!(this.options.appDebug ?? this.appDebug);
 
-        const env = (process.execArgv || []).join(",");
-        if ((env.indexOf('--production') > -1) || ((process.env.NODE_ENV || '').indexOf('pro') > -1)) {
+        const env = (process.execArgv ?? []).join(",");
+        if ((env.indexOf('--production') > -1) || ((process.env.NODE_ENV ?? '').indexOf('pro') > -1)) {
             this.appDebug = false;
         }
 
@@ -164,15 +164,15 @@ export class Koatty extends Koa {
         // catch error
         this.captureError();
         // define path
-        const rootPath = (this.options?.rootPath) || this.rootPath || process.cwd();
-        const appPath = this.appPath || (this.options?.appPath) || path.resolve(rootPath, env.indexOf('ts-node') > -1 ? 'src' : 'dist');
+        const rootPath = (this.options?.rootPath) ?? this.rootPath ?? process.cwd();
+        const appPath = this.appPath ?? (this.options?.appPath) ?? path.resolve(rootPath, env.indexOf('ts-node') > -1 ? 'src' : 'dist');
         const thinkPath = __dirname;
         Helper.define(this, 'rootPath', rootPath);
         Helper.define(this, 'appPath', appPath);
         Helper.define(this, 'thinkPath', thinkPath);
 
         // app.env
-        this.env = process.env.KOATTY_ENV || process.env.NODE_ENV;
+        this.env = process.env.KOATTY_ENV ?? process.env.NODE_ENV;
 
         process.env.ROOT_PATH = this.rootPath;
         process.env.APP_PATH = this.appPath;
@@ -255,9 +255,9 @@ export class Koatty extends Koa {
      */
     public config(name: string, type = 'config') {
         try {
-            const caches = this.getMap('configs') || {};
+            const caches = this.getMap('configs') ?? {};
             // tslint:disable-next-line: no-unused-expression
-            caches[type] || (caches[type] = {});
+            caches[type] ?? (caches[type] = {});
             if (name === undefined) {
                 return caches[type];
             }
@@ -267,7 +267,7 @@ export class Koatty extends Koa {
                     return caches[type][name];
                 }  // name包含. 二级
                 const keys = name.split('.');
-                const value = caches[type][keys[0]] || {};
+                const value = caches[type][keys[0]] ?? {};
                 return value[keys[1]];
             }
             return caches[type][name];
@@ -286,7 +286,7 @@ export class Koatty extends Koa {
      * @returns {*}  {KoattyContext}
      * @memberof Koatty
      */
-    public createContext(req: IncomingMessage, res: ServerResponse): any {
+    public createContext(req: IncomingMessage, res: ServerResponse): KoattyContext {
         const context: any = super.createContext(req, res);
         context.bodyParser = null;
         context.queryParser = null;
