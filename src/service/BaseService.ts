@@ -7,6 +7,7 @@
 import { Koatty } from "../Koatty";
 import { ObjectDefinitionOptions } from "koatty_container";
 import { IService } from '../core/Component';
+import { Logger } from "../util/Logger";
 
 /**
  * Base class
@@ -35,7 +36,8 @@ export class BaseService implements IService {
      * @memberof Base
      */
     protected init(...arg: any[]): void {
-
+        // todo
+        Logger.Debug(arg)
     }
 
 }

@@ -11,7 +11,6 @@ import { Koatty, KoattyContext } from "../Koatty";
 import { IOCContainer, RecursiveGetMetadata } from 'koatty_container';
 import { checkParams, PARAM_RULE_KEY, PARAM_CHECK_KEY } from 'koatty_validation';
 import { CONTROLLER_ROUTER, ROUTER_KEY, PARAM_KEY } from "./Constants";
-import { isPrevent } from "./Exception";
 
 /**
  *
@@ -127,7 +126,7 @@ async function getParamter(app: Koatty, ctx: KoattyContext, ctlParams: any = {})
 export class Router {
     app: Koatty;
     options: any;
-    router: KoaRouter<any, {}>;
+    router: KoaRouter<any, unknown>;
 
     constructor(app: Koatty, options?: any) {
         this.app = app;

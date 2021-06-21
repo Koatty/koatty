@@ -1,7 +1,7 @@
 /*
  * @Author: richen
  * @Date: 2020-07-06 15:53:37
- * @LastEditTime: 2021-06-21 11:29:06
+ * @LastEditTime: 2021-06-21 15:29:13
  * @Description:
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
@@ -217,6 +217,7 @@ export function startHTTP2(app: Koatty, openTrace: boolean) {
  */
 export function startWebSocket(app: Koatty, openTrace: boolean) {
     //todo
+    Logger.Debug(app.env, openTrace)
 }
 
 /**
@@ -228,4 +229,5 @@ export function startWebSocket(app: Koatty, openTrace: boolean) {
  */
 export function startRPC(app: Koatty, openTrace: boolean) {
     //todo
+    Logger.Debug(app.env, openTrace)
 }

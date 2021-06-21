@@ -5,7 +5,6 @@
  * @ version: 2020-05-20 15:45:24
  */
 import { Helper } from "../util/Helper";
-import { prevent } from "../core/Exception";
 import { Koatty, KoattyContext } from "../Koatty";
 import { ObjectDefinitionOptions } from "koatty_container";
 import { ApiInput, ApiOutput, IController } from '../core/Component';

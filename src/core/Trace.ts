@@ -10,7 +10,7 @@ import { Namespace, createNamespace } from "cls-hooked";
 import { Koatty, KoattyContext } from '../Koatty';
 import { Helper, UUID } from '../util/Helper';
 import { Logger } from '../util/Logger';
-import { Exception, HttpStatusCodeMap, isException, isPrevent } from './Exception';
+import { Exception, isException, isPrevent } from './Exception';
 
 /**
  * Create Namespace

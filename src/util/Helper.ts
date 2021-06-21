@@ -6,7 +6,6 @@
  */
 import { randomFillSync } from "crypto";
 import * as koatty_lib from "koatty_lib";
-import { IOCContainer } from 'koatty_container';
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
 // export Helper
@@ -49,7 +48,6 @@ export function requireDefault(p: string) {
 let controllerReg: any = null;
 export function ControllerMatch(name: string, controllerSuffix = "") {
     if (!controllerReg) {
-        const controllerSuffix = "";
         controllerReg = new RegExp(`([a-zA-Z0-9_]+)${controllerSuffix}`);
     }
 

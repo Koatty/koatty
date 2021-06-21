@@ -12,6 +12,7 @@ import { Namespace } from "cls-hooked";
 import { Helper } from "./util/Helper";
 import { Logger } from "./util/Logger";
 import { Exception, HttpStatusCode, HttpStatusCodeMap, isPrevent } from "./core/Exception";
+
 const pkg = require("../package.json");
 
 /**
@@ -120,13 +121,13 @@ export class Koatty extends Koa {
     public options: InitOptions;
     public trace: Namespace;
 
-    private handelMap: Map<string, any>;
+    private handelMap: Map<string, unknown>;
 
     protected constructor(options: InitOptions) {
         super();
         this.options = options ?? {};
         this.init();
-        this.handelMap = new Map<string, any>();
+        this.handelMap = new Map<string, unknown>();
         // initialize
         this.initialize();
     }
@@ -197,7 +198,7 @@ export class Koatty extends Koa {
      * @param {*} value
      * @memberof Koatty
      */
-    setMap(key: string, value: unknown) {
+    setMap(key: string, value: any) {
         return this.handelMap.set(key, value);
     }
 
@@ -207,7 +208,7 @@ export class Koatty extends Koa {
      * @param {string} key
      * @memberof Koatty
      */
-    getMap(key: string) {
+    getMap(key: string):any {
         return this.handelMap.get(key);
     }
 
@@ -223,10 +224,6 @@ export class Koatty extends Koa {
             Logger.Error('The paramter is not a function.');
             return;
         }
-        // koa has convert
-        // if (Helper.isGenerator(fn)) {
-        //     fn = Helper.generatorToPromise(<GeneratorFunction>fn);
-        // }
         return super.use(fn);
     }
 
