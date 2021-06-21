@@ -38,10 +38,10 @@ export class IndexController extends AdminController {
         // this.ctx.status = 403;
         // this.fail("sfsdfsdfdsf");
         // this.ctx.body = { "aa": "band!!!!!!" };
-        // throw new Error("band");
+        throw new Error("band");
         // throw new Exception("band", 1, 405);
         // ctx.body = "sss";
-        this.ctx.throw(200, "ssss");
+        // this.ctx.throw("ssss");
         // return prevent();
         // return new Promise((resolve: Function) => setTimeout(() => resolve(), 200));
         // return "Hello Koatty.";
@@ -56,8 +56,8 @@ export class IndexController extends AdminController {
         return this.body(info);
         // this.type("text/plain");
         // this.type("text/html");
-        console.log('PathVariable', name)
-        console.log('Get', test)
+        console.log('PathVariable', name);
+        console.log('Get', test);
         return this.fail({
             code: 200,
             message: "dsfsfs"

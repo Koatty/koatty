@@ -55,7 +55,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
                 }
                 exSet.add(fileName);
             }
-        }, [...configurationMetas, `!${target.name || '.no'}.ts`]);
+        }, [...configurationMetas, `!${target.name ?? '.no'}.ts`]);
         exSet.clear();
 
         // Load configuration
@@ -73,7 +73,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         Loader.LoadAppReadyHooks(target, app);
 
         // New router
-        const KoattyRouter = new Router(app, app.config(undefined, 'router') || {});
+        const KoattyRouter = new Router(app, app.config(undefined, 'router') ?? {});
         // Middleware may depend on
         Helper.define(app, "Router", KoattyRouter.router);
 
@@ -146,7 +146,7 @@ export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
         if (!(target.prototype instanceof Koatty)) {
             throw new Error(`class does not inherit from Koatty`);
         }
-        scanPath = scanPath || '';
+        scanPath = scanPath ?? '';
         IOCContainer.saveClassMetadata(TAGGED_CLS, COMPONENT_SCAN, scanPath, target);
     };
 }
@@ -165,7 +165,7 @@ export function ConfigurationScan(scanPath?: string | string[]): ClassDecorator 
         if (!(target.prototype instanceof Koatty)) {
             throw new Error(`class does not inherit from Koatty`);
         }
-        scanPath = scanPath || '';
+        scanPath = scanPath ?? '';
         IOCContainer.saveClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, scanPath, target);
     };
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: richen
  * @Date: 2020-07-06 15:53:37
- * @LastEditTime: 2021-01-08 15:22:26
+ * @LastEditTime: 2021-06-21 11:29:06
  * @Description:
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
@@ -130,8 +130,8 @@ const terminusOptions = {
  * @param {Koatty} app
  */
 export function StartSever(app: Koatty) {
-    const serveMode = app.config("serve_mod") || "http";
-    const openTrace = app.config("open_trace") || false;
+    const serveMode = app.config("serve_mod") ?? "http";
+    const openTrace = app.config("open_trace") ?? false;
     if (openTrace) {
         TraceServerSetup(app);
     }
@@ -159,8 +159,8 @@ export function StartSever(app: Koatty) {
  * @param {boolean} openTrace
  */
 export function startHTTP(app: Koatty, openTrace: boolean) {
-    const port = process.env.PORT || process.env.main_port || app.config('app_port') || 3000;
-    const hostname = process.env.IP || process.env.HOSTNAME?.replace(/-/g, '.') || app.config('app_hostname') || 'localhost';
+    const port = process.env.PORT ?? process.env.main_port ?? app.config('app_port') ?? 3000;
+    const hostname = process.env.IP ?? process.env.HOSTNAME?.replace(/-/g, '.') ?? app.config('app_hostname') ?? 'localhost';
 
     Logger.Custom("think", "", `Protocol: HTTP/1.1`);
     const server = createServer((req, res) => {
@@ -182,10 +182,10 @@ export function startHTTP(app: Koatty, openTrace: boolean) {
  * @param {boolean} openTrace
  */
 export function startHTTP2(app: Koatty, openTrace: boolean) {
-    const port = process.env.PORT || process.env.main_port || app.config('app_port') || 443;
-    const hostname = process.env.IP || process.env.HOSTNAME?.replace(/-/g, '.') || app.config('app_hostname') || 'localhost';
-    const keyFile = app.config("key_file") || "";
-    const crtFile = app.config("crt_file") || "";
+    const port = process.env.PORT ?? process.env.main_port ?? app.config('app_port') ?? 443;
+    const hostname = process.env.IP ?? process.env.HOSTNAME?.replace(/-/g, '.') ?? app.config('app_hostname') ?? 'localhost';
+    const keyFile = app.config("key_file") ?? "";
+    const crtFile = app.config("crt_file") ?? "";
     if (!Helper.isFile(keyFile) || !Helper.isFile(crtFile)) {
         Logger.Error("key_file, crt_file are not defined in the configuration");
         process.exit();

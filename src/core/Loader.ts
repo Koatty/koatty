@@ -152,14 +152,14 @@ export class Loader {
         }
         const tempConfig: any = {};
         // tslint:disable-next-line: no-unused-expression
-        process.env.APP_DEBUG && Logger.Custom("think", "", `Load configuration path: ${app.appPath}${loadPath || "/config"}`);
+        process.env.APP_DEBUG && Logger.Custom("think", "", `Load configuration path: ${app.appPath}${loadPath ?? "/config"}`);
 
-        Loader.LoadDirectory(loadPath || "./config", app.appPath, function (name: string, exp: any) {
+        Loader.LoadDirectory(loadPath ?? "./config", app.appPath, function (name: string, exp: any) {
             // tslint:disable-next-line: one-variable-per-declaration
             let type = "", t = "";
             if (name.indexOf("_") > -1) {
                 t = name.slice(name.lastIndexOf("_") + 1);
-                if (t && (app.env || "").indexOf(t) === 0) {
+                if (t && (app.env ?? "").indexOf(t) === 0) {
                     type = t;
                 }
             }
@@ -189,16 +189,16 @@ export class Loader {
      * @memberof Loader
      */
     public static SetLogger(app: Koatty) {
-        const configs = app.getMap("configs") || {};
+        const configs = app.getMap("configs") ?? {};
         //Logger
         if (configs.config) {
-            Logger.setLogFile(configs.config.logs_write || false);
-            Logger.setLevel(configs.config.logs_level || "INFO");
-            Logger.setLogFilePath(configs.config.logs_path || app.rootPath + "/logs");
+            Logger.setLogFile(configs.config.logs_write ?? false);
+            Logger.setLevel(configs.config.logs_level ?? "INFO");
+            Logger.setLogFilePath(configs.config.logs_path ?? app.rootPath + "/logs");
             // 
-            process.env.LOGS_WRITE = configs.config.logs_write || false;
-            process.env.LOGS_PATH = configs.config.logs_path || app.rootPath + "/logs";
-            process.env.LOGS_LEVEL = configs.config.logs_level || "INFO";
+            process.env.LOGS_WRITE = configs.config.logs_write ?? false;
+            process.env.LOGS_PATH = configs.config.logs_path ?? app.rootPath + "/logs";
+            process.env.LOGS_LEVEL = configs.config.logs_level ?? "INFO";
         }
     }
 
@@ -218,13 +218,13 @@ export class Loader {
         }
 
         //Mount default middleware
-        Loader.LoadDirectory(loadPath || "./middleware", app.thinkPath);
+        Loader.LoadDirectory(loadPath ?? "./middleware", app.thinkPath);
         //Mount application middleware
         // const middleware: any = {};
-        const appMiddleware = IOCContainer.listClass("MIDDLEWARE") || [];
+        const appMiddleware = IOCContainer.listClass("MIDDLEWARE") ?? [];
 
         appMiddleware.forEach((item: ComponentItem) => {
-            item.id = (item.id || "").replace("MIDDLEWARE:", "");
+            item.id = (item.id ?? "").replace("MIDDLEWARE:", "");
             if (item.id && Helper.isClass(item.target)) {
                 // inject configuration
                 injectValue(item.target, item.target.prototype, container);
@@ -268,7 +268,7 @@ export class Loader {
 
             // tslint:disable-next-line: no-unused-expression
             process.env.APP_DEBUG && Logger.Custom("think", "", `Load middleware: ${key}`);
-            const result = await handle.run(middlewareConf.config[key] || {}, app);
+            const result = await handle.run(middlewareConf.config[key] ?? {}, app);
             if (Helper.isFunction(result)) {
                 if (result.length < 3) {
                     app.use(result);
@@ -293,7 +293,7 @@ export class Loader {
 
         const controllers: any = {};
         controllerList.forEach((item: ComponentItem) => {
-            item.id = (item.id || "").replace("CONTROLLER:", "");
+            item.id = (item.id ?? "").replace("CONTROLLER:", "");
             if (item.id && Helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
                 process.env.APP_DEBUG && Logger.Custom("think", "", `Load controller: ${item.id}`);
@@ -326,7 +326,7 @@ export class Loader {
         const serviceList = IOCContainer.listClass("SERVICE");
 
         serviceList.forEach((item: ComponentItem) => {
-            item.id = (item.id || "").replace("SERVICE:", "");
+            item.id = (item.id ?? "").replace("SERVICE:", "");
             if (item.id && Helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
                 process.env.APP_DEBUG && Logger.Custom("think", "", `Load service: ${item.id}`);
@@ -356,7 +356,7 @@ export class Loader {
         const componentList = IOCContainer.listClass("COMPONENT");
 
         componentList.forEach((item: ComponentItem) => {
-            item.id = (item.id || "").replace("COMPONENT:", "");
+            item.id = (item.id ?? "").replace("COMPONENT:", "");
             if (item.id && !(item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
                 process.env.APP_DEBUG && Logger.Custom("think", "", `Load component: ${item.id}`);
@@ -390,7 +390,7 @@ export class Loader {
 
         const pluginList = [];
         componentList.forEach(async (item: ComponentItem) => {
-            item.id = (item.id || "").replace("COMPONENT:", "");
+            item.id = (item.id ?? "").replace("COMPONENT:", "");
             if (item.id && (item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
                 // tslint:disable-next-line: no-unused-expression
                 process.env.APP_DEBUG && Logger.Custom("think", "", `Load plugin: ${item.id}`);
@@ -421,7 +421,7 @@ export class Loader {
             // tslint:disable-next-line: no-unused-expression
             process.env.APP_DEBUG && Logger.Custom("think", "", `Execute plugin: ${key}`);
             // sync exec 
-            await handle.run(pluginsConf.config[key] || {}, app);
+            await handle.run(pluginsConf.config[key] ?? {}, app);
         }
     }
 
@@ -442,18 +442,18 @@ export class Loader {
         pattern?: string | string[],
         ignore?: string | string[]) {
 
-        baseDir = baseDir || process.cwd();
-        const loadDirs = [].concat(loadDir || []);
+        baseDir = baseDir ?? process.cwd();
+        const loadDirs = [].concat(loadDir ?? []);
 
         for (let dir of loadDirs) {
             dir = buildLoadDir(baseDir, dir);
-            const fileResults = globby.sync(['**/**.js', '**/**.ts', '!**/**.d.ts'].concat(pattern || []), {
+            const fileResults = globby.sync(['**/**.js', '**/**.ts', '!**/**.d.ts'].concat(pattern ?? []), {
                 cwd: dir,
                 ignore: [
                     '**/node_modules/**',
                     '**/logs/**',
                     '**/static/**'
-                ].concat(ignore || [])
+                ].concat(ignore ?? [])
             });
             for (let name of fileResults) {
                 const file = path.join(dir, name);

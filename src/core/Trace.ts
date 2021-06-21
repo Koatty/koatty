@@ -4,7 +4,6 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-12-10 11:49:15
  */
-import util from "util";
 import { IncomingMessage, ServerResponse } from 'http';
 import { Http2ServerRequest, Http2ServerResponse } from 'http2';
 import { Namespace, createNamespace } from "cls-hooked";
@@ -62,8 +61,8 @@ export function TraceBinding(
  * @returns {*}  
  */
 export function TraceHandler(app: Koatty) {
-    const timeout = (app.config('http_timeout') || 10) * 1000;
-    const encoding = app.config('encoding') || 'utf-8';
+    const timeout = (app.config('http_timeout') ?? 10) * 1000;
+    const encoding = app.config('encoding') ?? 'utf-8';
 
     return async function (ctx: KoattyContext, next: Function): Promise<any> {
         // set ctx start time
@@ -83,14 +82,14 @@ export function TraceHandler(app: Koatty) {
         let currTraceId = '';
         if (app.trace) {
             // some key
-            const traceId = ctx.headers.traceId || ctx.query.traceId;
-            const requestId = ctx.headers.requestId || ctx.query.requestId;
+            const traceId = ctx.headers.traceId ?? ctx.query.traceId;
+            const requestId = ctx.headers.requestId ?? ctx.query.requestId;
 
             // traceId
-            const parentId = traceId || requestId;
+            const parentId = traceId ?? requestId;
             // current traceId
-            currTraceId = parentId || `koatty-${UUID()}`;
-            app.trace.set('parentId', parentId || '');
+            currTraceId = parentId ?? `koatty-${UUID()}`;
+            app.trace.set('parentId', parentId ?? '');
             app.trace.set('traceId', currTraceId);
             app.trace.set('ctx', ctx);
             ctx.set('X-Trace-Id', currTraceId);
@@ -99,19 +98,10 @@ export function TraceHandler(app: Koatty) {
         ctx.res.once('finish', () => {
             const { method, startTime, status, originalPath } = ctx;
             const now = Date.now();
-            if (currTraceId) {
-                const duration = (now - startTime) || 0;
-                Logger.Write("TRACE", {
-                    action: method,
-                    code: status,
-                    startTime,
-                    duration,
-                    traceId: currTraceId,
-                    endTime: now,
-                    cmd: originalPath || '/',
-                });
-            }
-            Logger[(ctx.status >= 400 ? 'Error' : 'Info')](`${method} ${status} ${originalPath || '/'}`);
+            const cmd = originalPath ?? '/';
+            const msg = `{"action":"${method}","code":"${status}","startTime":"${startTime}","duration":"${(now - startTime) ?? 0}","traceId":"${currTraceId}","endTime":"${now}","path":"${cmd}"}`;
+            // Logger[(ctx.status >= 400 ? 'Error' : 'Info')](`${method} ${status} ${originalPath ?? '/'}`);
+            Logger[(ctx.status >= 400 ? 'Error' : 'Info')](msg);
             ctx = null;
         });
 
@@ -128,10 +118,6 @@ export function TraceHandler(app: Koatty) {
             if (res && ctx.status !== 304) {
                 ctx.body = res ?? "";
             }
-
-            // if (ctx.body !== undefined && ctx.status === 404) {
-            //     ctx.status = 200;
-            // }
 
             return null;
         } catch (err: any) {
@@ -160,16 +146,13 @@ function catcher(app: Koatty, ctx: KoattyContext, err: Exception) {
         if (!body) {
             body = err.message ?? ctx.message ?? "";
         }
-        // if (!(err instanceof Exception)) {
-        //     err = new Exception(body, err.code ?? 1, err.status ?? 500);
-        // }
         ctx.status = ctx.status ?? 500;
-        if (err instanceof Exception) {
+        if (isException(err)) {
             err.message = body;
             ctx.status = err.status;
             return responseBody(app, ctx, err);
         }
-        app.emit('error', err, ctx);
+        Logger.Error(err);
         return ctx.res.end(body);
     } catch (error) {
         Logger.Error(error);
@@ -235,9 +218,9 @@ function htmlRend(ctx: KoattyContext, err: Exception) {
     ctx.type = contentType;
 
     const { code, message } = err;
-    const body = `<!DOCTYPE html><html><head><title>Error - ${code || 1}</title><meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    const body = `<!DOCTYPE html><html><head><title>Error - ${code ?? 1}</title><meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <style>body {padding: 50px 80px;font: 14px 'Microsoft YaHei','微软雅黑',Helvetica,Sans-serif;}h1, h2 {margin: 0;padding: 10px 0;}h1 {font-size: 2em;}h2 {font-size: 1.2em;font-weight: 200;color: #aaa;}pre {font-size: .8em;}</style>
-    </head><body><div id="error"><h1>Error</h1><p>Oops! Your visit is rejected!</p><h2>Message:</h2><pre><code>${Helper.escapeHtml(message) || ""}</code></pre></div></body></html>`;
+    </head><body><div id="error"><h1>Error</h1><p>Oops! Your visit is rejected!</p><h2>Message:</h2><pre><code>${Helper.escapeHtml(message) ?? ""}</code></pre></div></body></html>`;
     ctx.set("content-Length", `${body.length}`);
     return ctx.res.end(body);
 }
@@ -256,9 +239,9 @@ function jsonRend(ctx: KoattyContext, err: Exception) {
     }
     ctx.type = contentType;
     const { code, message } = err;
-    const body = `{"code":${code || 1},"message":"${message || ""}"}`;
+    const body = `{"code":${code ?? 1},"message":"${message ?? ""}"}`;
     ctx.set("content-Length", `${body.length}`);
-    return ctx.res.end(`{"code":${code || 1},"message":"${message || ""}"}`);
+    return ctx.res.end(`{"code":${code ?? 1},"message":"${message ?? ""}"}`);
 }
 
 /**
@@ -275,7 +258,7 @@ function textRend(ctx: KoattyContext, err: Exception) {
     }
     ctx.type = contentType;
     const { code, message } = err;
-    const body = `{"code":${code || 1},"message":"${message || ""}"}`;
+    const body = `{"code":${code ?? 1},"message":"${message ?? ""}"}`;
     ctx.set("content-Length", `${body.length}`);
     return ctx.res.end(body);
 }
