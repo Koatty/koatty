@@ -50,11 +50,11 @@ export class Exception extends Error {
  *
  * @template T
  * @param {(Exception | T)} err
- * @returns {*}  {err is Exception}
+ * @returns {boolean}  {err is Exception}
  */
 export const isException = <T extends { message: string, code?: number, status?: HttpStatusCode }>(
     err: Exception | T,
-): err is Exception =>
+): boolean =>
     err instanceof Exception ||
     !!(err && typeof err.status === 'number' && typeof err.message === 'string');
 

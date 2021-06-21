@@ -59,7 +59,7 @@ export const RequestMapping = (
         routerName?: string;
     } = {}
 ): MethodDecorator => {
-    const routerName = routerOptions.routerName || "";
+    const routerName = routerOptions.routerName ?? "";
     return (target, key: string, descriptor: PropertyDescriptor) => {
         const targetType = IOCContainer.getType(target);
         if (targetType !== "CONTROLLER") {
@@ -268,7 +268,7 @@ export function Header(name?: string): ParameterDecorator {
  */
 export function PathVariable(name?: string): ParameterDecorator {
     return Inject((ctx: KoattyContext) => {
-        const getParams: any = ctx.params || {};
+        const getParams: any = ctx.params ?? {};
         if (name === undefined) {
             return getParams;
         }
@@ -285,7 +285,7 @@ export function PathVariable(name?: string): ParameterDecorator {
  */
 export function Get(name?: string): ParameterDecorator {
     return Inject((ctx: KoattyContext) => {
-        const getParams: any = ctx.query || {};
+        const getParams: any = ctx.query ?? {};
         if (name === undefined) {
             return getParams;
         }
@@ -326,7 +326,7 @@ export function File(name?: string): ParameterDecorator {
         return ctx.bodyParser().then((body: {
             file: Object
         }) => {
-            const params: any = body.file || {};
+            const params: any = body.file ?? {};
             if (name === undefined) {
                 return params;
             }
@@ -360,8 +360,8 @@ export function RequestParam(name?: string): ParameterDecorator {
         return ctx.bodyParser().then((body: {
             post: Object
         }) => {
-            const getParams: any = ctx.queryParser() || {};
-            const postParams: any = (body.post ? body.post : body) || {};
+            const getParams: any = ctx.queryParser() ?? {};
+            const postParams: any = (body.post ? body.post : body) ?? {};
             if (name !== undefined) {
                 return postParams[name] === undefined ? getParams[name] : postParams[name];
             }

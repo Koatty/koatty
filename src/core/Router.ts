@@ -27,7 +27,7 @@ function injectRouter(app: Koatty, target: any, instance?: any) {
     let path = "";
     const identifier = IOCContainer.getIdentifier(target);
     if (metaDatas) {
-        path = metaDatas[identifier] || "";
+        path = metaDatas[identifier] ?? "";
     }
     path = path.startsWith("/") || path === "" ? path : `/${path}`;
 
@@ -59,7 +59,7 @@ function injectRouter(app: Koatty, target: any, instance?: any) {
  * @returns {*} 
  */
 function injectParam(app: Koatty, target: any, instance?: any) {
-    instance = instance || target.prototype;
+    instance = instance ?? target.prototype;
     const metaDatas = RecursiveGetMetadata(PARAM_KEY, target);
     const validMetaDatas = RecursiveGetMetadata(PARAM_RULE_KEY, target);
     const validatedMetaDatas = RecursiveGetMetadata(PARAM_CHECK_KEY, target);
@@ -70,8 +70,8 @@ function injectParam(app: Koatty, target: any, instance?: any) {
             process.env.APP_DEBUG && Logger.Custom("think", "", `Register inject ${IOCContainer.getIdentifier(target)} param key: ${Helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
 
             // cover to obj
-            const data = (metaDatas[meta] || []).sort((a: any, b: any) => a.index - b.index);
-            const validData = validMetaDatas[meta] || [];
+            const data = (metaDatas[meta] ?? []).sort((a: any, b: any) => a.index - b.index);
+            const validData = validMetaDatas[meta] ?? [];
             const validMetaObj: any = {};
             data.forEach((v: any) => {
                 validData.forEach((it: any) => {
@@ -101,9 +101,9 @@ function injectParam(app: Koatty, target: any, instance?: any) {
  */
 async function getParamter(app: Koatty, ctx: KoattyContext, ctlParams: any = {}) {
     //convert type
-    const params = ctlParams.data || [];
-    const validRules = ctlParams.valids || {};
-    const dtoCheck = ctlParams.dtoCheck || false;
+    const params = ctlParams.data ?? [];
+    const validRules = ctlParams.valids ?? {};
+    const dtoCheck = ctlParams.dtoCheck ?? false;
     const props: any[] = params.map(async (v: any, k: number) => {
         let value: any = null;
         if (v.fn && Helper.isFunction(v.fn)) {
@@ -166,7 +166,7 @@ export class Router {
             const kRouter: any = this.router;
             const execRouter = this.ExecRouter;
 
-            const controllers = app.getMap("controllers") || {};
+            const controllers = app.getMap("controllers") ?? {};
             // tslint:disable-next-line: forin
             for (const n in controllers) {
                 const ctl = IOCContainer.getClass(n, "CONTROLLER");
