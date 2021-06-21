@@ -5,11 +5,11 @@
     "scripts": {
         "build": "del-cli --force dist && tsc",
         "eslint": "eslint --ext .ts,.js ./",
-        "prepublishOnly": "npm run eslint && npm test && npm run build",
+        "prepublishOnly": "npm test && npm run build",
         "release": "standard-version",
-        "test": "tsc && jest",
+        "test": "npm run eslint && npm run build && jest",
         "test:cov": "jest --collectCoverage --detectOpenHandles",
-        "version": "conventional-changelog -p angular -i CHANGELOG.md -s"
+        "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
     },
     "main": "./dist/index.js",
     "repository": {
@@ -54,14 +54,15 @@
         "@types/node": "^12.x.x",
         "@typescript-eslint/eslint-plugin": "^4.x.x",
         "@typescript-eslint/parser": "^4.x.x",
-        "del-cli": "^3.0.1",
+        "conventional-changelog-cli": "^2.1.1",
+        "del-cli": "^3.x.x",
         "eslint": "^7.x.x",
         "eslint-plugin-jest": "^24.x.x",
+        "husky": "^6.0.0",
         "jest": "^27.x.x",
         "jest-html-reporters": "^2.x.x",
         "koatty_cacheable": "^1.x.x",
         "koatty_schedule": "^1.x.x",
-        "prettier": "^2.x.x",
         "standard-version": "^9.x.x",
         "ts-jest": "^27.x.x",
         "ts-node": "^10.0.0",
@@ -81,5 +82,10 @@
         "koatty_validation": "^1.x.x",
         "reflect-metadata": "^0.1.13",
         "tslib": "^2.3.0"
+    },
+    "husky": {
+        "hooks": {
+            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+        }
     }
 }

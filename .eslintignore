@@ -1,0 +1,9 @@
+node_modules
+.eslintrc.js
+**/package-lock.json
+**/yarn.lock
+**/*.config.js
+dist
+coverage
+test
+demo
