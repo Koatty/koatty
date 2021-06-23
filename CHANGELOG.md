@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.2.10](https://github.com/thinkkoa/koatty/compare/v3.2.8...v3.2.10) (2021-06-23)
+
+
+### Bug Fixes
+
+* eslint ([2297a9d](https://github.com/thinkkoa/koatty/commit/2297a9dc054e911f31dbe5d8802d982077316df7))
+
 ### 3.2.8 (2021-06-21)
 
 
