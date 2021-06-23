@@ -6,3 +6,4 @@ dist
 demo/logs
 npm-debug.log
 yarn-error.log
+jest_html_reporters.html
