@@ -141,8 +141,7 @@ export class Loader {
      */
     public static LoadConfigs(app: Koatty, loadPath?: string | string[]) {
         const config: any = {};
-        // tslint:disable-next-line: no-unused-expression
-        process.env.APP_DEBUG && Logger.Custom("think", "", `Load configuration path: ${app.thinkPath}/config`);
+        // Logger.Debug(`Load configuration path: ${app.thinkPath}/config`);
         Loader.LoadDirectory("./config", app.thinkPath, function (name: string, exp: any) {
             config[name] = exp;
         });
@@ -151,9 +150,7 @@ export class Loader {
             loadPath = loadPath.length > 0 ? loadPath : "";
         }
         const tempConfig: any = {};
-        // tslint:disable-next-line: no-unused-expression
-        process.env.APP_DEBUG && Logger.Custom("think", "", `Load configuration path: ${app.appPath}${loadPath ?? "/config"}`);
-
+        // Logger.Debug(`Load configuration path: ${app.appPath}${loadPath ?? "/config"}`);
         Loader.LoadDirectory(loadPath ?? "./config", app.appPath, function (name: string, exp: any) {
             // tslint:disable-next-line: one-variable-per-declaration
             let type = "", t = "";
@@ -192,13 +189,19 @@ export class Loader {
         const configs = app.getMap("configs") ?? {};
         //Logger
         if (configs.config) {
-            Logger.setLogFile(configs.config.logs_write ?? false);
-            Logger.setLevel(configs.config.logs_level ?? "INFO");
-            Logger.setLogFilePath(configs.config.logs_path ?? app.rootPath + "/logs");
-            // 
-            process.env.LOGS_WRITE = configs.config.logs_write ?? false;
-            process.env.LOGS_PATH = configs.config.logs_path ?? app.rootPath + "/logs";
-            process.env.LOGS_LEVEL = configs.config.logs_level ?? "INFO";
+            if (configs.config.logs_level) {
+                Logger.setLevel(configs.config.logs_level);
+            }
+            if (configs.config.logs_console) {
+                Logger.setLogConsole(configs.config.logs_console);
+            }
+            if (configs.config.logs_write) {
+                Logger.setLogFile(configs.config.logs_write);
+                Logger.setLogFilePath(configs.config.logs_path ?? app.rootPath + "/logs");
+            }
+            if (configs.config.logs_write_level) {
+                Logger.setLogFileLevel(configs.config.logs_write_level);
+            }
         }
     }
 
@@ -266,8 +269,8 @@ export class Loader {
                 continue;
             }
 
-            // tslint:disable-next-line: no-unused-expression
-            process.env.APP_DEBUG && Logger.Custom("think", "", `Load middleware: ${key}`);
+            
+            Logger.Debug(`Load middleware: ${key}`);
             const result = await handle.run(middlewareConf.config[key] ?? {}, app);
             if (Helper.isFunction(result)) {
                 if (result.length < 3) {
@@ -295,8 +298,7 @@ export class Loader {
         controllerList.forEach((item: ComponentItem) => {
             item.id = (item.id ?? "").replace("CONTROLLER:", "");
             if (item.id && Helper.isClass(item.target)) {
-                // tslint:disable-next-line: no-unused-expression
-                process.env.APP_DEBUG && Logger.Custom("think", "", `Load controller: ${item.id}`);
+                Logger.Debug(`Load controller: ${item.id}`);
                 // inject configuration
                 injectValue(item.target, item.target.prototype, container);
                 // inject AOP
@@ -328,8 +330,7 @@ export class Loader {
         serviceList.forEach((item: ComponentItem) => {
             item.id = (item.id ?? "").replace("SERVICE:", "");
             if (item.id && Helper.isClass(item.target)) {
-                // tslint:disable-next-line: no-unused-expression
-                process.env.APP_DEBUG && Logger.Custom("think", "", `Load service: ${item.id}`);
+                Logger.Debug(`Load service: ${item.id}`);
                 // inject configuration
                 injectValue(item.target, item.target.prototype, container);
                 // inject AOP
@@ -358,8 +359,7 @@ export class Loader {
         componentList.forEach((item: ComponentItem) => {
             item.id = (item.id ?? "").replace("COMPONENT:", "");
             if (item.id && !(item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
-                // tslint:disable-next-line: no-unused-expression
-                process.env.APP_DEBUG && Logger.Custom("think", "", `Load component: ${item.id}`);
+                Logger.Debug(`Load component: ${item.id}`);
                 // inject configuration
                 injectValue(item.target, item.target.prototype, container);
                 // inject AOP
@@ -392,8 +392,7 @@ export class Loader {
         componentList.forEach(async (item: ComponentItem) => {
             item.id = (item.id ?? "").replace("COMPONENT:", "");
             if (item.id && (item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
-                // tslint:disable-next-line: no-unused-expression
-                process.env.APP_DEBUG && Logger.Custom("think", "", `Load plugin: ${item.id}`);
+                // Logger.Debug(`Load plugin: ${item.id}`);
                 // inject configuration
                 injectValue(item.target, item.target.prototype, container);
                 // inject AOP
@@ -417,9 +416,8 @@ export class Loader {
             if (pluginsConf.config[key] === false) {
                 continue;
             }
-
-            // tslint:disable-next-line: no-unused-expression
-            process.env.APP_DEBUG && Logger.Custom("think", "", `Execute plugin: ${key}`);
+            
+            // Logger.Debug(`Execute plugin: ${key}`);
             // sync exec 
             await handle.run(pluginsConf.config[key] ?? {}, app);
         }

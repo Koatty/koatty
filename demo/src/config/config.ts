@@ -12,5 +12,7 @@ export default {
     // enable_http2: true, // 是否启用HTTP2,启用需要配置证书
     // https certificate
     key_file: process.env.APP_PATH + "/config/server.key",
-    crt_file: process.env.APP_PATH + "/config/server.crt"
+    crt_file: process.env.APP_PATH + "/config/server.crt",
+
+    logs_level: "DEBUG", // Level log is printed to the console, "DEBUG" | "INFO" | "WARN" | "ERROR"
 };

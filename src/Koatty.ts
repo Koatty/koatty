@@ -156,8 +156,10 @@ export class Koatty extends Koa {
         if (this.appDebug) {
             process.env.NODE_ENV = 'development';
             process.env.APP_DEBUG = 'true';
+            Logger.setLevel("DEBUG");
         } else {
             process.env.NODE_ENV = 'production';
+            Logger.setLevel("INFO");
         }
 
         // check env

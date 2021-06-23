@@ -15,8 +15,10 @@ export default {
     crt_file: "", // HTTPS certificate crt
     encoding: "utf-8", // Character Encoding
 
-    logs_write: true, // Whether to store logs
+    logs_level: "DEBUG", // Level log is printed to the console, "DEBUG" | "INFO" | "WARN" | "ERROR"
+    logs_console: true, // Whether to console logs
+    logs_write: false, // Whether to store logs
+    logs_write_level: "WARN", // Level log is printed to the file, "DEBUG" | "INFO" | "WARN" | "ERROR"
     logs_path: process.env.ROOT_PATH + "/logs", // Log file directory
-    logs_level: "WARN" // Log storage level, "DEBUG" | "INFO" | "WARN" | "ERROR"
 
 };
