@@ -34,8 +34,7 @@ function injectRouter(app: Koatty, target: any, instance?: any) {
     const router: any = {};
     // tslint:disable-next-line: forin
     for (const metaKey in rmetaData) {
-        // tslint:disable-next-line: no-unused-expression
-        process.env.APP_DEBUG && Logger.Custom("think", "", `Register inject method Router key: ${metaKey} => value: ${JSON.stringify(rmetaData[metaKey])}`);
+        Logger.Debug(`Register inject method Router key: ${metaKey} => value: ${JSON.stringify(rmetaData[metaKey])}`);
         //.sort((a, b) => b.priority - a.priority) 
         for (const val of rmetaData[metaKey]) {
             const tmp = {
@@ -65,8 +64,7 @@ function injectParam(app: Koatty, target: any, instance?: any) {
     const argsMetaObj: any = {};
     for (const meta in metaDatas) {
         if (instance[meta] && instance[meta].length <= metaDatas[meta].length) {
-            // tslint:disable-next-line: no-unused-expression
-            process.env.APP_DEBUG && Logger.Custom("think", "", `Register inject ${IOCContainer.getIdentifier(target)} param key: ${Helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
+            Logger.Debug(`Register inject ${IOCContainer.getIdentifier(target)} param key: ${Helper.toString(meta)} => value: ${JSON.stringify(metaDatas[meta])}`);
 
             // cover to obj
             const data = (metaDatas[meta] ?? []).sort((a: any, b: any) => a.index - b.index);
@@ -175,8 +173,7 @@ export class Router {
                 const ctlParams = injectParam(app, ctl);
                 // tslint:disable-next-line: forin
                 for (const it in ctlRouters) {
-                    // tslint:disable-next-line: no-unused-expression
-                    app.appDebug && Logger.Custom("think", "", `Register request mapping: [${ctlRouters[it].requestMethod}] : ["${ctlRouters[it].path}" => ${n}.${ctlRouters[it].method}]`);
+                    Logger.Debug(`Register request mapping: [${ctlRouters[it].requestMethod}] : ["${ctlRouters[it].path}" => ${n}.${ctlRouters[it].method}]`);
                     kRouter[ctlRouters[it].requestMethod](ctlRouters[it].path, function (ctx: KoattyContext): Promise<any> {
                         const router = ctlRouters[it];
                         return execRouter(app, ctx, n, router, ctlParams[router.method]);

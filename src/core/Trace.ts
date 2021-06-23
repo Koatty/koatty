@@ -82,8 +82,8 @@ export function TraceHandler(app: Koatty) {
         let currTraceId = '';
         if (app.trace) {
             // some key
-            const traceId = ctx.headers.traceId ?? ctx.query.traceId;
-            const requestId = ctx.headers.requestId ?? ctx.query.requestId;
+            const traceId = <string>ctx.headers.traceId ?? <string>ctx.query.traceId;
+            const requestId = <string>ctx.headers.requestId ?? <string>ctx.query.requestId;
 
             // traceId
             const parentId = traceId ?? requestId;
@@ -100,7 +100,6 @@ export function TraceHandler(app: Koatty) {
             const now = Date.now();
             const cmd = originalPath ?? '/';
             const msg = `{"action":"${method}","code":"${status}","startTime":"${startTime}","duration":"${(now - startTime) ?? 0}","traceId":"${currTraceId}","endTime":"${now}","path":"${cmd}"}`;
-            // Logger[(ctx.status >= 400 ? 'Error' : 'Info')](`${method} ${status} ${originalPath ?? '/'}`);
             Logger[(ctx.status >= 400 ? 'Error' : 'Info')](msg);
             ctx = null;
         });
@@ -142,7 +141,7 @@ export function TraceHandler(app: Koatty) {
  */
 function catcher(app: Koatty, ctx: KoattyContext, err: Exception) {
     try {
-        let body = ctx.body;
+        let body: any = ctx.body;
         if (!body) {
             body = err.message ?? ctx.message ?? "";
         }

@@ -5,10 +5,10 @@
  * @ version: 2020-07-06 11:19:30
  */
 import * as helper from "koatty_lib";
-import { DefaultLogger as logger } from "koatty_logger";
 import { Container, getMethodNames, IOCContainer, TAGGED_CLS } from "koatty_container";
 import { TAGGED_AOP } from "./Constants";
 import { Koatty } from "../Koatty";
+import { Logger } from "../util/Logger";
 
 /**
  * defined AOP type
@@ -158,7 +158,7 @@ async function executeAspect(aopName: string | Function, props: any[]) {
         name = <string>aopName;
     }
     if (aspect && helper.isFunction(aspect.run)) {
-        logger.Info(`Execute the aspect ${name}`);
+        Logger.Info(`Execute the aspect ${name}`);
         // tslint:disable-next-line: no-invalid-this
         await aspect.run(props);
     }
@@ -188,8 +188,7 @@ export function injectAOP(target: any, instance: any, container: Container) {
                     !["constructor", "init", "__before", "__after"].includes(m)
                 );
                 methods.forEach((element) => {
-                    // tslint:disable-next-line: no-unused-expression
-                    process.env.APP_DEBUG && logger.Custom("think", "", `Register inject AOP ${target.name} method: ${element} => ${type}`);
+                    Logger.Debug(`Register inject AOP ${target.name} method: ${element} => ${type}`);
                     defineAOPProperty(target, element, name, type);
                 });
             }
@@ -228,17 +227,14 @@ function injectDefaultAOP(target: any, instance: any, container: Container) {
     const methods = getMethodNames(target, true).filter((m: string) =>
         !["constructor", "init", "__before", "__after"].includes(m)
     );
-    // tslint:disable-next-line: no-unused-expression
-    process.env.APP_DEBUG && logger.Warn(`The ${target.name} class has a default AOP method, @BeforeEach and @AfterEach maybe not take effect`);
+    Logger.Warn(`The ${target.name} class has a default AOP method, @BeforeEach and @AfterEach maybe not take effect`);
     methods.forEach((element) => {
         if (helper.isFunction(instance.__before)) {
-            // tslint:disable-next-line: no-unused-expression
-            process.env.APP_DEBUG && logger.Custom("think", "", `Register inject default AOP ${target.name} method: ${element} => __before`);
+            Logger.Debug(`Register inject default AOP ${target.name} method: ${element} => __before`);
             defineAOPProperty(target, element, "__before", AOPType.Before);
         }
         if (helper.isFunction(instance.__after)) {
-            // tslint:disable-next-line: no-unused-expression
-            process.env.APP_DEBUG && logger.Custom("think", "", `Register inject default AOP ${target.name} method: ${element} => __after`);
+            Logger.Debug(`Register inject default AOP ${target.name} method: ${element} => __after`);
             defineAOPProperty(target, element, "__after", AOPType.After);
         }
     });
@@ -262,7 +258,7 @@ function defineAOPProperty(classes: Function, protoName: string, aopName: string
             if (type === AOPType.Before) {
                 if (aopName) {
                     if (aopName === "__before") {
-                        logger.Info(`Execute the aspect ${classes.name}.__before`);
+                        Logger.Info(`Execute the aspect ${classes.name}.__before`);
                         // tslint:disable-next-line: no-invalid-this
                         await Reflect.apply(this.__before, this, props);
                     } else {
@@ -276,7 +272,7 @@ function defineAOPProperty(classes: Function, protoName: string, aopName: string
                 const res = await Reflect.apply(oldMethod, this, props);
                 if (aopName) {
                     if (aopName === "__after") {
-                        logger.Info(`Execute the aspect ${classes.name}.__after`);
+                        Logger.Info(`Execute the aspect ${classes.name}.__after`);
                         // tslint:disable-next-line: no-invalid-this
                         await Reflect.apply(this.__after, this, props);
                     } else {

@@ -2,12 +2,12 @@
  * @Author: richen
  * @Date: 2020-12-18 10:37:03
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-06-21 11:29:20
+ * @LastEditTime: 2021-06-22 11:13:47
  * @License: BSD (3-Clause)
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
-import { DefaultLogger as logger } from "koatty_logger";
 import { Container, IOCContainer, RecursiveGetMetadata } from "koatty_container";
+import { Logger } from "../util/Logger";
 import { TAGGED_ARGS } from "./Constants";
 
 /**
@@ -64,8 +64,7 @@ export function injectValue(target: any, instance: any, container: Container) {
 
     // tslint:disable-next-line: forin
     for (const metaKey in metaData) {
-        // tslint:disable-next-line: no-unused-expression
-        process.env.APP_DEBUG && logger.Custom("think", "", `Register inject ${IOCContainer.getIdentifier(target)} config key: ${metaKey} => value: ${metaData[metaKey]}`);
+        Logger.Debug(`Register inject ${IOCContainer.getIdentifier(target)} config key: ${metaKey} => value: ${metaData[metaKey]}`);
         const propKeys = metaData[metaKey].split("|");
         const [propKey, type] = propKeys;
         Reflect.defineProperty(instance, metaKey, {

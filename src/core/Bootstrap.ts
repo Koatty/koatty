@@ -66,7 +66,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         Logger.Custom('think', '', 'Load Plugins ...');
         await Loader.LoadPlugins(app, IOCContainer);
 
-        // Set Logger level
+        // Set Logger
         Loader.SetLogger(app);
 
         // Load App ready hooks

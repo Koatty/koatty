@@ -4,7 +4,7 @@
  * @ license: Apache License 2.0
  * @ version: 2020-05-19 14:31:04
  */
-import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, After, RequestBody, Get, Helper, Post, RequestParam, IOCContainer, PathVariable, BeforeEach, Exception, prevent } from "../../../src/index";
+import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, After, RequestBody, Get, Helper, Post, RequestParam, IOCContainer, PathVariable, BeforeEach, Exception, prevent, Logger } from "../../../src/index";
 import { Validated, Valid } from "koatty_validation";
 import { App } from '../App';
 import { AdminController } from "./AdminController";
@@ -38,6 +38,8 @@ export class IndexController extends AdminController {
         // this.ctx.status = 403;
         // this.fail("sfsdfsdfdsf");
         // this.ctx.body = { "aa": "band!!!!!!" };
+        console.log(Logger.getLevel());
+        Logger.Debug("do not logger");
         throw new Error("band");
         // throw new Exception("band", 1, 405);
         // ctx.body = "sss";
