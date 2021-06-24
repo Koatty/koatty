@@ -146,13 +146,15 @@ export class Koatty extends Koa {
         this.appDebug = !!(this.options.appDebug ?? this.appDebug);
 
         const env = (process.execArgv ?? []).join(",");
-        if ((env.indexOf('--production') > -1) || ((process.env.NODE_ENV ?? '').indexOf('pro') > -1)) {
-            this.appDebug = false;
-        }
-
         if (env.indexOf('ts-node') > -1 || env.indexOf('--debug') > -1) {
             this.appDebug = true;
         }
+        // app.env
+        this.env = process.env.KOATTY_ENV ?? process.env.NODE_ENV;
+        if ((env.indexOf('--production') > -1) || ((this.env ?? '').indexOf('pro') > -1)) {
+            this.appDebug = false;
+        }
+
         if (this.appDebug) {
             process.env.NODE_ENV = 'development';
             process.env.APP_DEBUG = 'true';
@@ -173,9 +175,6 @@ export class Koatty extends Koa {
         Helper.define(this, 'rootPath', rootPath);
         Helper.define(this, 'appPath', appPath);
         Helper.define(this, 'thinkPath', thinkPath);
-
-        // app.env
-        this.env = process.env.KOATTY_ENV ?? process.env.NODE_ENV;
 
         process.env.ROOT_PATH = this.rootPath;
         process.env.APP_PATH = this.appPath;
@@ -210,7 +209,7 @@ export class Koatty extends Koa {
      * @param {string} key
      * @memberof Koatty
      */
-    getMap(key: string):any {
+    getMap(key: string): any {
         return this.handelMap.get(key);
     }
 

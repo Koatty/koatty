@@ -40,8 +40,8 @@ export class IndexController extends AdminController {
         // this.ctx.body = { "aa": "band!!!!!!" };
         console.log(Logger.getLevel());
         Logger.Debug("do not logger");
-        throw new Error("band");
-        // throw new Exception("band", 1, 405);
+        // throw new Error("band");
+        throw new Exception("band", 1, 405);
         // ctx.body = "sss";
         // this.ctx.throw("ssss");
         // return prevent();

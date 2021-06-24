@@ -9,13 +9,13 @@ import { Bootstrap, ComponentScan, Autowired, Koatty, ConfigurationScan, Logger,
 import { EnableScheduleLock } from "koatty_schedule";
 import * as path from "path";
 // @EnableCacheStore()
-@EnableScheduleLock()
+// @EnableScheduleLock()
 @Bootstrap((app: any) => {
     //调整libuv线程池大小
     // process.env.UV_THREADPOOL_SIZE = "128";
     //忽略https自签名验证
     // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
+    process.env.NODE_ENV = 'production';
     console.log("bootFunc");
 })
 // @ComponentScan('./test')

@@ -269,7 +269,7 @@ export class Loader {
                 continue;
             }
 
-            
+
             Logger.Debug(`Load middleware: ${key}`);
             const result = await handle.run(middlewareConf.config[key] ?? {}, app);
             if (Helper.isFunction(result)) {
@@ -416,7 +416,7 @@ export class Loader {
             if (pluginsConf.config[key] === false) {
                 continue;
             }
-            
+
             // Logger.Debug(`Execute plugin: ${key}`);
             // sync exec 
             await handle.run(pluginsConf.config[key] ?? {}, app);

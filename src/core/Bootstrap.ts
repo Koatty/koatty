@@ -6,13 +6,13 @@
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
+import { Koatty } from '../Koatty';
+import { Loader } from "./Loader";
+import { Router } from "./Router";
 import { Helper } from "../util/Helper";
 import { Logger } from "../util/Logger";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
-import { Router } from "./Router";
-import { Koatty } from '../Koatty';
 import { asyncEvent, bindProcessEvent, StartSever } from './Server';
-import { Loader } from "./Loader";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
 
 /**
