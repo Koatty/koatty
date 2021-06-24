@@ -11,7 +11,7 @@ import { IncomingMessage, ServerResponse } from 'http';
 import { Namespace } from "cls-hooked";
 import { Helper } from "./util/Helper";
 import { Logger } from "./util/Logger";
-import { Exception, HttpStatusCode, HttpStatusCodeMap, isPrevent } from "./core/Exception";
+import { Exception, HttpStatusCode, HttpStatusCodeMap, isPrevent, prevent } from "./core/Exception";
 
 const pkg = require("../package.json");
 
@@ -182,7 +182,8 @@ export class Koatty extends Koa {
         process.env.APP_PATH = this.appPath;
         process.env.THINK_PATH = this.thinkPath;
 
-        // Compatible with old version
+        // Compatible with old version, will be deprecated
+        Helper.define(this, 'prevent', prevent);
         Helper.define(this, 'root_path', rootPath);
         Helper.define(this, 'app_path', appPath);
         Helper.define(this, 'think_path', thinkPath);

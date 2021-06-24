@@ -13,17 +13,17 @@ import { PREVENT_NEXT_PROCESS } from "./Constants";
  *
  * @returns {Promise.reject}
  */
-export function prevent() {
+export function prevent(): Promise<never> {
     return Promise.reject(new Error(PREVENT_NEXT_PROCESS));
 }
 
 /**
  * Check is prevent error
  *
- * @param {unknown} err
- * @returns {unknown}
+ * @param {Error} err
+ * @returns {boolean}
  */
-export function isPrevent(err: unknown) {
+export function isPrevent(err: Error): boolean {
     return Helper.isError(err) && err.message === PREVENT_NEXT_PROCESS;
 }
 
