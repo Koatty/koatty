@@ -316,7 +316,7 @@ export class Koatty extends Koa {
     private captureError(): void {
         // koa error
         this.removeAllListeners('error');
-        this.on('error', (err: unknown) => {
+        this.on('error', (err: Error) => {
             if (!isPrevent(err)) {
                 Logger.Error(err);
             }
@@ -331,7 +331,7 @@ export class Koatty extends Koa {
 
         // promise reject error
         process.removeAllListeners('unhandledRejection');
-        process.on('unhandledRejection', (reason) => {
+        process.on('unhandledRejection', (reason: Error) => {
             if (!isPrevent(reason)) {
                 Logger.Error(Helper.toString(reason));
             }
