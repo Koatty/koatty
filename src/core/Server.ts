@@ -1,7 +1,7 @@
 /*
  * @Author: richen
  * @Date: 2020-07-06 15:53:37
- * @LastEditTime: 2021-06-21 15:29:13
+ * @LastEditTime: 2021-06-24 17:07:52
  * @Description:
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
@@ -160,7 +160,7 @@ export function StartSever(app: Koatty) {
  */
 export function startHTTP(app: Koatty, openTrace: boolean) {
     const port = process.env.PORT ?? process.env.main_port ?? app.config('app_port') ?? 3000;
-    const hostname = process.env.IP ?? process.env.HOSTNAME?.replace(/-/g, '.') ?? app.config('app_hostname') ?? 'localhost';
+    const hostname = process.env.IP ?? process.env.HOSTNAME?.replace(/-/g, '.') ?? app.config('app_host') ?? 'localhost';
 
     Logger.Custom("think", "", `Protocol: HTTP/1.1`);
     const server = createServer((req, res) => {
@@ -183,7 +183,7 @@ export function startHTTP(app: Koatty, openTrace: boolean) {
  */
 export function startHTTP2(app: Koatty, openTrace: boolean) {
     const port = process.env.PORT ?? process.env.main_port ?? app.config('app_port') ?? 443;
-    const hostname = process.env.IP ?? process.env.HOSTNAME?.replace(/-/g, '.') ?? app.config('app_hostname') ?? 'localhost';
+    const hostname = process.env.IP ?? process.env.HOSTNAME?.replace(/-/g, '.') ?? app.config('app_host') ?? 'localhost';
     const keyFile = app.config("key_file") ?? "";
     const crtFile = app.config("crt_file") ?? "";
     if (!Helper.isFile(keyFile) || !Helper.isFile(crtFile)) {

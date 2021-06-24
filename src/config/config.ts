@@ -7,7 +7,7 @@
 export default {
     /*app config*/
     app_port: 3000, // Listening port
-    app_hostname: "", // Hostname
+    app_host: "", // Hostname
     serve_mod: "http", // Serve mode 'http' | 'http2' | 'websocket' | 'rpc'
     open_trace: false, // Full stack debug & trace, default: false
     http_timeout: 10, // HTTP request timeout time(seconds)
