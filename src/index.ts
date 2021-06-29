@@ -7,14 +7,12 @@
 export * from "./Koatty";
 export * from "./controller/BaseController";
 export * from "./controller/RestController";
-export * from './core/AOP';
 export * from "./core/Bootstrap";
 export * from "./core/Component";
-export * from './core/Exception';
-export * from "./core/RequestMapping";
 export { AppReadyHookFunc, BindAppReadyHook } from "./core/Loader";
-export { Value, Config } from './core/Value';
 export * from "./service/BaseService";
 export * from "koatty_container";
+export * from "koatty_router";
+export * from "koatty_trace";
 export { Helper } from "./util/Helper";
 export { Logger } from "./util/Logger";

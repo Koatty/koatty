@@ -7,7 +7,7 @@
 import { Helper } from "../util/Helper";
 import { IOCContainer } from "koatty_container";
 import { BaseController } from "./BaseController";
-import { GetMapping, PathVariable, PostMapping, DeleteMapping, PutMapping, RequestBody } from "../core/RequestMapping";
+import { GetMapping, PathVariable, PostMapping, DeleteMapping, PutMapping, RequestBody } from "koatty_router";
 
 /**
  * RESTful controller

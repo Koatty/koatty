@@ -7,8 +7,8 @@
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import { IOCContainer } from 'koatty_container';
-import { CONTROLLER_ROUTER } from "./Constants";
 import { Koatty, KoattyContext } from '../Koatty';
+import { CONTROLLER_ROUTER } from "koatty_router";
 
 /**
  * Indicates that an decorated class is a "component".
