@@ -1,12 +1,12 @@
 {
     "name": "koatty",
-    "version": "3.2.12",
+    "version": "3.3.0",
     "description": "Koa2 + Typescript = koatty. Use Typescript's decorator implement auto injection.",
     "scripts": {
         "build": "del-cli --force dist && tsc",
         "eslint": "eslint --ext .ts,.js ./",
         "prepublishOnly": "npm test && npm run build",
-        "release": "npm run build && standard-version",
+        "release": "npm run build && standard-version -h",
         "test": "npm run eslint && jest --passWithNoTests",
         "test:cov": "jest --collectCoverage --detectOpenHandles",
         "version": "conventional-changelog -p angular -i CHANGELOG.md -s"
@@ -75,14 +75,14 @@
     "dependencies": {
         "globby": "^11.0.4",
         "koa": "^2.13.1",
-        "koatty_container": "^1.4.2",
+        "koatty_container": "^1.4.3",
         "koatty_lib": "^1.2.5",
         "koatty_logger": "^1.1.2",
         "koatty_payload": "^1.2.5",
-        "koatty_router": "^1.0.4",
-        "koatty_serve": "^1.0.2",
+        "koatty_router": "^1.0.5",
+        "koatty_serve": "^1.0.3",
         "koatty_static": "^1.2.5",
-        "koatty_trace": "^1.2.3",
+        "koatty_trace": "^1.2.5",
         "koatty_validation": "^1.0.2",
         "reflect-metadata": "^0.1.13",
         "tslib": "^2.3.0"

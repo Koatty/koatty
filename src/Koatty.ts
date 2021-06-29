@@ -10,60 +10,17 @@ import Koa from "koa";
 import { IncomingMessage, ServerResponse } from 'http';
 import { Helper } from "./util/Helper";
 import { Logger } from "./util/Logger";
+import { Application } from "koatty_container";
 import { Exception, HttpStatusCode, HttpStatusCodeMap, isPrevent, prevent } from "koatty_trace";
-
 const pkg = require("../package.json");
 
 /**
- * check node version
- * @return {void} []
- */
-const checkEnv = () => {
-    let nodeEngines = pkg.engines.node.slice(1) ?? '10.0.0';
-    nodeEngines = nodeEngines.slice(0, nodeEngines.lastIndexOf('.'));
-    let nodeVersion = process.version;
-    if (nodeVersion[0] === 'v') {
-        nodeVersion = nodeVersion.slice(1);
-    }
-    nodeVersion = nodeVersion.slice(0, nodeVersion.lastIndexOf('.'));
-
-    if (Helper.toNumber(nodeEngines) > Helper.toNumber(nodeVersion)) {
-        Logger.Error(`Koatty need node version > ${nodeEngines}, current version is ${nodeVersion}, please upgrade it.`);
-        process.exit(-1);
-    }
-};
-
-/**
- * Convert express middleware for koa
  *
- * @param {function} fn
- * @returns
- * @memberof Koatty
- */
-const parseExp = function (fn: Function) {
-    return function (ctx: KoattyContext, next: Function) {
-        if (fn.length < 3) {
-            fn(ctx.req, ctx.res);
-            return next();
-        }
-        return new Promise((resolve, reject) => {
-            fn(ctx.req, ctx.res, (err: Error) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(next());
-                }
-            });
-        });
-
-    };
-};
-
-/**
  *
+ * @export
  * @interface InitOptions
  */
-interface InitOptions {
+export interface InitOptions {
     rootPath?: string;
     appPath?: string;
     appDebug?: boolean;
@@ -104,6 +61,7 @@ export interface KoattyContext extends Koa.Context {
     throw(message: string, code?: number, status?: HttpStatusCode): never;
 }
 
+
 /**
  * Application
  * @export
@@ -111,7 +69,7 @@ export interface KoattyContext extends Koa.Context {
  * @extends {Koa}
  * @implements {BaseApp}
  */
-export class Koatty extends Koa {
+export class Koatty extends Koa implements Application {
     public env: string;
     public rootPath: string;
     public appPath: string;
@@ -222,12 +180,12 @@ export class Koatty extends Koa {
      * @returns {any}
      * @memberof Koatty
      */
-    public use(fn: any): any {
+    public use(fn: Function): any {
         if (!Helper.isFunction) {
             Logger.Error('The paramter is not a function.');
             return;
         }
-        return super.use(fn);
+        return super.use(<any>fn);
     }
 
     /**
@@ -351,26 +309,72 @@ export class Koatty extends Koa {
     }
 }
 
-  // const properties = ["constructor", "init"];
-  // export const Koatty = new Proxy(Application, {
-  //     set(target, key, value, receiver) {
-  //         if (Reflect.get(target, key, receiver) === undefined) {
-  //             return Reflect.set(target, key, value, receiver);
-  //         } else if (key === "init") {
-  //             return Reflect.set(target, key, value, receiver);
-  //         } else {
-  //             throw Error("Cannot redefine getter-only property");
-  //         }
-  //     },
-  //     deleteProperty(target, key) {
-  //         throw Error("Cannot delete getter-only property");
-  //     },
-  //     construct(target, args, newTarget) {
-  //         Reflect.ownKeys(target.prototype).map((n) => {
-  //             if (newTarget.prototype.hasOwnProperty(n) && !properties.includes(Helper.toString(n))) {
-  //                 throw Error(`Cannot override the final method '${Helper.toString(n)}'`);
-  //             }
-  //         });
-  //         return Reflect.construct(target, args, newTarget);
-  //     }
-  // });
+// const properties = ["constructor", "init"];
+// export const Koatty = new Proxy(Application, {
+//     set(target, key, value, receiver) {
+//         if (Reflect.get(target, key, receiver) === undefined) {
+//             return Reflect.set(target, key, value, receiver);
+//         } else if (key === "init") {
+//             return Reflect.set(target, key, value, receiver);
+//         } else {
+//             throw Error("Cannot redefine getter-only property");
+//         }
+//     },
+//     deleteProperty(target, key) {
+//         throw Error("Cannot delete getter-only property");
+//     },
+//     construct(target, args, newTarget) {
+//         Reflect.ownKeys(target.prototype).map((n) => {
+//             if (newTarget.prototype.hasOwnProperty(n) && !properties.includes(Helper.toString(n))) {
+//                 throw Error(`Cannot override the final method '${Helper.toString(n)}'`);
+//             }
+//         });
+//         return Reflect.construct(target, args, newTarget);
+//     }
+// });
+
+
+/**
+ * check node version
+ * @return {void} []
+ */
+function checkEnv() {
+    let nodeEngines = pkg.engines.node.slice(1) ?? '10.0.0';
+    nodeEngines = nodeEngines.slice(0, nodeEngines.lastIndexOf('.'));
+    let nodeVersion = process.version;
+    if (nodeVersion[0] === 'v') {
+        nodeVersion = nodeVersion.slice(1);
+    }
+    nodeVersion = nodeVersion.slice(0, nodeVersion.lastIndexOf('.'));
+
+    if (Helper.toNumber(nodeEngines) > Helper.toNumber(nodeVersion)) {
+        Logger.Error(`Koatty need node version > ${nodeEngines}, current version is ${nodeVersion}, please upgrade it.`);
+        process.exit(-1);
+    }
+}
+
+/**
+ * Convert express middleware for koa
+ *
+ * @param {function} fn
+ * @returns
+ * @memberof Koatty
+ */
+function parseExp(fn: Function) {
+    return function (ctx: KoattyContext, next: Function) {
+        if (fn.length < 3) {
+            fn(ctx.req, ctx.res);
+            return next();
+        }
+        return new Promise((resolve, reject) => {
+            fn(ctx.req, ctx.res, (err: Error) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(next());
+                }
+            });
+        });
+
+    };
+}
