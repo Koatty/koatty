@@ -8,10 +8,9 @@
 import * as path from "path";
 import Koa from "koa";
 import { IncomingMessage, ServerResponse } from 'http';
-import { Namespace } from "cls-hooked";
 import { Helper } from "./util/Helper";
 import { Logger } from "./util/Logger";
-import { Exception, HttpStatusCode, HttpStatusCodeMap, isPrevent, prevent } from "./core/Exception";
+import { Exception, HttpStatusCode, HttpStatusCodeMap, isPrevent, prevent } from "koatty_trace";
 
 const pkg = require("../package.json");
 
@@ -119,7 +118,7 @@ export class Koatty extends Koa {
     public thinkPath: string;
     public appDebug: boolean;
     public options: InitOptions;
-    public trace: Namespace;
+    public trace: any; // cls-hooked.Namespace;
 
     private handelMap: Map<string, unknown>;
 
@@ -135,7 +134,7 @@ export class Koatty extends Koa {
     /**
      * app custom init, must be defined options
      */
-    public init() { }
+    public init(): void { }
 
 
     /**
@@ -280,14 +279,14 @@ export class Koatty extends Koa {
     }
 
     /**
-     *
+     * Create Context
      *
      * @param {IncomingMessage} req
      * @param {ServerResponse} res
      * @returns {*}  {KoattyContext}
      * @memberof Koatty
      */
-    public createContext(req: IncomingMessage, res: ServerResponse): KoattyContext {
+    public createContext(req: IncomingMessage, res: ServerResponse): any {
         const context: any = super.createContext(req, res);
         context.bodyParser = null;
         context.queryParser = null;

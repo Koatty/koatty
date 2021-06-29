@@ -6,13 +6,15 @@
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
+import EventEmitter from "events";
 import { Koatty } from '../Koatty';
 import { Loader } from "./Loader";
-import { Router } from "./Router";
 import { Helper } from "../util/Helper";
 import { Logger } from "../util/Logger";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
-import { asyncEvent, bindProcessEvent, StartSever } from './Server';
+import { BindProcessEvent } from "koatty_serve";
+import { newRouter } from "./Router";
+import { startSever } from './Serve';
 import { COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
 
 /**
@@ -22,7 +24,7 @@ import { COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
  * @param {Function} bootFunc
  * @returns {Promise<void>}
  */
-const executeBootstrap = async function (target: any, bootFunc: Function): Promise<void> {
+const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<void> {
     const app = Reflect.construct(target, []);
     try {
         console.log(LOGO);
@@ -48,6 +50,10 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         const configurationMetas = Loader.GetConfigurationMetas(target);
         // load all bean
         const exSet = new Set();
+
+        const a = IOCContainer.getApp();
+        console.log(a);
+
         Loader.LoadDirectory(componentMetas, '', (fileName: string, target: any, xpath: string) => {
             if (target[fileName] && Helper.isClass(target[fileName])) {
                 if (exSet.has(fileName)) {
@@ -73,7 +79,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         Loader.LoadAppReadyHooks(target, app);
 
         // New router
-        const KoattyRouter = new Router(app, app.config(undefined, 'router') ?? {});
+        const KoattyRouter = newRouter(app);
         // Middleware may depend on
         Helper.define(app, "Router", KoattyRouter.router);
 
@@ -102,19 +108,34 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
         Logger.Custom('think', '', 'Emit App Start ...');
         // app.emit("appStart");
         await asyncEvent(app, 'appStart');
-        // binding event "appStop"
-        bindProcessEvent(app, 'appStop');
 
         Logger.Custom('think', '', '====================================');
         // Start server
-        StartSever(app);
-
+        startSever(app);
+        // binding event "appStop"
+        BindProcessEvent(app, 'appStop');
     } catch (err) {
         Logger.Error(err);
         process.exit();
     }
 };
 
+/**
+ * Execute event as async
+ *
+ * @param {Koatty} event
+ * @param {string} eventName
+ */
+const asyncEvent = async function (event: EventEmitter, eventName: string) {
+    const ls: any[] = event.listeners(eventName);
+    // eslint-disable-next-line no-restricted-syntax
+    for await (const func of ls) {
+        if (Helper.isFunction(func)) {
+            func();
+        }
+    }
+    return event.removeAllListeners(eventName);
+};
 
 /**
  * Bootstrap application
@@ -128,7 +149,7 @@ export function Bootstrap(bootFunc?: Function): ClassDecorator {
         if (!(target.prototype instanceof Koatty)) {
             throw new Error(`class does not inherit from Koatty`);
         }
-        executeBootstrap(target, bootFunc);
+        ExecBootstrap(target, bootFunc);
     };
 }
 

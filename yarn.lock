@@ -1521,7 +1521,7 @@
     "@types/koa-compose" "*"
     "@types/node" "*"
 
-"@types/koa__router@^8.x.x":
+"@types/koa__router@^8.0.4":
   version "8.0.4"
   resolved "https://registry.yarnpkg.com/@types/koa__router/-/koa__router-8.0.4.tgz#0b754a5e5be3262fc649afc7e93800f30cfc5fe0"
   integrity sha512-SXpZy6ICU/bsTZbNhg7QMNUQuNE7ka94zeLPHXhej2QZ09u2tz5S3WlBRB85HLSUosUZFbIRgfrFtu+PSIAUVA==
@@ -4259,6 +4259,25 @@ koa@^2.13.1, koa@^2.x.x:
     type-is "^1.6.16"
     vary "^1.1.2"
 
+koatty@^3.x.x:
+  version "3.2.12"
+  resolved "https://registry.yarnpkg.com/koatty/-/koatty-3.2.12.tgz#0e5ba9a529bc7ebc769a64954fe4e898831220f6"
+  integrity sha512-p7TKUs3ErXe5uosZfLO0D8g99Lgaq6Y4AQdo/FgXQi8XsHub+FgCVhwtmV3d3bS2DqKU/PCx6859flCG2Id0CA==
+  dependencies:
+    "@godaddy/terminus" "^4.9.0"
+    "@koa/router" "^10.0.0"
+    cls-hooked "^4.2.2"
+    globby "^11.0.4"
+    koa "^2.13.1"
+    koatty_container "^1.3.14"
+    koatty_lib "^1.2.5"
+    koatty_logger "^1.1.2"
+    koatty_payload "^1.2.5"
+    koatty_static "^1.2.5"
+    koatty_validation "^1.0.1"
+    reflect-metadata "^0.1.13"
+    tslib "^2.3.0"
+
 koatty_cacheable@^1.x.x:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/koatty_cacheable/-/koatty_cacheable-1.2.2.tgz#5d8b504cb954a996f20c046b0e324a3d438141b8"
@@ -4274,6 +4293,16 @@ koatty_container@^1.3.14, koatty_container@^1.x.x:
   version "1.3.14"
   resolved "https://registry.yarnpkg.com/koatty_container/-/koatty_container-1.3.14.tgz#deeaa0a25fb8b54b91c5ad7f06633975f72d700a"
   integrity sha512-dF9ohr6BnO0pgv/dDwVWI1bs5e+MCh5giuG84mvTAGa3afuncOJmLEfgpIv9SVtm2XIhJc3dQP0ALZHl8SCynw==
+  dependencies:
+    koatty_lib "^1.x.x"
+    koatty_logger "^1.x.x"
+    reflect-metadata "^0.1.13"
+    tslib "^2.3.0"
+
+koatty_container@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/koatty_container/-/koatty_container-1.4.1.tgz#27fc172c45b3f4f7b4d4e9e80129478a9edda507"
+  integrity sha512-qV3hBxHGt+t0aecYMBaorFnaucTYkEn+sEQOiOm8OOkTd2dkFqNOvxnilT634LtYk5cHGmXcibBD0l8erMdufg==
   dependencies:
     koatty_lib "^1.x.x"
     koatty_logger "^1.x.x"
@@ -4324,6 +4353,17 @@ koatty_payload@^1.2.5:
     raw-body "^2.4.1"
     xml2js "^0.4.23"
 
+koatty_router@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/koatty_router/-/koatty_router-1.0.3.tgz#2b1a798700553918e880d1c6db010c95dc3ab9b4"
+  integrity sha512-uKum/Qu/ZWhaFxegr5ES5QUw0LlO6B110UookRHFTuMnf3ibH5mTq5GeDt1eGZ4mUCWM6FHr8Ik6wajSgrxUJA==
+  dependencies:
+    "@koa/router" "^10.0.0"
+    koatty "^3.x.x"
+    koatty_container "^1.x.x"
+    koatty_validation "^1.x.x"
+    tslib "^2.3.0"
+
 koatty_schedule@^1.x.x:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/koatty_schedule/-/koatty_schedule-1.3.1.tgz#11ddc923fde43bd68307cd0d32e64b2a991bedbb"
@@ -4335,6 +4375,16 @@ koatty_schedule@^1.x.x:
     koatty_logger "^1.x.x"
     koatty_store "^1.x.x"
     reflect-metadata "^0.1.13"
+    tslib "^2.3.0"
+
+koatty_serve@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/koatty_serve/-/koatty_serve-1.0.2.tgz#52a59dd73d094e7b23cae2bcd54a74b47aaaa19c"
+  integrity sha512-PH/693v+Yrg6KwW0Pjf5jhGjxrmSejTAbmgii2Qce8A6JEJjAe7xwH8IZDooUCOmbCCVd3hQffsUabvF3pWiQA==
+  dependencies:
+    "@godaddy/terminus" "^4.9.0"
+    koatty "^3.x.x"
+    koatty_trace "^1.x.x"
     tslib "^2.3.0"
 
 koatty_static@^1.2.5:
@@ -4356,10 +4406,31 @@ koatty_store@^1.x.x:
     koatty_lib "^1.x.x"
     koatty_logger "^1.x.x"
 
+koatty_trace@^1.2.3, koatty_trace@^1.x.x:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/koatty_trace/-/koatty_trace-1.2.3.tgz#10faa17282e847505860d6b39fcf3abf4cc17259"
+  integrity sha512-EOso7+PjACpAhKEIx5JcZbjtiDLtF9QCUDLf/VYFYtE2qoQBURNPeAx0v+qtK+1oN9hA2OYn6fF1Sn9IBGikWQ==
+  dependencies:
+    cls-hooked "^4.2.2"
+    koatty "^3.x.x"
+    uuid "^8.3.2"
+
 koatty_validation@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/koatty_validation/-/koatty_validation-1.0.1.tgz#4fa90ac8844e3318a1f4b7d0ae2e23b39353ee53"
   integrity sha512-lWUnnHlHyeOlw0KW6E3B6EMKhCtEYggedS28RepMig6mGWUzsyq1kX7EdQuaUFZIOO1/E5sbAmPDZ66r/VdPkw==
+  dependencies:
+    class-validator "^0.13.1"
+    koatty_container "^1.x.x"
+    koatty_lib "^1.x.x"
+    koatty_logger "^1.x.x"
+    reflect-metadata "^0.1.13"
+    tslib "^2.3.0"
+
+koatty_validation@^1.0.2, koatty_validation@^1.x.x:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/koatty_validation/-/koatty_validation-1.0.2.tgz#ace05cbaa7e13044454e85974d13a508a240cc03"
+  integrity sha512-W+V0+l340jtLbWotFk3Bwnqho/nlxyE6glF7DKCi0V+owqQSSD72tAiG435m3T6zMpmHmTQ8nBcZVKDWEAnTbg==
   dependencies:
     class-validator "^0.13.1"
     koatty_container "^1.x.x"
@@ -6072,6 +6143,11 @@ uuid@^3.3.2:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+
+uuid@^8.3.2:
+  version "8.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
 v8-compile-cache@^2.0.3:
   version "2.3.0"

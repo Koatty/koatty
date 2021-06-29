@@ -13,9 +13,7 @@ import { Container, IOCContainer, TAGGED_CLS } from "koatty_container";
 import { BaseController } from "../controller/BaseController";
 import { IMiddleware, IPlugin } from './Component';
 import { Koatty } from '../Koatty';
-import { TraceHandler } from "./Trace";
-import { injectValue } from "./Value";
-import { injectAOP } from "./AOP";
+import { TraceHandler } from "koatty_trace";
 import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 
 // type AppReadyHookFunc
@@ -229,10 +227,6 @@ export class Loader {
         appMiddleware.forEach((item: ComponentItem) => {
             item.id = (item.id ?? "").replace("MIDDLEWARE:", "");
             if (item.id && Helper.isClass(item.target)) {
-                // inject configuration
-                injectValue(item.target, item.target.prototype, container);
-                // inject AOP
-                injectAOP(item.target, item.target.prototype, container);
                 container.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
                 // middleware[item.id] = item.target;
             }
@@ -252,7 +246,7 @@ export class Loader {
         //de-duplication
         const appMList = [...new Set(defaultList)];
         // TraceHandler
-        app.use(TraceHandler(app));
+        app.use(TraceHandler(<any>app));
         //Automatically call middleware
         for (const key of appMList) {
             const handle: IMiddleware = container.get(key, "MIDDLEWARE");
@@ -299,10 +293,6 @@ export class Loader {
             item.id = (item.id ?? "").replace("CONTROLLER:", "");
             if (item.id && Helper.isClass(item.target)) {
                 Logger.Debug(`Load controller: ${item.id}`);
-                // inject configuration
-                injectValue(item.target, item.target.prototype, container);
-                // inject AOP
-                injectAOP(item.target, item.target.prototype, container);
                 // registering to IOC
                 container.reg(item.id, item.target, { scope: "Prototype", type: "CONTROLLER", args: [] });
                 const ctl = container.getInsByClass(item.target);
@@ -331,10 +321,6 @@ export class Loader {
             item.id = (item.id ?? "").replace("SERVICE:", "");
             if (item.id && Helper.isClass(item.target)) {
                 Logger.Debug(`Load service: ${item.id}`);
-                // inject configuration
-                injectValue(item.target, item.target.prototype, container);
-                // inject AOP
-                injectAOP(item.target, item.target.prototype, container);
                 // registering to IOC
                 container.reg(item.id, item.target, { scope: "Singleton", type: "SERVICE", args: [] });
                 const ctl = container.getInsByClass(item.target);
@@ -360,10 +346,6 @@ export class Loader {
             item.id = (item.id ?? "").replace("COMPONENT:", "");
             if (item.id && !(item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
                 Logger.Debug(`Load component: ${item.id}`);
-                // inject configuration
-                injectValue(item.target, item.target.prototype, container);
-                // inject AOP
-                injectAOP(item.target, item.target.prototype, container);
                 // inject schedule
                 // injectSchedule(item.target, item.target.prototype, container);
                 // registering to IOC
@@ -393,10 +375,6 @@ export class Loader {
             item.id = (item.id ?? "").replace("COMPONENT:", "");
             if (item.id && (item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
                 // Logger.Debug(`Load plugin: ${item.id}`);
-                // inject configuration
-                injectValue(item.target, item.target.prototype, container);
-                // inject AOP
-                injectAOP(item.target, item.target.prototype, container);
                 // registering to IOC
                 container.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
                 pluginList.push(item.id);

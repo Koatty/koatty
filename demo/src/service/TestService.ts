@@ -14,7 +14,7 @@ import { TestDto } from '../model/TestDto';
 @Service()
 export class TestService extends CommonService {
     app: App;
-    @Value("open_trace")
+    @Value("test")
     conf: any;
 
     init() {
