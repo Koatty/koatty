@@ -51,9 +51,6 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
         // load all bean
         const exSet = new Set();
 
-        const a = IOCContainer.getApp();
-        console.log(a);
-
         Loader.LoadDirectory(componentMetas, '', (fileName: string, target: any, xpath: string) => {
             if (target[fileName] && Helper.isClass(target[fileName])) {
                 if (exSet.has(fileName)) {
@@ -81,7 +78,7 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
         // New router
         const KoattyRouter = newRouter(app);
         // Middleware may depend on
-        Helper.define(app, "Router", KoattyRouter.router);
+        Helper.define(app, "Router", KoattyRouter);
 
         // Load Middleware
         Logger.Custom('think', '', 'Load Middlewares ...');

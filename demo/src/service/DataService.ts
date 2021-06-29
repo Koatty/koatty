@@ -21,7 +21,7 @@ export class DataService extends CommonService {
     }
 
     // @Scheduled("*/10 * * * * *")
-    @SchedulerLock()
+    // @SchedulerLock()
     async task() {
         const info = await this.Model.init();
         console.log('Schedule task run...');
