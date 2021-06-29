@@ -4,13 +4,12 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-07-06 11:21:37
  */
-
-import * as path from "path";
 import Koa from "koa";
-import { IncomingMessage, ServerResponse } from 'http';
+import * as path from "path";
 import { Helper } from "./util/Helper";
 import { Logger } from "./util/Logger";
-import { Application } from "koatty_container";
+import { IncomingMessage, ServerResponse } from 'http';
+import { Application, Context } from "koatty_container";
 import { Exception, HttpStatusCode, HttpStatusCodeMap, isPrevent, prevent } from "koatty_trace";
 const pkg = require("../package.json");
 
@@ -33,8 +32,7 @@ export interface InitOptions {
  * @interface KoattyContext
  * @extends {Koa.Context}
  */
-export interface KoattyContext extends Koa.Context {
-
+export interface KoattyContext extends Context {
     /**
      * Request body parser
      *
@@ -48,17 +46,6 @@ export interface KoattyContext extends Koa.Context {
      * @memberof KoattyContext
      */
     queryParser: () => Object;
-
-
-    /**
-     * Replace ctx.throw
-     *
-     * @type {(status: number, message?: string)}
-     * @type {(message: string, code?: number, status?: HttpStatusCode)}
-     * @memberof KoattyContext
-     */
-    throw(status: number, message?: string): never;
-    throw(message: string, code?: number, status?: HttpStatusCode): never;
 }
 
 
