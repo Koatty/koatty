@@ -4,9 +4,7 @@
  * @ license: Apache License 2.0
  * @ version: 2020-05-19 14:28:30
  */
-import { Service, BaseService, Autowired, Helper, Exception, HttpStatusCode, Value } from "../../../src/index";
-import { Scheduled, SchedulerLock } from "koatty_schedule";
-import { CacheAble } from "koatty_cacheable";
+import { Service, Helper, Exception, Value } from "../../../src/index";
 import { App } from '../App';
 import { CommonService, MoInterface } from './CommonService';
 import { TestDto } from '../model/TestDto';
@@ -21,7 +19,7 @@ export class TestService extends CommonService {
         //property
     }
 
-    @CacheAble("test")
+    // @CacheAble("test")
     async test(aa: TestDto) {
         // return Promise.reject("aa");
         console.log('TestService.test');
@@ -48,7 +46,7 @@ export class TestService extends CommonService {
         return "";
     }
 
-    @Scheduled("0 * * * * *")
+    // @Scheduled("0 * * * * *")
     // @SchedulerLock()
     scheduleTest() {
         console.log('TestService.scheduleTest');
