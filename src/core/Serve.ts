@@ -1,7 +1,7 @@
 /*
  * @Author: richen
  * @Date: 2020-07-06 15:53:37
- * @LastEditTime: 2021-06-28 18:06:48
+ * @LastEditTime: 2021-07-06 16:20:45
  * @Description:
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
@@ -54,6 +54,6 @@ export function startSever(app: Koatty) {
         options.cert = fs.readFileSync(crtFile).toString();
         options.port = options.port == 80 ? 443 : options.port;
     }
-    Serve(serveMode, <any>app, options, callback(app, options))
+    Serve(serveMode, app, options, callback(app, options))
 
 }

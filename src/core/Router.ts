@@ -17,5 +17,5 @@ import { NewRouter } from "koatty_router";
 export function newRouter(app: Koatty) {
     const serveMode = app.config("serve_mod") ?? "http";
     const options = app.config(undefined, 'router') ?? {};
-    return NewRouter(serveMode, <any>app, options);
+    return NewRouter(serveMode, app, options);
 }
