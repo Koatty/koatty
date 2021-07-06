@@ -23,7 +23,7 @@ export default {
         //     preload: false, // caches the assets on initialization or not, default to true. always work together with options.dynamic.
         //     cache: false // dynamic load file which not cached on initialization.
         // },
-        "StaticMiddleware": false,
+        // "StaticMiddleware": false,
         "PayloadMiddleware": {
             "extTypes": {
                 "json": ['application/json'],

@@ -233,7 +233,7 @@ export class Loader {
         });
 
         const middlewareConfList = middlewareConf.list;
-        const defaultList = ["StaticMiddleware", "PayloadMiddleware"];
+        const defaultList = ["PayloadMiddleware"];
         middlewareConfList.forEach((item: string) => {
             if (!defaultList.includes(item)) {
                 defaultList.push(item);
@@ -246,7 +246,7 @@ export class Loader {
         //de-duplication
         const appMList = [...new Set(defaultList)];
         // TraceHandler
-        app.use(TraceHandler(<any>app));
+        app.use(TraceHandler(app));
         //Automatically call middleware
         for (const key of appMList) {
             const handle: IMiddleware = container.get(key, "MIDDLEWARE");
