@@ -75,7 +75,7 @@ export class IndexController extends AdminController {
         // });
         // return new Promise((resolve: Function) => setTimeout(() => resolve(1), 200));
         // throw Error("test");
-        console.log(this.app.trace.get('traceId'), '------------------------');
+        console.log(this.app.tracer.get('traceId'), '------------------------');
         return this.ok("success", "");
 
     }

@@ -4,7 +4,7 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-05-18 11:24:49
  */
-import { Koatty } from "../Koatty";
+import { Koatty } from 'koatty_core';
 import { ObjectDefinitionOptions } from "koatty_container";
 import { IService } from '../core/Component';
 import { Logger } from "../util/Logger";

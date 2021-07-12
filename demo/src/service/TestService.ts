@@ -40,9 +40,9 @@ export class TestService extends CommonService {
 
     async test2() {
         // throw new Exception("exception", 1, HttpStatusCode.BAD_REQUEST);
-        throw new Exception("aaa");
+        // throw new Exception("aaa");
 
-        console.log('TestService.test2');
+        console.log("queryParser", this.app.context.queryParser);
         return "";
     }
 

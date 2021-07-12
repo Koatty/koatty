@@ -7,7 +7,7 @@
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import { IOCContainer } from 'koatty_container';
-import { Koatty, KoattyContext } from '../Koatty';
+import { Koatty, KoattyContext } from 'koatty_core';
 import { CONTROLLER_ROUTER } from "koatty_router";
 
 /**
@@ -19,7 +19,7 @@ import { CONTROLLER_ROUTER } from "koatty_router";
  */
 export function Component(identifier?: string): ClassDecorator {
     return (target: any) => {
-        identifier = identifier ?? IOCContainer.getIdentifier(target);
+        identifier = identifier || IOCContainer.getIdentifier(target);
         IOCContainer.saveClass("COMPONENT", target, identifier);
     };
 }
@@ -90,7 +90,7 @@ export interface IController {
  */
 export function Middleware(identifier?: string): ClassDecorator {
     return (target: any) => {
-        identifier = identifier ?? IOCContainer.getIdentifier(target);
+        identifier = identifier || IOCContainer.getIdentifier(target);
         IOCContainer.saveClass("MIDDLEWARE", target, identifier);
     };
 }
@@ -111,7 +111,7 @@ export interface IMiddleware {
  */
 export function Service(identifier?: string): ClassDecorator {
     return (target: any) => {
-        identifier = identifier ?? IOCContainer.getIdentifier(target);
+        identifier = identifier || IOCContainer.getIdentifier(target);
         IOCContainer.saveClass("SERVICE", target, identifier);
     };
 }
@@ -134,7 +134,7 @@ export interface IService {
  */
 export function Plugin(identifier?: string): ClassDecorator {
     return (target: any) => {
-        identifier = identifier ?? IOCContainer.getIdentifier(target);
+        identifier = identifier || IOCContainer.getIdentifier(target);
         // 
         if (!identifier.endsWith("Plugin")) {
             throw Error("Plugin class name must be 'Plugin' suffix.");

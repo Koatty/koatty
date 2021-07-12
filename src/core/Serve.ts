@@ -1,7 +1,7 @@
 /*
  * @Author: richen
  * @Date: 2020-07-06 15:53:37
- * @LastEditTime: 2021-07-06 16:20:45
+ * @LastEditTime: 2021-07-12 15:53:19
  * @Description:
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
@@ -37,9 +37,9 @@ const callback = (app: Koatty, options: ListeningOptions) => {
  * @param {Koatty} app
  */
 export function startSever(app: Koatty) {
-    const serveMode = app.config("serve_mod") ?? "http";
-    const port = process.env.PORT ?? process.env.main_port ?? app.config('app_port') ?? 80;
-    const hostname = process.env.IP ?? process.env.HOSTNAME?.replace(/-/g, '.') ?? app.config('app_host') ?? 'localhost';
+    const serveMode = app.config("serve_mod") || "http";
+    const port = process.env.PORT || process.env.APPPORT || app.config('app_port') || 3000;
+    const hostname = process.env.IP || process.env.HOSTNAME?.replace(/-/g, '.') || app.config('app_host') || 'localhost';
     const options = {
         hostname: hostname,
         port: port,
@@ -54,6 +54,6 @@ export function startSever(app: Koatty) {
         options.cert = fs.readFileSync(crtFile).toString();
         options.port = options.port == 80 ? 443 : options.port;
     }
-    Serve(serveMode, app, options, callback(app, options))
+    Serve(serveMode, <any>app, options, callback(app, options))
 
 }

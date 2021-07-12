@@ -5,7 +5,7 @@
  * @ version: 2020-05-18 11:16:22
  */
 import { Middleware, IMiddleware } from "../core/Component";
-import { Koatty } from "../Koatty";
+import { Koatty } from 'koatty_core';
 import { Payload } from "koatty_payload";
 
 @Middleware()

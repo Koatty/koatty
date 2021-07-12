@@ -4,11 +4,13 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-05-10 11:49:15
  */
-import * as koatty_lib from "koatty_lib";
+import * as Helper from "koatty_lib";
+import { Logger } from "./Logger";
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
+const pkg = require("../../package.json");
 // export Helper
-export const Helper = koatty_lib;
+export * as Helper from "koatty_lib";
 
 /**
  *
@@ -53,4 +55,23 @@ export function getParamNames(func: { toString: () => { replace: (arg0: RegExp, 
         result = [];
     }
     return result;
+}
+
+/**
+ * check node version
+ * @return {void} []
+ */
+export function checkRuntime() {
+    let nodeEngines = pkg.engines.node.slice(1) || '10.0.0';
+    nodeEngines = nodeEngines.slice(0, nodeEngines.lastIndexOf('.'));
+    let nodeVersion = process.version;
+    if (nodeVersion[0] === 'v') {
+        nodeVersion = nodeVersion.slice(1);
+    }
+    nodeVersion = nodeVersion.slice(0, nodeVersion.lastIndexOf('.'));
+
+    if (Helper.toNumber(nodeEngines) > Helper.toNumber(nodeVersion)) {
+        Logger.Error(`Koatty need node version > ${nodeEngines}, current version is ${nodeVersion}, please upgrade it.`);
+        process.exit(-1);
+    }
 }
