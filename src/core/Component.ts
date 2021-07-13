@@ -7,7 +7,7 @@
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import { IOCContainer } from 'koatty_container';
-import { Koatty, KoattyContext } from 'koatty_core';
+import { Koatty, KoattyContext, KoattyNext } from 'koatty_core';
 import { CONTROLLER_ROUTER } from "koatty_router";
 
 /**
@@ -99,7 +99,7 @@ export function Middleware(identifier?: string): ClassDecorator {
  * Interface for Middleware
  */
 export interface IMiddleware {
-    run: (options: any, app: Koatty) => ((ctx: KoattyContext, next: any) => Promise<any>);
+    run: (options: any, app: Koatty) => ((ctx: KoattyContext, next: KoattyNext) => Promise<any>);
 }
 
 /**

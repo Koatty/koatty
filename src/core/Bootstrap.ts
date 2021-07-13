@@ -102,7 +102,7 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
         Loader.LoadControllers(app, IOCContainer);
         // Load Routers
         Logger.Custom('think', '', 'Load Routers ...');
-        KoattyRouter.LoadRouter();
+        KoattyRouter.LoadRouter(app.getMetaData("_controllers"));
 
         // Emit app started event
         Logger.Custom('think', '', 'Emit App Start ...');
