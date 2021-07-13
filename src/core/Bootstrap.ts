@@ -7,9 +7,9 @@
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import EventEmitter from "events";
-import { Koatty } from '../Koatty';
+import { Koatty } from 'koatty_core';
 import { Loader } from "./Loader";
-import { Helper } from "../util/Helper";
+import { checkRuntime, Helper } from "../util/Helper";
 import { Logger } from "../util/Logger";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
 import { BindProcessEvent } from "koatty_serve";
@@ -25,6 +25,8 @@ import { COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
  * @returns {Promise<void>}
  */
 const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<void> {
+    // checked runtime
+    checkRuntime();
     const app = Reflect.construct(target, []);
     try {
         console.log(LOGO);
@@ -40,6 +42,8 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
             Logger.Custom('think', '', 'Execute bootFunc ...');
             await bootFunc(app);
         }
+        // Initialize env
+        Loader.initialize(app);
         // Set IOC.app
         IOCContainer.setApp(app);
 
@@ -50,7 +54,6 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
         const configurationMetas = Loader.GetConfigurationMetas(target);
         // load all bean
         const exSet = new Set();
-
         Loader.LoadDirectory(componentMetas, '', (fileName: string, target: any, xpath: string) => {
             if (target[fileName] && Helper.isClass(target[fileName])) {
                 if (exSet.has(fileName)) {
@@ -58,7 +61,7 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
                 }
                 exSet.add(fileName);
             }
-        }, [...configurationMetas, `!${target.name ?? '.no'}.ts`]);
+        }, [...configurationMetas, `!${target.name || '.no'}.ts`]);
         exSet.clear();
 
         // Load configuration
@@ -99,7 +102,7 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
         Loader.LoadControllers(app, IOCContainer);
         // Load Routers
         Logger.Custom('think', '', 'Load Routers ...');
-        KoattyRouter.LoadRouter();
+        KoattyRouter.LoadRouter(app.getMetaData("_controllers"));
 
         // Emit app started event
         Logger.Custom('think', '', 'Emit App Start ...');

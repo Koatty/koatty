@@ -12,8 +12,8 @@ import { BaseService } from "../service/BaseService";
 import { Container, IOCContainer, TAGGED_CLS } from "koatty_container";
 import { BaseController } from "../controller/BaseController";
 import { IMiddleware, IPlugin } from './Component';
-import { Koatty } from '../Koatty';
-import { TraceHandler } from "koatty_trace";
+import { Koatty } from 'koatty_core';
+import { prevent, TraceHandler } from "koatty_trace";
 import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 
 // type AppReadyHookFunc
@@ -65,6 +65,54 @@ interface ComponentItem {
  * 
  */
 export class Loader {
+
+    /**
+     * initialize env
+     *
+     * @static
+     * @param {Koatty} app
+     * @memberof Loader
+     */
+    public static initialize(app: Koatty) {
+        const env = (process.execArgv ?? []).join(",");
+        if (env.indexOf('ts-node') > -1 || env.indexOf('--debug') > -1) {
+            app.appDebug = true;
+        }
+        // app.env
+        app.env = process.env.KOATTY_ENV || process.env.NODE_ENV;
+        if ((env.indexOf('--production') > -1) || ((app.env ?? '').indexOf('pro') > -1)) {
+            app.appDebug = true;
+        }
+
+        if (app.appDebug) {
+            app.env = 'development';
+            process.env.NODE_ENV = 'development';
+            process.env.APP_DEBUG = 'true';
+            Logger.setLevel("DEBUG");
+        } else {
+            app.env = 'production';
+            process.env.NODE_ENV = 'production';
+            Logger.setLevel("INFO");
+        }
+
+        // define path
+        const rootPath = app.rootPath || process.cwd();
+        const appPath = app.appPath || path.resolve(rootPath, env.indexOf('ts-node') > -1 ? 'src' : 'dist');
+        const thinkPath = path.resolve(__dirname, '..');
+        Helper.define(app, 'rootPath', rootPath);
+        Helper.define(app, 'appPath', appPath);
+        Helper.define(app, 'thinkPath', thinkPath);
+
+        process.env.ROOT_PATH = rootPath;
+        process.env.APP_PATH = appPath;
+        process.env.THINK_PATH = thinkPath;
+
+        // Compatible with old version, will be deprecated
+        Helper.define(app, 'prevent', prevent);
+        Helper.define(app, 'root_path', rootPath);
+        Helper.define(app, 'app_path', appPath);
+        Helper.define(app, 'think_path', thinkPath);
+    }
 
     /**
      * get component metadata
@@ -148,8 +196,8 @@ export class Loader {
             loadPath = loadPath.length > 0 ? loadPath : "";
         }
         const tempConfig: any = {};
-        // Logger.Debug(`Load configuration path: ${app.appPath}${loadPath ?? "/config"}`);
-        Loader.LoadDirectory(loadPath ?? "./config", app.appPath, function (name: string, exp: any) {
+        // Logger.Debug(`Load configuration path: ${app.appPath}${loadPath || "/config"}`);
+        Loader.LoadDirectory(loadPath || "./config", app.appPath, function (name: string, exp: any) {
             // tslint:disable-next-line: one-variable-per-declaration
             let type = "", t = "";
             if (name.indexOf("_") > -1) {
@@ -173,7 +221,7 @@ export class Loader {
             }
         }
 
-        app.setMap("configs", Helper.extend(config, appConfig, true));
+        app.setMetaData("_configs", Helper.extend(config, appConfig, true));
     }
 
     /**
@@ -184,7 +232,7 @@ export class Loader {
      * @memberof Loader
      */
     public static SetLogger(app: Koatty) {
-        const configs = app.getMap("configs") ?? {};
+        const configs = app.getMetaData("_configs") ?? {};
         //Logger
         if (configs.config) {
             if (configs.config.logs_level) {
@@ -195,7 +243,7 @@ export class Loader {
             }
             if (configs.config.logs_write) {
                 Logger.setLogFile(configs.config.logs_write);
-                Logger.setLogFilePath(configs.config.logs_path ?? app.rootPath + "/logs");
+                Logger.setLogFilePath(configs.config.logs_path || app.rootPath + "/logs");
             }
             if (configs.config.logs_write_level) {
                 Logger.setLogFileLevel(configs.config.logs_write_level);
@@ -219,7 +267,7 @@ export class Loader {
         }
 
         //Mount default middleware
-        Loader.LoadDirectory(loadPath ?? "./middleware", app.thinkPath);
+        Loader.LoadDirectory(loadPath || "./middleware", app.thinkPath);
         //Mount application middleware
         // const middleware: any = {};
         const appMiddleware = IOCContainer.listClass("MIDDLEWARE") ?? [];
@@ -233,7 +281,7 @@ export class Loader {
         });
 
         const middlewareConfList = middlewareConf.list;
-        const defaultList = ["StaticMiddleware", "PayloadMiddleware"];
+        const defaultList = ["PayloadMiddleware"];
         middlewareConfList.forEach((item: string) => {
             if (!defaultList.includes(item)) {
                 defaultList.push(item);
@@ -246,7 +294,7 @@ export class Loader {
         //de-duplication
         const appMList = [...new Set(defaultList)];
         // TraceHandler
-        app.use(TraceHandler(<any>app));
+        app.use(TraceHandler(app));
         //Automatically call middleware
         for (const key of appMList) {
             const handle: IMiddleware = container.get(key, "MIDDLEWARE");
@@ -274,7 +322,7 @@ export class Loader {
                 }
             }
         }
-        // app.setMap("middlewares", middleware);
+        // app.setMetaData("_middlewares", middleware);
     }
 
     /**
@@ -303,7 +351,7 @@ export class Loader {
             }
         });
 
-        app.setMap("controllers", controllers);
+        app.setMetaData("_controllers", controllers);
     }
 
     /**
@@ -418,7 +466,7 @@ export class Loader {
         pattern?: string | string[],
         ignore?: string | string[]) {
 
-        baseDir = baseDir ?? process.cwd();
+        baseDir = baseDir || process.cwd();
         const loadDirs = [].concat(loadDir ?? []);
 
         for (let dir of loadDirs) {

@@ -4,7 +4,7 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-07-06 14:23:43
  */
-import { Koatty } from "../Koatty";
+import { Koatty } from 'koatty_core';
 import { NewRouter } from "koatty_router";
 
 /**
@@ -15,7 +15,7 @@ import { NewRouter } from "koatty_router";
  * @returns {*}  
  */
 export function newRouter(app: Koatty) {
-    const serveMode = app.config("serve_mod") ?? "http";
+    const serveMode = app.config("serve_mod") || "http";
     const options = app.config(undefined, 'router') ?? {};
-    return NewRouter(serveMode, <any>app, options);
+    return NewRouter(serveMode, app, options);
 }
