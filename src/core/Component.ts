@@ -100,7 +100,7 @@ export function Middleware(identifier?: string): ClassDecorator {
  * Interface for Middleware
  */
 export interface IMiddleware {
-    run: (options: any, app: Koatty) => Promise<Koa.Middleware>;
+    run: (options: any, app: Koatty) => Koa.Middleware;
 }
 
 /**
