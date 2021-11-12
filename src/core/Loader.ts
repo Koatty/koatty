@@ -15,29 +15,7 @@ import { IMiddleware, IPlugin } from './Component';
 import { Koatty } from 'koatty_core';
 import { prevent, TraceHandler } from "koatty_trace";
 import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
-
-// type AppReadyHookFunc
-export type AppReadyHookFunc = (app: Koatty) => Promise<any>;
-
-/**
- * bind AppReadyHookFunc
- * example:
- * export function TestDecorator(): ClassDecorator {
- *  return (target: any) => {
- *   BindAppReadyHook((app: Koatty) => {
- *      // todo
- *      return Promise.resolve();
- *   }, target)   
- *  }
- * }
- *
- * @export
- * @param {AppReadyHookFunc} func
- * @param {*} target 
- */
-export function BindAppReadyHook(func: AppReadyHookFunc, target: any) {
-    IOCContainer.attachClassMetadata(TAGGED_CLS, APP_READY_HOOK, func, target);
-}
+import { AppReadyHookFunc } from "./Bootstrap";
 
 /**
  * 
