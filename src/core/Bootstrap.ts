@@ -7,15 +7,15 @@
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import EventEmitter from "events";
-import { Koatty } from 'koatty_core';
+import { Koatty, KoattyRouterOptions, ListeningOptions } from 'koatty_core';
 import { Loader } from "./Loader";
 import { checkRuntime, Helper } from "../util/Helper";
 import { Logger } from "../util/Logger";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
-import { BindProcessEvent } from "koatty_serve";
-import { newRouter } from "./Router";
-import { startSever } from './Serve';
-import { COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
+import { BindProcessEvent, Serve } from "koatty_serve";
+import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
+import { NewRouter } from "koatty_router";
+const pkg = require("../../package.json");
 
 /**
  * execute bootstrap
@@ -80,8 +80,6 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
 
         // New router
         const KoattyRouter = newRouter(app);
-        // Middleware may depend on
-        Helper.define(app, "Router", KoattyRouter);
 
         // Load Middleware
         Logger.Custom('think', '', 'Load Middlewares ...');
@@ -111,7 +109,8 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
 
         Logger.Custom('think', '', '====================================');
         // Start server
-        startSever(app);
+        app.listen(Serve, listenCallback);
+
         // binding event "appStop"
         BindProcessEvent(app, 'appStop');
     } catch (err) {
@@ -119,6 +118,39 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
         process.exit();
     }
 };
+
+/**
+ * Listening callback function
+ *
+ * @param {Koatty} app
+ * @param {ListeningOptions} options
+ * @returns {*} 
+ */
+const listenCallback = (app: Koatty, options: ListeningOptions) => {
+    return function () {
+        Logger.Custom("think", "", `Nodejs Version: ${process.version}`);
+        Logger.Custom("think", "", `${pkg.name} Version: v${pkg.version}`);
+        Logger.Custom("think", "", `App Environment: ${app.env}`);
+        Logger.Custom("think", "", `Server running at ${options.protocol === "http2" ? "https" : options.protocol}://${options.hostname || '127.0.0.1'}:${options.port}/`);
+        Logger.Custom("think", "", "====================================");
+        // tslint:disable-next-line: no-unused-expression
+        app.appDebug && Logger.Warn(`Running in debug mode.`);
+    };
+};
+
+/**
+ * get instance of router
+ *
+ * @export
+ * @param {Koatty} app
+ * @returns {*}  
+ */
+const newRouter = function (app: Koatty) {
+    const protocol = app.config("protocol") || "http";
+    const options: KoattyRouterOptions = app.config(undefined, 'router') ?? {};
+    options.protocol = protocol;
+    return NewRouter(app, options);
+}
 
 /**
  * Execute event as async
@@ -189,4 +221,27 @@ export function ConfigurationScan(scanPath?: string | string[]): ClassDecorator 
         scanPath = scanPath ?? '';
         IOCContainer.saveClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, scanPath, target);
     };
+}
+
+// type AppReadyHookFunc
+export type AppReadyHookFunc = (app: Koatty) => Promise<any>;
+
+/**
+ * bind AppReadyHookFunc
+ * example:
+ * export function TestDecorator(): ClassDecorator {
+ *  return (target: any) => {
+ *   BindAppReadyHook((app: Koatty) => {
+ *      // todo
+ *      return Promise.resolve();
+ *   }, target)   
+ *  }
+ * }
+ *
+ * @export
+ * @param {AppReadyHookFunc} func
+ * @param {*} target 
+ */
+export function BindAppReadyHook(func: AppReadyHookFunc, target: any) {
+    IOCContainer.attachClassMetadata(TAGGED_CLS, APP_READY_HOOK, func, target);
 }

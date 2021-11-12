@@ -8,7 +8,7 @@ export default {
     /*app config*/
     app_port: 3000, // Listening port
     app_host: "", // Hostname
-    serve_mod: "http", // Serve mode 'http' | 'http2' | 'websocket' | 'rpc'
+    protocol: "http", // Server protocol 'http' | 'https' | 'http2' | 'grpc' | 'ws' | 'wss'
     open_trace: false, // Full stack debug & trace, default: false
     http_timeout: 10, // HTTP request timeout time(seconds)
     key_file: "", // HTTPS certificate key
