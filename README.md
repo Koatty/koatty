@@ -6,6 +6,11 @@ Use Typescript's decorator implement IOC and AOP.
 
 [![Version npm](https://img.shields.io/npm/v/koatty.svg?style=flat-square)](https://www.npmjs.com/package/koatty)[![npm Downloads](https://img.shields.io/npm/dm/koatty.svg?style=flat-square)](https://npmcharts.com/compare/koatty?minimal=true)
 
+## New 
+
+* 支持HTTP1.1、HTTP2 .
+* 支持gRPC  server. (unstable)
+* 支持WebSocket server. (unstable)
 ## Documentation
 
 [koatty_doc_CN](https://koatty.github.io/koatty_doc/) （In progress💪）
