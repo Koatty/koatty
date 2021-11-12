@@ -8,11 +8,12 @@ export default {
     "test": {
         aa: '111111'
     },
-    open_trace: true, //全链路debug/trace，默认: false
-    // enable_http2: true, // 是否启用HTTP2,启用需要配置证书
-    // https certificate
-    key_file: process.env.APP_PATH + "/config/server.key",
-    crt_file: process.env.APP_PATH + "/config/server.crt",
+    protocol: "ws", // Server protocol 'http' | 'https' | 'http2' | 'grpc' | 'ws' | 'wss'
+    open_trace: true, // Full stack debug & trace, default: false
+    http_timeout: 10, // HTTP request timeout time(seconds)
+    encoding: "utf-8", // Character Encoding
+    key_file: process.env.APP_PATH + "/config/ssl.key", // HTTPS certificate key
+    crt_file: process.env.APP_PATH + "/config/ssl.crt", // HTTPS certificate crt
 
     // logs_level: "DEBUG", // Level log is printed to the console, "DEBUG" | "INFO" | "WARN" | "ERROR"
     logs_console: true, // Whether to console logs

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package example.foo;
+
+service Example {
+  rpc Ping(Echor) returns (Echor) {}
+  rpc Echo(Hellor) returns (Hellor) {}
+}
+
+message Echor { string content = 1; }
+
+message Hellor { string msg = 1; }

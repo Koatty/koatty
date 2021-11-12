@@ -7,6 +7,7 @@
 import { Bootstrap, ComponentScan, Autowired, Koatty, ConfigurationScan, Logger, Helper } from '../../src/index';
 
 import * as path from "path";
+import { TestBootstrap } from './TestBootstrap';
 @Bootstrap((app: any) => {
     //调整libuv线程池大小
     // process.env.UV_THREADPOOL_SIZE = "128";
@@ -17,6 +18,7 @@ import * as path from "path";
 })
 // @ComponentScan('./test')
 // @ConfigurationScan('./test/config')
+@TestBootstrap() // 自定义的启动执行装饰器s
 export class App extends Koatty {
     rootPath: string;
     mm1: any;
