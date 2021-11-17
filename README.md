@@ -8,7 +8,7 @@ Use Typescript's decorator implement IOC and AOP.
 
 ## New 
 
-* HTTP1.1、HTTP2 .
+* HTTP、HTTPS、HTTP2 .
 * gRPC  server. (unstable)
 * WebSocket server. (unstable)
 ## Documentation
