@@ -7,7 +7,7 @@
 export default {
     app_port: 3000, // Listening port
     app_host: "127.0.0.1", // Hostname
-    protocol: "grpc", // Server protocol 'http' | 'https' | 'http2' | 'grpc' | 'ws' | 'wss'
+    protocol: "http", // Server protocol 'http' | 'https' | 'http2' | 'grpc' | 'ws' | 'wss'
     open_trace: true, // Full stack debug & trace, default: false
     http_timeout: 10, // HTTP request timeout time(seconds)
     encoding: "utf-8", // Character Encoding
