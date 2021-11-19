@@ -32,22 +32,29 @@ export class IndexController extends AdminController {
 
     @GetMapping("/")
     @Before(Test2Aspect)
-    async default() {
-        const info = await this.testService.test2().catch(() => null);
+    async default(@RequestBody() data: any) {
+        console.log(data.toString());
+
+        // const info = await this.testService.test2().catch(() => null);
         // return { "aa": "band!!!!!!" };
         // this.ctx.status = 403;
         // this.fail("sfsdfsdfdsf");
         // this.ctx.body = { "aa": "band!!!!!!" };
         console.log(Logger.getLevel());
-        Logger.Debug("do not logger");
+        Logger.Debug("do not logger when product env");
         // throw new Error("band");
-        throw new Exception("band", 1, 405);
+        // throw new Exception("band", 1, 405);
         // ctx.body = "sss";
         // this.ctx.throw("ssss");
         // return prevent();
         // return new Promise((resolve: Function) => setTimeout(() => resolve(), 200));
         // return "Hello Koatty.";
-        // return this.ok("Hello Koatty.");
+        if (data == "1") {
+            return this.ok("Hello Koatty.");
+        } else {
+            return this.fail("err.");
+        }
+
     }
 
     @GetMapping("/path/:name")
@@ -75,7 +82,7 @@ export class IndexController extends AdminController {
         // });
         // return new Promise((resolve: Function) => setTimeout(() => resolve(1), 200));
         // throw Error("test");
-        console.log(this.app.tracer.get('traceId'), '------------------------');
+        console.log(this.ctx.getMetaData('X-Request-Id'), '------------------------');
         return this.ok("success", "");
 
     }

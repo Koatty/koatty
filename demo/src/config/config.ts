@@ -5,10 +5,9 @@
  * @ version: 2019-09-24 11:06:12
  */
 export default {
-    "test": {
-        aa: '111111'
-    },
-    protocol: "ws", // Server protocol 'http' | 'https' | 'http2' | 'grpc' | 'ws' | 'wss'
+    app_port: 3000, // Listening port
+    app_host: "127.0.0.1", // Hostname
+    protocol: "grpc", // Server protocol 'http' | 'https' | 'http2' | 'grpc' | 'ws' | 'wss'
     open_trace: true, // Full stack debug & trace, default: false
     http_timeout: 10, // HTTP request timeout time(seconds)
     encoding: "utf-8", // Character Encoding
@@ -20,4 +19,8 @@ export default {
     logs_write: false, // Whether to store logs
     logs_write_level: "WARN", // Level log is printed to the file, "DEBUG" | "INFO" | "WARN" | "ERROR"
     logs_path: process.env.ROOT_PATH + "/logs", // Log file directory
+
+    "test": {
+        aa: '111111'
+    },
 };
