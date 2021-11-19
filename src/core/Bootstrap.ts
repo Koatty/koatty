@@ -7,7 +7,7 @@
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import EventEmitter from "events";
-import { Koatty, KoattyRouterOptions, ListeningOptions } from 'koatty_core';
+import { Koatty, KoattyRouterOptions } from 'koatty_core';
 import { Loader } from "./Loader";
 import { checkRuntime, Helper } from "../util/Helper";
 import { Logger } from "../util/Logger";
@@ -36,6 +36,8 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
         if (!(app instanceof Koatty)) {
             throw new Error(`class ${target.name} does not inherit from Koatty`);
         }
+        // version
+        Helper.define(app, "version", pkg.version);
 
         // exec bootFunc
         if (Helper.isFunction(bootFunc)) {
@@ -109,7 +111,7 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
 
         Logger.Custom('think', '', '====================================');
         // Start server
-        app.listen(Serve, listenCallback);
+        app.listen(newServe(app));
 
         // binding event "appStop"
         BindProcessEvent(app, 'appStop');
@@ -120,26 +122,7 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
 };
 
 /**
- * Listening callback function
- *
- * @param {Koatty} app
- * @param {ListeningOptions} options
- * @returns {*} 
- */
-const listenCallback = (app: Koatty, options: ListeningOptions) => {
-    return function () {
-        Logger.Custom("think", "", `Nodejs Version: ${process.version}`);
-        Logger.Custom("think", "", `${pkg.name} Version: v${pkg.version}`);
-        Logger.Custom("think", "", `App Environment: ${app.env}`);
-        Logger.Custom("think", "", `Server running at ${options.protocol === "http2" ? "https" : options.protocol}://${options.hostname || '127.0.0.1'}:${options.port}/`);
-        Logger.Custom("think", "", "====================================");
-        // tslint:disable-next-line: no-unused-expression
-        app.appDebug && Logger.Warn(`Running in debug mode.`);
-    };
-};
-
-/**
- * get instance of router
+ * create router
  *
  * @export
  * @param {Koatty} app
@@ -148,9 +131,27 @@ const listenCallback = (app: Koatty, options: ListeningOptions) => {
 const newRouter = function (app: Koatty) {
     const protocol = app.config("protocol") || "http";
     const options: KoattyRouterOptions = app.config(undefined, 'router') ?? {};
-    options.protocol = protocol;
-    return NewRouter(app, options);
+    const router = NewRouter(app, options, protocol);
+
+    Helper.define(app, "router", router);
+    return router;
 }
+
+/**
+ * create serve
+ *
+ * @param {Koatty} app
+ * @returns {*}  
+ */
+const newServe = function (app: Koatty) {
+    const protocol = app.config("protocol") || "http";
+    const server = Serve(app, protocol);
+
+    Helper.define(app, "server", server);
+    return server;
+}
+
+
 
 /**
  * Execute event as async

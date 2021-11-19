@@ -6,16 +6,16 @@
  */
 import * as globby from "globby";
 import * as path from "path";
-import { Helper, requireDefault } from "../util/Helper";
-import { Logger } from "../util/Logger";
-import { BaseService } from "../service/BaseService";
-import { Container, IOCContainer, TAGGED_CLS } from "koatty_container";
-import { BaseController } from "../controller/BaseController";
-import { IMiddleware, IPlugin } from './Component';
 import { Koatty } from 'koatty_core';
-import { prevent, TraceHandler } from "koatty_trace";
-import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
+import { Logger } from "../util/Logger";
+import { prevent } from "koatty_exception";
+import { IMiddleware, IPlugin } from './Component';
+import { BaseService } from "../service/BaseService";
 import { AppReadyHookFunc } from "./Bootstrap";
+import { Helper, requireDefault } from "../util/Helper";
+import { BaseController } from "../controller/BaseController";
+import { Container, IOCContainer, TAGGED_CLS } from "koatty_container";
+import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 
 /**
  * 
@@ -259,7 +259,7 @@ export class Loader {
         });
 
         const middlewareConfList = middlewareConf.list;
-        const defaultList = ["PayloadMiddleware"];
+        const defaultList = ["TraceMiddleware", "PayloadMiddleware"];
         middlewareConfList.forEach((item: string) => {
             if (!defaultList.includes(item)) {
                 defaultList.push(item);
@@ -271,8 +271,6 @@ export class Loader {
 
         //de-duplication
         const appMList = [...new Set(defaultList)];
-        // TraceHandler
-        app.use(TraceHandler(app));
         //Automatically call middleware
         for (const key of appMList) {
             const handle: IMiddleware = container.get(key, "MIDDLEWARE");
@@ -300,6 +298,7 @@ export class Loader {
                 }
             }
         }
+
         // app.setMetaData("_middlewares", middleware);
     }
 
