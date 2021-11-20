@@ -13,9 +13,9 @@ import { IMiddleware, IPlugin } from './Component';
 import { BaseService } from "../service/BaseService";
 import { AppReadyHookFunc } from "./Bootstrap";
 import { Helper, requireDefault } from "../util/Helper";
-import { BaseController } from "../controller/BaseController";
 import { Container, IOCContainer, TAGGED_CLS } from "koatty_container";
 import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
+import { BaseController } from "../controller/BaseController";
 
 /**
  * 
@@ -93,17 +93,18 @@ export class Loader {
     }
 
     /**
-     * get component metadata
+     * Get component metadata
      *
      * @static
      * @param {*} target
      * @param {string} appPath
+     * @param {Container} container
      * @returns {*}  {any[]}
      * @memberof Loader
      */
-    public static GetComponentMetas(target: any, appPath: string): any[] {
+    public static GetComponentMetas(target: any, appPath: string, container: Container): any[] {
         let componentMetas = [];
-        const componentMeta = IOCContainer.getClassMetadata(TAGGED_CLS, COMPONENT_SCAN, target);
+        const componentMeta = container.getClassMetadata(TAGGED_CLS, COMPONENT_SCAN, target);
         if (componentMeta) {
             if (Helper.isArray(componentMeta)) {
                 componentMetas = componentMeta;
@@ -118,15 +119,16 @@ export class Loader {
     }
 
     /**
-     * get configuration metadata
+     * Get configuration metadata
      *
      * @static
      * @param {*} target
+     * @param {Container} container
      * @returns {*}  {any[]}
      * @memberof Loader
      */
-    public static GetConfigurationMetas(target: any): any[] {
-        const confMeta = IOCContainer.getClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, target);
+    public static GetConfigurationMetas(target: any, container: Container): any[] {
+        const confMeta = container.getClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, target);
         let configurationMetas = [];
         if (confMeta) {
             if (Helper.isArray(confMeta)) {
@@ -144,10 +146,11 @@ export class Loader {
      * @static
      * @param {*} target
      * @param {Koatty} app
+     * @param {Container} container
      * @memberof Loader
      */
-    public static LoadAppReadyHooks(target: any, app: Koatty) {
-        const funcs = IOCContainer.getClassMetadata(TAGGED_CLS, APP_READY_HOOK, target);
+    public static LoadAppReadyHooks(target: any, app: Koatty, container: Container) {
+        const funcs = container.getClassMetadata(TAGGED_CLS, APP_READY_HOOK, target);
         if (Helper.isArray(funcs)) {
             funcs.forEach((element: AppReadyHookFunc): any => {
                 app.once('appReady', () => element(app));
@@ -248,7 +251,7 @@ export class Loader {
         Loader.LoadDirectory(loadPath || "./middleware", app.thinkPath);
         //Mount application middleware
         // const middleware: any = {};
-        const appMiddleware = IOCContainer.listClass("MIDDLEWARE") ?? [];
+        const appMiddleware = container.listClass("MIDDLEWARE") ?? [];
 
         appMiddleware.forEach((item: ComponentItem) => {
             item.id = (item.id ?? "").replace("MIDDLEWARE:", "");
@@ -311,7 +314,7 @@ export class Loader {
      * @memberof Loader
      */
     public static LoadControllers(app: Koatty, container: Container) {
-        const controllerList = IOCContainer.listClass("CONTROLLER");
+        const controllerList = container.listClass("CONTROLLER");
 
         const controllers: any = {};
         controllerList.forEach((item: ComponentItem) => {
@@ -340,7 +343,7 @@ export class Loader {
      * @memberof Loader
      */
     public static LoadServices(app: Koatty, container: Container) {
-        const serviceList = IOCContainer.listClass("SERVICE");
+        const serviceList = container.listClass("SERVICE");
 
         serviceList.forEach((item: ComponentItem) => {
             item.id = (item.id ?? "").replace("SERVICE:", "");
@@ -365,7 +368,7 @@ export class Loader {
      * @memberof Loader
      */
     public static LoadComponents(app: Koatty, container: Container) {
-        const componentList = IOCContainer.listClass("COMPONENT");
+        const componentList = container.listClass("COMPONENT");
 
         componentList.forEach((item: ComponentItem) => {
             item.id = (item.id ?? "").replace("COMPONENT:", "");
@@ -388,7 +391,7 @@ export class Loader {
      * @memberof Loader
      */
     public static async LoadPlugins(app: Koatty, container: Container) {
-        const componentList = IOCContainer.listClass("COMPONENT");
+        const componentList = container.listClass("COMPONENT");
 
         let pluginsConf = app.config(undefined, "plugin");
         if (Helper.isEmpty(pluginsConf)) {

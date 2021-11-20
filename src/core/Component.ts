@@ -65,21 +65,10 @@ export interface IController {
     app: Koatty;
     ctx: KoattyContext;
 
-    // __before: () => Promise<any>;
-    // __after: () => Promise<any>;
-    readonly body: (data: any, contentType?: string, encoding?: string) => Promise<any>;
-    readonly deny: (code?: number) => void;
-    readonly expires: (timeout: number) => void;
+    __befor?: () => Promise<any>;
+    __after?: () => Promise<any>;
     readonly fail: (msg?: Error | string | ApiInput, data?: any, ret?: number) => Promise<ApiOutput>;
-    readonly header: (name: string, value?: any) => any;
-    readonly json: (data: any) => Promise<any>;
-    readonly isGet: () => boolean;
-    readonly isMethod: (method: string) => boolean;
-    readonly isPost: () => boolean;
     readonly ok: (msg?: string | ApiInput, data?: any, ret?: number) => Promise<ApiOutput>;
-    readonly param: (name?: string) => any;
-    readonly redirect: (urls: string, alt?: string) => void;
-    readonly type: (contentType?: string, encoding?: string | boolean) => string;
 }
 
 /**

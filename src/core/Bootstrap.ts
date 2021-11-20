@@ -51,9 +51,9 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
 
         Logger.Custom('think', '', 'ComponentScan ...');
         // component metadata
-        const componentMetas = Loader.GetComponentMetas(target, app.appPath);
+        const componentMetas = Loader.GetComponentMetas(target, app.appPath, IOCContainer);
         // configuration metadata
-        const configurationMetas = Loader.GetConfigurationMetas(target);
+        const configurationMetas = Loader.GetConfigurationMetas(target, IOCContainer);
         // load all bean
         const exSet = new Set();
         Loader.LoadDirectory(componentMetas, '', (fileName: string, target: any, xpath: string) => {
@@ -78,7 +78,7 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
         Loader.SetLogger(app);
 
         // Load App ready hooks
-        Loader.LoadAppReadyHooks(target, app);
+        Loader.LoadAppReadyHooks(target, app, IOCContainer);
 
         // New router
         const KoattyRouter = newRouter(app);
