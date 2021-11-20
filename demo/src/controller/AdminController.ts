@@ -4,12 +4,12 @@
  * @ license: Apache License 2.0
  * @ version: 2020-05-11 12:06:16
  */
-import { Controller, BaseController, Autowired, Logger, Helper, RequestBody } from "../../../src/index";
+import { Controller, BaseController, Autowired, Logger, Helper, RequestBody, HttpController } from "../../../src/index";
 import { App } from '../App';
 import { CommonService } from '../service/CommonService';
 
 @Controller()
-export class AdminController extends BaseController {
+export class AdminController extends HttpController {
     app: App;
     // Mo: { rel: false; sortby: any; field: any[]; ispage: boolean; pagesize: number; page: number; };
     // Map: any; //保存查询条件
