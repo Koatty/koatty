@@ -37,7 +37,7 @@ export class BaseService implements IService {
      */
     protected init(...arg: any[]): void {
         // todo
-        Logger.Debug(arg)
+        // Logger.Debug(arg)
     }
 
 }

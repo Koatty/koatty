@@ -176,35 +176,6 @@ export class HttpController extends BaseController {
     }
 
     /**
-     * Format api interface data format
-     *
-     * @private
-     * @param {Error | string | ApiInput} msg   待处理的接口数据信息｜接口msg
-     * @param {*} data    待返回的数据
-     * @param {number} defaultCode   默认错误码
-     * @returns {ApiOutput}   格式化之后的接口数据
-     * @memberof HttpController
-     */
-    protected formatApiData(msg: any, data: any, defaultCode: number): ApiOutput {
-        let obj: ApiOutput = {
-            code: defaultCode,
-            message: '',
-            data: null,
-        };
-        if (Helper.isError(msg)) {
-            const { code, message } = <any>msg;
-            obj.code = code || defaultCode;
-            obj.message = message;
-        } else if (Helper.isObject(msg)) {
-            obj = { ...obj, ...msg };
-        } else {
-            obj.message = msg;
-            obj.data = data;
-        }
-        return obj;
-    }
-
-    /**
      * Response to normalize json format content for success
      *
      * @param {(string | ApiInput)} msg   待处理的message消息
