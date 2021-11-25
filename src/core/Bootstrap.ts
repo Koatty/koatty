@@ -114,9 +114,6 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
         // Start server
         app.listen(newServe(app));
 
-        console.log(Logger.Debug("dont print"));
-
-
         // binding event "appStop"
         BindProcessEvent(app, 'appStop');
     } catch (err) {
