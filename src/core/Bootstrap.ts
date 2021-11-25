@@ -48,12 +48,13 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
         Loader.initialize(app);
         // Set IOC.app
         IOCContainer.setApp(app);
+        Helper.define(app, "container", IOCContainer);
 
         Logger.Custom('think', '', 'ComponentScan ...');
         // component metadata
-        const componentMetas = Loader.GetComponentMetas(target, app.appPath, IOCContainer);
+        const componentMetas = Loader.GetComponentMetas(app, target);
         // configuration metadata
-        const configurationMetas = Loader.GetConfigurationMetas(target, IOCContainer);
+        const configurationMetas = Loader.GetConfigurationMetas(app, target);
         // load all bean
         const exSet = new Set();
         Loader.LoadDirectory(componentMetas, '', (fileName: string, target: any, xpath: string) => {
@@ -72,20 +73,20 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
 
         // Load Plugin
         Logger.Custom('think', '', 'Load Plugins ...');
-        await Loader.LoadPlugins(app, IOCContainer);
+        await Loader.LoadPlugins(app);
 
         // Set Logger
         Loader.SetLogger(app);
 
         // Load App ready hooks
-        Loader.LoadAppReadyHooks(target, app, IOCContainer);
+        Loader.LoadAppReadyHooks(app, target);
 
         // New router
         const KoattyRouter = newRouter(app);
 
         // Load Middleware
         Logger.Custom('think', '', 'Load Middlewares ...');
-        await Loader.LoadMiddlewares(app, IOCContainer);
+        await Loader.LoadMiddlewares(app);
 
         // Emit app ready event
         Logger.Custom('think', '', 'Emit App Ready ...');
@@ -93,13 +94,13 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
         await asyncEvent(app, 'appReady');
         // Load Components
         Logger.Custom('think', '', 'Load Components ...');
-        Loader.LoadComponents(app, IOCContainer);
+        Loader.LoadComponents(app);
         // Load Services
         Logger.Custom('think', '', 'Load Services ...');
-        Loader.LoadServices(app, IOCContainer);
+        Loader.LoadServices(app);
         // Load Controllers
         Logger.Custom('think', '', 'Load Controllers ...');
-        Loader.LoadControllers(app, IOCContainer);
+        Loader.LoadControllers(app);
         // Load Routers
         Logger.Custom('think', '', 'Load Routers ...');
         KoattyRouter.LoadRouter(app.getMetaData("_controllers"));
@@ -112,6 +113,9 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
         Logger.Custom('think', '', '====================================');
         // Start server
         app.listen(newServe(app));
+
+        console.log(Logger.Debug("dont print"));
+
 
         // binding event "appStop"
         BindProcessEvent(app, 'appStop');

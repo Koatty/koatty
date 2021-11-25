@@ -7,7 +7,7 @@
 import { Service, Helper, Exception, Value } from "../../../src/index";
 import { App } from '../App';
 import { CommonService, MoInterface } from './CommonService';
-import { TestDto } from '../model/TestDto';
+import { TestDto } from '../dto/TestDto';
 
 @Service()
 export class TestService extends CommonService {

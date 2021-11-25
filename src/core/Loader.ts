@@ -7,13 +7,13 @@
 import * as globby from "globby";
 import * as path from "path";
 import { Koatty } from 'koatty_core';
-import { Logger } from "../util/Logger";
+import { Logger, SetLogger } from "../util/Logger";
 import { prevent } from "koatty_exception";
 import { IMiddleware, IPlugin } from './Component';
 import { BaseService } from "../service/BaseService";
 import { AppReadyHookFunc } from "./Bootstrap";
 import { Helper, requireDefault } from "../util/Helper";
-import { Container, IOCContainer, TAGGED_CLS } from "koatty_container";
+import { TAGGED_CLS } from "koatty_container";
 import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 import { BaseController } from "../controller/BaseController";
 
@@ -90,21 +90,23 @@ export class Loader {
         Helper.define(app, 'root_path', rootPath);
         Helper.define(app, 'app_path', appPath);
         Helper.define(app, 'think_path', thinkPath);
+
+        // set Logger
+        Helper.define(app, 'logger', Logger);
     }
 
     /**
      * Get component metadata
      *
      * @static
+     * @param {Koatty} app
      * @param {*} target
-     * @param {string} appPath
-     * @param {Container} container
      * @returns {*}  {any[]}
      * @memberof Loader
      */
-    public static GetComponentMetas(target: any, appPath: string, container: Container): any[] {
+    public static GetComponentMetas(app: Koatty, target: any): any[] {
         let componentMetas = [];
-        const componentMeta = container.getClassMetadata(TAGGED_CLS, COMPONENT_SCAN, target);
+        const componentMeta = app.container.getClassMetadata(TAGGED_CLS, COMPONENT_SCAN, target);
         if (componentMeta) {
             if (Helper.isArray(componentMeta)) {
                 componentMetas = componentMeta;
@@ -113,7 +115,7 @@ export class Loader {
             }
         }
         if (componentMetas.length < 1) {
-            componentMetas = [appPath];
+            componentMetas = [app.appPath];
         }
         return componentMetas;
     }
@@ -122,13 +124,13 @@ export class Loader {
      * Get configuration metadata
      *
      * @static
+     * @param {Koatty} app
      * @param {*} target
-     * @param {Container} container
      * @returns {*}  {any[]}
      * @memberof Loader
      */
-    public static GetConfigurationMetas(target: any, container: Container): any[] {
-        const confMeta = container.getClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, target);
+    public static GetConfigurationMetas(app: Koatty, target: any): any[] {
+        const confMeta = app.container.getClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, target);
         let configurationMetas = [];
         if (confMeta) {
             if (Helper.isArray(confMeta)) {
@@ -144,13 +146,12 @@ export class Loader {
      * Load app ready hook funcs
      *
      * @static
-     * @param {*} target
      * @param {Koatty} app
-     * @param {Container} container
+     * @param {*} target
      * @memberof Loader
      */
-    public static LoadAppReadyHooks(target: any, app: Koatty, container: Container) {
-        const funcs = container.getClassMetadata(TAGGED_CLS, APP_READY_HOOK, target);
+    public static LoadAppReadyHooks(app: Koatty, target: any) {
+        const funcs = app.container.getClassMetadata(TAGGED_CLS, APP_READY_HOOK, target);
         if (Helper.isArray(funcs)) {
             funcs.forEach((element: AppReadyHookFunc): any => {
                 app.once('appReady', () => element(app));
@@ -216,19 +217,13 @@ export class Loader {
         const configs = app.getMetaData("_configs") ?? {};
         //Logger
         if (configs.config) {
-            if (configs.config.logs_level) {
-                Logger.setLevel(configs.config.logs_level);
-            }
-            if (configs.config.logs_console) {
-                Logger.setLogConsole(configs.config.logs_console);
-            }
-            if (configs.config.logs_write) {
-                Logger.setLogFile(configs.config.logs_write);
-                Logger.setLogFilePath(configs.config.logs_path || app.rootPath + "/logs");
-            }
-            if (configs.config.logs_write_level) {
-                Logger.setLogFileLevel(configs.config.logs_write_level);
-            }
+            SetLogger({
+                logLevel: configs.config.logs_level,
+                logConsole: configs.config.logs_console,
+                logFile: configs.config.logs_write,
+                logFileLevel: configs.config.logs_write_level,
+                logFilePath: configs.config.logs_path || app.rootPath + "/logs"
+            });
         }
     }
 
@@ -237,11 +232,10 @@ export class Loader {
      * [async]
      * @static
      * @param {*} app
-     * @param {Container} container
      * @param {(string | string[])} [loadPath]
      * @memberof Loader
      */
-    public static async LoadMiddlewares(app: Koatty, container: Container, loadPath?: string | string[]) {
+    public static async LoadMiddlewares(app: Koatty, loadPath?: string | string[]) {
         let middlewareConf = app.config(undefined, "middleware");
         if (Helper.isEmpty(middlewareConf)) {
             middlewareConf = { config: {}, list: [] };
@@ -251,12 +245,12 @@ export class Loader {
         Loader.LoadDirectory(loadPath || "./middleware", app.thinkPath);
         //Mount application middleware
         // const middleware: any = {};
-        const appMiddleware = container.listClass("MIDDLEWARE") ?? [];
+        const appMiddleware = app.container.listClass("MIDDLEWARE") ?? [];
 
         appMiddleware.forEach((item: ComponentItem) => {
             item.id = (item.id ?? "").replace("MIDDLEWARE:", "");
             if (item.id && Helper.isClass(item.target)) {
-                container.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
+                app.container.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
                 // middleware[item.id] = item.target;
             }
         });
@@ -276,7 +270,7 @@ export class Loader {
         const appMList = [...new Set(defaultList)];
         //Automatically call middleware
         for (const key of appMList) {
-            const handle: IMiddleware = container.get(key, "MIDDLEWARE");
+            const handle: IMiddleware = app.container.get(key, "MIDDLEWARE");
             if (!handle) {
                 Logger.Error(`Middleware ${key} load error.`);
                 continue;
@@ -310,11 +304,10 @@ export class Loader {
      *
      * @static
      * @param {*} app
-     * @param {Container} container
      * @memberof Loader
      */
-    public static LoadControllers(app: Koatty, container: Container) {
-        const controllerList = container.listClass("CONTROLLER");
+    public static LoadControllers(app: Koatty) {
+        const controllerList = app.container.listClass("CONTROLLER");
 
         const controllers: any = {};
         controllerList.forEach((item: ComponentItem) => {
@@ -322,8 +315,8 @@ export class Loader {
             if (item.id && Helper.isClass(item.target)) {
                 Logger.Debug(`Load controller: ${item.id}`);
                 // registering to IOC
-                container.reg(item.id, item.target, { scope: "Prototype", type: "CONTROLLER", args: [] });
-                const ctl = container.getInsByClass(item.target);
+                app.container.reg(item.id, item.target, { scope: "Prototype", type: "CONTROLLER", args: [] });
+                const ctl = app.container.getInsByClass(item.target);
                 if (!(ctl instanceof BaseController)) {
                     throw new Error(`class ${item.id} does not inherit from BaseController`);
                 }
@@ -339,19 +332,18 @@ export class Loader {
      *
      * @static
      * @param {*} app
-     * @param {Container} container
      * @memberof Loader
      */
-    public static LoadServices(app: Koatty, container: Container) {
-        const serviceList = container.listClass("SERVICE");
+    public static LoadServices(app: Koatty) {
+        const serviceList = app.container.listClass("SERVICE");
 
         serviceList.forEach((item: ComponentItem) => {
             item.id = (item.id ?? "").replace("SERVICE:", "");
             if (item.id && Helper.isClass(item.target)) {
                 Logger.Debug(`Load service: ${item.id}`);
                 // registering to IOC
-                container.reg(item.id, item.target, { scope: "Singleton", type: "SERVICE", args: [] });
-                const ctl = container.getInsByClass(item.target);
+                app.container.reg(item.id, item.target, { scope: "Singleton", type: "SERVICE", args: [] });
+                const ctl = app.container.getInsByClass(item.target);
                 if (!(ctl instanceof BaseService)) {
                     throw new Error(`class ${item.id} does not inherit from BaseService`);
                 }
@@ -364,20 +356,19 @@ export class Loader {
      *
      * @static
      * @param {*} app
-     * @param {Container} container
      * @memberof Loader
      */
-    public static LoadComponents(app: Koatty, container: Container) {
-        const componentList = container.listClass("COMPONENT");
+    public static LoadComponents(app: Koatty) {
+        const componentList = app.container.listClass("COMPONENT");
 
         componentList.forEach((item: ComponentItem) => {
             item.id = (item.id ?? "").replace("COMPONENT:", "");
             if (item.id && !(item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
                 Logger.Debug(`Load component: ${item.id}`);
                 // inject schedule
-                // injectSchedule(item.target, item.target.prototype, container);
+                // injectSchedule(item.target, item.target.prototype, app.container);
                 // registering to IOC
-                container.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
+                app.container.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
             }
         });
     }
@@ -387,11 +378,10 @@ export class Loader {
      *
      * @static
      * @param {*} app
-     * @param {Container} container
      * @memberof Loader
      */
-    public static async LoadPlugins(app: Koatty, container: Container) {
-        const componentList = container.listClass("COMPONENT");
+    public static async LoadPlugins(app: Koatty) {
+        const componentList = app.container.listClass("COMPONENT");
 
         let pluginsConf = app.config(undefined, "plugin");
         if (Helper.isEmpty(pluginsConf)) {
@@ -404,7 +394,7 @@ export class Loader {
             if (item.id && (item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
                 // Logger.Debug(`Load plugin: ${item.id}`);
                 // registering to IOC
-                container.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
+                app.container.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
                 pluginList.push(item.id);
             }
         });
@@ -414,7 +404,7 @@ export class Loader {
             Logger.Warn("Some plugins is loaded but not allowed to execute.");
         }
         for (const key of pluginConfList) {
-            const handle: IPlugin = container.get(key, "COMPONENT");
+            const handle: IPlugin = app.container.get(key, "COMPONENT");
             if (!Helper.isFunction(handle.run)) {
                 Logger.Error(`plugin ${key} must be implements method 'run'.`);
                 continue;
