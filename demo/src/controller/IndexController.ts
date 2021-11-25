@@ -9,7 +9,7 @@ import { Validated, Valid } from "koatty_validation";
 import { App } from '../App';
 import { AdminController } from "./AdminController";
 import { TestService } from "../service/TestService";
-import { TestDto } from '../model/TestDto';
+import { TestDto } from '../dto/TestDto';
 import { TestModel } from '../model/TestModel';
 import { TestAspect } from '../aspect/TestAspect';
 import { Test2Aspect } from "../aspect/Test2Aspect";
@@ -62,7 +62,7 @@ export class IndexController extends AdminController {
     async path(@Get("test") test = '666', @PathVariable("name") name: string) {
         const info = await this.testService.test1(name);
         // throw Error("default");
-        return this.body(info);
+        // return this.body(info);
         // this.type("text/plain");
         // this.type("text/html");
         console.log('PathVariable', name);

@@ -8,6 +8,11 @@ import { Component } from '../../../src';
  */
 @Component()
 export class TestDto {
+    // @Min(0, { message: "大于等于0" })
+    // @Max(10, { message: "小于等于10" })
+    @IsDefined()
+    age: number;
+
     // @Length(10, 20, {
     //     message: "name必填或格式不正确"
     // })
@@ -16,10 +21,8 @@ export class TestDto {
     name: string;
 
     // @Contains("hello")
-    @IsDefined()
-    text: string;
+    // @IsDefined()
+    // text: string;
 
-    // @Min(0, { message: "大于等于0" })
-    // @Max(10, { message: "小于等于10" })
-    rating: number;
+
 }
