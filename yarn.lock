@@ -4272,10 +4272,10 @@
   dependencies:
     "koatty_lib" "^1.x.x"
 
-"koatty_payload@^1.3.8":
-  "integrity" "sha512-iOZ51KC5ULhqNhBsq3Kg4FiDYKkmsBSZVG2sHl/KPjNIWZFVhlOS5SwsCFPf9ExdkoVlMElgIY1rpA8t+NSv8Q=="
-  "resolved" "https://registry.npmjs.org/koatty_payload/-/koatty_payload-1.3.8.tgz"
-  "version" "1.3.8"
+"koatty_payload@^1.3.10":
+  "integrity" "sha512-GFyIA4xHVXBVa2jDYAdqY3h14xBhZBp/LN4KnXGA0o3M4CF4q1sapKUXVCoO79BU40yYC0aN7Jlorzj1p03gqg=="
+  "resolved" "https://registry.npmjs.org/koatty_payload/-/koatty_payload-1.3.10.tgz"
+  "version" "1.3.10"
   dependencies:
     "formidable" "^2.0.1"
     "inflation" "^2.0.0"
@@ -4315,10 +4315,10 @@
     "tslib" "^2.3.1"
     "ws" "^8.2.3"
 
-"koatty_trace@^1.4.22":
-  "integrity" "sha512-RMxexngmsYUq5MkcQEBApkPKPd0ouiWhEQlVhNgrkvQedoFRBkfVIFxGRbnFgagfY3DcVoSnh/ToI1/QQBHtJg=="
-  "resolved" "https://registry.npmjs.org/koatty_trace/-/koatty_trace-1.4.22.tgz"
-  "version" "1.4.22"
+"koatty_trace@^1.4.24":
+  "integrity" "sha512-zU7QyEWkbBaaB+W1bZJUu7hgWrxyk4QufC8aKzZHnmhgxh0vv+o+UEt4xsnQAYb294Mhq0bS3cAiZ6t/BIcDQA=="
+  "resolved" "https://registry.npmjs.org/koatty_trace/-/koatty_trace-1.4.24.tgz"
+  "version" "1.4.24"
   dependencies:
     "koatty_container" "^1.x.x"
     "koatty_core" "^1.x.x"
