@@ -4315,10 +4315,10 @@
     "tslib" "^2.3.1"
     "ws" "^8.2.3"
 
-"koatty_trace@^1.4.24":
-  "integrity" "sha512-zU7QyEWkbBaaB+W1bZJUu7hgWrxyk4QufC8aKzZHnmhgxh0vv+o+UEt4xsnQAYb294Mhq0bS3cAiZ6t/BIcDQA=="
-  "resolved" "https://registry.npmjs.org/koatty_trace/-/koatty_trace-1.4.24.tgz"
-  "version" "1.4.24"
+"koatty_trace@^1.4.26":
+  "integrity" "sha512-YudOHB3e2s6/sFH4YT+mX8+/aPDv75N12TdonmaGsb5HmV6JB6WzIrrj/bntyepSSMtV6EDt8+/lCpiEqtz81w=="
+  "resolved" "https://registry.npmjs.org/koatty_trace/-/koatty_trace-1.4.26.tgz"
+  "version" "1.4.26"
   dependencies:
     "koatty_container" "^1.x.x"
     "koatty_core" "^1.x.x"
