@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [3.4.10](https://github.com/thinkkoa/koatty/compare/v3.4.8...v3.4.10) (2021-11-26)
+### [3.4.12](https://github.com/thinkkoa/koatty/compare/v3.4.8...v3.4.12) (2021-11-26)
 
 ### [3.4.8](https://github.com/thinkkoa/koatty/compare/v3.4.4...v3.4.8) (2021-11-25)
 
