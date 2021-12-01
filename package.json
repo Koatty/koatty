@@ -29,7 +29,7 @@
         "thinkkoa"
     ],
     "engines": {
-        "node": ">10.0.0"
+        "node": ">12.0.0"
     },
     "author": {
         "name": "richenlin",
@@ -76,10 +76,12 @@
     "dependencies": {
         "globby": "^11.0.4",
         "koa": "^2.13.4",
+        "koatty_config": "^1.0.4",
         "koatty_container": "^1.6.8",
         "koatty_core": "^1.3.38",
         "koatty_exception": "^1.0.6",
         "koatty_lib": "^1.2.6",
+        "koatty_loader": "^1.0.2",
         "koatty_logger": "^1.2.6",
         "koatty_payload": "^1.3.10",
         "koatty_router": "^1.5.12",

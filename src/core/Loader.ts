@@ -4,15 +4,16 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-07-06 11:18:01
  */
-import * as globby from "globby";
 import * as path from "path";
+import { Load } from "koatty_loader";
 import { Koatty } from 'koatty_core';
+import { LoadConfigs as loadConf } from "koatty_config";
 import { Logger, SetLogger } from "../util/Logger";
 import { prevent } from "koatty_exception";
 import { IMiddleware, IPlugin } from './Component';
 import { BaseService } from "../service/BaseService";
 import { AppReadyHookFunc } from "./Bootstrap";
-import { Helper, requireDefault } from "../util/Helper";
+import { checkClass, Helper, requireDefault } from "../util/Helper";
 import { TAGGED_CLS } from "koatty_container";
 import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 import { BaseController } from "../controller/BaseController";
@@ -121,6 +122,26 @@ export class Loader {
     }
 
     /**
+     * Load all bean, excepted config/*、App.ts
+     *
+     * @static
+     * @param {Koatty} app
+     * @param {*} target
+     * @memberof Loader
+     */
+    public static CheckAllComponents(app: Koatty, target: any) {
+        // component metadata
+        const componentMetas = Loader.GetComponentMetas(app, target);
+        // configuration metadata
+        const configurationMetas = Loader.GetConfigurationMetas(app, target);
+        const exSet = new Set();
+        Load(componentMetas, '', (fileName: string, xpath: string, xTarget: any) => {
+            checkClass(fileName, xpath, xTarget, exSet);
+        }, ['**/**.js', '**/**.ts', '!**/**.d.ts'], [...configurationMetas, `${target.name || '.no'}.ts`]);
+        exSet.clear();
+    }
+
+    /**
      * Get configuration metadata
      *
      * @static
@@ -140,70 +161,6 @@ export class Loader {
             }
         }
         return configurationMetas;
-    }
-
-    /**
-     * Load app ready hook funcs
-     *
-     * @static
-     * @param {Koatty} app
-     * @param {*} target
-     * @memberof Loader
-     */
-    public static LoadAppReadyHooks(app: Koatty, target: any) {
-        const funcs = app.container.getClassMetadata(TAGGED_CLS, APP_READY_HOOK, target);
-        if (Helper.isArray(funcs)) {
-            funcs.forEach((element: AppReadyHookFunc): any => {
-                app.once('appReady', () => element(app));
-                return null;
-            });
-        }
-    }
-
-    /**
-     * Load configuration
-     *
-     * @static
-     * @param {*} app
-     * @memberof Loader
-     */
-    public static LoadConfigs(app: Koatty, loadPath?: string | string[]) {
-        const config: any = {};
-        // Logger.Debug(`Load configuration path: ${app.thinkPath}/config`);
-        Loader.LoadDirectory("./config", app.thinkPath, function (name: string, exp: any) {
-            config[name] = exp;
-        });
-        const appConfig: any = {};
-        if (Helper.isArray(loadPath)) {
-            loadPath = loadPath.length > 0 ? loadPath : "";
-        }
-        const tempConfig: any = {};
-        // Logger.Debug(`Load configuration path: ${app.appPath}${loadPath || "/config"}`);
-        Loader.LoadDirectory(loadPath || "./config", app.appPath, function (name: string, exp: any) {
-            // tslint:disable-next-line: one-variable-per-declaration
-            let type = "", t = "";
-            if (name.indexOf("_") > -1) {
-                t = name.slice(name.lastIndexOf("_") + 1);
-                if (t && (app.env ?? "").indexOf(t) === 0) {
-                    type = t;
-                }
-            }
-            if (type) {
-                tempConfig[`${name.replace(`_${t}`, "")}^${type}`] = exp;
-            } else {
-                appConfig[name] = exp;
-            }
-        });
-        // load env configuration
-        // tslint:disable-next-line: forin
-        for (const n in tempConfig) {
-            const na = n.split("^")[0];
-            if (appConfig[na]) {
-                appConfig[na] = Helper.extend(appConfig[na], tempConfig[n], true);
-            }
-        }
-
-        app.setMetaData("_configs", Helper.extend(config, appConfig, true));
     }
 
     /**
@@ -227,6 +184,49 @@ export class Loader {
         }
     }
 
+
+    /**
+     * Load app ready hook funcs
+     *
+     * @static
+     * @param {Koatty} app
+     * @param {*} target
+     * @memberof Loader
+     */
+    public static LoadAppReadyHooks(app: Koatty, target: any) {
+        const funcs = app.container.getClassMetadata(TAGGED_CLS, APP_READY_HOOK, target);
+        if (Helper.isArray(funcs)) {
+            funcs.forEach((element: AppReadyHookFunc): any => {
+                app.once('appReady', () => element(app));
+                return null;
+            });
+        }
+    }
+
+    /**
+     * Load configuration
+     *
+     * @static
+     * @param {Koatty} app
+     * @param {string[]} [loadPath]
+     * @memberof Loader
+     */
+    public static LoadConfigs(app: Koatty, loadPath?: string[]) {
+        const frameConfig: any = {};
+        // Logger.Debug(`Load configuration path: ${app.thinkPath}/config`);
+        Load(["./config"], app.thinkPath, function (name: string, path: string, exp: any) {
+            frameConfig[name] = exp;
+        });
+
+        if (Helper.isArray(loadPath)) {
+            loadPath = loadPath.length > 0 ? loadPath : ["./config"];
+        }
+        let appConfig = loadConf(loadPath, app.appPath, ["*.ts", "*.js"]);
+        appConfig = Helper.extend(frameConfig, appConfig, true);
+
+        app.setMetaData("_configs", appConfig);
+    }
+
     /**
      * Load middlewares
      * [async]
@@ -235,14 +235,14 @@ export class Loader {
      * @param {(string | string[])} [loadPath]
      * @memberof Loader
      */
-    public static async LoadMiddlewares(app: Koatty, loadPath?: string | string[]) {
+    public static async LoadMiddlewares(app: Koatty, loadPath?: string[]) {
         let middlewareConf = app.config(undefined, "middleware");
         if (Helper.isEmpty(middlewareConf)) {
             middlewareConf = { config: {}, list: [] };
         }
 
         //Mount default middleware
-        Loader.LoadDirectory(loadPath || "./middleware", app.thinkPath);
+        Load(loadPath || ["./middleware"], app.thinkPath);
         //Mount application middleware
         // const middleware: any = {};
         const appMiddleware = app.container.listClass("MIDDLEWARE") ?? [];
@@ -430,54 +430,54 @@ export class Loader {
      * @param {(string | string[])} [ignore]
      * @memberof Loader
      */
-    public static LoadDirectory(loadDir: string | string[],
-        baseDir?: string,
-        fn?: Function,
-        pattern?: string | string[],
-        ignore?: string | string[]) {
+    // public static LoadDirectory(loadDir: string | string[],
+    //     baseDir?: string,
+    //     fn?: Function,
+    //     pattern?: string | string[],
+    //     ignore?: string | string[]) {
 
-        baseDir = baseDir || process.cwd();
-        const loadDirs = [].concat(loadDir ?? []);
+    //     baseDir = baseDir || process.cwd();
+    //     const loadDirs = [].concat(loadDir ?? []);
 
-        for (let dir of loadDirs) {
-            dir = buildLoadDir(baseDir, dir);
-            const fileResults = globby.sync(['**/**.js', '**/**.ts', '!**/**.d.ts'].concat(pattern ?? []), {
-                cwd: dir,
-                ignore: [
-                    '**/node_modules/**',
-                    '**/logs/**',
-                    '**/static/**'
-                ].concat(ignore ?? [])
-            });
-            for (let name of fileResults) {
-                const file = path.join(dir, name);
+    //     for (let dir of loadDirs) {
+    //         dir = buildLoadDir(baseDir, dir);
+    //         const fileResults = globby.sync(['**/**.js', '**/**.ts', '!**/**.d.ts'].concat(pattern ?? []), {
+    //             cwd: dir,
+    //             ignore: [
+    //                 '**/node_modules/**',
+    //                 '**/logs/**',
+    //                 '**/static/**'
+    //             ].concat(ignore ?? [])
+    //         });
+    //         for (let name of fileResults) {
+    //             const file = path.join(dir, name);
 
-                if (name.indexOf('/') > -1) {
-                    name = name.slice(name.lastIndexOf('/') + 1);
-                }
-                // let namePattern = '.ts';
-                // if (name.slice(-3) === '.js') {
-                //     namePattern = '.js';
-                // }
-                // const fileName = name.slice(0, name.lastIndexOf(namePattern));
-                const fileName = name.slice(0, -3);
-                //
-                const exports = requireDefault(file);
+    //             if (name.indexOf('/') > -1) {
+    //                 name = name.slice(name.lastIndexOf('/') + 1);
+    //             }
+    //             // let namePattern = '.ts';
+    //             // if (name.slice(-3) === '.js') {
+    //             //     namePattern = '.js';
+    //             // }
+    //             // const fileName = name.slice(0, name.lastIndexOf(namePattern));
+    //             const fileName = name.slice(0, -3);
+    //             //
+    //             const exports = requireDefault(file);
 
-                const tkeys = Object.keys(exports);
-                if (!exports[fileName] && (tkeys[0] && Helper.isClass(exports[tkeys[0]]) && tkeys[0] !== fileName)) {
-                    throw new Error(`The class name is not consistent with the file('${file}') name. Or you used 'export default'?`);
-                    // continue;
-                }
-                // callback
-                if (fn) {
-                    // console.log(fileName);
-                    // console.log(exports); 
-                    fn(fileName, exports, file);
-                }
-            }
-        }
-    }
+    //             const tkeys = Object.keys(exports);
+    //             if (!exports[fileName] && (tkeys[0] && Helper.isClass(exports[tkeys[0]]) && tkeys[0] !== fileName)) {
+    //                 throw new Error(`The class name is not consistent with the file('${file}') name. Or you used 'export default'?`);
+    //                 // continue;
+    //             }
+    //             // callback
+    //             if (fn) {
+    //                 // console.log(fileName);
+    //                 // console.log(exports); 
+    //                 fn(fileName, exports, file);
+    //             }
+    //         }
+    //     }
+    // }
 }
 
 
