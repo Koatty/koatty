@@ -30,9 +30,6 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
     const app = Reflect.construct(target, []);
     try {
         console.log(LOGO);
-        Logger.Custom('think', '', '====================================');
-        Logger.Custom('think', '', 'Bootstrap');
-
         if (!(app instanceof Koatty)) {
             throw new Error(`class ${target.name} does not inherit from Koatty`);
         }

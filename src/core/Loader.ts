@@ -174,13 +174,34 @@ export class Loader {
         const configs = app.getMetaData("_configs") ?? {};
         //Logger
         if (configs.config) {
-            SetLogger({
-                logLevel: configs.config.logs_level,
-                logConsole: configs.config.logs_console,
-                logFile: configs.config.logs_write,
-                logFileLevel: configs.config.logs_write_level,
-                logFilePath: configs.config.logs_path || app.rootPath + "/logs"
-            });
+            const opt = configs.config;
+            let logLevel: any = "DEBUG",
+                logFileLevel: any = "INFO",
+                logConsole = true,
+                logFile = false,
+                logFilePath = app.rootPath + "/logs";
+            if (app.env === "production") {
+                logLevel = "INFO";
+                logFileLevel = "WARN";
+                logConsole = false;
+                logFile = true;
+            }
+            if (opt.logs_level) {
+                logLevel = opt.logs_level;
+            }
+            if (opt.logs_write_level) {
+                logFileLevel = opt.logs_write_level;
+            }
+            if (opt.logFile !== undefined) {
+                logFile = !!opt.logs_write;
+            }
+            if (opt.logs_console !== undefined) {
+                logConsole = !!opt.logs_console;
+            }
+            if (opt.logs_path) {
+                logFilePath = opt.logs_path;
+            }
+            SetLogger({ logLevel, logConsole, logFile, logFileLevel, logFilePath });
         }
     }
 
