@@ -13,6 +13,9 @@
                 "-r",
                 "ts-node/register"
             ],
+            "env": {
+                "NODE_ENV": "development",
+            },
             "sourceMaps": true,
             "cwd": "${workspaceRoot}",
             "protocol": "inspector",

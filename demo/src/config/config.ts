@@ -14,7 +14,7 @@ export default {
     key_file: process.env.APP_PATH + "/config/ssl.key", // HTTPS certificate key
     crt_file: process.env.APP_PATH + "/config/ssl.crt", // HTTPS certificate crt
 
-    logs_level: "DEBUG", // Level log is printed to the console, "DEBUG" | "INFO" | "WARN" | "ERROR"
+    logs_level: "INFO", // Level log is printed to the console, "DEBUG" | "INFO" | "WARN" | "ERROR"
     logs_console: true, // Whether to console logs
     logs_write: false, // Whether to store logs
     logs_write_level: "INFO", // Level log is printed to the file, "DEBUG" | "INFO" | "WARN" | "ERROR"
