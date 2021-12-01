@@ -3,7 +3,7 @@
 node_modules
 coverage
 dist
-demo/logs
+logs
 npm-debug.log
 yarn-error.log
 jest_html_reporters.html
