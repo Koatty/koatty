@@ -13,7 +13,7 @@ import { TestBootstrap } from './TestBootstrap';
     // process.env.UV_THREADPOOL_SIZE = "128";
     //忽略https自签名验证
     // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-    process.env.NODE_ENV = 'production';
+    // process.env.NODE_ENV = 'production';
     console.log("bootFunc");
 })
 // @ComponentScan('./test')
