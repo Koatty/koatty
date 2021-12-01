@@ -78,7 +78,7 @@ export function checkRuntime() {
 
 /**
  * Check class file 
- * name should be always the same as a public class name
+ * name should be always the same as class name
  * class must be unique
  *
  * @export
@@ -91,23 +91,23 @@ export function checkRuntime() {
 const exSet = new Set();
 export function checkClass(fileName: string, xpath: string, target: any, exSet?: Set<unknown>) {
     if (Helper.isClass(target) && target.name != fileName) { // export default class name{}
-        throw Error(`The file(${xpath}) name should be always the same as a public class name.`);
+        throw Error(`The file(${xpath}) name should be always the same as class name.`);
     }
     if (target["__esModule"]) {
         if (target.name === undefined) { // export class name{}
             const keys = Object.keys(target);
             if (keys[0] != fileName && Helper.isClass(target[keys[0]])) {
-                throw Error(`The file(${xpath}) name should be always the same as a public class name.`);
+                throw Error(`The file(${xpath}) name should be always the same as class name.`);
             }
         } else if (target.name != fileName) { // export default class {}
-            throw Error(`The file(${xpath}) name should be always the same as a public class name.`);
+            throw Error(`The file(${xpath}) name should be always the same as class name.`);
         }
     }
     if (!exSet) {
         return;
     }
     if (exSet.has(fileName)) {
-        throw new Error(`A same name class already exists. Please modify the \`${xpath}\`'s class name and file name.`);
+        throw new Error(`A same class already exists. at \`${xpath}\`.`);
     }
     exSet.add(fileName);
 
