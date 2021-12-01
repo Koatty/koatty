@@ -62,7 +62,7 @@ export function getParamNames(func: { toString: () => { replace: (arg0: RegExp, 
  * @return {void} []
  */
 export function checkRuntime() {
-    let nodeEngines = pkg.engines.node.slice(1) || '10.0.0';
+    let nodeEngines = pkg.engines.node.slice(1) || '12.0.0';
     nodeEngines = nodeEngines.slice(0, nodeEngines.lastIndexOf('.'));
     let nodeVersion = process.version;
     if (nodeVersion[0] === 'v') {
