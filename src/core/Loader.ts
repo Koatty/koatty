@@ -221,7 +221,7 @@ export class Loader {
         if (Helper.isArray(loadPath)) {
             loadPath = loadPath.length > 0 ? loadPath : ["./config"];
         }
-        let appConfig = loadConf(loadPath, app.appPath, ["*.ts", "*.js"]);
+        let appConfig = loadConf(loadPath, app.appPath);
         appConfig = Helper.extend(frameConfig, appConfig, true);
 
         app.setMetaData("_configs", appConfig);

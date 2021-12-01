@@ -1,13 +1,13 @@
 {
     "name": "koatty",
-    "version": "3.5.2",
+    "version": "3.5.3",
     "description": "Koa2 + Typescript = koatty. Use Typescript's decorator implement auto injection.",
     "scripts": {
         "build": "del-cli --force dist && tsc",
         "eslint": "eslint --ext .ts,.js ./",
         "prepublishOnly": "npm test && npm run build",
         "release": "npm run prepublishOnly && standard-version",
-        "pub": "git push --follow-tags origin  && npm publish",
+        "pub": "git push --follow-tags origin && npm publish",
         "test": "npm run eslint && jest --passWithNoTests",
         "test:cov": "jest --collectCoverage --detectOpenHandles",
         "version": "conventional-changelog -p angular -i CHANGELOG.md -s"
