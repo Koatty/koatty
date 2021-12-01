@@ -51,24 +51,14 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
         Helper.define(app, "container", IOCContainer);
 
         Logger.Custom('think', '', 'ComponentScan ...');
-        // component metadata
-        const componentMetas = Loader.GetComponentMetas(app, target);
-        // configuration metadata
-        const configurationMetas = Loader.GetConfigurationMetas(app, target);
-        // load all bean
-        const exSet = new Set();
-        Loader.LoadDirectory(componentMetas, '', (fileName: string, target: any, xpath: string) => {
-            if (target[fileName] && Helper.isClass(target[fileName])) {
-                if (exSet.has(fileName)) {
-                    throw new Error(`A same name class already exists. Please modify the \`${xpath}\`'s class name and file name.`);
-                }
-                exSet.add(fileName);
-            }
-        }, [...configurationMetas, `!${target.name || '.no'}.ts`]);
-        exSet.clear();
+
+        // Check all bean
+        Loader.CheckAllComponents(app, target);
 
         // Load configuration
         Logger.Custom('think', '', 'Load Configurations ...');
+        // configuration metadata
+        const configurationMetas = Loader.GetConfigurationMetas(app, target);
         Loader.LoadConfigs(app, configurationMetas);
 
         // Load Plugin
