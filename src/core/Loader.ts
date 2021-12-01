@@ -60,7 +60,7 @@ export class Loader {
         // app.env
         app.env = process.env.KOATTY_ENV || process.env.NODE_ENV;
         if ((env.indexOf('--production') > -1) || ((app.env ?? '').indexOf('pro') > -1)) {
-            app.appDebug = true;
+            app.appDebug = false;
         }
 
         if (app.appDebug) {
