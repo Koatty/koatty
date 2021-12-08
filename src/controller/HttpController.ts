@@ -160,7 +160,6 @@ export class HttpController extends BaseController {
         encoding = encoding || this.app.config("encoding") || "utf-8";
         this.type(contentType, encoding);
         this.ctx.body = data;
-        // return this.app.prevent();
         return null;
     }
 

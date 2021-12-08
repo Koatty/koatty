@@ -36,13 +36,15 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
         // version
         Helper.define(app, "version", pkg.version);
 
+        // Initialize env
+        Loader.initialize(app);
+
         // exec bootFunc
         if (Helper.isFunction(bootFunc)) {
             Logger.Custom('think', '', 'Execute bootFunc ...');
             await bootFunc(app);
         }
-        // Initialize env
-        Loader.initialize(app);
+
         // Set IOC.app
         IOCContainer.setApp(app);
         Helper.define(app, "container", IOCContainer);
@@ -65,6 +67,9 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
         // Set Logger
         Loader.SetLogger(app);
 
+        // app.emit("appBoot");
+        await asyncEvent(app, 'appBoot');
+
         // Load App ready hooks
         Loader.LoadAppReadyHooks(app, target);
 
@@ -75,10 +80,6 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
         Logger.Custom('think', '', 'Load Middlewares ...');
         await Loader.LoadMiddlewares(app);
 
-        // Emit app ready event
-        Logger.Custom('think', '', 'Emit App Ready ...');
-        // app.emit("appReady");
-        await asyncEvent(app, 'appReady');
         // Load Components
         Logger.Custom('think', '', 'Load Components ...');
         Loader.LoadComponents(app);
@@ -88,6 +89,12 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
         // Load Controllers
         Logger.Custom('think', '', 'Load Controllers ...');
         Loader.LoadControllers(app);
+
+        // Emit app ready event
+        Logger.Custom('think', '', 'Emit App Ready ...');
+        // app.emit("appReady");
+        await asyncEvent(app, 'appReady');
+
         // Load Routers
         Logger.Custom('think', '', 'Load Routers ...');
         KoattyRouter.LoadRouter(app.getMetaData("_controllers"));

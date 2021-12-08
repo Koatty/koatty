@@ -19,18 +19,6 @@ import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants'
 import { BaseController } from "../controller/BaseController";
 
 /**
- * 
- * @param baseDir 
- * @param dir 
- */
-function buildLoadDir(baseDir: string, dir: string) {
-    if (!path.isAbsolute(dir)) {
-        return path.join(baseDir, dir);
-    }
-    return dir;
-}
-
-/**
  *
  *
  * @interface ComponentItem
@@ -92,8 +80,6 @@ export class Loader {
         Helper.define(app, 'app_path', appPath);
         Helper.define(app, 'think_path', thinkPath);
 
-        // set Logger
-        Helper.define(app, 'logger', Logger);
     }
 
     /**
