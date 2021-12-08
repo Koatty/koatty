@@ -1,6 +1,6 @@
 # koatty
 
-Koa2 + Typescript = koatty. 
+Koa2 + Typescript + IOC = koatty. 
 
 Use Typescript's decorator implement IOC and AOP.
 
@@ -145,7 +145,6 @@ Select `TS Program` to debug run. Try to call `http://localhost:3000/` .
 Check out the [quick start example][quick-example].
 
 [quick-example]: https://github.com/thinkkoa/koatty_demo/
-
 
 
 
