@@ -4,7 +4,6 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-04-30 14:52:34
  */
-import { v4 as uuidv4 } from "uuid";
 
 export default {
     // List of loaded middleware(except for the middleware loaded by default), 
@@ -13,7 +12,6 @@ export default {
     config: { // middleware configuration
         "TraceMiddleware": {
             HeaderName: 'X-Request-Id',
-            IdFactory: uuidv4,
         },
         "PayloadMiddleware": {
             "extTypes": {
