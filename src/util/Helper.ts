@@ -4,13 +4,13 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-05-10 11:49:15
  */
-import * as Helper from "koatty_lib";
+import { Helper } from "koatty_lib";
 import { Logger } from "./Logger";
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
 const pkg = require("../../package.json");
 // export Helper
-export * as Helper from "koatty_lib";
+export { Helper } from "koatty_lib";
 
 /**
  *
