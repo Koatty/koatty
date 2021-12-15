@@ -102,11 +102,12 @@ const ExecBootstrap = async function (target: any, bootFunc: Function): Promise<
         // Emit app started event
         Logger.Custom('think', '', 'Emit App Start ...');
         // app.emit("appStart");
+        const server = newServe(app)
         await asyncEvent(app, 'appStart');
 
         Logger.Custom('think', '', '====================================');
         // Start server
-        app.listen(newServe(app));
+        app.listen(server);
 
         // binding event "appStop"
         BindProcessEvent(app, 'appStop');
