@@ -178,7 +178,7 @@ export class Loader {
             if (opt.logs_write_level) {
                 logFileLevel = opt.logs_write_level;
             }
-            if (opt.logFile !== undefined) {
+            if (opt.logs_write !== undefined) {
                 logFile = !!opt.logs_write;
             }
             if (opt.logs_console !== undefined) {
