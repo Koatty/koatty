@@ -11,11 +11,12 @@ Use Typescript's decorator implement IOC and AOP.
 * HTTP、HTTPS、HTTP2 .
 * gRPC  server. 
 * WebSocket server. (unstable)
+* Support loading environment configuration, support parsing command line parameters (process. argv) and environment variables (process.env)
 
 
 ## Documentation
 
-[koatty_doc_CN](https://koatty.github.io/koatty_doc/) （In progress💪）
+[koatty_doc_CN](https://koatty.org/) （In progress💪）
 
 [koatty_doc_EN] come soon...
 
