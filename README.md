@@ -18,7 +18,6 @@ Use Typescript's decorator implement IOC and AOP.
 
 [koatty_doc_CN](https://koatty.org/) （In progress💪）
 
-[koatty_doc_EN] come soon...
 
 ## Installation
 
@@ -61,14 +60,11 @@ koatty middleware test
 ```
 ### 4.Create a Model（Optional）
 
-Supports [thinkorm](https://github.com/thinkkoa/thinkorm) and [typeorm](https://github.com/typeorm/typeorm). Please expand other ORM by yourself.
+Supports [typeorm](https://github.com/typeorm/typeorm). Please expand other ORM by yourself.
 
 ```shell
-//thinkorm
-koatty middleware test
-
 //typeorm
-koatty middleware -o typeorm test
+koatty middleware test
 
 ```
 
