@@ -6,6 +6,7 @@ coverage
 .travis.yml
 .coveralls.yml
 src
+temp
 test
 demo
 logs

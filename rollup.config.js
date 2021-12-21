@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2021-12-17 10:20:44
- * @LastEditTime: 2021-12-18 00:47:46
+ * @LastEditTime: 2021-12-18 11:58:46
  */
 import json from "@rollup/plugin-json";
 import typescript from 'rollup-plugin-typescript2';
@@ -29,7 +29,7 @@ export default [
                     compilerOptions: {
                         declaration: false,
                         declarationMap: false,
-                        module: "esnext"
+                        module: "ESNext"
                     }
                 }
             })
@@ -54,7 +54,7 @@ export default [
                     compilerOptions: {
                         declaration: false,
                         declarationMap: false,
-                        module: "esnext"
+                        module: "ESNext"
                     }
                 }
             })

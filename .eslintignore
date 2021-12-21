@@ -4,6 +4,8 @@ node_modules
 **/yarn.lock
 **/*.config.js
 dist
+temp
+scripts
 coverage
 test
 demo
