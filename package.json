@@ -25,7 +25,6 @@
         "require": "./index.js",
         "import": "./index.mjs"
     },
-    "typings": "index.d.ts",
     "directories": {
         "doc": "docs"
     },
