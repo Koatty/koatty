@@ -4,7 +4,7 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-05-20 15:45:24
  */
-import { Helper } from "../util/Helper";
+import { formatApiData, Helper } from "../util/Helper";
 import { Koatty, KoattyContext } from 'koatty_core';
 import { ObjectDefinitionOptions } from "koatty_container";
 import { ApiInput, ApiOutput, IController } from '../core/Component';
@@ -18,9 +18,9 @@ import { ApiInput, ApiOutput, IController } from '../core/Component';
  */
 export class BaseController implements IController {
     public app: Koatty;
-    public ctx: KoattyContext;
+    readonly ctx: KoattyContext;
 
-    protected _options: ObjectDefinitionOptions;
+    protected _options!: ObjectDefinitionOptions;
 
     /**
      * instance of BaseController.
@@ -65,45 +65,16 @@ export class BaseController implements IController {
     // }
 
     /**
-     * Format api interface data format
-     *
-     * @private
-     * @param {Error | string | ApiInput} msg   待处理的接口数据信息｜接口msg
-     * @param {*} data    待返回的数据
-     * @param {number} defaultCode   默认错误码
-     * @returns {ApiOutput}   格式化之后的接口数据
-     * @memberof BaseController
-     */
-    protected formatApiData(msg: any, data: any, defaultCode: number): ApiOutput {
-        let obj: ApiOutput = {
-            code: defaultCode,
-            message: '',
-            data: null,
-        };
-        if (Helper.isError(msg)) {
-            const { code, message } = <any>msg;
-            obj.code = code || defaultCode;
-            obj.message = message;
-        } else if (Helper.isObject(msg)) {
-            obj = { ...obj, ...msg };
-        } else {
-            obj.message = msg;
-            obj.data = data;
-        }
-        return obj;
-    }
-
-    /**
      * Response to normalize json format content for success
      *
      * @param {(string | ApiInput)} msg   待处理的message消息
      * @param {*} [data]    待处理的数据
      * @param {number} [code=200]    错误码，默认0
-     * @returns {Promise<ApiOutput>}
+     * @returns {*}
      * @memberof BaseController
      */
-    public ok(msg: string | ApiInput, data?: any, code = 0): Promise<ApiOutput> {
-        const obj: ApiOutput = this.formatApiData(msg, data, code);
+    public ok(msg: string | ApiInput, data?: any, code = 0) {
+        const obj: ApiOutput = formatApiData(msg, data, code);
         return Promise.resolve(obj);
     }
 
@@ -113,11 +84,11 @@ export class BaseController implements IController {
      * @param {(string | ApiInput)} msg   
      * @param {*} [data]    
      * @param {number} [code=1]    
-     * @returns {Promise<ApiOutput>}
+     * @returns {*}
      * @memberof BaseController
      */
-    public fail(msg: Error | string | ApiInput, data?: any, code = 1): Promise<ApiOutput> {
-        const obj: ApiOutput = this.formatApiData(msg, data, code);
+    public fail(msg: Error | string | ApiInput, data?: any, code = 1): any {
+        const obj: ApiOutput = formatApiData(msg, data, code);
         return Promise.resolve(obj);
     }
 

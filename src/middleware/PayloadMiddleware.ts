@@ -8,7 +8,6 @@ import { Middleware, IMiddleware } from "../core/Component";
 import { Koatty } from 'koatty_core';
 import { Payload } from "koatty_payload";
 
-@Middleware()
 export class PayloadMiddleware implements IMiddleware {
     run(options: any, app: Koatty) {
         return Payload(options, app);

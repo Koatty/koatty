@@ -30,6 +30,6 @@ export default {
      *  Other extended configuration
      */
     ext: {
-        protoFile: "/Users/richen/Workspace/nodejs/koatty/demo/src/proto/details.proto"
+        protoFile: "./demo/src/proto/details.proto"
     }
 };

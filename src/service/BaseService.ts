@@ -7,7 +7,6 @@
 import { Koatty } from 'koatty_core';
 import { ObjectDefinitionOptions } from "koatty_container";
 import { IService } from '../core/Component';
-import { Logger } from "../util/Logger";
 
 /**
  * Base class

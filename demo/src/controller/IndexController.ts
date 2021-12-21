@@ -32,7 +32,7 @@ export class IndexController extends AdminController {
 
     @GetMapping("/")
     @Before(Test2Aspect)
-    async default(@RequestBody() data: any) {
+    async default(@Get("id") data: any) {
         console.log(data.toString());
 
         // const info = await this.testService.test2().catch(() => null);
@@ -40,7 +40,6 @@ export class IndexController extends AdminController {
         // this.ctx.status = 403;
         // this.fail("sfsdfsdfdsf");
         // this.ctx.body = { "aa": "band!!!!!!" };
-        console.log(Logger.getLevel());
         Logger.Debug("do not logger when product env");
         // throw new Error("band");
         // throw new Exception("band", 1, 405);

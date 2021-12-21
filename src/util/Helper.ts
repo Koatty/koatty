@@ -5,10 +5,9 @@
  * @ version: 2020-05-10 11:49:15
  */
 import { Helper } from "koatty_lib";
-import { Logger } from "./Logger";
+import { ApiOutput } from "../core/Component";
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
-const pkg = require("../../package.json");
 // export Helper
 export { Helper } from "koatty_lib";
 
@@ -58,25 +57,6 @@ export function getParamNames(func: { toString: () => { replace: (arg0: RegExp, 
 }
 
 /**
- * check node version
- * @return {void} []
- */
-export function checkRuntime() {
-    let nodeEngines = pkg.engines.node.slice(1) || '12.0.0';
-    nodeEngines = nodeEngines.slice(0, nodeEngines.lastIndexOf('.'));
-    let nodeVersion = process.version;
-    if (nodeVersion[0] === 'v') {
-        nodeVersion = nodeVersion.slice(1);
-    }
-    nodeVersion = nodeVersion.slice(0, nodeVersion.lastIndexOf('.'));
-
-    if (Helper.toNumber(nodeEngines) > Helper.toNumber(nodeVersion)) {
-        Logger.Error(`Koatty need node version > ${nodeEngines}, current version is ${nodeVersion}, please upgrade it.`);
-        process.exit(-1);
-    }
-}
-
-/**
  * Check class file 
  * name should be always the same as class name
  * class must be unique
@@ -88,7 +68,6 @@ export function checkRuntime() {
  * @param {Set<unknown>} [exSet]
  * @returns {*}  
  */
-const exSet = new Set();
 export function checkClass(fileName: string, xpath: string, target: any, exSet?: Set<unknown>) {
     if (Helper.isClass(target) && target.name != fileName) { // export default class name{}
         throw Error(`The file(${xpath}) name should be always the same as class name.`);
@@ -112,4 +91,33 @@ export function checkClass(fileName: string, xpath: string, target: any, exSet?:
     exSet.add(fileName);
 
     return;
+}
+
+/**
+ * Format api interface data format
+ *
+ * @private
+ * @param {Error | string | ApiInput} msg   待处理的接口数据信息｜接口msg
+ * @param {*} data    待返回的数据
+ * @param {number} defaultCode   默认错误码
+ * @returns {ApiOutput}   格式化之后的接口数据
+ * @memberof BaseController
+ */
+export function formatApiData(msg: any, data: any, defaultCode: number): ApiOutput {
+    let obj: ApiOutput = {
+        code: defaultCode,
+        message: '',
+        data: null,
+    };
+    if (Helper.isError(msg)) {
+        const { code, message } = <any>msg;
+        obj.code = code || defaultCode;
+        obj.message = message;
+    } else if (Helper.isObject(msg)) {
+        obj = { ...obj, ...msg };
+    } else {
+        obj.message = msg;
+        obj.data = data;
+    }
+    return obj;
 }

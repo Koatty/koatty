@@ -14,9 +14,11 @@ import { IMiddleware, IPlugin } from './Component';
 import { BaseService } from "../service/BaseService";
 import { AppReadyHookFunc } from "./Bootstrap";
 import { checkClass, Helper, requireDefault } from "../util/Helper";
-import { TAGGED_CLS } from "koatty_container";
+import { IOCContainer, TAGGED_CLS } from "koatty_container";
 import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 import { BaseController } from "../controller/BaseController";
+import { TraceMiddleware } from "../middleware/TraceMiddleware";
+import { PayloadMiddleware } from "../middleware/PayloadMiddleware";
 
 /**
  *
@@ -93,7 +95,7 @@ export class Loader {
      */
     public static GetComponentMetas(app: Koatty, target: any): any[] {
         let componentMetas = [];
-        const componentMeta = app.container.getClassMetadata(TAGGED_CLS, COMPONENT_SCAN, target);
+        const componentMeta = IOCContainer.getClassMetadata(TAGGED_CLS, COMPONENT_SCAN, target);
         if (componentMeta) {
             if (Helper.isArray(componentMeta)) {
                 componentMetas = componentMeta;
@@ -137,7 +139,7 @@ export class Loader {
      * @memberof Loader
      */
     public static GetConfigurationMetas(app: Koatty, target: any): any[] {
-        const confMeta = app.container.getClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, target);
+        const confMeta = IOCContainer.getClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, target);
         let configurationMetas = [];
         if (confMeta) {
             if (Helper.isArray(confMeta)) {
@@ -201,7 +203,7 @@ export class Loader {
      * @memberof Loader
      */
     public static LoadAppReadyHooks(app: Koatty, target: any) {
-        const funcs = app.container.getClassMetadata(TAGGED_CLS, APP_READY_HOOK, target);
+        const funcs = IOCContainer.getClassMetadata(TAGGED_CLS, APP_READY_HOOK, target);
         if (Helper.isArray(funcs)) {
             funcs.forEach((element: AppReadyHookFunc): any => {
                 app.once('appReady', () => element(app));
@@ -252,18 +254,22 @@ export class Loader {
         Load(loadPath || ["./middleware"], app.thinkPath);
         //Mount application middleware
         // const middleware: any = {};
-        const appMiddleware = app.container.listClass("MIDDLEWARE") ?? [];
+        const appMiddleware = IOCContainer.listClass("MIDDLEWARE") ?? [];
+        appMiddleware.push({ id: "TraceMiddleware", target: TraceMiddleware });
+        appMiddleware.push({ id: "PayloadMiddleware", target: PayloadMiddleware });
 
         appMiddleware.forEach((item: ComponentItem) => {
             item.id = (item.id ?? "").replace("MIDDLEWARE:", "");
             if (item.id && Helper.isClass(item.target)) {
-                app.container.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
+                IOCContainer.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
                 // middleware[item.id] = item.target;
             }
         });
 
         const middlewareConfList = middlewareConf.list;
+
         const defaultList = ["TraceMiddleware", "PayloadMiddleware"];
+
         middlewareConfList.forEach((item: string) => {
             if (!defaultList.includes(item)) {
                 defaultList.push(item);
@@ -277,7 +283,7 @@ export class Loader {
         const appMList = [...new Set(defaultList)];
         //Automatically call middleware
         for (const key of appMList) {
-            const handle: IMiddleware = app.container.get(key, "MIDDLEWARE");
+            const handle: IMiddleware = IOCContainer.get(key, "MIDDLEWARE");
             if (!handle) {
                 Logger.Error(`Middleware ${key} load error.`);
                 continue;
@@ -314,7 +320,7 @@ export class Loader {
      * @memberof Loader
      */
     public static LoadControllers(app: Koatty) {
-        const controllerList = app.container.listClass("CONTROLLER");
+        const controllerList = IOCContainer.listClass("CONTROLLER");
 
         const controllers: any = {};
         controllerList.forEach((item: ComponentItem) => {
@@ -322,8 +328,8 @@ export class Loader {
             if (item.id && Helper.isClass(item.target)) {
                 Logger.Debug(`Load controller: ${item.id}`);
                 // registering to IOC
-                app.container.reg(item.id, item.target, { scope: "Prototype", type: "CONTROLLER", args: [] });
-                const ctl = app.container.getInsByClass(item.target);
+                IOCContainer.reg(item.id, item.target, { scope: "Prototype", type: "CONTROLLER", args: [] });
+                const ctl = IOCContainer.getInsByClass(item.target);
                 if (!(ctl instanceof BaseController)) {
                     throw new Error(`class ${item.id} does not inherit from BaseController`);
                 }
@@ -342,15 +348,15 @@ export class Loader {
      * @memberof Loader
      */
     public static LoadServices(app: Koatty) {
-        const serviceList = app.container.listClass("SERVICE");
+        const serviceList = IOCContainer.listClass("SERVICE");
 
         serviceList.forEach((item: ComponentItem) => {
             item.id = (item.id ?? "").replace("SERVICE:", "");
             if (item.id && Helper.isClass(item.target)) {
                 Logger.Debug(`Load service: ${item.id}`);
                 // registering to IOC
-                app.container.reg(item.id, item.target, { scope: "Singleton", type: "SERVICE", args: [] });
-                const ctl = app.container.getInsByClass(item.target);
+                IOCContainer.reg(item.id, item.target, { scope: "Singleton", type: "SERVICE", args: [] });
+                const ctl = IOCContainer.getInsByClass(item.target);
                 if (!(ctl instanceof BaseService)) {
                     throw new Error(`class ${item.id} does not inherit from BaseService`);
                 }
@@ -366,16 +372,16 @@ export class Loader {
      * @memberof Loader
      */
     public static LoadComponents(app: Koatty) {
-        const componentList = app.container.listClass("COMPONENT");
+        const componentList = IOCContainer.listClass("COMPONENT");
 
         componentList.forEach((item: ComponentItem) => {
             item.id = (item.id ?? "").replace("COMPONENT:", "");
             if (item.id && !(item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
                 Logger.Debug(`Load component: ${item.id}`);
                 // inject schedule
-                // injectSchedule(item.target, item.target.prototype, app.container);
+                // injectSchedule(item.target, item.target.prototype, IOCContainer);
                 // registering to IOC
-                app.container.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
+                IOCContainer.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
             }
         });
     }
@@ -388,7 +394,7 @@ export class Loader {
      * @memberof Loader
      */
     public static async LoadPlugins(app: Koatty) {
-        const componentList = app.container.listClass("COMPONENT");
+        const componentList = IOCContainer.listClass("COMPONENT");
 
         let pluginsConf = app.config(undefined, "plugin");
         if (Helper.isEmpty(pluginsConf)) {
@@ -401,7 +407,7 @@ export class Loader {
             if (item.id && (item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
                 // Logger.Debug(`Load plugin: ${item.id}`);
                 // registering to IOC
-                app.container.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
+                IOCContainer.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
                 pluginList.push(item.id);
             }
         });
@@ -411,7 +417,7 @@ export class Loader {
             Logger.Warn("Some plugins is loaded but not allowed to execute.");
         }
         for (const key of pluginConfList) {
-            const handle: IPlugin = app.container.get(key, "COMPONENT");
+            const handle: IPlugin = IOCContainer.get(key, "COMPONENT");
             if (!Helper.isFunction(handle.run)) {
                 Logger.Error(`plugin ${key} must be implements method 'run'.`);
                 continue;

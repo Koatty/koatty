@@ -4,8 +4,7 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-05-20 15:45:24
  */
-import { Helper } from "../util/Helper";
-import { Koatty, KoattyContext } from 'koatty_core';
+import { formatApiData, Helper } from "../util/Helper";
 import { ApiInput, ApiOutput } from '../core/Component';
 import { BaseController } from "./BaseController";
 
@@ -17,9 +16,6 @@ import { BaseController } from "./BaseController";
  * @implements {IController}
  */
 export class HttpController extends BaseController {
-    public app: Koatty;
-    public ctx: KoattyContext;
-
     /**
      * Whether it is a GET request
      *
@@ -180,11 +176,11 @@ export class HttpController extends BaseController {
      * @param {(string | ApiInput)} msg   待处理的message消息
      * @param {*} [data]    待处理的数据
      * @param {number} [code=200]    错误码，默认0
-     * @returns {Promise<ApiOutput>}
+     * @returns {*}
      * @memberof HttpController
      */
-    public ok(msg: string | ApiInput, data?: any, code = 0): Promise<ApiOutput> {
-        const obj: ApiOutput = this.formatApiData(msg, data, code);
+    public ok(msg: string | ApiInput, data?: any, code = 0) {
+        const obj: ApiOutput = formatApiData(msg, data, code);
         return this.json(obj);
     }
 
@@ -194,11 +190,11 @@ export class HttpController extends BaseController {
      * @param {(string | ApiInput)} msg   
      * @param {*} [data]    
      * @param {number} [code=1]    
-     * @returns {Promise<ApiOutput>}
+     * @returns {*}
      * @memberof HttpController
      */
-    public fail(msg: Error | string | ApiInput, data?: any, code = 1): Promise<ApiOutput> {
-        const obj: ApiOutput = this.formatApiData(msg, data, code);
+    public fail(msg: Error | string | ApiInput, data?: any, code = 1) {
+        const obj: ApiOutput = formatApiData(msg, data, code);
         return this.json(obj);
     }
 

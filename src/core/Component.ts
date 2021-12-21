@@ -7,9 +7,9 @@
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import Koa from "koa";
-import { IOCContainer } from 'koatty_container';
 import { Koatty, KoattyContext } from 'koatty_core';
 import { CONTROLLER_ROUTER } from "koatty_router";
+import { IOCContainer } from "koatty_container";
 
 /**
  * Indicates that an decorated class is a "component".
@@ -63,12 +63,12 @@ export interface ApiInput {
  */
 export interface IController {
     app: Koatty;
-    ctx: KoattyContext;
+    readonly ctx: KoattyContext;
 
     __befor?: () => Promise<any>;
     __after?: () => Promise<any>;
-    readonly fail: (msg?: Error | string | ApiInput, data?: any, ret?: number) => Promise<ApiOutput>;
-    readonly ok: (msg?: string | ApiInput, data?: any, ret?: number) => Promise<ApiOutput>;
+    readonly fail: (msg?: Error | string | ApiInput, data?: any, ret?: number) => Promise<any>;
+    readonly ok: (msg?: string | ApiInput, data?: any, ret?: number) => Promise<any>;
 }
 
 /**

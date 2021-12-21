@@ -7,5 +7,5 @@
 <b>Signature:</b>
 
 ```typescript
-Logger: import("koatty_logger").ILogger
+Logger: import("koatty_logger").Logger
 ```
