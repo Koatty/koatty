@@ -1,18 +1,20 @@
-/**
- * @ author: richen
- * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: BSD (3-Clause)
- * @ version: 2020-03-05 14:12:17
+/*
+ * @Description: AOP切面类
+ * @Usage: 
+ * @Author: xxx
+ * @Date: 2020-12-22 15:24:25
+ * @LastEditTime: 2021-12-23 00:58:50
  */
-import { Aspect, Exception, IAspect, Koatty, Logger } from "../../../src/index";
+
+import { Aspect, IAspect, Logger } from "../../../src/index";
+import { App } from '../App';
 
 @Aspect()
 export class TestAspect implements IAspect {
-    app: Koatty;
-    run(...args: any[]) {
-        Logger.Debug('TestAspect', args[0]);
-        // return Promise.reject({ status: 401, message: "切面执行异常" });
-        // throw new Exception(401, "切面执行异常");
+    app: App;
+
+    run(name: string) {
+        Logger.Debug(name);
         return Promise.resolve();
     }
 }

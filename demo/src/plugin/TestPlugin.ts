@@ -1,21 +1,22 @@
 /*
- * @Author: richen
- * @Date: 2020-07-16 14:13:32
- * @LastEditTime: 2020-12-15 10:10:37
- * @Description:
- * @Copyright (c) - <richenlin(at)gmail.com>
+ * @Description: 插件扩展
+ * @Usage: Test插件实现
+ * @Author: xxx
+ * @Date: 2020-12-22 16:00:49
+ * @LastEditTime: 2021-12-23 01:00:20
  */
 
-import { IPlugin, Plugin, Logger } from '../../../src';
+import { Plugin, IPlugin, Logger } from '../../../src/index';
 import { App } from '../App';
+// import { TestPlugin } from 'xxx';
 
 @Plugin()
 export class TestPlugin implements IPlugin {
-
     run(options: any, app: App) {
-        Logger.Info("TestPlugin run...");
-
-        app.test = "TestPlugin---111111";
+        // return TestPlugin(options, app);
+        // or
+        // todo something
+        Logger.Debug("TestPlugin");
         return Promise.resolve();
     }
 }
