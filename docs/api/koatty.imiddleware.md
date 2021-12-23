@@ -16,5 +16,5 @@ export interface IMiddleware
 
 |  Property | Type | Description |
 |  --- | --- | --- |
-|  [run](./koatty.imiddleware.run.md) | (options: any, app: Koatty) =&gt; Koa.Middleware |  |
+|  [run](./koatty.imiddleware.run.md) | (options: any, app: Koatty) =&gt; [KoattyMiddleware](./koatty.koattymiddleware.md) |  |
 

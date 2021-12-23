@@ -48,4 +48,5 @@
 |  Type Alias | Description |
 |  --- | --- |
 |  [AppReadyHookFunc](./koatty.appreadyhookfunc.md) |  |
+|  [KoattyMiddleware](./koatty.koattymiddleware.md) | Interface for Middleware |
 

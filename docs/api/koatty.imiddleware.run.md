@@ -7,5 +7,5 @@
 <b>Signature:</b>
 
 ```typescript
-run: (options: any, app: Koatty) => Koa.Middleware;
+run: (options: any, app: Koatty) => KoattyMiddleware;
 ```
