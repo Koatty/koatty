@@ -6,7 +6,6 @@
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
-import Koa from "koa";
 import { Koatty, KoattyContext, KoattyNext } from 'koatty_core';
 import { CONTROLLER_ROUTER } from "koatty_router";
 import { IOCContainer } from "koatty_container";
@@ -62,7 +61,7 @@ export interface ApiInput {
  * Interface for Controller
  */
 export interface IController {
-    app: Koatty;
+    readonly app: Koatty;
     readonly ctx: KoattyContext;
 
     __befor?: () => Promise<any>;
@@ -115,9 +114,7 @@ export function Service(identifier?: string): ClassDecorator {
  * Interface for Service
  */
 export interface IService {
-    app: Koatty;
-
-    // readonly init: (...arg: any[]) => void;
+    readonly app: Koatty;
 }
 
 /**

@@ -5,7 +5,6 @@
  * @ version: 2020-05-18 11:24:49
  */
 import { Koatty } from 'koatty_core';
-import { ObjectDefinitionOptions } from "koatty_container";
 import { IService } from '../core/Component';
 
 /**
@@ -15,13 +14,13 @@ import { IService } from '../core/Component';
  * @class Base
  */
 export class BaseService implements IService {
-    public app: Koatty;
-    protected _options: ObjectDefinitionOptions;
+    readonly app: Koatty;
 
     /**
-     * instance of Base.
-     * @param {...any[]} arg
-     * @memberof Base
+     * instance of BaseController.
+     * @param {Koatty} app
+     * @param {KoattyContext} ctx
+     * @memberof BaseController
      */
     protected constructor(...arg: any[]) {
         this.init(arg);
@@ -31,12 +30,10 @@ export class BaseService implements IService {
      * init
      *
      * @protected
-     * @param {...any[]} arg
-     * @memberof Base
+     * @memberof BaseController
      */
     protected init(...arg: any[]): void {
-        // todo
-        // Logger.Debug(arg)
+
     }
 
 }

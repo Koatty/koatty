@@ -11,7 +11,6 @@ import { LoadConfigs as loadConf } from "koatty_config";
 import { Logger, SetLogger } from "../util/Logger";
 import { prevent } from "koatty_exception";
 import { IMiddleware, IPlugin } from './Component';
-import { BaseService } from "../service/BaseService";
 import { AppReadyHookFunc } from "./Bootstrap";
 import { checkClass, Helper, requireDefault } from "../util/Helper";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
@@ -356,10 +355,6 @@ export class Loader {
                 Logger.Debug(`Load service: ${item.id}`);
                 // registering to IOC
                 IOCContainer.reg(item.id, item.target, { scope: "Singleton", type: "SERVICE", args: [] });
-                const ctl = IOCContainer.getInsByClass(item.target);
-                if (!(ctl instanceof BaseService)) {
-                    throw new Error(`class ${item.id} does not inherit from BaseService`);
-                }
             }
         });
     }
@@ -378,8 +373,6 @@ export class Loader {
             item.id = (item.id ?? "").replace("COMPONENT:", "");
             if (item.id && !(item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
                 Logger.Debug(`Load component: ${item.id}`);
-                // inject schedule
-                // injectSchedule(item.target, item.target.prototype, IOCContainer);
                 // registering to IOC
                 IOCContainer.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
             }
@@ -405,7 +398,6 @@ export class Loader {
         componentList.forEach(async (item: ComponentItem) => {
             item.id = (item.id ?? "").replace("COMPONENT:", "");
             if (item.id && (item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
-                // Logger.Debug(`Load plugin: ${item.id}`);
                 // registering to IOC
                 IOCContainer.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
                 pluginList.push(item.id);
@@ -426,71 +418,12 @@ export class Loader {
                 continue;
             }
 
-            // Logger.Debug(`Execute plugin: ${key}`);
             // sync exec 
             await handle.run(pluginsConf.config[key] ?? {}, app);
         }
     }
 
-    /**
-     *
-     *
-     * @static
-     * @param {(string | string[])} loadDir
-     * @param {string} [baseDir]
-     * @param {Function} [fn]
-     * @param {(string | string[])} [pattern]
-     * @param {(string | string[])} [ignore]
-     * @memberof Loader
-     */
-    // public static LoadDirectory(loadDir: string | string[],
-    //     baseDir?: string,
-    //     fn?: Function,
-    //     pattern?: string | string[],
-    //     ignore?: string | string[]) {
 
-    //     baseDir = baseDir || process.cwd();
-    //     const loadDirs = [].concat(loadDir ?? []);
-
-    //     for (let dir of loadDirs) {
-    //         dir = buildLoadDir(baseDir, dir);
-    //         const fileResults = globby.sync(['**/**.js', '**/**.ts', '!**/**.d.ts'].concat(pattern ?? []), {
-    //             cwd: dir,
-    //             ignore: [
-    //                 '**/node_modules/**',
-    //                 '**/logs/**',
-    //                 '**/static/**'
-    //             ].concat(ignore ?? [])
-    //         });
-    //         for (let name of fileResults) {
-    //             const file = path.join(dir, name);
-
-    //             if (name.indexOf('/') > -1) {
-    //                 name = name.slice(name.lastIndexOf('/') + 1);
-    //             }
-    //             // let namePattern = '.ts';
-    //             // if (name.slice(-3) === '.js') {
-    //             //     namePattern = '.js';
-    //             // }
-    //             // const fileName = name.slice(0, name.lastIndexOf(namePattern));
-    //             const fileName = name.slice(0, -3);
-    //             //
-    //             const exports = requireDefault(file);
-
-    //             const tkeys = Object.keys(exports);
-    //             if (!exports[fileName] && (tkeys[0] && Helper.isClass(exports[tkeys[0]]) && tkeys[0] !== fileName)) {
-    //                 throw new Error(`The class name is not consistent with the file('${file}') name. Or you used 'export default'?`);
-    //                 // continue;
-    //             }
-    //             // callback
-    //             if (fn) {
-    //                 // console.log(fileName);
-    //                 // console.log(exports); 
-    //                 fn(fileName, exports, file);
-    //             }
-    //         }
-    //     }
-    // }
 }
 
 

@@ -7,6 +7,7 @@
 import { formatApiData, Helper } from "../util/Helper";
 import { ApiInput, ApiOutput } from '../core/Component';
 import { BaseController } from "./BaseController";
+import { Koatty, KoattyContext } from "koatty_core";
 
 /**
  * HTTP controller

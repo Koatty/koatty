@@ -6,7 +6,6 @@
  */
 import { formatApiData, Helper } from "../util/Helper";
 import { Koatty, KoattyContext } from 'koatty_core';
-import { ObjectDefinitionOptions } from "koatty_container";
 import { ApiInput, ApiOutput, IController } from '../core/Component';
 
 /**
@@ -17,10 +16,8 @@ import { ApiInput, ApiOutput, IController } from '../core/Component';
  * @implements {IController}
  */
 export class BaseController implements IController {
-    public app: Koatty;
+    readonly app: Koatty;
     readonly ctx: KoattyContext;
-
-    protected _options!: ObjectDefinitionOptions;
 
     /**
      * instance of BaseController.
@@ -28,9 +25,9 @@ export class BaseController implements IController {
      * @param {KoattyContext} ctx
      * @memberof BaseController
      */
-    protected constructor(ctx: KoattyContext) {
+    protected constructor(ctx: KoattyContext, ...arg: any[]) {
         this.ctx = ctx;
-        this.init();
+        this.init(arg);
     }
 
     /**
@@ -39,12 +36,12 @@ export class BaseController implements IController {
      * @protected
      * @memberof BaseController
      */
-    protected init(): void {
+    protected init(...arg: any[]): void {
 
     }
 
     // /**
-    //  * Class pre-execution method, executed before each class member methods (except constructor, init, __after) are executed.
+    //  * Class pre-execution method (except constructor, init, __after).
     //  *
     //  * @returns {Promise<any>}
     //  * @memberof BaseController
@@ -54,7 +51,7 @@ export class BaseController implements IController {
     // }
 
     // /**
-    //  * Class after-execution method,after each class member methods (except constructor, init, __before) are executed.
+    //  * Class after-execution method (except constructor, init, __before).
     //  *
     //  * @public
     //  * @returns {*}
