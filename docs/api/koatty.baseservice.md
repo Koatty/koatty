@@ -19,18 +19,17 @@ export declare class BaseService implements IService
 
 |  Constructor | Modifiers | Description |
 |  --- | --- | --- |
-|  [(constructor)(arg)](./koatty.baseservice._constructor_.md) |  | instance of Base. |
+|  [(constructor)(arg)](./koatty.baseservice._constructor_.md) |  | instance of BaseController. |
 
 ## Properties
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [\_options](./koatty.baseservice._options.md) |  | ObjectDefinitionOptions |  |
 |  [app](./koatty.baseservice.app.md) |  | Koatty |  |
 
 ## Methods
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
-|  [init(arg)](./koatty.baseservice.init.md) |  | init |
+|  [init(arg)](./koatty.baseservice.init.md) |  | init  BaseController |
 

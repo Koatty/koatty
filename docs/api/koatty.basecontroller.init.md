@@ -11,8 +11,15 @@ init
 <b>Signature:</b>
 
 ```typescript
-protected init(): void;
+protected init(...arg: any[]): void;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  arg | any\[\] |  |
+
 <b>Returns:</b>
 
 void

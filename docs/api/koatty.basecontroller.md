@@ -19,13 +19,12 @@ export declare class BaseController implements IController
 
 |  Constructor | Modifiers | Description |
 |  --- | --- | --- |
-|  [(constructor)(ctx)](./koatty.basecontroller._constructor_.md) |  | instance of BaseController. |
+|  [(constructor)(ctx, arg)](./koatty.basecontroller._constructor_.md) |  | instance of BaseController. |
 
 ## Properties
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [\_options](./koatty.basecontroller._options.md) |  | ObjectDefinitionOptions |  |
 |  [app](./koatty.basecontroller.app.md) |  | Koatty |  |
 |  [ctx](./koatty.basecontroller.ctx.md) |  | KoattyContext |  |
 
@@ -34,6 +33,6 @@ export declare class BaseController implements IController
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
 |  [fail(msg, data, code)](./koatty.basecontroller.fail.md) |  | Response to normalize json format content for fail |
-|  [init()](./koatty.basecontroller.init.md) |  | init  BaseController |
+|  [init(arg)](./koatty.basecontroller.init.md) |  | init  BaseController |
 |  [ok(msg, data, code)](./koatty.basecontroller.ok.md) |  | Response to normalize json format content for success |
 

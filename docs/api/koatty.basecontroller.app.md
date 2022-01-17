@@ -7,5 +7,5 @@
 <b>Signature:</b>
 
 ```typescript
-app: Koatty;
+readonly app: Koatty;
 ```

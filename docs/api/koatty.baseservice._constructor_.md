@@ -4,7 +4,7 @@
 
 ## BaseService.(constructor)
 
-instance of Base.
+instance of BaseController.
 
 <b>Signature:</b>
 
@@ -16,5 +16,5 @@ protected constructor(...arg: any[]);
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  arg | any\[\] |  Base |
+|  arg | any\[\] |  |
 

@@ -6,6 +6,7 @@
 
 init
 
+  BaseController
 
 <b>Signature:</b>
 
@@ -17,7 +18,7 @@ protected init(...arg: any[]): void;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  arg | any\[\] |  Base |
+|  arg | any\[\] |  |
 
 <b>Returns:</b>
 

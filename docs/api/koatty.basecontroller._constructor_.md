@@ -9,7 +9,7 @@ instance of BaseController.
 <b>Signature:</b>
 
 ```typescript
-protected constructor(ctx: KoattyContext);
+protected constructor(ctx: KoattyContext, ...arg: any[]);
 ```
 
 ## Parameters
@@ -17,4 +17,5 @@ protected constructor(ctx: KoattyContext);
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  ctx | KoattyContext |  BaseController |
+|  arg | any\[\] |  |
 
