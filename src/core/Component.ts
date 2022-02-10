@@ -74,7 +74,7 @@ export interface IController {
  * Indicates that an decorated class is a "middleware".
  *
  * @export
- * @param {string} [identifier] middleware name
+ * @param {string} [identifier] class name
  * @returns {ClassDecorator}
  */
 export function Middleware(identifier?: string): ClassDecorator {
@@ -100,7 +100,7 @@ export interface IMiddleware {
  * Indicates that an decorated class is a "service".
  *
  * @export
- * @param {string} [identifier] middleware name
+ * @param {string} [identifier] class name
  * @returns {ClassDecorator}
  */
 export function Service(identifier?: string): ClassDecorator {
@@ -121,7 +121,7 @@ export interface IService {
  * Indicates that an decorated class is a "plugin".
  *
  * @export
- * @param {string} [identifier]
+ * @param {string} [identifier] class name
  * @returns {ClassDecorator}
  */
 export function Plugin(identifier?: string): ClassDecorator {
