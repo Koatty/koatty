@@ -9,7 +9,7 @@ Use Typescript's decorator implement IOC and AOP.
 ## New features 
 
 * HTTP、HTTPS、HTTP2、gRPC、WebSocket server.
-* Support loading environment configuration, support parsing command line parameters (process. argv) and environment variables (process.env)
+* Support loading environment configuration, parsing command line parameters (process. argv) and environment variables (process.env)
 * `@ExceptionHandler()` Register global exception handling
 
 
