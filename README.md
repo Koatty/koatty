@@ -8,10 +8,9 @@ Use Typescript's decorator implement IOC and AOP.
 
 ## New features 
 
-* HTTP、HTTPS、HTTP2 .
-* gRPC  server. 
-* WebSocket server. (unstable)
+* HTTP、HTTPS、HTTP2、gRPC、WebSocket server.
 * Support loading environment configuration, support parsing command line parameters (process. argv) and environment variables (process.env)
+* `@ExceptionHandler()` Register global exception handling
 
 
 ## Documentation
@@ -96,8 +95,12 @@ export class IndexController extends BaseController {
 
     @RequestMapping("/:name", RequestMethod.ALL)
     async default(@PathVariable("name") @Valid("IsNotEmpty") name: string) {
-        const info = await this.testService.sayHello(name).catch((err: any) => this.fail(err.message));
-        return info;
+        try {
+            const info = await this.testService.sayHello(name);
+            return this.ok("success", info);
+        } catch (err: Error) {
+            return this.fail(err.message));
+        }
     }
 
     @PostMapping("/test")
