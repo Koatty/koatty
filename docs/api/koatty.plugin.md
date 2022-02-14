@@ -17,7 +17,7 @@ export declare function Plugin(identifier?: string): ClassDecorator;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  identifier | string |  |
+|  identifier | string | class name |
 
 <b>Returns:</b>
 

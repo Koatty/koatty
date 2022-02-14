@@ -17,7 +17,7 @@ export declare function Service(identifier?: string): ClassDecorator;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  identifier | string | middleware name |
+|  identifier | string | class name |
 
 <b>Returns:</b>
 
