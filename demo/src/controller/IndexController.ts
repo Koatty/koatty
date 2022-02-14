@@ -3,15 +3,16 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:31:17
- * @LastEditTime: 2021-12-23 01:04:46
+ * @LastEditTime: 2022-02-14 14:53:38
  */
 
-import { Controller, Autowired, GetMapping, Post, PostMapping, KoattyContext, Before, HttpController, Get } from '../../../src/index';
+import { Controller, Autowired, GetMapping, Post, PostMapping, KoattyContext, Before, HttpController, Get, Exception } from '../../../src/index';
 import { Valid, Validated } from "koatty_validation";
 import { App } from '../App';
 import { TestAspect } from '../aspect/TestAspect';
 import { UserDto } from '../dto/UserDto';
 import { TestService } from '../service/TestService';
+import { BussinessException } from '../exception/BussinessException';
 
 @Controller('/')
 export class IndexController extends HttpController {
@@ -53,6 +54,17 @@ export class IndexController extends HttpController {
   index() {
     this.ctx.status = 200;
     return 'Hi Koatty';
+  }
+
+  @GetMapping("error")
+  error(@Get("t") t: string) {
+    if (t === "1") {
+      throw new Error("error1");
+    } else if (t === "2") {
+      throw new Exception("error2");
+    } else {
+      throw new BussinessException("error3");
+    }
   }
 
   /**
