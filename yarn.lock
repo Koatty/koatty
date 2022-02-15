@@ -3883,7 +3883,19 @@ koatty_exception@^1.1.2, koatty_exception@^1.x.x:
     koatty_lib "^1.x.x"
     koatty_logger "^1.x.x"
 
-koatty_lib@^1.2.8, koatty_lib@^1.x.x:
+koatty_lib@^1.2.10:
+  version "1.2.10"
+  resolved "https://registry.yarnpkg.com/koatty_lib/-/koatty_lib-1.2.10.tgz#a92bfc6a9dbba5fb5aaa85a245df5bd6b42cfadc"
+  integrity sha512-/owFDMR1LioYh/17As5L9b4o/qBzzBibhAq8ucZJmqc1En2rU19eWFPVBEFcaFDzqnNHq1LUwYwt1Ii+U+JLDw==
+  dependencies:
+    "@types/lodash" "^4.x.x"
+    co "^4.6.0"
+    lodash "^4.17.21"
+    moment "^2.29.1"
+    murmurhash "^2.0.0"
+    tslib "^2.3.1"
+
+koatty_lib@^1.x.x:
   version "1.2.8"
   resolved "https://registry.npmjs.org/koatty_lib/-/koatty_lib-1.2.8.tgz"
   integrity sha512-4kMFupKue5f7o13vILIFW9Mg5nHbnv7i+I0eLXpUvOl9KGCb3Zv+7i1I7G2jA7BiOreVxuyZyiwyZ+410mrJyQ==
