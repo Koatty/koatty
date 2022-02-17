@@ -188,8 +188,6 @@ export function Bootstrap(bootFunc?: Function): ClassDecorator {
  * @returns {ClassDecorator}
  */
 export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
-    Logger.Log('think', '', 'ComponentScan');
-
     return (target: any) => {
         if (!(target.prototype instanceof Koatty)) {
             throw new Error(`class does not inherit from Koatty`);
@@ -207,8 +205,6 @@ export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
  * @returns {ClassDecorator}
  */
 export function ConfigurationScan(scanPath?: string | string[]): ClassDecorator {
-    Logger.Log('think', '', 'ConfigurationScan');
-
     return (target: any) => {
         if (!(target.prototype instanceof Koatty)) {
             throw new Error(`class does not inherit from Koatty`);
