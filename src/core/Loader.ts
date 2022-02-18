@@ -289,7 +289,7 @@ export class Loader {
             }
             if (middlewareConf.config[key] === false) {
                 // Default middleware cannot be disabled
-                if (key === "TraceMiddleware" || key === "PayloadMiddleware") {
+                if (defaultList.includes(key)) {
                     Logger.Warn(`Middleware ${key} cannot be disabled.`);
                 } else {
                     Logger.Warn(`Middleware ${key} is loaded but not allowed to execute.`);
