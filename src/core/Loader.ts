@@ -261,7 +261,6 @@ export class Loader {
             item.id = (item.id ?? "").replace("MIDDLEWARE:", "");
             if (item.id && Helper.isClass(item.target)) {
                 IOCContainer.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
-                // middleware[item.id] = item.target;
             }
         });
 
@@ -274,9 +273,6 @@ export class Loader {
                 defaultList.push(item);
             }
         });
-        // if (defaultList.length > middlewareConfList.length) {
-        //     Logger.Warn("Some middleware is loaded but not allowed to execute.");
-        // }
 
         //de-duplication
         const appMList = [...new Set(defaultList)];
@@ -292,13 +288,16 @@ export class Loader {
                 continue;
             }
             if (middlewareConf.config[key] === false) {
-                Logger.Warn(`Middleware ${key} is loaded but not allowed to execute.`);
-                continue;
+                // Default middleware cannot be disabled
+                if (key === "TraceMiddleware" || key === "PayloadMiddleware") {
+                    Logger.Warn(`Middleware ${key} cannot be disabled.`);
+                } else {
+                    Logger.Warn(`Middleware ${key} is loaded but not allowed to execute.`);
+                    continue;
+                }
             }
-
-
             Logger.Debug(`Load middleware: ${key}`);
-            const result = await handle.run(middlewareConf.config[key] ?? {}, app);
+            const result = await handle.run(middlewareConf.config[key] || {}, app);
             if (Helper.isFunction(result)) {
                 if (result.length < 3) {
                     app.use(result);
@@ -307,8 +306,6 @@ export class Loader {
                 }
             }
         }
-
-        // app.setMetaData("_middlewares", middleware);
     }
 
     /**
@@ -422,8 +419,6 @@ export class Loader {
             await handle.run(pluginsConf.config[key] ?? {}, app);
         }
     }
-
-
 }
 
 
