@@ -91,7 +91,7 @@
         "koatty_proto": "1.1.6",
         "koatty_router": "1.7.0",
         "koatty_serve": "1.4.6",
-        "koatty_trace": "1.6.0",
+        "koatty_trace": "1.6.1",
         "koatty_validation": "1.1.0",
         "reflect-metadata": "0.1.13",
         "tslib": "2.3.1"
