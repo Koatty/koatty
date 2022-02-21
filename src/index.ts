@@ -14,6 +14,6 @@ export * from "koatty_container";
 export * from "koatty_exception";
 export * from "koatty_router";
 export * from "koatty_serve";
-export * from "koatty_trace";
+export { Value, Config } from "koatty_config";
 export { Helper } from "./util/Helper";
 export { Logger } from "./util/Logger";
