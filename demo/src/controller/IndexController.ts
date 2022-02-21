@@ -3,10 +3,10 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:31:17
- * @LastEditTime: 2022-02-14 14:53:38
+ * @LastEditTime: 2022-02-21 17:53:52
  */
 
-import { Controller, Autowired, GetMapping, Post, PostMapping, KoattyContext, Before, HttpController, Get, Exception } from '../../../src/index';
+import { Controller, Autowired, GetMapping, Post, PostMapping, KoattyContext, Before, HttpController, Get, Exception, Logger, Config } from '../../../src/index';
 import { Valid, Validated } from "koatty_validation";
 import { App } from '../App';
 import { TestAspect } from '../aspect/TestAspect';
@@ -18,6 +18,9 @@ import { BussinessException } from '../exception/BussinessException';
 export class IndexController extends HttpController {
   app: App;
   ctx: KoattyContext;
+
+  @Config("ext", "router")
+  conf: string;
 
   @Autowired()
   protected TestService: TestService;
@@ -58,6 +61,9 @@ export class IndexController extends HttpController {
 
   @GetMapping("error")
   error(@Get("t") t: string) {
+
+    Logger.Info(this.conf);
+
     if (t === "1") {
       throw new Error("error1");
     } else if (t === "2") {
