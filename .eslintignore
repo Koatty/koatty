@@ -9,3 +9,4 @@ scripts
 coverage
 test
 demo
+jest-html-reporters-attach
