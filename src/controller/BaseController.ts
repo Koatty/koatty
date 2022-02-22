@@ -4,7 +4,7 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-05-20 15:45:24
  */
-import { formatApiData, Helper } from "../util/Helper";
+import { formatApiData } from "../util/Helper";
 import { Koatty, KoattyContext } from 'koatty_core';
 import { ApiInput, ApiOutput, IController } from '../core/Component';
 

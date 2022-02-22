@@ -12,7 +12,7 @@ import { Logger, SetLogger } from "../util/Logger";
 import { prevent } from "koatty_exception";
 import { IMiddleware, IPlugin } from './Component';
 import { AppReadyHookFunc } from "./Bootstrap";
-import { checkClass, Helper, requireDefault } from "../util/Helper";
+import { checkClass, Helper } from "../util/Helper";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
 import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 import { BaseController } from "../controller/BaseController";
