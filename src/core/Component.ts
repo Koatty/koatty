@@ -134,6 +134,7 @@ export function Plugin(identifier?: string): ClassDecorator {
         IOCContainer.saveClass("COMPONENT", target, `${identifier}`);
     };
 }
+
 /**
  * Interface for Plugin
  */

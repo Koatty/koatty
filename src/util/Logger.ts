@@ -5,6 +5,7 @@
  * @ version: 2020-05-10 11:49:15
  */
 
+import { Koatty } from "koatty_core";
 import { DefaultLogger, LogLevelType } from "koatty_logger";
 
 // Logger
@@ -22,7 +23,7 @@ export const Logger = DefaultLogger;
  *     logFilePath?: string;
  * }} config
  */
-export function SetLogger(config: {
+export function SetLogger(app: Koatty, config: {
     logLevel?: LogLevelType;
     logConsole?: boolean;
     logFile?: boolean;
@@ -32,10 +33,10 @@ export function SetLogger(config: {
     if (config.logLevel !== undefined) {
         DefaultLogger.setLevel(config.logLevel);
     }
-    if (config.logConsole !== undefined) {
+    if (config.logConsole !== undefined && !app.silent) {
         DefaultLogger.setLogConsole(config.logConsole);
     }
-    if (config.logFile !== undefined) {
+    if (config.logFile !== undefined && !app.silent) {
         DefaultLogger.setLogFile(config.logFile);
         DefaultLogger.setLogFilePath(config.logFilePath);
     }
