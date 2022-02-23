@@ -51,33 +51,18 @@ koatty service test
 
 ```
 
-### 3.Create a Middleware （Optional）
-
-```shell
-koatty middleware test
-
-```
-### 4.Create a Model（Optional）
-
-Supports [typeorm](https://github.com/typeorm/typeorm). Please expand other ORM by yourself.
-
-```shell
-//typeorm
-koatty middleware test
-
-```
-
-### 5.Create a DTOClass （Optional）
+### 4.Create a DTOClass （Optional）
 
 ```shell
 koatty dto test
 
 ```
 
-### 6.Define TestController
+### 5.Define TestController
 
 ```javascript
-import { Controller, BaseController, Autowired, GetMapping, RequestBody, PathVariable, PostMapping, RequestMapping, RequestMethod, Valid } from "koatty";
+import { Controller, BaseController, Autowired, GetMapping, RequestBody, PathVariable,
+ PostMapping, RequestMapping, RequestMethod, Valid } from "koatty";
 import { TestDTO } from "../model/dto/TestDTO";
 import { TestService } from "../service/TestService";
 import { App } from "../App";
@@ -109,6 +94,33 @@ export class IndexController extends BaseController {
         return this.ok("test", params);
     }
 }
+```
+
+## How to do Unit Testing
+
+>now only support `jest` UT framework
+
+```javascript
+import request from 'supertest';
+import { ExecBootStrap } from 'koatty';
+
+import { App } from '../src/App';
+
+describe('UT example', () => {
+
+  let server;
+  beforeAll(async () => {
+    const appInstance = await ExecBootStrap()(App);
+    server = appInstance.callback();
+  });
+
+  it('request', async (done) => {
+    const rsp = await request(server).get('/path/to/server');
+    expect(rsp.status).toBe(200);
+    done();
+  });
+});
+
 ```
 
 ## How to debug

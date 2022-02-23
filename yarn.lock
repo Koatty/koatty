@@ -3900,19 +3900,19 @@
     "koatty_loader" "^1.x.x"
     "rc" "^1.2.8"
 
-"koatty_container@^1.x.x", "koatty_container@1.7.4":
-  "integrity" "sha512-ZwrAGz2Y/6qz2MK/fet9tXp+v82fM5+NSGbvjDMRmfvm3PYLZdqDwDQLpITGyF18Sd7hUXpYTBGhEFbOHm/j/w=="
-  "resolved" "https://registry.npmjs.org/koatty_container/-/koatty_container-1.7.4.tgz"
-  "version" "1.7.4"
+"koatty_container@^1.x.x", "koatty_container@1.7.5":
+  "integrity" "sha512-sA+vJHIVV2tTX4bYX/p33vcaL/gL1bw4qrQY0K3PgadBX4fl5Ly/Q5eH8HYcgy6RPU0V28NvmxJg3mJ3SyjfYg=="
+  "resolved" "https://mirrors.tencent.com/npm/koatty_container/-/koatty_container-1.7.5.tgz"
+  "version" "1.7.5"
   dependencies:
     "koatty_lib" "^1.x.x"
     "reflect-metadata" "^0.1.13"
     "tslib" "^2.3.1"
 
-"koatty_core@^1.x.x", "koatty_core@1.6.0":
-  "integrity" "sha512-5YTbXlR4GGSK2xlG/wHtfKgBoxm/acYJETG+54IX6Y+uNFpPcnod/XWWOwdzeMI9j29QL5EnmeBnupEiCslZnQ=="
-  "resolved" "https://registry.npmjs.org/koatty_core/-/koatty_core-1.6.0.tgz"
-  "version" "1.6.0"
+"koatty_core@^1.x.x", "koatty_core@1.6.1":
+  "integrity" "sha512-alTfsx3CH/Obn2quZDiRHkG1EHZGV6Oen6YALU3USMgumlSCj8BM6rZnf3I06QeTiArZa6qT3DOJBXg2ZmmhRw=="
+  "resolved" "https://registry.npmjs.org/koatty_core/-/koatty_core-1.6.1.tgz"
+  "version" "1.6.1"
   dependencies:
     "http-assert" "^1.5.0"
     "koa-compose" "^4.1.0"
@@ -3982,10 +3982,10 @@
     "koatty_lib" "^1.x.x"
     "protobufjs" "^6.11.2"
 
-"koatty_router@1.7.0":
-  "integrity" "sha512-O3nVLmVzu4B9vlyH7E0tmj8rlvzf7G7G37ipI5FdUlKtzrENr9FgLEBmRarb68ycz1IXKWyvcQlS6JnR+s0ixw=="
-  "resolved" "https://registry.npmjs.org/koatty_router/-/koatty_router-1.7.0.tgz"
-  "version" "1.7.0"
+"koatty_router@1.7.1":
+  "integrity" "sha512-GA7L+H3dJltq1r7dniJb5aykGYnIAfY1yQ4XO/Si3RWgePr8X9IM5KRn1r9GJfJMWj3Zs3L8Gn78PVE935Uv5Q=="
+  "resolved" "https://registry.npmjs.org/koatty_router/-/koatty_router-1.7.1.tgz"
+  "version" "1.7.1"
   dependencies:
     "@grpc/grpc-js" "^1.5.5"
     "@koa/router" "^10.1.1"
@@ -3997,10 +3997,10 @@
     "koatty_validation" "^1.x.x"
     "tslib" "^2.3.1"
 
-"koatty_serve@1.4.6":
-  "integrity" "sha512-z0Is5Ot+lf9TE3YQHbMWDixpOnjdcJKtWiSqTQXshoK+mZB7DGcOiulnZFHH2NKVz8xqIvjrF5V3BeWrYsHArg=="
-  "resolved" "https://registry.npmjs.org/koatty_serve/-/koatty_serve-1.4.6.tgz"
-  "version" "1.4.6"
+"koatty_serve@1.4.8":
+  "integrity" "sha512-4YGDJxYAcolKdze3uLMwTpGGyssVAXokl/+e2ceFVdui6rrv9t5VUqWZvbblY9MvtfBOSvA3LjSwAF1FWlTmoA=="
+  "resolved" "https://registry.npmjs.org/koatty_serve/-/koatty_serve-1.4.8.tgz"
+  "version" "1.4.8"
   dependencies:
     "@godaddy/terminus" "^4.10.2"
     "@grpc/grpc-js" "^1.5.5"
