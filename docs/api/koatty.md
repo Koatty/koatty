@@ -22,6 +22,7 @@
 |  [ComponentScan(scanPath)](./koatty.componentscan.md) | Define project scan path |
 |  [ConfigurationScan(scanPath)](./koatty.configurationscan.md) | Define project configuration scan path |
 |  [Controller(path)](./koatty.controller.md) | Indicates that an decorated class is a "controller". |
+|  [ExecBootStrap(bootFunc)](./koatty.execbootstrap.md) | Actively perform dependency injection Parse the decorator, return the instantiated app.  ExecBootStrap |
 |  [Middleware(identifier)](./koatty.middleware.md) | Indicates that an decorated class is a "middleware". |
 |  [Plugin(identifier)](./koatty.plugin.md) | Indicates that an decorated class is a "plugin". |
 |  [Service(identifier)](./koatty.service.md) | Indicates that an decorated class is a "service". |
