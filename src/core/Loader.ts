@@ -188,7 +188,7 @@ export class Loader {
             if (opt.logs_path) {
                 logFilePath = opt.logs_path;
             }
-            SetLogger({ logLevel, logConsole, logFile, logFileLevel, logFilePath });
+            SetLogger(app, { logLevel, logConsole, logFile, logFileLevel, logFilePath });
         }
     }
 
@@ -267,15 +267,14 @@ export class Loader {
         const middlewareConfList = middlewareConf.list;
 
         const defaultList = ["TraceMiddleware", "PayloadMiddleware"];
-
+        //de-duplication
+        const appMList = new Set(defaultList);
         middlewareConfList.forEach((item: string) => {
             if (!defaultList.includes(item)) {
-                defaultList.push(item);
+                appMList.add(item);
             }
         });
 
-        //de-duplication
-        const appMList = [...new Set(defaultList)];
         //Automatically call middleware
         for (const key of appMList) {
             const handle: IMiddleware = IOCContainer.get(key, "MIDDLEWARE");
