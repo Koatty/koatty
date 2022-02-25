@@ -80,7 +80,7 @@
     "dependencies": {
         "koa": "2.13.4",
         "koatty_config": "1.1.2",
-        "koatty_container": "1.7.5",
+        "koatty_container": "1.7.6",
         "koatty_core": "1.6.1",
         "koatty_exception": "1.2.2",
         "koatty_lib": "1.2.10",

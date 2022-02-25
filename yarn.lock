@@ -3881,10 +3881,10 @@ koatty_config@1.1.2:
     koatty_loader "^1.x.x"
     rc "^1.2.8"
 
-koatty_container@1.7.5, koatty_container@^1.x.x:
-  version "1.7.5"
-  resolved "https://mirrors.tencent.com/npm/koatty_container/-/koatty_container-1.7.5.tgz"
-  integrity sha512-sA+vJHIVV2tTX4bYX/p33vcaL/gL1bw4qrQY0K3PgadBX4fl5Ly/Q5eH8HYcgy6RPU0V28NvmxJg3mJ3SyjfYg==
+koatty_container@1.7.6, koatty_container@^1.x.x:
+  version "1.7.6"
+  resolved "https://registry.yarnpkg.com/koatty_container/-/koatty_container-1.7.6.tgz#48be61ae1cf1feed0d473e9627c9e8012a8e6f1a"
+  integrity sha512-95mGRN2Iym9brbQFA3Kf3rXaMs97OdqmNtjFevI05bRb8bW4rCQ8EGDuzliNsMWtbTeq1SYGgrSk5WSXSXCxDw==
   dependencies:
     koatty_lib "^1.x.x"
     reflect-metadata "^0.1.13"
