@@ -66,8 +66,8 @@ export interface IController {
 
     __befor?: () => Promise<any>;
     __after?: () => Promise<any>;
-    readonly fail: (msg?: Error | string | ApiInput, data?: any, ret?: number) => Promise<any>;
     readonly ok: (msg?: string | ApiInput, data?: any, ret?: number) => Promise<any>;
+    readonly fail: (msg?: Error | string | ApiInput, data?: any, ret?: number) => void;
 }
 
 /**

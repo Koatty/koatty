@@ -148,10 +148,10 @@ export class HttpController extends BaseController {
      * @param {*} data
      * @param {string} [contentType]
      * @param {string} [encoding]
-     * @returns {Promise<any>}
+     * @returns void
      * @memberof HttpController
      */
-    public body(data: any, contentType?: string, encoding?: string): Promise<any> {
+    public body(data: any, contentType?: string, encoding?: string): void {
         contentType = contentType || "text/plain";
         encoding = encoding || this.app.config("encoding") || "utf-8";
         this.type(contentType, encoding);
@@ -168,34 +168,6 @@ export class HttpController extends BaseController {
      */
     public json(data: any) {
         return this.body(data, "application/json");
-    }
-
-    /**
-     * Response to normalize json format content for success
-     *
-     * @param {(string | ApiInput)} msg   待处理的message消息
-     * @param {*} [data]    待处理的数据
-     * @param {number} [code=200]    错误码，默认0
-     * @returns {*}
-     * @memberof HttpController
-     */
-    public ok(msg: string | ApiInput, data?: any, code = 0) {
-        const obj: ApiOutput = formatApiData(msg, data, code);
-        return this.json(obj);
-    }
-
-    /**
-     * Response to normalize json format content for fail
-     *
-     * @param {(string | ApiInput)} msg   
-     * @param {*} [data]    
-     * @param {number} [code=1]    
-     * @returns {*}
-     * @memberof HttpController
-     */
-    public fail(msg: Error | string | ApiInput, data?: any, code = 1) {
-        const obj: ApiOutput = formatApiData(msg, data, code);
-        return this.json(obj);
     }
 
 }

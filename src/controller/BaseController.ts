@@ -84,9 +84,9 @@ export class BaseController implements IController {
      * @returns {*}
      * @memberof BaseController
      */
-    public fail(msg: Error | string | ApiInput, data?: any, code = 1): any {
+    public fail(msg: Error | string | ApiInput, data?: any, code = 1) {
         const obj: ApiOutput = formatApiData(msg, data, code);
-        return Promise.resolve(obj);
+        this.ctx.throw(obj.message, obj.code, 200);
     }
 
 }
