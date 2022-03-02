@@ -3904,10 +3904,10 @@ koatty_core@1.6.1, koatty_core@^1.x.x:
     on-finished "^2.3.0"
     tslib "^2.3.1"
 
-koatty_exception@1.2.4, koatty_exception@^1.x.x:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/koatty_exception/-/koatty_exception-1.2.4.tgz#ce73eb96007bbacc0bd7a533f3bf976e178f3efb"
-  integrity sha512-yJPUOAShKgfZU+7ILoReCx0+jJT/fiV7q5hua3s4RD1WRw8EPnBaKjY0Z+ykk1rnBx6soopVTVuN5ON2zmANvQ==
+koatty_exception@1.2.6, koatty_exception@^1.x.x:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/koatty_exception/-/koatty_exception-1.2.6.tgz#70af3f58644d075af19638a63fb5052ae5d28e24"
+  integrity sha512-TilEjTOPRhfWy8QqXJPL+Zn+m8MFP7fDYxEvru8x0UFyRZTbestYOS/VY9zm46ugke6vgv3OmttzQBLmqShUKQ==
   dependencies:
     koatty_container "^1.x.x"
     koatty_lib "^1.x.x"
@@ -3992,10 +3992,10 @@ koatty_serve@1.4.8:
     tslib "^2.3.1"
     ws "^8.5.0"
 
-koatty_trace@1.6.4:
-  version "1.6.4"
-  resolved "https://registry.yarnpkg.com/koatty_trace/-/koatty_trace-1.6.4.tgz#fce99debe20eb8bf8493313198fc66de9002506e"
-  integrity sha512-mF1w6MbQbVfLgEdZMSHMY+3et15FCrTwkXUbZ2pXxyWN0UlpOBg2SnfdZ41JCT4hG0e2nEqEm/SXeWAYbHJMvA==
+koatty_trace@1.6.6:
+  version "1.6.6"
+  resolved "https://registry.yarnpkg.com/koatty_trace/-/koatty_trace-1.6.6.tgz#9ae485bfc73694701e47fe8413d2655842ca8880"
+  integrity sha512-qSbyj5fJcQSbWd+EtfOns6vEWnEn5Amnp5TMeUHXxp78fBLytJLEH3gZnImgKO1kzit7ltdi9F7FiS9VKOemug==
   dependencies:
     koatty_container "^1.x.x"
     koatty_core "^1.x.x"

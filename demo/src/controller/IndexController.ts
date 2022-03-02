@@ -3,7 +3,7 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:31:17
- * @LastEditTime: 2022-03-02 10:50:37
+ * @LastEditTime: 2022-03-02 16:03:18
  */
 
 import { Controller, Autowired, GetMapping, Post, PostMapping, KoattyContext, Before, HttpController, Get, Exception, Logger, Config } from '../../../src/index';
@@ -35,7 +35,7 @@ export class IndexController extends HttpController {
     if (isLogin) {
       this.ctx.userId = `${Date.now()}_${String(Math.random()).substring(2)}`;
     } else {
-      return this.fail("未登录");
+      return this.fail('no login', { needLogin: 1 });
     }
   }
 

@@ -3,27 +3,26 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2022-02-14 11:26:20
- * @LastEditTime: 2022-03-02 10:33:35
+ * @LastEditTime: 2022-03-02 18:56:37
  */
 
 import { KoattyContext } from "koatty_core";
-import { Exception, ExceptionHandler, HttpStatusCodeMap } from "koatty_exception";
+import { Exception, ExceptionHandler } from "koatty_exception";
 
-@ExceptionHandler()
+// @ExceptionHandler()
 export class BussinessException extends Exception {
-    // type = "BussinessException";
     async handler(ctx: KoattyContext): Promise<any> {
         ctx.status = this.status;
         ctx.type = "application/json";
-
+        const body = ctx.body ? JSON.stringify(ctx.body) : (ctx.body || null);
         switch (ctx.protocol) {
             case "ws":
             case "wss":
-                return ctx.websocket.send(this.message, () => ctx.websocket.emit('finish'));
+                return ctx.websocket.send(body, () => ctx.websocket.emit('finish'));
             case "grpc":
-                return ctx.rpc.callback(null, this.message);
+                return ctx.rpc.callback(null, body);
             default:
-                return ctx.res.end(`{"code": "${this.code}", "message": "${this.message || HttpStatusCodeMap.get(this.status)}", "data": null}`);
+                return ctx.res.end(`{"code": ${this.code}, "message": "${this.message || ctx.message}", "data": ${body}}`);
         }
     }
 }

@@ -86,6 +86,7 @@ export class BaseController implements IController {
      */
     public fail(msg: Error | string | ApiInput, data?: any, code = 1) {
         const obj: ApiOutput = formatApiData(msg, data, code);
+        this.ctx.body = obj.data;
         this.ctx.throw(obj.message, obj.code, 200);
     }
 
