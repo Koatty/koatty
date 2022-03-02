@@ -3,7 +3,7 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:31:17
- * @LastEditTime: 2022-02-21 17:53:52
+ * @LastEditTime: 2022-03-02 10:50:37
  */
 
 import { Controller, Autowired, GetMapping, Post, PostMapping, KoattyContext, Before, HttpController, Get, Exception, Logger, Config } from '../../../src/index';
@@ -19,9 +19,6 @@ export class IndexController extends HttpController {
   app: App;
   ctx: KoattyContext;
 
-  @Config("ext", "router")
-  conf: string;
-
   @Autowired()
   protected TestService: TestService;
 
@@ -31,16 +28,16 @@ export class IndexController extends HttpController {
    * @returns {*}  {Promise<any>}
    * @memberof TestController
    */
-  // async __before(): Promise<any> {
-  //   // 登录检查
-  //   const token = this.header("x-access-token");
-  //   const isLogin = await this.TestService.checkLogin(token);
-  //   if (isLogin) {
-  //     this.ctx.userId = `${Date.now()}_${String(Math.random()).substring(2)}`;
-  //   } else {
-  //     return this.fail('no login', { needLogin: 1 });
-  //   }
-  // }
+  async __before(): Promise<any> {
+    // 登录检查
+    const token = this.header("x-access-token");
+    const isLogin = await this.TestService.checkLogin(token);
+    if (isLogin) {
+      this.ctx.userId = `${Date.now()}_${String(Math.random()).substring(2)}`;
+    } else {
+      return this.fail("未登录");
+    }
+  }
 
   /**
    * @api {get} / index接口
@@ -53,24 +50,10 @@ export class IndexController extends HttpController {
    * @apiErrorExample {json} Error
    * {"code":0,"message":"错误信息","data":null}
    */
-  @GetMapping()
-  index() {
+  @GetMapping('/')
+  index(): Promise<any> {
     this.ctx.status = 200;
-    return 'Hi Koatty';
-  }
-
-  @GetMapping("error")
-  error(@Get("t") t: string) {
-
-    Logger.Info(this.conf);
-
-    if (t === "1") {
-      throw new Error("error1");
-    } else if (t === "2") {
-      throw new Exception("error2");
-    } else {
-      throw new BussinessException("error3");
-    }
+    return this.ok('Hi Koatty');
   }
 
   /**
@@ -109,5 +92,17 @@ export class IndexController extends HttpController {
   async add(@Post() data: UserDto): Promise<any> {
     const userId = await this.TestService.addUser(data);
     return this.ok('success', { userId });
+  }
+
+  /**
+   * hello 接口
+   *
+   * @returns
+   * @memberof TestController
+   */
+  @GetMapping('/html')
+  html(): Promise<any> {
+    this.ctx.state = { title: 'Koatty', content: 'Hello, Koatty!' };
+    return this.ctx.render('index.html');
   }
 }
