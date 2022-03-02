@@ -9,7 +9,7 @@ Response to normalize json format content for fail
 <b>Signature:</b>
 
 ```typescript
-fail(msg: Error | string | ApiInput, data?: any, code?: number): any;
+fail(msg: Error | string | ApiInput, data?: any, code?: number): void;
 ```
 
 ## Parameters
@@ -22,7 +22,7 @@ fail(msg: Error | string | ApiInput, data?: any, code?: number): any;
 
 <b>Returns:</b>
 
-any
+void
 
 {<!-- -->\*<!-- -->}  BaseController
 

@@ -22,13 +22,11 @@ export declare class HttpController extends BaseController
 |  [body(data, contentType, encoding)](./koatty.httpcontroller.body.md) |  | Set response Body content |
 |  [deny(code)](./koatty.httpcontroller.deny.md) |  | Block access |
 |  [expires(timeout)](./koatty.httpcontroller.expires.md) |  | set cache-control and expires header |
-|  [fail(msg, data, code)](./koatty.httpcontroller.fail.md) |  | Response to normalize json format content for fail |
 |  [header(name, value)](./koatty.httpcontroller.header.md) |  | Get/Set headers. |
 |  [isGet()](./koatty.httpcontroller.isget.md) |  | Whether it is a GET request |
 |  [isMethod(method)](./koatty.httpcontroller.ismethod.md) |  | Determines whether the METHOD request is specified |
 |  [isPost()](./koatty.httpcontroller.ispost.md) |  | Whether it is a POST request |
 |  [json(data)](./koatty.httpcontroller.json.md) |  | Respond to json formatted content |
-|  [ok(msg, data, code)](./koatty.httpcontroller.ok.md) |  | Response to normalize json format content for success |
 |  [param(name)](./koatty.httpcontroller.param.md) |  | Get POST/GET parameters, the POST value is priority. |
 |  [redirect(urls, alt)](./koatty.httpcontroller.redirect.md) |  | Url redirect |
 |  [type(contentType, encoding)](./koatty.httpcontroller.type.md) |  | Set response content-type |

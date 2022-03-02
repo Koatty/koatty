@@ -20,6 +20,6 @@ export interface IController
 |  [\_\_befor?](./koatty.icontroller.__befor.md) | () =&gt; Promise&lt;any&gt; | <i>(Optional)</i> |
 |  [app](./koatty.icontroller.app.md) | Koatty |  |
 |  [ctx](./koatty.icontroller.ctx.md) | KoattyContext |  |
-|  [fail](./koatty.icontroller.fail.md) | (msg?: Error \| string \| [ApiInput](./koatty.apiinput.md)<!-- -->, data?: any, ret?: number) =&gt; Promise&lt;any&gt; |  |
+|  [fail](./koatty.icontroller.fail.md) | (msg?: Error \| string \| [ApiInput](./koatty.apiinput.md)<!-- -->, data?: any, ret?: number) =&gt; void |  |
 |  [ok](./koatty.icontroller.ok.md) | (msg?: string \| [ApiInput](./koatty.apiinput.md)<!-- -->, data?: any, ret?: number) =&gt; Promise&lt;any&gt; |  |
 

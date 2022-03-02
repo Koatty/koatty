@@ -9,7 +9,7 @@ Respond to json formatted content
 <b>Signature:</b>
 
 ```typescript
-json(data: any): Promise<any>;
+json(data: any): void;
 ```
 
 ## Parameters
@@ -20,7 +20,7 @@ json(data: any): Promise<any>;
 
 <b>Returns:</b>
 
-Promise&lt;any&gt;
+void
 
 {<!-- -->Promise<any>}  HttpController
 

@@ -7,5 +7,5 @@
 <b>Signature:</b>
 
 ```typescript
-readonly fail: (msg?: Error | string | ApiInput, data?: any, ret?: number) => Promise<any>;
+readonly fail: (msg?: Error | string | ApiInput, data?: any, ret?: number) => void;
 ```

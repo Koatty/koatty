@@ -9,7 +9,7 @@ Set response Body content
 <b>Signature:</b>
 
 ```typescript
-body(data: any, contentType?: string, encoding?: string): Promise<any>;
+body(data: any, contentType?: string, encoding?: string): void;
 ```
 
 ## Parameters
@@ -22,7 +22,7 @@ body(data: any, contentType?: string, encoding?: string): Promise<any>;
 
 <b>Returns:</b>
 
-Promise&lt;any&gt;
+void
 
-{<!-- -->Promise<any>}  HttpController
+void  HttpController
 
