@@ -9,7 +9,7 @@ Get POST/GET parameters, the POST value is priority.
 <b>Signature:</b>
 
 ```typescript
-param(name?: string): any;
+param(name?: string): Promise<any>;
 ```
 
 ## Parameters
@@ -20,7 +20,7 @@ param(name?: string): any;
 
 <b>Returns:</b>
 
-any
+Promise&lt;any&gt;
 
  HttpController
 

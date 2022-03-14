@@ -3954,10 +3954,10 @@
     "reflect-metadata" "^0.1.13"
     "tslib" "^2.3.1"
 
-"koatty_core@^1.x.x", "koatty_core@1.6.4":
-  "integrity" "sha512-yxUXftyXJ/yqZ6gmVHT8aRWbVLFlEMu9EXyyN4eRcVlDACuNpsfBKTu/2qkNQWxTnbcQHZhowAWvXXntqYEgew=="
-  "resolved" "https://registry.npmjs.org/koatty_core/-/koatty_core-1.6.4.tgz"
-  "version" "1.6.4"
+"koatty_core@^1.x.x", "koatty_core@1.6.5":
+  "integrity" "sha512-hDq7YNnRYn58x0175nSHgG36rE1TN7+dPSrPOtw6oxM3DfcbzNXTgombal68Dbkj2QBL1EkfdQO9u8LA7ns5tg=="
+  "resolved" "https://registry.npmjs.org/koatty_core/-/koatty_core-1.6.5.tgz"
+  "version" "1.6.5"
   dependencies:
     "http-assert" "^1.5.0"
     "koa-compose" "^4.1.0"
