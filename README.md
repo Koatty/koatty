@@ -103,21 +103,25 @@ export class IndexController extends BaseController {
 ```javascript
 import request from 'supertest';
 import { ExecBootStrap } from 'koatty';
-
 import { App } from '../src/App';
 
 describe('UT example', () => {
 
-  let server;
+  let server: any;
   beforeAll(async () => {
+    jest.useFakeTimers();
     const appInstance = await ExecBootStrap()(App);
-    server = appInstance.callback();
+    server = await appInstance.listen();
   });
 
-  it('request', async (done) => {
-    const rsp = await request(server).get('/path/to/server');
-    expect(rsp.status).toBe(200);
+  afterAll(done => {
+    server.close();
     done();
+  });
+
+  it('request', async () => {
+    const rsp = await request(server).get('/');
+    expect(rsp.status).toBe(200);
   });
 });
 

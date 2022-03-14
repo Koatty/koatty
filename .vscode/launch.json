@@ -14,12 +14,28 @@
                 "ts-node/register"
             ],
             "env": {
-                "NODE_ENV": "development",
+                "NODE_ENV": "development"
             },
             "sourceMaps": true,
             "cwd": "${workspaceRoot}",
             "protocol": "inspector",
             "internalConsoleOptions": "neverOpen"
+        },
+        {
+            "type": "node",
+            "name": "vscode-jest-tests",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "disableOptimisticBPs": true,
+            "program": "${workspaceFolder}/node_modules/.bin/jest",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "--config",
+                "jest.config.js",
+                "--runInBand",
+                "--watchAll=false"
+            ]
         }
     ]
 }

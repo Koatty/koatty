@@ -26,7 +26,7 @@ module.exports = {
   globals: {
     'ts-jest': {
       // 编译 Typescript 所依赖的配置
-      tsconfig: '<rootDir>/tsconfig.json',
+      tsconfig: '<rootDir>/tsconfig.test.json',
       // 是否启用报告诊断，这里是不启用
       diagnostics: false,
     },
