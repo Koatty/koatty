@@ -4,8 +4,7 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-05-20 15:45:24
  */
-import { formatApiData, Helper } from "../util/Helper";
-import { ApiInput, ApiOutput } from '../core/Component';
+import { Helper } from "../util/Helper";
 import { BaseController } from "./BaseController";
 
 /**
@@ -76,7 +75,7 @@ export class HttpController extends BaseController {
      * @returns
      * @memberof HttpController
      */
-    public param(name?: string) {
+    public param(name?: string): Promise<any> {
         return this.ctx.bodyParser().then((body: any) => {
             const getParams: any = this.ctx.queryParser() || {};
             const postParams = (body.post ? body.post : body) || {};

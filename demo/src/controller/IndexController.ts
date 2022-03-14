@@ -3,10 +3,13 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:31:17
- * @LastEditTime: 2022-03-02 16:03:18
+ * @LastEditTime: 2022-03-14 17:33:32
  */
 
-import { Controller, Autowired, GetMapping, Post, PostMapping, KoattyContext, Before, HttpController, Get, Exception, Logger, Config } from '../../../src/index';
+import {
+  Controller, Autowired, GetMapping, Post, PostMapping, KoattyContext,
+  Before, HttpController, Get, Exception, Logger, Config, RequestBody
+} from '../../../src/index';
 import { Valid, Validated } from "koatty_validation";
 import { App } from '../App';
 import { TestAspect } from '../aspect/TestAspect';
@@ -51,9 +54,9 @@ export class IndexController extends HttpController {
    * {"code":0,"message":"错误信息","data":null}
    */
   @GetMapping('/')
-  index(): Promise<any> {
+  index(@RequestBody() body: any): Promise<any> {
     this.ctx.status = 200;
-    return this.ok('Hi Koatty');
+    return this.ok("", body);
   }
 
   /**
