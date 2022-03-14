@@ -3,7 +3,7 @@
  * @Usage: 静态配置数据信息
  * @Author: xxx
  * @Date: 2020-12-22 15:24:25
- * @LastEditTime: 2022-02-21 11:43:16
+ * @LastEditTime: 2022-03-14 17:18:52
  */
 export default {
     /*app config*/

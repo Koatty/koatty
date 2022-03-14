@@ -317,7 +317,7 @@ export class Loader {
     public static LoadControllers(app: Koatty) {
         const controllerList = IOCContainer.listClass("CONTROLLER");
 
-        const controllers: any = {};
+        const controllers: string[] = [];
         controllerList.forEach((item: ComponentItem) => {
             item.id = (item.id ?? "").replace("CONTROLLER:", "");
             if (item.id && Helper.isClass(item.target)) {
@@ -328,11 +328,11 @@ export class Loader {
                 if (!(ctl instanceof BaseController)) {
                     throw new Error(`class ${item.id} does not inherit from BaseController`);
                 }
-                controllers[item.id] = 1;
+                controllers.push(item.id);
             }
         });
 
-        app.setMetaData("_controllers", controllers);
+        return controllers;
     }
 
     /**

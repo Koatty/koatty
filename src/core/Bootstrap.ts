@@ -26,7 +26,7 @@ import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Cons
  * mainly for unittest scenarios, you need to actively obtain app instances
  * @returns {Promise<void>}
  */
-const executeBootstrap = async function (target: any, bootFunc: Function, isInitiative = false): Promise<void> {
+const executeBootstrap = async function (target: any, bootFunc: Function, isInitiative = false): Promise<Koatty> {
     // checked runtime
     checkRuntime();
     // unittest running environment
@@ -89,11 +89,15 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
 
         // New router
         const KoattyRouter = newRouter(app);
+        Helper.define(app, "router", KoattyRouter);
+
+        // Create Server
+        app.server = newServe(app);
+        Helper.define(app, "listenCallback", listenCallback(app));
 
         // Load Middleware
         Logger.Log('think', '', 'Load Middlewares ...');
         await Loader.LoadMiddlewares(app);
-
         // Load Components
         Logger.Log('think', '', 'Load Components ...');
         Loader.LoadComponents(app);
@@ -102,28 +106,21 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
         Loader.LoadServices(app);
         // Load Controllers
         Logger.Log('think', '', 'Load Controllers ...');
-        Loader.LoadControllers(app);
-
-        // Emit app ready event
-        Logger.Log('think', '', 'Emit App Ready ...');
-        // app.emit("appReady");
-        await asyncEvent(app, 'appReady');
+        const controllers = Loader.LoadControllers(app);
 
         // Load Routers
         Logger.Log('think', '', 'Load Routers ...');
-        KoattyRouter.LoadRouter(app.getMetaData("_controllers"));
+        KoattyRouter.LoadRouter(controllers);
 
-        Logger.Log('think', '', '====================================');
-        // Start server
-        const server = newServe(app)
-        app.listen(server, listenCallback(app, server.options));
-        // app.emit("appStart");
-        // Emit app started event
-        Logger.Log('think', '', 'Emit App Start ...');
-        asyncEvent(app, 'appStart');
+        // Emit app ready event
+        Logger.Log('think', '', 'Emit App Ready ...');
+        await asyncEvent(app, 'appReady');
 
-        // binding event "appStop"
-        BindProcessEvent(app, 'appStop');
+        if (!isUTRuntime) {
+            app.listen();
+        }
+
+        return app;
     } catch (err) {
         Logger.Error(err);
         process.exit();
@@ -142,7 +139,6 @@ const newRouter = function (app: Koatty) {
     const options: RouterOptions = app.config(undefined, 'router') ?? {};
     const router = NewRouter(app, options, protocol);
 
-    Helper.define(app, "router", router);
     return router;
 }
 
@@ -150,16 +146,26 @@ const newRouter = function (app: Koatty) {
  * Listening callback function
  *
  * @param {Koatty} app
- * @param {ListeningOptions} options
  * @returns {*} 
  */
-const listenCallback = (app: Koatty, options: ListeningOptions) => {
+const listenCallback = (app: Koatty) => {
+    const options = app.server.options;
     return function () {
+        // Emit app started event
+        Logger.Log('think', '', 'Emit App Start ...');
+        asyncEvent(app, 'appStart');
+
+        Logger.Log('think', '', '====================================');
         Logger.Log("think", "", `Nodejs Version: ${process.version}`);
         Logger.Log("think", "", `Koatty Version: v${app.version}`);
         Logger.Log("think", "", `App Environment: ${app.env}`);
+        Logger.Log('think', '', `Server Protocol: ${(options.protocol).toUpperCase()}`);
         Logger.Log("think", "", `Server running at ${options.protocol === "http2" ? "https" : options.protocol}://${options.hostname || '127.0.0.1'}:${options.port}/`);
         Logger.Log("think", "", "====================================");
+
+        // binding event "appStop"
+        Logger.Log('think', '', 'Bind App Stop event ...');
+        BindProcessEvent(app, 'appStop');
         // tslint:disable-next-line: no-unused-expression
         app.appDebug && Logger.Warn(`Running in debug mode.`);
     };
@@ -201,10 +207,8 @@ const newServe = function (app: Koatty) {
         const proto = app.config("protoFile", "router");
         options.ext.protoFile = proto;
     }
-    const server = Serve(app, options);
 
-    Helper.define(app, "server", server);
-    return server;
+    return Serve(app, options);
 }
 
 /**
