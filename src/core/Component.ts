@@ -18,10 +18,10 @@ import { IOCContainer } from "koatty_container";
  * @returns {ClassDecorator}
  */
 export function Component(identifier?: string): ClassDecorator {
-    return (target: any) => {
-        identifier = identifier || IOCContainer.getIdentifier(target);
-        IOCContainer.saveClass("COMPONENT", target, identifier);
-    };
+  return (target: any) => {
+    identifier = identifier || IOCContainer.getIdentifier(target);
+    IOCContainer.saveClass("COMPONENT", target, identifier);
+  };
 }
 
 /**
@@ -32,42 +32,42 @@ export function Component(identifier?: string): ClassDecorator {
  * @returns {ClassDecorator}
  */
 export function Controller(path = ""): ClassDecorator {
-    return (target: any) => {
-        const identifier = IOCContainer.getIdentifier(target);
-        IOCContainer.saveClass("CONTROLLER", target, identifier);
-        IOCContainer.savePropertyData(CONTROLLER_ROUTER, path, target, identifier);
-    };
+  return (target: any) => {
+    const identifier = IOCContainer.getIdentifier(target);
+    IOCContainer.saveClass("CONTROLLER", target, identifier);
+    IOCContainer.savePropertyData(CONTROLLER_ROUTER, path, target, identifier);
+  };
 }
 
 /**
  * Interface for Api output
  */
 export interface ApiOutput {
-    code: number; // 错误码
-    message: string; // 消息内容
-    data: any; // 数据
+  code: number; // 错误码
+  message: string; // 消息内容
+  data: any; // 数据
 }
 
 /**
  * Interface for Api input
  */
 export interface ApiInput {
-    code?: number; // 错误码
-    message?: string; // 消息内容
-    data?: any; // 数据
+  code?: number; // 错误码
+  message?: string; // 消息内容
+  data?: any; // 数据
 }
 
 /**
  * Interface for Controller
  */
 export interface IController {
-    readonly app: Koatty;
-    readonly ctx: KoattyContext;
+  readonly app: Koatty;
+  readonly ctx: KoattyContext;
 
-    __befor?: () => Promise<any>;
-    __after?: () => Promise<any>;
-    readonly ok: (msg?: string | ApiInput, data?: any, ret?: number) => Promise<any>;
-    readonly fail: (msg?: Error | string | ApiInput, data?: any, ret?: number) => void;
+  __befor?: () => Promise<any>;
+  __after?: () => Promise<any>;
+  readonly ok: (msg?: string | ApiInput, data?: any, ret?: number) => Promise<any>;
+  readonly fail: (msg?: Error | string | ApiInput, data?: any, ret?: number) => void;
 }
 
 /**
@@ -78,10 +78,10 @@ export interface IController {
  * @returns {ClassDecorator}
  */
 export function Middleware(identifier?: string): ClassDecorator {
-    return (target: any) => {
-        identifier = identifier || IOCContainer.getIdentifier(target);
-        IOCContainer.saveClass("MIDDLEWARE", target, identifier);
-    };
+  return (target: any) => {
+    identifier = identifier || IOCContainer.getIdentifier(target);
+    IOCContainer.saveClass("MIDDLEWARE", target, identifier);
+  };
 }
 
 /**
@@ -93,7 +93,7 @@ export type KoattyMiddleware = (ctx: KoattyContext, next: KoattyNext) => Promise
  * Interface for Middleware
  */
 export interface IMiddleware {
-    run: (options: any, app: Koatty) => KoattyMiddleware;
+  run: (options: any, app: Koatty) => KoattyMiddleware;
 }
 
 /**
@@ -104,17 +104,17 @@ export interface IMiddleware {
  * @returns {ClassDecorator}
  */
 export function Service(identifier?: string): ClassDecorator {
-    return (target: any) => {
-        identifier = identifier || IOCContainer.getIdentifier(target);
-        IOCContainer.saveClass("SERVICE", target, identifier);
-    };
+  return (target: any) => {
+    identifier = identifier || IOCContainer.getIdentifier(target);
+    IOCContainer.saveClass("SERVICE", target, identifier);
+  };
 }
 
 /**
  * Interface for Service
  */
 export interface IService {
-    readonly app: Koatty;
+  readonly app: Koatty;
 }
 
 /**
@@ -125,19 +125,19 @@ export interface IService {
  * @returns {ClassDecorator}
  */
 export function Plugin(identifier?: string): ClassDecorator {
-    return (target: any) => {
-        identifier = identifier || IOCContainer.getIdentifier(target);
-        // 
-        if (!identifier.endsWith("Plugin")) {
-            throw Error("Plugin class name must be 'Plugin' suffix.");
-        }
-        IOCContainer.saveClass("COMPONENT", target, `${identifier}`);
-    };
+  return (target: any) => {
+    identifier = identifier || IOCContainer.getIdentifier(target);
+    // 
+    if (!identifier.endsWith("Plugin")) {
+      throw Error("Plugin class name must be 'Plugin' suffix.");
+    }
+    IOCContainer.saveClass("COMPONENT", target, `${identifier}`);
+  };
 }
 
 /**
  * Interface for Plugin
  */
 export interface IPlugin {
-    run: (options: any, app: Koatty) => Promise<any>;
+  run: (options: any, app: Koatty) => Promise<any>;
 }

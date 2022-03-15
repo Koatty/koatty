@@ -16,79 +16,79 @@ import { ApiInput, ApiOutput, IController } from '../core/Component';
  * @implements {IController}
  */
 export class BaseController implements IController {
-    readonly app: Koatty;
-    readonly ctx: KoattyContext;
+  readonly app: Koatty;
+  readonly ctx: KoattyContext;
 
-    /**
-     * instance of BaseController.
-     * @param {Koatty} app
-     * @param {KoattyContext} ctx
-     * @memberof BaseController
-     */
-    protected constructor(ctx: KoattyContext, ...arg: any[]) {
-        this.ctx = ctx;
-        this.init(arg);
-    }
+  /**
+   * instance of BaseController.
+   * @param {Koatty} app
+   * @param {KoattyContext} ctx
+   * @memberof BaseController
+   */
+  protected constructor(ctx: KoattyContext, ...arg: any[]) {
+    this.ctx = ctx;
+    this.init(arg);
+  }
 
-    /**
-     * init
-     *
-     * @protected
-     * @memberof BaseController
-     */
-    protected init(...arg: any[]): void {
+  /**
+   * init
+   *
+   * @protected
+   * @memberof BaseController
+   */
+  protected init(...arg: any[]): void {
 
-    }
+  }
 
-    // /**
-    //  * Class pre-execution method (except constructor, init, __after).
-    //  *
-    //  * @returns {Promise<any>}
-    //  * @memberof BaseController
-    //  */
-    // public __before(): Promise<any> {
-    //     return Promise.resolve();
-    // }
+  // /**
+  //  * Class pre-execution method (except constructor, init, __after).
+  //  *
+  //  * @returns {Promise<any>}
+  //  * @memberof BaseController
+  //  */
+  // public __before(): Promise<any> {
+  //     return Promise.resolve();
+  // }
 
-    // /**
-    //  * Class after-execution method (except constructor, init, __before).
-    //  *
-    //  * @public
-    //  * @returns {*}
-    //  * @memberof BaseController
-    //  */
-    // public __after(): Promise<any> {
-    //     return Promise.resolve();
-    // }
+  // /**
+  //  * Class after-execution method (except constructor, init, __before).
+  //  *
+  //  * @public
+  //  * @returns {*}
+  //  * @memberof BaseController
+  //  */
+  // public __after(): Promise<any> {
+  //     return Promise.resolve();
+  // }
 
-    /**
-     * Response to normalize json format content for success
-     *
-     * @param {(string | ApiInput)} msg   待处理的message消息
-     * @param {*} [data]    待处理的数据
-     * @param {number} [code=200]    错误码，默认0
-     * @returns {*}
-     * @memberof BaseController
-     */
-    public ok(msg: string | ApiInput, data?: any, code = 0) {
-        const obj: ApiOutput = formatApiData(msg, data, code);
-        return Promise.resolve(obj);
-    }
+  /**
+   * Response to normalize json format content for success
+   *
+   * @param {(string | ApiInput)} msg   待处理的message消息
+   * @param {*} [data]    待处理的数据
+   * @param {number} [code=200]    错误码，默认0
+   * @returns {*}
+   * @memberof BaseController
+   */
+  public ok(msg: string | ApiInput, data?: any, code = 0) {
+    const obj: ApiOutput = formatApiData(msg, data, code);
+    return Promise.resolve(obj);
+  }
 
-    /**
-     * Response to normalize json format content for fail
-     *
-     * @param {(string | ApiInput)} msg   
-     * @param {*} [data]    
-     * @param {number} [code=1]    
-     * @returns {*}
-     * @memberof BaseController
-     */
-    public fail(msg: Error | string | ApiInput, data?: any, code = 1) {
-        const obj: ApiOutput = formatApiData(msg, data, code);
-        this.ctx.body = obj.data;
-        this.ctx.throw(obj.message, obj.code, 200);
-    }
+  /**
+   * Response to normalize json format content for fail
+   *
+   * @param {(string | ApiInput)} msg   
+   * @param {*} [data]    
+   * @param {number} [code=1]    
+   * @returns {*}
+   * @memberof BaseController
+   */
+  public fail(msg: Error | string | ApiInput, data?: any, code = 1) {
+    const obj: ApiOutput = formatApiData(msg, data, code);
+    this.ctx.body = obj.data;
+    this.ctx.throw(obj.message, obj.code, 200);
+  }
 
 }
 

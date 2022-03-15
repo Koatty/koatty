@@ -9,7 +9,7 @@ import { Koatty } from 'koatty_core';
 import { Trace } from "koatty_trace";
 
 export class TraceMiddleware implements IMiddleware {
-    run(options: any, app: Koatty) {
-        return Trace(options, app);
-    }
+  run(options: any, app: Koatty) {
+    return Trace(options, app);
+  }
 }

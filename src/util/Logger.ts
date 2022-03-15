@@ -24,23 +24,23 @@ export const Logger = DefaultLogger;
  * }} config
  */
 export function SetLogger(app: Koatty, config: {
-    logLevel?: LogLevelType;
-    logConsole?: boolean;
-    logFile?: boolean;
-    logFileLevel?: LogLevelType;
-    logFilePath?: string;
+  logLevel?: LogLevelType;
+  logConsole?: boolean;
+  logFile?: boolean;
+  logFileLevel?: LogLevelType;
+  logFilePath?: string;
 }) {
-    if (config.logLevel !== undefined) {
-        DefaultLogger.setLevel(config.logLevel);
-    }
-    if (config.logConsole !== undefined && !app.silent) {
-        DefaultLogger.setLogConsole(config.logConsole);
-    }
-    if (config.logFile !== undefined && !app.silent) {
-        DefaultLogger.setLogFile(config.logFile);
-        DefaultLogger.setLogFilePath(config.logFilePath);
-    }
-    if (config.logFileLevel !== undefined) {
-        DefaultLogger.setLogFileLevel(config.logFileLevel);
-    }
+  if (config.logLevel !== undefined) {
+    DefaultLogger.setLevel(config.logLevel);
+  }
+  if (config.logConsole !== undefined && !app.silent) {
+    DefaultLogger.setLogConsole(config.logConsole);
+  }
+  if (config.logFile !== undefined && !app.silent) {
+    DefaultLogger.setLogFile(config.logFile);
+    DefaultLogger.setLogFilePath(config.logFilePath);
+  }
+  if (config.logFileLevel !== undefined) {
+    DefaultLogger.setLogFileLevel(config.logFileLevel);
+  }
 }

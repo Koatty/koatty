@@ -9,7 +9,7 @@ import { Koatty } from 'koatty_core';
 import { Payload } from "koatty_payload";
 
 export class PayloadMiddleware implements IMiddleware {
-    run(options: any, app: Koatty) {
-        return Payload(options, app);
-    }
+  run(options: any, app: Koatty) {
+    return Payload(options, app);
+  }
 }

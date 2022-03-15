@@ -14,26 +14,26 @@ import { IService } from '../core/Component';
  * @class Base
  */
 export class BaseService implements IService {
-    readonly app: Koatty;
+  readonly app: Koatty;
 
-    /**
-     * instance of BaseController.
-     * @param {Koatty} app
-     * @param {KoattyContext} ctx
-     * @memberof BaseController
-     */
-    protected constructor(...arg: any[]) {
-        this.init(arg);
-    }
+  /**
+   * instance of BaseController.
+   * @param {Koatty} app
+   * @param {KoattyContext} ctx
+   * @memberof BaseController
+   */
+  protected constructor(...arg: any[]) {
+    this.init(arg);
+  }
 
-    /**
-     * init
-     *
-     * @protected
-     * @memberof BaseController
-     */
-    protected init(...arg: any[]): void {
+  /**
+   * init
+   *
+   * @protected
+   * @memberof BaseController
+   */
+  protected init(...arg: any[]): void {
 
-    }
+  }
 
 }

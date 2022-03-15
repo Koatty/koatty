@@ -10,10 +10,10 @@ import { App } from '../App';
 
 @Middleware()
 export class StaticMiddleware implements IMiddleware {
-    run(options: any, app: App) {
-        return function (ctx: KoattyContext, next: KoattyNext) {
-            return next();
-        }
-        // return Static(options, app);
+  run(options: any, app: App) {
+    return function (ctx: KoattyContext, next: KoattyNext) {
+      return next();
     }
+    // return Static(options, app);
+  }
 }
