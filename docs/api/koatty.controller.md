@@ -17,7 +17,7 @@ export declare function Controller(path?: string): ClassDecorator;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  path | string | controller router path |
+|  path | string | <i>(Optional)</i> controller router path |
 
 <b>Returns:</b>
 

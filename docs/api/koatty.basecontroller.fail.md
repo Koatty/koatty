@@ -17,8 +17,8 @@ fail(msg: Error | string | ApiInput, data?: any, code?: number): void;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  msg | Error \| string \| [ApiInput](./koatty.apiinput.md) |  |
-|  data | any |  |
-|  code | number |  |
+|  data | any | <i>(Optional)</i> |
+|  code | number | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

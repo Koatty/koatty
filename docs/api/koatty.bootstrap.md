@@ -17,7 +17,7 @@ export declare function Bootstrap(bootFunc?: Function): ClassDecorator;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  bootFunc | Function |  |
+|  bootFunc | Function | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

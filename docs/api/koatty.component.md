@@ -17,7 +17,7 @@ export declare function Component(identifier?: string): ClassDecorator;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  identifier | string | component name |
+|  identifier | string | <i>(Optional)</i> component name |
 
 <b>Returns:</b>
 

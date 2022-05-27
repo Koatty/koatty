@@ -16,7 +16,7 @@ deny(code?: number): Promise<any>;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  code | number |  |
+|  code | number | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

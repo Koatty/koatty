@@ -17,7 +17,7 @@ redirect(urls: string, alt?: string): void;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  urls | string |  |
-|  alt | string |  |
+|  alt | string | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

@@ -1,7 +1,10 @@
+/*
+ * 
+ */
 module.exports = {
   extends: ['@commitlint/config-conventional'],
   rules: {
-    'type-enum': [2, 'always', ['init', 'feat', 'fix', 'docs', 'style', 'refactor', 'perf', 'test', 'build', 'ci', 'chore', 'revert']],
+    'type-enum': [2, 'always', ['init', 'feat', 'fix', 'docs', 'style', 'refactor', 'perf', 'test', 'chore', 'build', 'ci', 'revert']],
     'type-empty': [2, 'never'],
     'scope-enum': [0], // 不校验scope类型
     'scope-empty': [0], // 不校验scope是否设置

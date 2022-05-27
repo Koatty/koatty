@@ -16,8 +16,8 @@ header(name?: string, value?: any): any;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  name | string |  |
-|  value | any |  |
+|  name | string | <i>(Optional)</i> |
+|  value | any | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

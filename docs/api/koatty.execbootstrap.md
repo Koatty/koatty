@@ -16,7 +16,7 @@ export declare function ExecBootStrap(bootFunc?: Function): (target: any) => Pro
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  bootFunc | Function | callback function |
+|  bootFunc | Function | <i>(Optional)</i> callback function |
 
 <b>Returns:</b>
 

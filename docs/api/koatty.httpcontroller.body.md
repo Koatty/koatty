@@ -17,8 +17,8 @@ body(data: any, contentType?: string, encoding?: string): void;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  data | any |  |
-|  contentType | string |  |
-|  encoding | string |  |
+|  contentType | string | <i>(Optional)</i> |
+|  encoding | string | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

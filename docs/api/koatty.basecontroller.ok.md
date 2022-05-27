@@ -17,8 +17,8 @@ ok(msg: string | ApiInput, data?: any, code?: number): Promise<ApiOutput>;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  msg | string \| [ApiInput](./koatty.apiinput.md) | 待处理的message消息 |
-|  data | any | 待处理的数据 |
-|  code | number | 错误码，默认0 |
+|  data | any | <i>(Optional)</i> 待处理的数据 |
+|  code | number | <i>(Optional)</i> 错误码，默认0 |
 
 <b>Returns:</b>
 

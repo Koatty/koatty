@@ -17,7 +17,7 @@ type(contentType: string, encoding?: string | boolean): string;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  contentType | string |  |
-|  encoding | string \| boolean |  |
+|  encoding | string \| boolean | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

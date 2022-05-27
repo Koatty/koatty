@@ -16,7 +16,7 @@ param(name?: string): Promise<any>;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  name | string |  |
+|  name | string | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

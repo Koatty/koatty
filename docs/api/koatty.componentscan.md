@@ -17,7 +17,7 @@ export declare function ComponentScan(scanPath?: string | string[]): ClassDecora
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  scanPath | string \| string\[\] |  |
+|  scanPath | string \| string\[\] | <i>(Optional)</i> |
 
 <b>Returns:</b>
 
