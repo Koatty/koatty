@@ -98,7 +98,7 @@ export class IndexController extends BaseController {
 
 ## How to do Unit Testing
 
->now only support `jest` UT framework
+>only support `jest` UT framework now 
 
 ```javascript
 import request from 'supertest';

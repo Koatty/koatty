@@ -760,16 +760,15 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@koa/router@^10.1.1":
-  version "10.1.1"
-  resolved "https://registry.yarnpkg.com/@koa/router/-/router-10.1.1.tgz#8e5a85c9b243e0bc776802c0de564561e57a5f78"
-  integrity sha512-ORNjq5z4EmQPriKbR0ER3k4Gh7YGNhWDL7JBW+8wXDrHLbWYKYSJaOJ9aN06npF5tbTxe2JBOsurpJDAvjiXKw==
+"@koa/router@^12.0.0":
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/@koa/router/-/router-12.0.0.tgz#2ae7937093fd392761c0e5833c368379d4a35737"
+  integrity sha512-cnnxeKHXlt7XARJptflGURdJaO+ITpNkOHmQu7NHmCoRinPbyvFzce/EG/E8Zy81yQ1W9MoSdtklc3nyaDReUw==
   dependencies:
-    debug "^4.1.1"
-    http-errors "^1.7.3"
+    http-errors "^2.0.0"
     koa-compose "^4.1.0"
     methods "^1.1.2"
-    path-to-regexp "^6.1.0"
+    path-to-regexp "^6.2.1"
 
 "@microsoft/api-documenter@^7.x.x":
   version "7.17.16"
@@ -2819,7 +2818,7 @@ http-assert@^1.3.0, http-assert@^1.5.0:
     deep-equal "~1.0.1"
     http-errors "~1.8.0"
 
-http-errors@2.0.0:
+http-errors@2.0.0, http-errors@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/http-errors/-/http-errors-2.0.0.tgz#b7774a1486ef73cf7667ac9ae0858c012c57b9d3"
   integrity sha512-FtwrG/euBzaEjYeRqOgly7G0qviiXoJWnvEH2Z1plBdXgbyjv34pHTSb9zoeHMyDy33+DWy5Wt9Wo+TURtOYSQ==
@@ -2830,7 +2829,7 @@ http-errors@2.0.0:
     statuses "2.0.1"
     toidentifier "1.0.1"
 
-http-errors@^1.6.3, http-errors@^1.7.3, http-errors@~1.8.0:
+http-errors@^1.6.3, http-errors@~1.8.0:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/http-errors/-/http-errors-1.8.1.tgz#7c3f28577cbc8a207388455dbd62295ed07bd68c"
   integrity sha512-Kpk9Sm7NmI+RHhnj6OIWDI1d6fIoFAtFt9RLaTMRlg/8w49juAStsrBgp0Dp4OdxdVbRIeKhtCUvoi/RuAhO4g==
@@ -3711,12 +3710,12 @@ koatty_proto@1.1.8, koatty_proto@^1.x.x:
     koatty_lib "^1.x.x"
     protobufjs "^6.11.3"
 
-koatty_router@1.7.6:
-  version "1.7.6"
-  resolved "https://registry.yarnpkg.com/koatty_router/-/koatty_router-1.7.6.tgz#ae171d9be104be0b2a83086e4723c72e93278041"
-  integrity sha512-xNL8XMQwXJaICqetYX8G9o+uyUekvjK41+3t4KI1fqEKXvSNYmb6MKqbty7aEmZzpqLEyMRWLmYmNucq8cjBFw==
+koatty_router@1.7.9:
+  version "1.7.9"
+  resolved "https://registry.yarnpkg.com/koatty_router/-/koatty_router-1.7.9.tgz#56e1b1320957a202c37c0ac05c711e710313c279"
+  integrity sha512-Lvj34yJ0p5LP0a4Z10If+dJZazOCej4ilpQg4WAPKJr9+aM5c2o4esHyzAILSYALlidqoN+i1eIDrPuWTN31Gw==
   dependencies:
-    "@koa/router" "^10.1.1"
+    "@koa/router" "^12.0.0"
     koatty_container "^1.x.x"
     koatty_core "^1.x.x"
     koatty_exception "^1.x.x"
@@ -3739,10 +3738,10 @@ koatty_serve@1.4.10:
     tslib "^2.4.0"
     ws "^8.7.0"
 
-koatty_trace@1.6.7:
-  version "1.6.7"
-  resolved "https://registry.yarnpkg.com/koatty_trace/-/koatty_trace-1.6.7.tgz#4c7cabbe1b760e25b3f99f8e7ec2c2895a5778db"
-  integrity sha512-Ft3SpPcG9ZwuG0cQei5SyqlmiZ8op85cBejw1fHDUX9y4DXF0JqbDF1vxp2wqdvzb5IL7MlwSh12yKjZsY0Bcw==
+koatty_trace@1.6.9:
+  version "1.6.9"
+  resolved "https://registry.yarnpkg.com/koatty_trace/-/koatty_trace-1.6.9.tgz#9dac8c9eb7ac6f205aec1eb8a2f3a35d41edfd78"
+  integrity sha512-OudykbxjGlcT/lbWj6jiwPAafW7Vl+KyRDqEwAwaFL9rlQ4NuyWkLqG5inP8nnwaNxDo0yPcDcVFbBmIr/Z0rQ==
   dependencies:
     koatty_container "^1.x.x"
     koatty_core "^1.x.x"
@@ -3751,9 +3750,9 @@ koatty_trace@1.6.7:
     uuid "^8.3.2"
 
 koatty_validation@^1.x.x:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/koatty_validation/-/koatty_validation-1.2.4.tgz#941f0b324f9f0adc4cc091c744a739e23ddb3cc8"
-  integrity sha512-Xl62p93u0SjLXnAPbpXw8i5e6hHFD2Fy5ZIOP2BId8wsbEs3FAYTuNykVVQ+9QNbAPy2yu4G8jGGJc+jUdMJJw==
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/koatty_validation/-/koatty_validation-1.2.5.tgz#359d0ee2bc92841e6796ed96bdf209c66fb87967"
+  integrity sha512-6R+gbch4VXM7tO9IglUq+XAHNrnyO8QPrMK4izD1PaEakO99+IUhhfl5eRO71RGaUFejy1ncz9IaI8x+x/Xmeg==
   dependencies:
     class-validator "^0.13.2"
     koatty_container "^1.x.x"
@@ -4284,7 +4283,7 @@ path-strip-sep@^1.0.12:
   dependencies:
     tslib "^2"
 
-path-to-regexp@^6.1.0:
+path-to-regexp@^6.2.1:
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-6.2.1.tgz#d54934d6798eb9e5ef14e7af7962c945906918e5"
   integrity sha512-JLyh7xT1kizaEvcaXOQwOc2/Yhw6KZOvPf1S8401UyLk86CU79LN3vl7ztXGm/pZ+YjoyAJ4rxmHwbkBXJX+yw==
