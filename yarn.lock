@@ -459,12 +459,20 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@godaddy/terminus@^4.10.2":
-  version "4.10.2"
-  resolved "https://registry.yarnpkg.com/@godaddy/terminus/-/terminus-4.10.2.tgz#7ed17253fb6a24fe4e834b461a57bbeac8b00ddc"
-  integrity sha512-xzNSk6yL3tbeD/vtmHlrBbxflmmbdBKT89rM4b10H5LeaBjBFgG6CsDPTb6CdZHdwipZl1Rxn5RDH5UbCLf8Qw==
+"@godaddy/terminus@^4.11.2":
+  version "4.11.2"
+  resolved "https://registry.yarnpkg.com/@godaddy/terminus/-/terminus-4.11.2.tgz#86e8e0c40ad64eb62f5e2c3ee5c20beff97d9a2d"
+  integrity sha512-e/kbOWpGKME42eltM/wXM3RxSUOrfureZxEd6Dt6NXyFoJ7E8lnmm7znXydJsL3B7ky4HRFZI+eHrep54NZbeQ==
   dependencies:
     stoppable "^1.1.0"
+
+"@grpc/grpc-js@^1.6.12":
+  version "1.6.12"
+  resolved "https://registry.yarnpkg.com/@grpc/grpc-js/-/grpc-js-1.6.12.tgz#20f710d8a8c5c396b2ae9530ba6c06b984614fdf"
+  integrity sha512-JmvQ03OTSpVd9JTlj/K3IWHSz4Gk/JMLUTtW7Zb0KvO1LcOYGATh5cNuRYzCAeDR3O8wq+q8FZe97eO9MBrkUw==
+  dependencies:
+    "@grpc/proto-loader" "^0.7.0"
+    "@types/node" ">=12.12.47"
 
 "@grpc/grpc-js@^1.6.7":
   version "1.6.7"
@@ -483,6 +491,17 @@
     lodash.camelcase "^4.3.0"
     long "^4.0.0"
     protobufjs "^6.10.0"
+    yargs "^16.2.0"
+
+"@grpc/proto-loader@^0.7.0":
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/@grpc/proto-loader/-/proto-loader-0.7.2.tgz#fa63178853afe1473c50cff89fe572f7c8b20154"
+  integrity sha512-jCdyLIT/tdQ1zhrbTQnJNK5nbDf0GoBpy5jVNywBzzMDF+Vs6uEaHnfz46dMtDxkvwrF2hzk5Z67goliceH0sA==
+  dependencies:
+    "@types/long" "^4.0.1"
+    lodash.camelcase "^4.3.0"
+    long "^4.0.0"
+    protobufjs "^7.0.0"
     yargs "^16.2.0"
 
 "@humanwhocodes/config-array@^0.9.2":
@@ -3725,18 +3744,18 @@ koatty_router@1.7.9:
     koatty_validation "^1.x.x"
     tslib "^2.4.0"
 
-koatty_serve@1.4.10:
-  version "1.4.10"
-  resolved "https://registry.yarnpkg.com/koatty_serve/-/koatty_serve-1.4.10.tgz#d9c7abb97ce45d078005e507b09bb2653d2f288f"
-  integrity sha512-U4Wu2AJTaZL+vDV8UCjbZe52s1wftKsFi+Da43cG41+QV5AreEq5h7SunzEEMsecSIVAciBwCEWU8TScKXT28Q==
+koatty_serve@1.4.11:
+  version "1.4.11"
+  resolved "https://registry.yarnpkg.com/koatty_serve/-/koatty_serve-1.4.11.tgz#cbdc689848d0becd1b0ec271c3423e2e17a79d34"
+  integrity sha512-jAXMrDyb5diRHsloO8wVWyqsUIluLpYExW5fTUjyJM7V7rDFf7bKND9aTVn3CiZEfJQNcsN1LvZ5TiOuB3OFQA==
   dependencies:
-    "@godaddy/terminus" "^4.10.2"
-    "@grpc/grpc-js" "^1.6.7"
+    "@godaddy/terminus" "^4.11.2"
+    "@grpc/grpc-js" "^1.6.12"
     koatty_core "^1.x.x"
     koatty_lib "^1.x.x"
     koatty_logger "^1.x.x"
     tslib "^2.4.0"
-    ws "^8.7.0"
+    ws "^8.8.1"
 
 koatty_trace@1.6.9:
   version "1.6.9"
@@ -3749,7 +3768,7 @@ koatty_trace@1.6.9:
     koatty_lib "^1.x.x"
     uuid "^8.3.2"
 
-koatty_validation@^1.x.x:
+koatty_validation@1.2.5, koatty_validation@^1.x.x:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/koatty_validation/-/koatty_validation-1.2.5.tgz#359d0ee2bc92841e6796ed96bdf209c66fb87967"
   integrity sha512-6R+gbch4VXM7tO9IglUq+XAHNrnyO8QPrMK4izD1PaEakO99+IUhhfl5eRO71RGaUFejy1ncz9IaI8x+x/Xmeg==
@@ -3863,6 +3882,11 @@ long@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/long/-/long-4.0.0.tgz#9a7b71cfb7d361a194ea555241c92f7468d5bf28"
   integrity sha512-XsP+KhQif4bjX1kbuSiySJFNAehNxgLb6hPRGJ9QsUr8ajHkuXGdrHmFUTUUXhDwVX2R5bY4JNZEwbUiMhV+MA==
+
+long@^5.0.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/long/-/long-5.2.0.tgz#2696dadf4b4da2ce3f6f6b89186085d94d52fd61"
+  integrity sha512-9RTUNjK60eJbx3uz+TEGF7fUr29ZDxR5QzXcyDpeSfeH28S9ycINflOgOlppit5U+4kNTe83KQnMEerw7GmE8w==
 
 lru-cache@^6.0.0:
   version "6.0.0"
@@ -4401,6 +4425,24 @@ protobufjs@^6.10.0, protobufjs@^6.11.3:
     "@types/long" "^4.0.1"
     "@types/node" ">=13.7.0"
     long "^4.0.0"
+
+protobufjs@^7.0.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-7.1.0.tgz#5174b5f96fad4f7dea7dd4abd594042ac360e665"
+  integrity sha512-rCuxKlh0UQKSMjrpIcTLbR5TtGQ52cgs1a5nUoPBAKOccdPblN67BJtjrbtudUJK6HmBvUdsmymyYOzO7lxZEA==
+  dependencies:
+    "@protobufjs/aspromise" "^1.1.2"
+    "@protobufjs/base64" "^1.1.2"
+    "@protobufjs/codegen" "^2.0.4"
+    "@protobufjs/eventemitter" "^1.1.0"
+    "@protobufjs/fetch" "^1.1.0"
+    "@protobufjs/float" "^1.0.2"
+    "@protobufjs/inquire" "^1.1.0"
+    "@protobufjs/path" "^1.1.2"
+    "@protobufjs/pool" "^1.1.0"
+    "@protobufjs/utf8" "^1.1.0"
+    "@types/node" ">=13.7.0"
+    long "^5.0.0"
 
 punycode@^2.1.0:
   version "2.1.1"
@@ -5343,10 +5385,10 @@ write-file-atomic@^4.0.1:
     imurmurhash "^0.1.4"
     signal-exit "^3.0.7"
 
-ws@^8.7.0:
-  version "8.7.0"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-8.7.0.tgz#eaf9d874b433aa00c0e0d8752532444875db3957"
-  integrity sha512-c2gsP0PRwcLFzUiA8Mkr37/MI7ilIlHQxaEAtd0uNMbVMoy8puJyafRlm0bV9MbGSabUPeLrRRaqIBcFcA2Pqg==
+ws@^8.8.1:
+  version "8.8.1"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.8.1.tgz#5dbad0feb7ade8ecc99b830c1d77c913d4955ff0"
+  integrity sha512-bGy2JzvzkPowEJV++hF07hAD6niYSr0JzBNo/J29WsB57A2r7Wlc1UFcTR9IzrPvuNVO4B8LGqF8qcpsVOhJCA==
 
 xml2js@^0.4.23:
   version "0.4.23"
