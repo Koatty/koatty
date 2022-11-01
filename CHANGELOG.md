@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.7.0](https://github.com/thinkkoa/koatty/compare/v3.6.10...v3.7.0) (2022-11-01)
+
+
+### Bug Fixes
+
+* ctx.body未赋值导致的404 ([ea0a248](https://github.com/thinkkoa/koatty/commit/ea0a248a71031b2d8a26b0b4280410dcdeb841af))
+
 ### [3.6.10](https://github.com/thinkkoa/koatty/compare/v3.6.10-1...v3.6.10) (2022-09-05)
 
 
