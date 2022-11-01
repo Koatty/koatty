@@ -10,7 +10,6 @@
 |  --- | --- |
 |  [BaseController](./koatty.basecontroller.md) | Base controller  BaseController  {<!-- -->IController<!-- -->} |
 |  [BaseService](./koatty.baseservice.md) | Base class  Base |
-|  [HttpController](./koatty.httpcontroller.md) | HTTP controller  HttpController  {<!-- -->IController<!-- -->} |
 
 ## Functions
 
