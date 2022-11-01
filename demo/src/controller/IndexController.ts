@@ -3,12 +3,12 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:31:17
- * @LastEditTime: 2022-03-14 17:33:32
+ * @LastEditTime: 2022-10-31 16:54:54
  */
 
 import {
   Controller, Autowired, GetMapping, Post, PostMapping, KoattyContext,
-  Before, HttpController, Get, Exception, Logger, Config, RequestBody
+  Before, Get, Exception, Logger, Config, RequestBody, BaseController
 } from '../../../src/index';
 import { Valid, Validated } from "koatty_validation";
 import { App } from '../App';
@@ -18,7 +18,7 @@ import { TestService } from '../service/TestService';
 import { BussinessException } from '../exception/BussinessException';
 
 @Controller('/')
-export class IndexController extends HttpController {
+export class IndexController extends BaseController {
   app: App;
   ctx: KoattyContext;
 
@@ -31,16 +31,16 @@ export class IndexController extends HttpController {
    * @returns {*}  {Promise<any>}
    * @memberof TestController
    */
-  async __before(): Promise<any> {
-    // 登录检查
-    const token = this.header("x-access-token");
-    const isLogin = await this.TestService.checkLogin(token);
-    if (isLogin) {
-      this.ctx.userId = `${Date.now()}_${String(Math.random()).substring(2)}`;
-    } else {
-      return this.fail('no login', { needLogin: 1 });
-    }
-  }
+  // async __before(): Promise<any> {
+  //   // 登录检查
+  //   const token = this.ctx.get("x-access-token");
+  //   const isLogin = await this.TestService.checkLogin(token);
+  //   if (isLogin) {
+  //     this.ctx.userId = `${Date.now()}_${String(Math.random()).substring(2)}`;
+  //   } else {
+  //     return this.fail('no login', { needLogin: 1 });
+  //   }
+  // }
 
   /**
    * @api {get} / index接口
@@ -55,8 +55,8 @@ export class IndexController extends HttpController {
    */
   @GetMapping('/')
   index(@RequestBody() body: any): Promise<any> {
-    this.ctx.status = 200;
-    return this.ok("", body);
+    // this.ctx.session.username = "test"
+    return this.ok({ "code": 1 });
   }
 
   /**

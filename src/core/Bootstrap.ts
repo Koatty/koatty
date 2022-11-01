@@ -7,7 +7,7 @@
 import "reflect-metadata";
 import fs from "fs";
 import EventEmitter from "events";
-import { Koatty } from 'koatty_core';
+import { Koatty, KoattyServer } from 'koatty_core';
 import { NewRouter, RouterOptions } from "koatty_router";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
 import { BindProcessEvent, Serve, ListeningOptions } from "koatty_serve";
@@ -87,14 +87,6 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
     // Load App ready hooks
     Loader.LoadAppReadyHooks(app, target);
 
-    // New router
-    const KoattyRouter = newRouter(app);
-    Helper.define(app, "router", KoattyRouter);
-
-    // Create Server
-    app.server = newServe(app);
-    Helper.define(app, "listenCallback", listenCallback(app));
-
     // Load Middleware
     Logger.Log('think', '', 'Load Middlewares ...');
     await Loader.LoadMiddlewares(app);
@@ -108,16 +100,21 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
     Logger.Log('think', '', 'Load Controllers ...');
     const controllers = Loader.LoadControllers(app);
 
+    // Create Server
+    app.server = newServe(app);
+    // Create router
+    app.router = newRouter(app);
+
     // Load Routers
     Logger.Log('think', '', 'Load Routers ...');
-    KoattyRouter.LoadRouter(controllers);
+    app.router.LoadRouter(controllers);
 
     // Emit app ready event
     Logger.Log('think', '', 'Emit App Ready ...');
     await asyncEvent(app, 'appReady');
 
     if (!isUTRuntime) {
-      app.listen();
+      app.listen(app.server, listenCallback(app));
     }
 
     return app;
@@ -149,8 +146,8 @@ const newRouter = function (app: Koatty) {
  * @returns {*} 
  */
 const listenCallback = (app: Koatty) => {
-  const options = app.server.options;
   return function () {
+    const options = app.server.options;
     // Emit app started event
     Logger.Log('think', '', 'Emit App Start ...');
     asyncEvent(app, 'appStart');
@@ -183,10 +180,9 @@ const newServe = function (app: Koatty) {
     app.config('app_port') || 3000;
   const hostname = process.env.IP ||
     process.env.HOSTNAME?.replace(/-/g, '.') || app.config('app_host') || '127.0.0.1';
+
   const options: ListeningOptions = {
-    hostname,
-    port,
-    protocol,
+    hostname, port, protocol,
     ext: {
       key: "",
       cert: "",
@@ -208,7 +204,11 @@ const newServe = function (app: Koatty) {
     options.ext.protoFile = proto;
   }
 
-  return Serve(app, options);
+  const server = Serve(app, options);
+  process.on('SIGINT', () => {
+    server.Stop();
+  })
+  return server;
 }
 
 /**

@@ -10,6 +10,25 @@ import { Koatty, KoattyContext, KoattyNext } from 'koatty_core';
 import { CONTROLLER_ROUTER } from "koatty_router";
 import { IOCContainer } from "koatty_container";
 
+
+/**
+ * Interface for Api output
+ */
+export interface ApiOutput {
+  code: number; // 错误码
+  message: string; // 消息内容
+  data: any; // 数据
+}
+
+/**
+ * Interface for Api input
+ */
+export interface ApiInput {
+  code?: number; // 错误码
+  message?: string; // 消息内容
+  data?: any; // 数据
+}
+
 /**
  * Indicates that an decorated class is a "component".
  *
@@ -40,24 +59,6 @@ export function Controller(path = ""): ClassDecorator {
 }
 
 /**
- * Interface for Api output
- */
-export interface ApiOutput {
-  code: number; // 错误码
-  message: string; // 消息内容
-  data: any; // 数据
-}
-
-/**
- * Interface for Api input
- */
-export interface ApiInput {
-  code?: number; // 错误码
-  message?: string; // 消息内容
-  data?: any; // 数据
-}
-
-/**
  * Interface for Controller
  */
 export interface IController {
@@ -66,8 +67,6 @@ export interface IController {
 
   __befor?: () => Promise<any>;
   __after?: () => Promise<any>;
-  readonly ok: (msg?: string | ApiInput, data?: any, ret?: number) => Promise<any>;
-  readonly fail: (msg?: Error | string | ApiInput, data?: any, ret?: number) => void;
 }
 
 /**

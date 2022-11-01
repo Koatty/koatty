@@ -10,12 +10,12 @@ import { Koatty } from 'koatty_core';
 import { LoadConfigs as loadConf } from "koatty_config";
 import { Logger, SetLogger } from "../util/Logger";
 import { prevent } from "koatty_exception";
-import { IMiddleware, IPlugin } from './Component';
+import { IMiddleware, IPlugin } from '../component/Component';
 import { AppReadyHookFunc } from "./Bootstrap";
 import { checkClass, Helper } from "../util/Helper";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
 import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
-import { BaseController } from "../controller/BaseController";
+import { BaseController } from "../component/BaseController";
 import { TraceMiddleware } from "../middleware/TraceMiddleware";
 import { PayloadMiddleware } from "../middleware/PayloadMiddleware";
 

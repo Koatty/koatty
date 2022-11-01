@@ -4,9 +4,9 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-05-20 15:45:24
  */
-import { formatApiData } from "../util/Helper";
 import { Koatty, KoattyContext } from 'koatty_core';
-import { ApiInput, ApiOutput, IController } from '../core/Component';
+import { formatApiData } from '../util/Helper';
+import { ApiInput, ApiOutput, IController } from './Component';
 
 /**
  * Base controller
@@ -40,26 +40,6 @@ export class BaseController implements IController {
 
   }
 
-  // /**
-  //  * Class pre-execution method (except constructor, init, __after).
-  //  *
-  //  * @returns {Promise<any>}
-  //  * @memberof BaseController
-  //  */
-  // public __before(): Promise<any> {
-  //     return Promise.resolve();
-  // }
-
-  // /**
-  //  * Class after-execution method (except constructor, init, __before).
-  //  *
-  //  * @public
-  //  * @returns {*}
-  //  * @memberof BaseController
-  //  */
-  // public __after(): Promise<any> {
-  //     return Promise.resolve();
-  // }
 
   /**
    * Response to normalize json format content for success
@@ -89,6 +69,27 @@ export class BaseController implements IController {
     this.ctx.body = obj.data;
     this.ctx.throw(obj.message, obj.code, 200);
   }
+
+  // /**
+  //  * Class pre-execution method (except constructor, init, __after).
+  //  *
+  //  * @returns {Promise<any>}
+  //  * @memberof BaseController
+  //  */
+  // public __before(): Promise<any> {
+  //     return Promise.resolve();
+  // }
+
+  // /**
+  //  * Class after-execution method (except constructor, init, __before).
+  //  *
+  //  * @public
+  //  * @returns {*}
+  //  * @memberof BaseController
+  //  */
+  // public __after(): Promise<any> {
+  //     return Promise.resolve();
+  // }
 
 }
 

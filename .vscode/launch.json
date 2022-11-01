@@ -4,7 +4,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "TS Program",
+            "name": "Koatty Test Program",
             "args": [
                 "${workspaceRoot}/demo/src/App.ts"
             ],

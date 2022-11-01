@@ -5,7 +5,7 @@
  * @ version: 2020-05-10 11:49:15
  */
 import { Helper } from "koatty_lib";
-import { ApiOutput } from "../core/Component";
+import { ApiOutput } from "../component/Component";
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
 // export Helper

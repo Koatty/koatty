@@ -5,7 +5,7 @@
  * @ version: 2020-05-18 11:24:49
  */
 import { Koatty } from 'koatty_core';
-import { IService } from '../core/Component';
+import { IService } from './Component';
 
 /**
  * Base class
