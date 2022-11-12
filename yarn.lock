@@ -3811,10 +3811,10 @@ koatty_proto@^1.x.x:
     koatty_lib "^1.x.x"
     protobufjs "^6.11.3"
 
-koatty_router@1.7.12:
-  version "1.7.12"
-  resolved "https://registry.yarnpkg.com/koatty_router/-/koatty_router-1.7.12.tgz#bc79b4151f9b6aa39095202b290eff80a1e8a535"
-  integrity sha512-VNd6w14w5v8UalU1Fc5yw8JjoAfQD+THvS5aBfR0Z6Cw8C04CuYQ/l3D5D9gPC54aPJLM6ZfmfT9sXgCvn0YFw==
+koatty_router@1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/koatty_router/-/koatty_router-1.8.0.tgz#bf38f6e5b0d266db39c886429b2999e5df090d83"
+  integrity sha512-LjSU5xlPZ1mB66mvij7fRYoLIyjQFovEbdvvzeatkpPor+XWwdYzI4AuEK3sod61k6GZbqXCWxEJF0D4vk9sSA==
   dependencies:
     "@koa/router" "^12.0.0"
     koatty_container "^1.x.x"
