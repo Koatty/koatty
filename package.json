@@ -91,7 +91,7 @@
     "koatty_payload": "1.3.18",
     "koatty_proto": "^1.1.9",
     "koatty_router": "1.8.0",
-    "koatty_serve": "1.5.0",
+    "koatty_serve": "1.5.1",
     "koatty_trace": "1.7.0",
     "koatty_validation": "1.2.5",
     "reflect-metadata": "0.1.13",

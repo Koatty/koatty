@@ -3819,10 +3819,10 @@ koatty_router@1.8.0:
     koatty_validation "^1.x.x"
     tslib "^2.4.0"
 
-koatty_serve@1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/koatty_serve/-/koatty_serve-1.5.0.tgz#825a296e2680c91913a56e8e80e4e71152de167f"
-  integrity sha512-IdZ/gBtwBj34gzlOyEaw5ANYVnOvh3LON3IQz5ip2+eNMjaKKL5h5HjDy1iuCpjM9fDhck1c3ti22p2O2gacZQ==
+koatty_serve@1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/koatty_serve/-/koatty_serve-1.5.1.tgz#160b620aa4f86abedb6c5e1cdae2d36cfad465d8"
+  integrity sha512-V8BsNONgGoTwSGWMT7b2eF/X9mC2yG498zbxCnXbyRaPtKqSDL/ER6egucEBgFsvO0e5yHyIivr87tk9NHB8YA==
   dependencies:
     "@grpc/grpc-js" "^1.7.3"
     koatty_core "^1.x.x"
