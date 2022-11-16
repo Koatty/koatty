@@ -11,6 +11,7 @@ Use Typescript's decorator implement IOC and AOP.
 * HTTP、HTTPS、HTTP2、gRPC、WebSocket server.
 * Support loading environment configuration, parsing command line parameters (process. argv) and environment variables (process.env)
 * `@ExceptionHandler()` Register global exception handling
+* graceful shutdown and pre-exit event
 
 
 ## Documentation
