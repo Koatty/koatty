@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.7.2](https://github.com/thinkkoa/koatty/compare/v3.7.1...v3.7.2) (2022-11-16)
+
+
+### Bug Fixes
+
+* add log ([08dcf4d](https://github.com/thinkkoa/koatty/commit/08dcf4df2ce86f08db8cd34877ed7d06a50b4deb))
+* sigint监听修复 ([f632191](https://github.com/thinkkoa/koatty/commit/f632191897a6c3220d9be8babc2d538d7ad085f7))
+
 ### [3.7.1](https://github.com/thinkkoa/koatty/compare/v3.7.0...v3.7.1) (2022-11-12)
 
 ## [3.7.0](https://github.com/thinkkoa/koatty/compare/v3.6.10...v3.7.0) (2022-11-01)
