@@ -291,7 +291,7 @@ export class Loader {
         if (defaultList.includes(key)) {
           Logger.Warn(`Middleware ${key} cannot be disabled.`);
         } else {
-          Logger.Warn(`Middleware ${key} is loaded but not allowed to execute.`);
+          Logger.Warn(`Middleware ${key} already loaded but not effective.`);
           continue;
         }
       }
@@ -401,9 +401,6 @@ export class Loader {
     });
 
     const pluginConfList = pluginsConf.list;
-    if (pluginList.length > pluginConfList.length) {
-      Logger.Warn("Some plugins is loaded but not allowed to execute.");
-    }
     for (const key of pluginConfList) {
       const handle: IPlugin = IOCContainer.get(key, "COMPONENT");
       if (!Helper.isFunction(handle.run)) {
@@ -411,6 +408,7 @@ export class Loader {
         continue;
       }
       if (pluginsConf.config[key] === false) {
+        Logger.Warn(`Plugin ${key} already loaded but not effective.`);
         continue;
       }
 
