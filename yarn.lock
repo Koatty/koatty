@@ -459,13 +459,6 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@godaddy/terminus@^4.11.2":
-  version "4.11.2"
-  resolved "https://registry.yarnpkg.com/@godaddy/terminus/-/terminus-4.11.2.tgz#86e8e0c40ad64eb62f5e2c3ee5c20beff97d9a2d"
-  integrity sha512-e/kbOWpGKME42eltM/wXM3RxSUOrfureZxEd6Dt6NXyFoJ7E8lnmm7znXydJsL3B7ky4HRFZI+eHrep54NZbeQ==
-  dependencies:
-    stoppable "^1.1.0"
-
 "@grpc/grpc-js@^1.6.7":
   version "1.6.7"
   resolved "https://registry.yarnpkg.com/@grpc/grpc-js/-/grpc-js-1.6.7.tgz#4c4fa998ff719fe859ac19fe977fdef097bb99aa"
@@ -3826,23 +3819,22 @@ koatty_router@1.8.0:
     koatty_validation "^1.x.x"
     tslib "^2.4.0"
 
-koatty_serve@1.4.12:
-  version "1.4.12"
-  resolved "https://registry.yarnpkg.com/koatty_serve/-/koatty_serve-1.4.12.tgz#906de919a6333023af1ff90efd22c20d0d3029e2"
-  integrity sha512-fEnxrAMkZf3ZK5DgvgzeMNaClaAF4Ru5rUnM1MC78nqCPt/1oLK4IXcpxjHa5g7KVa//slrdU9OYgfB0ZX6A0Q==
+koatty_serve@1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/koatty_serve/-/koatty_serve-1.5.0.tgz#825a296e2680c91913a56e8e80e4e71152de167f"
+  integrity sha512-IdZ/gBtwBj34gzlOyEaw5ANYVnOvh3LON3IQz5ip2+eNMjaKKL5h5HjDy1iuCpjM9fDhck1c3ti22p2O2gacZQ==
   dependencies:
-    "@godaddy/terminus" "^4.11.2"
     "@grpc/grpc-js" "^1.7.3"
     koatty_core "^1.x.x"
     koatty_lib "^1.x.x"
     koatty_logger "^1.x.x"
     tslib "^2.4.0"
-    ws "^8.10.0"
+    ws "^8.11.0"
 
-koatty_trace@1.6.10:
-  version "1.6.10"
-  resolved "https://registry.yarnpkg.com/koatty_trace/-/koatty_trace-1.6.10.tgz#ac60ff3da5fe48651dcf9ada3e47d964aa65cf9c"
-  integrity sha512-AMEmmul/EpYhkoe84y/aoUEqs2J6kblbbuyg5MYMktdbiQcSIIp2vxkm2pV99iWxfHe0KT2ZTzsBanXi/O7Rkg==
+koatty_trace@1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/koatty_trace/-/koatty_trace-1.7.0.tgz#ec9c958c1659fd8ac2cd78f8ec89f075d2f1d53b"
+  integrity sha512-DgqT5UBjS9eairIH5ErCENDv6shKwzQ/U94VlsWeB+8qhwhKbCqGQqLNePEzfh5FuBQI2bxeh9Xa7aws+TBPOw==
   dependencies:
     koatty_container "^1.x.x"
     koatty_core "^1.x.x"
@@ -4992,11 +4984,6 @@ statuses@2.0.1:
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.5.0.tgz#161c7dac177659fd9811f43771fa99381478628c"
   integrity sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=
 
-stoppable@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/stoppable/-/stoppable-1.1.0.tgz#32da568e83ea488b08e4d7ea2c3bcc9d75015d5b"
-  integrity sha512-KXDYZ9dszj6bzvnEMRYvxgeTHU74QBFL54XKtP3nyMuJ81CFYtABZ3bAzL2EdFUaEwJOBOgENyFj3R7oTzDyyw==
-
 string-argv@~0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/string-argv/-/string-argv-0.3.1.tgz#95e2fbec0427ae19184935f816d74aaa4c5c19da"
@@ -5490,10 +5477,10 @@ write-file-atomic@^4.0.1:
     imurmurhash "^0.1.4"
     signal-exit "^3.0.7"
 
-ws@^8.10.0:
-  version "8.10.0"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-8.10.0.tgz#00a28c09dfb76eae4eb45c3b565f771d6951aa51"
-  integrity sha512-+s49uSmZpvtAsd2h37vIPy1RBusaLawVe8of+GyEPsaJTCMpj/2v8NpeK1SHXjBlQ95lQTmQofOJnFiLoaN3yw==
+ws@^8.11.0:
+  version "8.11.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.11.0.tgz#6a0d36b8edfd9f96d8b25683db2f8d7de6e8e143"
+  integrity sha512-HPG3wQd9sNQoT9xHyNCXoDUa+Xw/VevmY9FoHyQ+g+rrMn4j6FB4np7Z0OhdTgjx6MgQLK7jwSy1YecU1+4Asg==
 
 xml2js@^0.4.23:
   version "0.4.23"

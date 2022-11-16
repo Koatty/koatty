@@ -205,9 +205,6 @@ const newServe = function (app: Koatty) {
   }
 
   const server = Serve(app, options);
-  process.on('SIGINT', () => {
-    server.Stop();
-  })
   return server;
 }
 
