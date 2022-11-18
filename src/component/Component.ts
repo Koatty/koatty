@@ -65,7 +65,7 @@ export interface IController {
   readonly app: Koatty;
   readonly ctx: KoattyContext;
 
-  __befor?: () => Promise<any>;
+  __before?: () => Promise<any>;
   __after?: () => Promise<any>;
 }
 
