@@ -14,10 +14,9 @@ export const APP_READY_HOOK = "APP_READY_HOOK";
 // tslint:disable: no-irregular-whitespace
 export const LOGO = `
 
-██   ██  ██████   █████  ████████ ████████ ██    ██ 
-██  ██  ██    ██ ██   ██    ██       ██     ██  ██  
-█████   ██    ██ ███████    ██       ██      ████   
-██  ██  ██    ██ ██   ██    ██       ██       ██    
-██   ██  ██████  ██   ██    ██       ██       ██    
-                         https://github.com/koatty
+┬┌─┌─┐┌─┐┌┬┐┌┬┐┬ ┬
+├┴┐│ │├─┤ │  │ └┬┘
+┴ ┴└─┘┴ ┴ ┴  ┴  ┴ 
+-------------------------------------------
+https://github.com/koatty
 `;
