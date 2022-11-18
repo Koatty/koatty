@@ -7,7 +7,7 @@
 import "reflect-metadata";
 import fs from "fs";
 import EventEmitter from "events";
-import { Koatty, KoattyServer } from 'koatty_core';
+import { Koatty } from 'koatty_core';
 import { NewRouter, RouterOptions } from "koatty_router";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
 import { BindProcessEvent, Serve, ListeningOptions } from "koatty_serve";
@@ -77,9 +77,6 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
     // Load Plugin
     Logger.Log('think', '', 'Load Plugins ...');
     await Loader.LoadPlugins(app);
-
-    // Set Logger
-    Loader.SetLogger(app);
 
     // app.emit("appBoot");
     await asyncEvent(app, 'appBoot');
@@ -163,6 +160,8 @@ const listenCallback = (app: Koatty) => {
     // binding event "appStop"
     Logger.Log('think', '', 'Bind App Stop event ...');
     BindProcessEvent(app, 'appStop');
+    // Set Logger
+    Loader.SetLogger(app);
     // tslint:disable-next-line: no-unused-expression
     app.appDebug && Logger.Warn(`Running in debug mode.`);
   };

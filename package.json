@@ -11,7 +11,7 @@
     "eslint": "eslint --ext .ts,.js ./",
     "prepublishOnly": "npm test && npm run build",
     "prerelease": "npm test && npm run build",
-    "pub": "git push --follow-tags origin && npm publish",
+    "push": "git push --follow-tags origin && npm publish",
     "release": "standard-version",
     "release:pre": "npm run release -- --prerelease",
     "release:major": "npm run release -- --release-as major",
