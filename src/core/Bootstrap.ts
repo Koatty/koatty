@@ -39,12 +39,11 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
   // unittest does not print startup logs
   if (isUTRuntime) {
     app.silent = true;
-    Logger.setLogConsole(false);
-    Logger.setLogFile(false);
+    Logger.enable(false);
   }
 
   try {
-    !app.silent && console.log(LOGO);
+    !app.silent && Logger.Log("Koatty", LOGO);
     if (!(app instanceof Koatty)) {
       throw new Error(`class ${target.name} does not inherit from Koatty`);
     }
@@ -56,26 +55,26 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
 
     // exec bootFunc
     if (Helper.isFunction(bootFunc)) {
-      Logger.Log('think', '', 'Execute bootFunc ...');
+      Logger.Log('Koatty', '', 'Execute bootFunc ...');
       await bootFunc(app);
     }
 
     // Set IOCContainer.app
     IOCContainer.setApp(app);
 
-    Logger.Log('think', '', 'ComponentScan ...');
+    Logger.Log('Koatty', '', 'ComponentScan ...');
 
     // Check all bean
     Loader.CheckAllComponents(app, target);
 
     // Load configuration
-    Logger.Log('think', '', 'Load Configurations ...');
+    Logger.Log('Koatty', '', 'Load Configurations ...');
     // configuration metadata
     const configurationMetas = Loader.GetConfigurationMetas(app, target);
     Loader.LoadConfigs(app, configurationMetas);
 
     // Load Plugin
-    Logger.Log('think', '', 'Load Plugins ...');
+    Logger.Log('Koatty', '', 'Load Plugins ...');
     await Loader.LoadPlugins(app);
 
     // app.emit("appBoot");
@@ -85,16 +84,16 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
     Loader.LoadAppReadyHooks(app, target);
 
     // Load Middleware
-    Logger.Log('think', '', 'Load Middlewares ...');
+    Logger.Log('Koatty', '', 'Load Middlewares ...');
     await Loader.LoadMiddlewares(app);
     // Load Components
-    Logger.Log('think', '', 'Load Components ...');
+    Logger.Log('Koatty', '', 'Load Components ...');
     Loader.LoadComponents(app);
     // Load Services
-    Logger.Log('think', '', 'Load Services ...');
+    Logger.Log('Koatty', '', 'Load Services ...');
     Loader.LoadServices(app);
     // Load Controllers
-    Logger.Log('think', '', 'Load Controllers ...');
+    Logger.Log('Koatty', '', 'Load Controllers ...');
     const controllers = Loader.LoadControllers(app);
 
     // Create Server
@@ -103,11 +102,11 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
     app.router = newRouter(app);
 
     // Load Routers
-    Logger.Log('think', '', 'Load Routers ...');
+    Logger.Log('Koatty', '', 'Load Routers ...');
     app.router.LoadRouter(controllers);
 
     // Emit app ready event
-    Logger.Log('think', '', 'Emit App Ready ...');
+    Logger.Log('Koatty', '', 'Emit App Ready ...');
     await asyncEvent(app, 'appReady');
 
     if (!isUTRuntime) {
@@ -146,24 +145,24 @@ const listenCallback = (app: Koatty) => {
   return function () {
     const options = app.server.options;
     // Emit app started event
-    Logger.Log('think', '', 'Emit App Start ...');
+    Logger.Log('Koatty', '', 'Emit App Start ...');
     asyncEvent(app, 'appStart');
 
-    Logger.Log('think', '', '====================================');
-    Logger.Log("think", "", `Nodejs Version: ${process.version}`);
-    Logger.Log("think", "", `Koatty Version: v${app.version}`);
-    Logger.Log("think", "", `App Environment: ${app.env}`);
-    Logger.Log('think', '', `Server Protocol: ${(options.protocol).toUpperCase()}`);
-    Logger.Log("think", "", `Server running at ${options.protocol === "http2" ? "https" : options.protocol}://${options.hostname || '127.0.0.1'}:${options.port}/`);
-    Logger.Log("think", "", "====================================");
+    Logger.Log('Koatty', '', '====================================');
+    Logger.Log("Koatty", "", `Nodejs Version: ${process.version}`);
+    Logger.Log("Koatty", "", `Koatty Version: v${app.version}`);
+    Logger.Log("Koatty", "", `App Environment: ${app.env}`);
+    Logger.Log('Koatty', '', `Server Protocol: ${(options.protocol).toUpperCase()}`);
+    Logger.Log("Koatty", "", `Server running at ${options.protocol === "http2" ? "https" : options.protocol}://${options.hostname || '127.0.0.1'}:${options.port}/`);
+    Logger.Log("Koatty", "", "====================================");
 
     // binding event "appStop"
-    Logger.Log('think', '', 'Bind App Stop event ...');
+    Logger.Log('Koatty', '', 'Bind App Stop event ...');
     BindProcessEvent(app, 'appStop');
-    // Set Logger
-    Loader.SetLogger(app);
     // tslint:disable-next-line: no-unused-expression
     app.appDebug && Logger.Warn(`Running in debug mode.`);
+    // Set Logger
+    Loader.SetLogger(app);
   };
 };
 

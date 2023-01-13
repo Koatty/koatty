@@ -4,7 +4,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Koatty Test Program",
+            "name": "Koatty Demo Program",
             "args": [
                 "${workspaceRoot}/demo/src/App.ts"
             ],
@@ -16,6 +16,7 @@
             "env": {
                 "NODE_ENV": "development"
             },
+            "outputCapture": "std",
             "sourceMaps": true,
             "cwd": "${workspaceRoot}",
             "protocol": "inspector",

@@ -10,6 +10,7 @@ import { DefaultLogger, LogLevelType } from "koatty_logger";
 
 // Logger
 export const Logger = DefaultLogger;
+export { ILogger, LogLevelType } from "koatty_logger";
 
 /**
  * SetLogger
@@ -17,30 +18,22 @@ export const Logger = DefaultLogger;
  * @export
  * @param {{
  *     logLevel?: LogLevelType;
- *     logConsole?: boolean;
- *     logFile?: boolean;
- *     logFileLevel?: LogLevelType;
  *     logFilePath?: string;
+ *     sensFields?: string[];
  * }} config
  */
 export function SetLogger(app: Koatty, config: {
   logLevel?: LogLevelType;
-  logConsole?: boolean;
-  logFile?: boolean;
-  logFileLevel?: LogLevelType;
   logFilePath?: string;
+  sensFields?: string[];
 }) {
-  if (config.logLevel !== undefined) {
+  if (config.logLevel) {
     DefaultLogger.setLevel(config.logLevel);
   }
-  if (config.logConsole !== undefined && !app.silent) {
-    DefaultLogger.setLogConsole(config.logConsole);
-  }
-  if (config.logFile !== undefined && !app.silent) {
-    DefaultLogger.setLogFile(config.logFile);
+  if (config.logFilePath && !app.silent) {
     DefaultLogger.setLogFilePath(config.logFilePath);
   }
-  if (config.logFileLevel !== undefined) {
-    DefaultLogger.setLogFileLevel(config.logFileLevel);
+  if (config.sensFields) {
+    DefaultLogger.setSensFields(config.sensFields);
   }
 }

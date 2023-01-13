@@ -24,8 +24,9 @@
     /* Strict Type-Checking Options */
     "stripInternal": true, /* Enable all strict type-checking options. */
     "noImplicitAny": true /* Raise error on expressions and declarations with an implied 'any' type. */,
-    // "strictNullChecks": true,              /* Enable strict null checks. */
+    "strictNullChecks": false, /* Enable strict null checks. */
     "noImplicitThis": false /* Raise error on 'this' expressions with an implied 'any' type. */,
+    "strictFunctionTypes": false, /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
     // "alwaysStrict": true,                  /* Parse in strict mode and emit "use strict" for each source file. */
     "pretty": true, /* pretty source file. */
     /* Additional Checks */

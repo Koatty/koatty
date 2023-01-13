@@ -8,7 +8,7 @@ import * as path from "path";
 import { Load } from "koatty_loader";
 import { Koatty } from 'koatty_core';
 import { LoadConfigs as loadConf } from "koatty_config";
-import { Logger, SetLogger } from "../util/Logger";
+import { Logger, LogLevelType, SetLogger } from "../util/Logger";
 import { prevent } from "koatty_exception";
 import { IMiddleware, IPlugin } from '../component/Component';
 import { AppReadyHookFunc } from "./Bootstrap";
@@ -56,11 +56,11 @@ export class Loader {
       app.env = 'development';
       process.env.NODE_ENV = 'development';
       process.env.APP_DEBUG = 'true';
-      Logger.setLevel("DEBUG");
+      Logger.setLevel("debug");
     } else {
       app.env = 'production';
       process.env.NODE_ENV = 'production';
-      Logger.setLevel("INFO");
+      Logger.setLevel("info");
     }
 
     // define path
@@ -162,33 +162,22 @@ export class Loader {
     //Logger
     if (configs.config) {
       const opt = configs.config;
-      let logLevel: any = "DEBUG",
-        logFileLevel: any = "INFO",
-        logConsole = true,
-        logFile = false,
-        logFilePath = app.rootPath + "/logs";
+      let logLevel: LogLevelType = "debug",
+        logFilePath = "",
+        sensFields = [];
       if (app.env === "production") {
-        logLevel = "INFO";
-        logFileLevel = "WARN";
-        logConsole = false;
-        logFile = true;
+        logLevel = "info";
       }
       if (opt.logs_level) {
-        logLevel = opt.logs_level;
-      }
-      if (opt.logs_write_level) {
-        logFileLevel = opt.logs_write_level;
-      }
-      if (opt.logs_write !== undefined) {
-        logFile = !!opt.logs_write;
-      }
-      if (opt.logs_console !== undefined) {
-        logConsole = !!opt.logs_console;
+        logLevel = (opt.logs_level).toLowerCase();
       }
       if (opt.logs_path) {
         logFilePath = opt.logs_path;
       }
-      SetLogger(app, { logLevel, logConsole, logFile, logFileLevel, logFilePath });
+      if (opt.sens_fields) {
+        sensFields = opt.sens_fields;
+      }
+      SetLogger(app, { logLevel, logFilePath, sensFields });
     }
   }
 

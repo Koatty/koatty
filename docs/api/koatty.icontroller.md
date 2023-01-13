@@ -16,8 +16,6 @@ export interface IController
 
 |  Property | Type | Description |
 |  --- | --- | --- |
-|  [\_\_after?](./koatty.icontroller.__after.md) | () =&gt; Promise&lt;any&gt; | <i>(Optional)</i> |
-|  [\_\_before?](./koatty.icontroller.__before.md) | () =&gt; Promise&lt;any&gt; | <i>(Optional)</i> |
 |  [app](./koatty.icontroller.app.md) | Koatty |  |
 |  [ctx](./koatty.icontroller.ctx.md) | KoattyContext |  |
 

@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2022-02-14 11:26:20
- * @LastEditTime: 2022-03-15 14:24:38
+ * @LastEditTime: 2023-01-13 15:04:14
  */
 
 import { KoattyContext } from "koatty_core";
@@ -14,13 +14,13 @@ export class BussinessException extends Exception {
   async handler(ctx: KoattyContext): Promise<any> {
     ctx.status = this.status;
     ctx.type = "application/json";
-    const body = ctx.body ? JSON.stringify(ctx.body) : (ctx.body || null);
+    const body: any = ctx.body ? JSON.stringify(ctx.body) : (ctx.body || null);
     switch (ctx.protocol) {
       case "ws":
       case "wss":
-        return ctx.websocket.send(body, () => ctx.websocket.emit('finish'));
+        return ctx?.websocket?.send(body, () => ctx?.websocket?.emit('finish'));
       case "grpc":
-        return ctx.rpc.callback(null, body);
+        return ctx.rpc ? ctx.rpc.callback!(null, body) : null;
       default:
         return ctx.res.end(`{"code": ${this.code}, "message": "${this.message || ctx.message}", "data": ${body}}`);
     }

@@ -64,9 +64,6 @@ export function Controller(path = ""): ClassDecorator {
 export interface IController {
   readonly app: Koatty;
   readonly ctx: KoattyContext;
-
-  __before?: () => Promise<any>;
-  __after?: () => Promise<any>;
 }
 
 /**
