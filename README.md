@@ -19,7 +19,7 @@ Use Typescript's decorator implement IOC and AOP.
 [koatty_doc_CN](https://koatty.org/) （In progress💪）
 
 
-## Installation
+## Installation CLI tools
 
 ```shell
 npm i -g koatty_cli
@@ -30,36 +30,31 @@ npm i -g koatty_cli
 ### 1.Create Project
 
 ```shell
-koatty new projectName
-
-cd ./projectName
-
-yarn install
+kt new projectName
 
 npm start
 ```
 
-### 2.Create a Controller
-```shell
-koatty controller test
+### 2. Install deps
 
 ```
+cd ./projectName
 
-### 3.Create a Service
-
-```shell
-koatty service test
-
+npm i
 ```
 
-### 4.Create a DTOClass （Optional）
-
-```shell
-koatty dto test
+### 3. Start up
 
 ```
+npm run dev
 
-### 5.Define TestController
+// or
+npm start
+```
+
+## Code style
+
+default Controller:
 
 ```javascript
 import { Controller, BaseController, Autowired, GetMapping, RequestBody, PathVariable,
