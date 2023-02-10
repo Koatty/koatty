@@ -90,7 +90,7 @@
     "koatty_logger": "^2.0.4",
     "koatty_payload": "^1.4.0",
     "koatty_proto": "^1.1.10",
-    "koatty_router": "^1.8.2",
+    "koatty_router": "^1.8.3",
     "koatty_serve": "^1.5.4",
     "koatty_trace": "^1.7.2",
     "koatty_validation": "^1.2.6",
