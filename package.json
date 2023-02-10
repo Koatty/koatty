@@ -79,8 +79,7 @@
     "typescript": "^4.x.x"
   },
   "dependencies": {
-    "@koa/router": "^12.0.0",
-    "koa": "^2.13.4",
+    "koa": "^2.14.1",
     "koatty_config": "^1.1.6",
     "koatty_container": "^1.7.14",
     "koatty_core": "^1.6.12",
@@ -90,8 +89,8 @@
     "koatty_logger": "^2.0.4",
     "koatty_payload": "^1.4.0",
     "koatty_proto": "^1.1.10",
-    "koatty_router": "^1.8.3",
-    "koatty_serve": "^1.5.4",
+    "koatty_router": "^1.8.4",
+    "koatty_serve": "^1.5.5",
     "koatty_trace": "^1.7.2",
     "koatty_validation": "^1.2.6",
     "reflect-metadata": "^0.1.13",
