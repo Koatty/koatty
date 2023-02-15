@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.7.7](https://github.com/thinkkoa/koatty/compare/v3.7.6...v3.7.7) (2023-02-15)
+
+
+### Bug Fixes
+
+* rebuild logger ([42cdb96](https://github.com/thinkkoa/koatty/commit/42cdb964c2e0a41a93b1a895084c92c016cbad24))
+
 ### [3.7.6](https://github.com/thinkkoa/koatty/compare/v3.7.4...v3.7.6) (2023-01-13)
 
 ### [3.7.4](https://github.com/thinkkoa/koatty/compare/v3.7.3...v3.7.4) (2022-11-18)
