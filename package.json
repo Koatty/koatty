@@ -89,11 +89,9 @@
     "koatty_logger": "^2.0.4",
     "koatty_payload": "^1.4.0",
     "koatty_proto": "^1.1.10",
-    "koatty_router": "^1.8.5",
+    "koatty_router": "^1.8.6",
     "koatty_serve": "^1.5.5",
     "koatty_trace": "^1.7.2",
-    "koatty_validation": "^1.2.7",
-    "reflect-metadata": "^0.1.13",
-    "tslib": "^2.4.1"
+    "koatty_validation": "^1.2.8"
   }
 }
