@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.7.9](https://github.com/thinkkoa/koatty/compare/v3.7.8...v3.7.9) (2023-02-17)
+
+
+### Bug Fixes
+
+* 绑定参数类型转换 ([4fc5bc8](https://github.com/thinkkoa/koatty/commit/4fc5bc8927a5be9b51bd23f8b702bbf34c9b42c3))
+
 ### [3.7.8](https://github.com/thinkkoa/koatty/compare/v3.7.7...v3.7.8) (2023-02-17)
 
 ### [3.7.7](https://github.com/thinkkoa/koatty/compare/v3.7.6...v3.7.7) (2023-02-15)
