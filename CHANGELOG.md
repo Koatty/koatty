@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.8.0-1](https://github.com/thinkkoa/koatty/compare/v3.8.0-0...v3.8.0-1) (2023-02-21)
+
+
+### Bug Fixes
+
+* version is getter ([1f43b68](https://github.com/thinkkoa/koatty/commit/1f43b68b3434eecc8d0ce154380c16e39a347634))
+
 ## [3.8.0-0](https://github.com/thinkkoa/koatty/compare/v3.7.9...v3.8.0-0) (2023-02-21)
 
 
