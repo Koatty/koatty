@@ -91,7 +91,7 @@
     "koatty_proto": "^1.1.10",
     "koatty_router": "^1.8.6",
     "koatty_serve": "^1.5.5",
-    "koatty_trace": "^1.7.2",
+    "koatty_trace": "^1.8.0",
     "koatty_validation": "^1.2.8"
   }
 }
