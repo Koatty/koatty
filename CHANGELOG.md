@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.8.0-0](https://github.com/thinkkoa/koatty/compare/v3.7.9...v3.8.0-0) (2023-02-21)
+
+
+### Features
+
+* koatty_trace支持opentracing ([ae67ce0](https://github.com/thinkkoa/koatty/commit/ae67ce05c8e731a149d67b2b5e98edc88bef9861))
+
+
+### Bug Fixes
+
+* core模块app增加name及version ([e55db1a](https://github.com/thinkkoa/koatty/commit/e55db1aa78369181b54d0d11c6319b20f21d50f2))
+* SetLogger读取配置变更 ([9765908](https://github.com/thinkkoa/koatty/commit/9765908a6b00486a510e8028cdbe5fc27ecadc88))
+* 修改container关于 app及 ctx 接口定义 ([a7c318a](https://github.com/thinkkoa/koatty/commit/a7c318a649531acb5a7cfeb4f9b357fc9418cff7))
+
 ### [3.7.9](https://github.com/thinkkoa/koatty/compare/v3.7.8...v3.7.9) (2023-02-17)
 
 
