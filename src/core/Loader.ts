@@ -71,6 +71,15 @@ export class Loader {
     Helper.define(app, 'appPath', appPath);
     Helper.define(app, 'thinkPath', thinkPath);
 
+    // 
+    if (app.name === "") {
+      const pkg = Helper.safeRequire(`${appPath}/package.json`);
+      if (pkg.name) {
+        app.name = pkg.name;
+        app.version = app.version || pkg.version;
+      }
+    }
+
     process.env.ROOT_PATH = rootPath;
     process.env.APP_PATH = appPath;
     process.env.THINK_PATH = thinkPath;
@@ -158,7 +167,8 @@ export class Loader {
    * @memberof Loader
    */
   public static SetLogger(app: Koatty) {
-    const configs = app.getMetaData("_configs") ?? {};
+    const data = app.getMetaData('_configs') || [];
+    const configs = data[0] || {};
     //Logger
     if (configs.config) {
       const opt = configs.config;
