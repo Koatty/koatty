@@ -72,11 +72,11 @@ export class Loader {
     Helper.define(app, 'thinkPath', thinkPath);
 
     // 
-    if (app.name === "") {
+    if (Helper.isEmpty(app.name)) {
       const pkg = Helper.safeRequire(`${appPath}/package.json`);
       if (pkg.name) {
         app.name = pkg.name;
-        app.version = app.version || pkg.version;
+        // app.version = app.version || pkg.version; // TODO version is getter
       }
     }
 
