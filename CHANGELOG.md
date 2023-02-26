@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.8.0-4](https://github.com/thinkkoa/koatty/compare/v3.8.0-3...v3.8.0-4) (2023-02-26)
+
+
+### Bug Fixes
+
+* app.version ([5e82cef](https://github.com/thinkkoa/koatty/commit/5e82cef804f5ae01f7fffd9c0ed3379f80995542))
+* path of package.json ([6d4f2f6](https://github.com/thinkkoa/koatty/commit/6d4f2f664ad6b16053ae67be787436cacf2434f1))
+
 ## [3.8.0-3](https://github.com/thinkkoa/koatty/compare/v3.8.0-2...v3.8.0-3) (2023-02-26)
 
 ## [3.8.0-2](https://github.com/thinkkoa/koatty/compare/v3.8.0-1...v3.8.0-2) (2023-02-26)
