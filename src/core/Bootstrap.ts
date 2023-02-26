@@ -47,8 +47,6 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
     if (!(app instanceof Koatty)) {
       throw new Error(`class ${target.name} does not inherit from Koatty`);
     }
-    // version
-    Helper.define(app, "version", KOATTY_VERSION);
 
     // Initialize env
     Loader.initialize(app);
@@ -150,7 +148,7 @@ const listenCallback = (app: Koatty) => {
 
     Logger.Log('Koatty', '', '====================================');
     Logger.Log("Koatty", "", `Nodejs Version: ${process.version}`);
-    Logger.Log("Koatty", "", `Koatty Version: v${app.version}`);
+    Logger.Log("Koatty", "", `Koatty Version: v${KOATTY_VERSION}`);
     Logger.Log("Koatty", "", `App Environment: ${app.env}`);
     Logger.Log('Koatty', '', `Server Protocol: ${(options.protocol).toUpperCase()}`);
     Logger.Log("Koatty", "", `Server running at ${options.protocol === "http2" ? "https" : options.protocol}://${options.hostname || '127.0.0.1'}:${options.port}/`);
