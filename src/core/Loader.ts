@@ -73,7 +73,7 @@ export class Loader {
 
     // 
     if (Helper.isEmpty(app.name)) {
-      const pkg = Helper.safeRequire(`${appPath}/package.json`);
+      const pkg = Helper.safeRequire(`${path.dirname(appPath)}/package.json`);
       if (pkg.name) {
         app.name = pkg.name;
         // app.version = app.version || pkg.version; // TODO version is getter
