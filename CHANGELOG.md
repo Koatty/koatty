@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.8.0-6](https://github.com/thinkkoa/koatty/compare/v3.8.0-5...v3.8.0-6) (2023-03-04)
+
+
+### Bug Fixes
+
+* change event ([7d651a7](https://github.com/thinkkoa/koatty/commit/7d651a7b3453c0878dd37d0890509b2908e4afdf))
+* 修改listen callback函数类型 ([9a3b29f](https://github.com/thinkkoa/koatty/commit/9a3b29f8d16a06b3627e5ccf88c08460e2cc3ae2))
+
 ## [3.8.0-5](https://github.com/thinkkoa/koatty/compare/v3.8.0-4...v3.8.0-5) (2023-02-26)
 
 ## [3.8.0-4](https://github.com/thinkkoa/koatty/compare/v3.8.0-3...v3.8.0-4) (2023-02-26)
