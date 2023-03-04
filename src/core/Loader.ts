@@ -11,10 +11,10 @@ import { LoadConfigs as loadConf } from "koatty_config";
 import { Logger, LogLevelType, SetLogger } from "../util/Logger";
 import { prevent } from "koatty_exception";
 import { IMiddleware, IPlugin } from '../component/Component';
-import { AppReadyHookFunc } from "./Bootstrap";
+import { AppBootHookFunc } from "./Bootstrap";
 import { checkClass, Helper } from "../util/Helper";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
-import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
+import { APP_BOOT_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 import { BaseController } from "../component/BaseController";
 import { TraceMiddleware } from "../middleware/TraceMiddleware";
 import { PayloadMiddleware } from "../middleware/PayloadMiddleware";
@@ -200,11 +200,11 @@ export class Loader {
    * @param {*} target
    * @memberof Loader
    */
-  public static LoadAppReadyHooks(app: Koatty, target: any) {
-    const funcs = IOCContainer.getClassMetadata(TAGGED_CLS, APP_READY_HOOK, target);
+  public static LoadAppBootHooks(app: Koatty, target: any) {
+    const funcs = IOCContainer.getClassMetadata(TAGGED_CLS, APP_BOOT_HOOK, target);
     if (Helper.isArray(funcs)) {
-      funcs.forEach((element: AppReadyHookFunc): any => {
-        app.once('appReady', () => element(app));
+      funcs.forEach((element: AppBootHookFunc): any => {
+        app.once('appBoot', () => element(app));
         return null;
       });
     }

@@ -15,7 +15,7 @@ import { Loader } from "./Loader";
 import { Helper } from "../util/Helper";
 import { Logger } from "../util/Logger";
 import { checkRuntime, checkUTRuntime, KOATTY_VERSION } from "../util/Check";
-import { APP_READY_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
+import { APP_BOOT_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
 
 /**
  * execute bootstrap
@@ -71,16 +71,14 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
     const configurationMetas = Loader.GetConfigurationMetas(app, target);
     Loader.LoadConfigs(app, configurationMetas);
 
-    // Load Plugin
-    Logger.Log('Koatty', '', 'Load Plugins ...');
-    await Loader.LoadPlugins(app);
-
+    // Load App ready hooks
+    Loader.LoadAppBootHooks(app, target);
     // app.emit("appBoot");
     await asyncEvent(app, 'appBoot');
 
-    // Load App ready hooks
-    Loader.LoadAppReadyHooks(app, target);
-
+    // Load Plugin
+    Logger.Log('Koatty', '', 'Load Plugins ...');
+    await Loader.LoadPlugins(app);
     // Load Middleware
     Logger.Log('Koatty', '', 'Load Middlewares ...');
     await Loader.LoadMiddlewares(app);
@@ -95,19 +93,22 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
     const controllers = Loader.LoadControllers(app);
 
     // Create Server
-    app.server = newServe(app);
+    // app.server = newServe(app);
+    Helper.define(app, "server", newServe(app));
     // Create router
-    app.router = newRouter(app);
-
-    // Load Routers
-    Logger.Log('Koatty', '', 'Load Routers ...');
-    app.router.LoadRouter(controllers);
+    // app.router = newRouter(app);
+    Helper.define(app, "server", newRouter(app));
 
     // Emit app ready event
     Logger.Log('Koatty', '', 'Emit App Ready ...');
     await asyncEvent(app, 'appReady');
 
+    // Load Routers
+    Logger.Log('Koatty', '', 'Load Routers ...');
+    app.router.LoadRouter(controllers);
+
     if (!isUTRuntime) {
+      // Start Server
       app.listen(app.server, listenCallback(app));
     }
 
@@ -142,9 +143,6 @@ const newRouter = function (app: Koatty) {
 const listenCallback = (app: Koatty) => {
   return function () {
     const options = app.server.options;
-    // Emit app started event
-    Logger.Log('Koatty', '', 'Emit App Start ...');
-    asyncEvent(app, 'appStart');
 
     Logger.Log('Koatty', '', '====================================');
     Logger.Log("Koatty", "", `Nodejs Version: ${process.version}`);
@@ -288,15 +286,15 @@ export function ConfigurationScan(scanPath?: string | string[]): ClassDecorator 
   };
 }
 
-// type AppReadyHookFunc
-export type AppReadyHookFunc = (app: Koatty) => Promise<any>;
+// type AppBootHookFunc
+export type AppBootHookFunc = (app: Koatty) => Promise<any>;
 
 /**
  * bind AppReadyHookFunc
  * example:
  * export function TestDecorator(): ClassDecorator {
  *  return (target: any) => {
- *   BindAppReadyHook((app: Koatty) => {
+ *   BindAppBootHook((app: Koatty) => {
  *      // todo
  *      return Promise.resolve();
  *   }, target)   
@@ -304,9 +302,9 @@ export type AppReadyHookFunc = (app: Koatty) => Promise<any>;
  * }
  *
  * @export
- * @param {AppReadyHookFunc} func
+ * @param {AppBootHookFunc} func
  * @param {*} target 
  */
-export function BindAppReadyHook(func: AppReadyHookFunc, target: any) {
-  IOCContainer.attachClassMetadata(TAGGED_CLS, APP_READY_HOOK, func, target);
+export function BindAppBootHook(func: AppBootHookFunc, target: any) {
+  IOCContainer.attachClassMetadata(TAGGED_CLS, APP_BOOT_HOOK, func, target);
 }
