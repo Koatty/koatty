@@ -15,7 +15,7 @@
 
 |  Function | Description |
 |  --- | --- |
-|  [BindAppReadyHook(func, target)](./koatty.bindappreadyhook.md) | bind AppReadyHookFunc example: export function TestDecorator(): ClassDecorator { return (target: any) =<!-- -->&gt; { BindAppReadyHook((app: Koatty) =<!-- -->&gt; { // todo return Promise.resolve(); }<!-- -->, target) } } |
+|  [BindAppBootHook(func, target)](./koatty.bindappboothook.md) | bind AppReadyHookFunc example: export function TestDecorator(): ClassDecorator { return (target: any) =<!-- -->&gt; { BindAppBootHook((app: Koatty) =<!-- -->&gt; { // todo return Promise.resolve(); }<!-- -->, target) } } |
 |  [Bootstrap(bootFunc)](./koatty.bootstrap.md) | Bootstrap application |
 |  [Component(identifier)](./koatty.component.md) | Indicates that an decorated class is a "component". |
 |  [ComponentScan(scanPath)](./koatty.componentscan.md) | Define project scan path |
@@ -47,6 +47,6 @@
 
 |  Type Alias | Description |
 |  --- | --- |
-|  [AppReadyHookFunc](./koatty.appreadyhookfunc.md) |  |
+|  [AppBootHookFunc](./koatty.appboothookfunc.md) |  |
 |  [KoattyMiddleware](./koatty.koattymiddleware.md) | Interface for Middleware |
 
