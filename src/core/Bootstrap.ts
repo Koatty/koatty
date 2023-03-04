@@ -97,7 +97,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
     Helper.define(app, "server", newServe(app));
     // Create router
     // app.router = newRouter(app);
-    Helper.define(app, "server", newRouter(app));
+    Helper.define(app, "router", newRouter(app));
 
     // Emit app ready event
     Logger.Log('Koatty', '', 'Emit App Ready ...');
@@ -109,7 +109,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
 
     if (!isUTRuntime) {
       // Start Server
-      app.listen(app.server, listenCallback(app));
+      app.listen(listenCallback);
     }
 
     return app;
@@ -141,25 +141,24 @@ const newRouter = function (app: Koatty) {
  * @returns {*} 
  */
 const listenCallback = (app: Koatty) => {
-  return function () {
-    const options = app.server.options;
+  const options = app.server.options;
 
-    Logger.Log('Koatty', '', '====================================');
-    Logger.Log("Koatty", "", `Nodejs Version: ${process.version}`);
-    Logger.Log("Koatty", "", `Koatty Version: v${KOATTY_VERSION}`);
-    Logger.Log("Koatty", "", `App Environment: ${app.env}`);
-    Logger.Log('Koatty', '', `Server Protocol: ${(options.protocol).toUpperCase()}`);
-    Logger.Log("Koatty", "", `Server running at ${options.protocol === "http2" ? "https" : options.protocol}://${options.hostname || '127.0.0.1'}:${options.port}/`);
-    Logger.Log("Koatty", "", "====================================");
+  Logger.Log('Koatty', '', '====================================');
+  Logger.Log("Koatty", "", `Nodejs Version: ${process.version}`);
+  Logger.Log("Koatty", "", `Koatty Version: v${KOATTY_VERSION}`);
+  Logger.Log("Koatty", "", `App Environment: ${app.env}`);
+  Logger.Log('Koatty', '', `Server Protocol: ${(options.protocol).toUpperCase()}`);
+  Logger.Log("Koatty", "", `Server running at ${options.protocol === "http2" ? "https" : options.protocol}://${options.hostname || '127.0.0.1'}:${options.port}/`);
+  Logger.Log("Koatty", "", "====================================");
 
-    // binding event "appStop"
-    Logger.Log('Koatty', '', 'Bind App Stop event ...');
-    BindProcessEvent(app, 'appStop');
-    // tslint:disable-next-line: no-unused-expression
-    app.appDebug && Logger.Warn(`Running in debug mode.`);
-    // Set Logger
-    Loader.SetLogger(app);
-  };
+  // binding event "appStop"
+  Logger.Log('Koatty', '', 'Bind App Stop event ...');
+  BindProcessEvent(app, 'appStop');
+  // tslint:disable-next-line: no-unused-expression
+  app.appDebug && Logger.Warn(`Running in debug mode.`);
+  // Set Logger
+  Loader.SetLogger(app);
+
 };
 
 /**

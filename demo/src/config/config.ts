@@ -3,7 +3,7 @@
  * @Usage: 静态配置数据信息
  * @Author: xxx
  * @Date: 2020-12-22 15:24:25
- * @LastEditTime: 2023-01-13 16:15:14
+ * @LastEditTime: 2023-03-05 01:12:39
  */
 export default {
   /*app config*/
@@ -17,6 +17,6 @@ export default {
   encoding: "utf-8", // Character Encoding
 
   logs_level: "debug", // Level log is printed to the console, "debug" | "info" | "warning" | "error"
-  logs_path: "./logs", // Log file directory
+  // logs_path: "./logs", // Log file directory
   // sens_fields: ["password"] // Sensitive words
 };
