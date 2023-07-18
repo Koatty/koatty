@@ -35,7 +35,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
     return;
   }
 
-  const app = Reflect.construct(target, []);
+  const app = <Koatty>Reflect.construct(target, []);
   // unittest does not print startup logs
   if (isUTRuntime) {
     app.silent = true;
