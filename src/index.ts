@@ -11,7 +11,6 @@ export * from "./component/BaseController";
 export * from "koatty_core";
 export * from "koatty_container";
 export * from "koatty_exception";
-export * from "koatty_router";
 export * from "koatty_serve";
 export { Value, Config } from "koatty_config";
 export { Helper } from "./util/Helper";

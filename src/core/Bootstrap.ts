@@ -5,15 +5,13 @@
  * @ version: 2020-07-06 11:22:58
  */
 import "reflect-metadata";
-import fs from "fs";
 import EventEmitter from "events";
 import { Koatty } from 'koatty_core';
-import { NewRouter, RouterOptions } from "koatty_router";
-import { IOCContainer, TAGGED_CLS } from "koatty_container";
-import { BindProcessEvent, Serve, ListeningOptions } from "koatty_serve";
 import { Loader } from "./Loader";
 import { Helper } from "../util/Helper";
 import { Logger } from "../util/Logger";
+import { IOCContainer, TAGGED_CLS } from "koatty_container";
+import { BindProcessEvent, NewRouter, NewServe } from "koatty_serve";
 import { checkRuntime, checkUTRuntime, KOATTY_VERSION } from "../util/Check";
 import { APP_BOOT_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
 
@@ -94,10 +92,10 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
 
     // Create Server
     // app.server = newServe(app);
-    Helper.define(app, "server", newServe(app));
+    Helper.define(app, "server", NewServe(app));
     // Create router
     // app.router = newRouter(app);
-    Helper.define(app, "router", newRouter(app));
+    Helper.define(app, "router", NewRouter(app));
 
     // Emit app ready event
     Logger.Log('Koatty', '', 'Emit App Ready ...');
@@ -118,21 +116,6 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
     process.exit();
   }
 };
-
-/**
- * create router
- *
- * @export
- * @param {Koatty} app
- * @returns {*}  
- */
-const newRouter = function (app: Koatty) {
-  const protocol = app.config("protocol") || "http";
-  const options: RouterOptions = app.config(undefined, 'router') ?? {};
-  const router = NewRouter(app, options, protocol);
-
-  return router;
-}
 
 /**
  * Listening callback function
@@ -160,46 +143,6 @@ const listenCallback = (app: Koatty) => {
   Loader.SetLogger(app);
 
 };
-
-/**
- * create serve
- *
- * @param {Koatty} app
- * @returns {*}  
- */
-const newServe = function (app: Koatty) {
-  const protocol = app.config("protocol") || "http";
-  const port = process.env.PORT || process.env.APP_PORT ||
-    app.config('app_port') || 3000;
-  const hostname = process.env.IP ||
-    process.env.HOSTNAME?.replace(/-/g, '.') || app.config('app_host') || '127.0.0.1';
-
-  const options: ListeningOptions = {
-    hostname, port, protocol,
-    ext: {
-      key: "",
-      cert: "",
-      protoFile: "",
-    },
-  };
-  const pm = new Set(["https", "http2", "wss"])
-  if (pm.has(options.protocol)) {
-    const keyFile = app.config("key_file") ?? "";
-    const crtFile = app.config("crt_file") ?? "";
-    options.ext.key = fs.readFileSync(keyFile).toString();
-    options.ext.cert = fs.readFileSync(crtFile).toString();
-  }
-  if (options.protocol === "https" || options.protocol === "http2") {
-    options.port = options.port == 80 ? 443 : options.port;
-  }
-  if (options.protocol === "grpc") {
-    const proto = app.config("protoFile", "router");
-    options.ext.protoFile = proto;
-  }
-
-  const server = Serve(app, options);
-  return server;
-}
 
 /**
  * Execute event as async
@@ -289,7 +232,7 @@ export function ConfigurationScan(scanPath?: string | string[]): ClassDecorator 
 export type AppBootHookFunc = (app: Koatty) => Promise<any>;
 
 /**
- * bind AppReadyHookFunc
+ * bind AppBootHookFunc
  * example:
  * export function TestDecorator(): ClassDecorator {
  *  return (target: any) => {

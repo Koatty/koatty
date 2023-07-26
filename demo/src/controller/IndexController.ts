@@ -3,7 +3,7 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:31:17
- * @LastEditTime: 2022-10-31 16:54:54
+ * @LastEditTime: 2023-07-26 21:45:00
  */
 
 import {
@@ -56,7 +56,7 @@ export class IndexController extends BaseController {
   @GetMapping('/')
   index(@RequestBody() body: any): Promise<any> {
     // this.ctx.session.username = "test"
-    return this.ok({ "code": 1 });
+    return this.ok("");
   }
 
   /**

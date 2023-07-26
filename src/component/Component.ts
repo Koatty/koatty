@@ -7,7 +7,7 @@
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import { Koatty, KoattyContext, KoattyNext } from 'koatty_core';
-import { CONTROLLER_ROUTER } from "koatty_router";
+import { CONTROLLER_ROUTER } from "koatty_serve";
 import { IOCContainer } from "koatty_container";
 
 
