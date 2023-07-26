@@ -7,7 +7,7 @@
 Indicates that an decorated class is a "service".
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function Service(identifier?: string): ClassDecorator;
@@ -17,9 +17,9 @@ export declare function Service(identifier?: string): ClassDecorator;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  identifier | string | <i>(Optional)</i> class name |
+|  identifier | string | _(Optional)_ class name |
 
-<b>Returns:</b>
+**Returns:**
 
 ClassDecorator
 

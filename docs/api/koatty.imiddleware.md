@@ -6,7 +6,7 @@
 
 Interface for Middleware
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface IMiddleware 
@@ -14,7 +14,7 @@ export interface IMiddleware
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [run](./koatty.imiddleware.run.md) | (options: any, app: Koatty) =&gt; [KoattyMiddleware](./koatty.koattymiddleware.md) |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [run](./koatty.imiddleware.run.md) |  | (options: any, app: Koatty) =&gt; [KoattyMiddleware](./koatty.koattymiddleware.md) |  |
 

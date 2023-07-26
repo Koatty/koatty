@@ -4,7 +4,7 @@
 
 ## IController.ctx property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly ctx: KoattyContext;

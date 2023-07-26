@@ -4,7 +4,7 @@
 
 ## IController.app property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly app: Koatty;

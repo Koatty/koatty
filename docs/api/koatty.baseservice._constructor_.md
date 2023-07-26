@@ -6,7 +6,7 @@
 
 instance of BaseController.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 protected constructor(...arg: any[]);

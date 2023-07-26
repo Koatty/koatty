@@ -6,7 +6,7 @@
 
 Interface for Middleware
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare type KoattyMiddleware = (ctx: KoattyContext, next: KoattyNext) => Promise<any>;

@@ -6,7 +6,7 @@
 
 Interface for Api output
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface ApiOutput 
@@ -14,9 +14,9 @@ export interface ApiOutput
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [code](./koatty.apioutput.code.md) | number |  |
-|  [data](./koatty.apioutput.data.md) | any |  |
-|  [message](./koatty.apioutput.message.md) | string |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [code](./koatty.apioutput.code.md) |  | number |  |
+|  [data](./koatty.apioutput.data.md) |  | any |  |
+|  [message](./koatty.apioutput.message.md) |  | string |  |
 

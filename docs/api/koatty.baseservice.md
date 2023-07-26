@@ -8,28 +8,28 @@ Base class
 
   Base
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare class BaseService implements IService 
 ```
-<b>Implements:</b> [IService](./koatty.iservice.md)
+**Implements:** [IService](./koatty.iservice.md)
 
 ## Constructors
 
 |  Constructor | Modifiers | Description |
 |  --- | --- | --- |
-|  [(constructor)(arg)](./koatty.baseservice._constructor_.md) |  | instance of BaseController. |
+|  [(constructor)(arg)](./koatty.baseservice._constructor_.md) | <code>protected</code> | instance of BaseController. |
 
 ## Properties
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [app](./koatty.baseservice.app.md) |  | Koatty |  |
+|  [app](./koatty.baseservice.app.md) | <code>readonly</code> | Koatty |  |
 
 ## Methods
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
-|  [init(arg)](./koatty.baseservice.init.md) |  | init  BaseController |
+|  [init(arg)](./koatty.baseservice.init.md) | <code>protected</code> | <p>init</p><p>  BaseController</p> |
 

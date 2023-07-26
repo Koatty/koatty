@@ -7,7 +7,7 @@
 Indicates that an decorated class is a "component".
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function Component(identifier?: string): ClassDecorator;
@@ -17,9 +17,9 @@ export declare function Component(identifier?: string): ClassDecorator;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  identifier | string | <i>(Optional)</i> component name |
+|  identifier | string | _(Optional)_ component name |
 
-<b>Returns:</b>
+**Returns:**
 
 ClassDecorator
 

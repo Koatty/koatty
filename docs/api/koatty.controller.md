@@ -7,7 +7,7 @@
 Indicates that an decorated class is a "controller".
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function Controller(path?: string): ClassDecorator;
@@ -17,9 +17,9 @@ export declare function Controller(path?: string): ClassDecorator;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  path | string | <i>(Optional)</i> controller router path |
+|  path | string | _(Optional)_ controller router path |
 
-<b>Returns:</b>
+**Returns:**
 
 ClassDecorator
 

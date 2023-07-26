@@ -6,7 +6,7 @@
 
 Interface for Controller
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface IController 
@@ -14,8 +14,8 @@ export interface IController
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [app](./koatty.icontroller.app.md) | Koatty |  |
-|  [ctx](./koatty.icontroller.ctx.md) | KoattyContext |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [app](./koatty.icontroller.app.md) | <code>readonly</code> | Koatty |  |
+|  [ctx](./koatty.icontroller.ctx.md) | <code>readonly</code> | KoattyContext |  |
 

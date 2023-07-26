@@ -6,7 +6,7 @@
 
 Response to normalize json format content for success
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ok(msg: string | ApiInput, data?: any, code?: number): Promise<ApiOutput>;
@@ -17,10 +17,10 @@ ok(msg: string | ApiInput, data?: any, code?: number): Promise<ApiOutput>;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  msg | string \| [ApiInput](./koatty.apiinput.md) | 待处理的message消息 |
-|  data | any | <i>(Optional)</i> 待处理的数据 |
-|  code | number | <i>(Optional)</i> 错误码，默认0 |
+|  data | any | _(Optional)_ 待处理的数据 |
+|  code | number | _(Optional)_ 错误码，默认0 |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[ApiOutput](./koatty.apioutput.md)<!-- -->&gt;
 

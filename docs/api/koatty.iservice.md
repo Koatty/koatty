@@ -6,7 +6,7 @@
 
 Interface for Service
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface IService 
@@ -14,7 +14,7 @@ export interface IService
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [app](./koatty.iservice.app.md) | Koatty |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [app](./koatty.iservice.app.md) | <code>readonly</code> | Koatty |  |
 

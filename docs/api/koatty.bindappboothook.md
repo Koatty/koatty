@@ -4,10 +4,10 @@
 
 ## BindAppBootHook() function
 
-bind AppReadyHookFunc example: export function TestDecorator(): ClassDecorator { return (target: any) =<!-- -->&gt; { BindAppBootHook((app: Koatty) =<!-- -->&gt; { // todo return Promise.resolve(); }<!-- -->, target) } }
+bind AppBootHookFunc example: export function TestDecorator(): ClassDecorator { return (target: any) =<!-- -->&gt; { BindAppBootHook((app: Koatty) =<!-- -->&gt; { // todo return Promise.resolve(); }<!-- -->, target) } }
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function BindAppBootHook(func: AppBootHookFunc, target: any): void;
@@ -20,7 +20,7 @@ export declare function BindAppBootHook(func: AppBootHookFunc, target: any): voi
 |  func | [AppBootHookFunc](./koatty.appboothookfunc.md) |  |
 |  target | any |  |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

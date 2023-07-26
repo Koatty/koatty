@@ -4,7 +4,7 @@
 
 ## Logger variable
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 Logger: import("koatty_logger").Logger

@@ -4,7 +4,7 @@
 
 ## AppBootHookFunc type
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare type AppBootHookFunc = (app: Koatty) => Promise<any>;

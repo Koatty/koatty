@@ -7,7 +7,7 @@
 Define project configuration scan path
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function ConfigurationScan(scanPath?: string | string[]): ClassDecorator;
@@ -17,9 +17,9 @@ export declare function ConfigurationScan(scanPath?: string | string[]): ClassDe
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  scanPath | string \| string\[\] | <i>(Optional)</i> |
+|  scanPath | string \| string\[\] | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 ClassDecorator
 

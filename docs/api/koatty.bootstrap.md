@@ -7,7 +7,7 @@
 Bootstrap application
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function Bootstrap(bootFunc?: Function): ClassDecorator;
@@ -17,9 +17,9 @@ export declare function Bootstrap(bootFunc?: Function): ClassDecorator;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  bootFunc | Function | <i>(Optional)</i> |
+|  bootFunc | Function | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 ClassDecorator
 

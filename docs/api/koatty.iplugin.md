@@ -6,7 +6,7 @@
 
 Interface for Plugin
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface IPlugin 
@@ -14,7 +14,7 @@ export interface IPlugin
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [run](./koatty.iplugin.run.md) | (options: any, app: Koatty) =&gt; Promise&lt;any&gt; |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [run](./koatty.iplugin.run.md) |  | (options: any, app: Koatty) =&gt; Promise&lt;any&gt; |  |
 

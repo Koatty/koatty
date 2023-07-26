@@ -8,31 +8,31 @@ Base controller
 
   BaseController  {<!-- -->IController<!-- -->}
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare class BaseController implements IController 
 ```
-<b>Implements:</b> [IController](./koatty.icontroller.md)
+**Implements:** [IController](./koatty.icontroller.md)
 
 ## Constructors
 
 |  Constructor | Modifiers | Description |
 |  --- | --- | --- |
-|  [(constructor)(ctx, arg)](./koatty.basecontroller._constructor_.md) |  | instance of BaseController. |
+|  [(constructor)(ctx, arg)](./koatty.basecontroller._constructor_.md) | <code>protected</code> | instance of BaseController. |
 
 ## Properties
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [app](./koatty.basecontroller.app.md) |  | Koatty |  |
-|  [ctx](./koatty.basecontroller.ctx.md) |  | KoattyContext |  |
+|  [app](./koatty.basecontroller.app.md) | <code>readonly</code> | Koatty |  |
+|  [ctx](./koatty.basecontroller.ctx.md) | <code>readonly</code> | KoattyContext |  |
 
 ## Methods
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
 |  [fail(msg, data, code)](./koatty.basecontroller.fail.md) |  | Response to normalize json format content for fail |
-|  [init(arg)](./koatty.basecontroller.init.md) |  | init  BaseController |
+|  [init(arg)](./koatty.basecontroller.init.md) | <code>protected</code> | <p>init</p><p>  BaseController</p> |
 |  [ok(msg, data, code)](./koatty.basecontroller.ok.md) |  | Response to normalize json format content for success |
 

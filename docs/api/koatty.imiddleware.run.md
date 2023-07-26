@@ -4,7 +4,7 @@
 
 ## IMiddleware.run property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 run: (options: any, app: Koatty) => KoattyMiddleware;

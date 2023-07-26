@@ -6,7 +6,7 @@
 
 Interface for Api input
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface ApiInput 
@@ -14,9 +14,9 @@ export interface ApiInput
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [code?](./koatty.apiinput.code.md) | number | <i>(Optional)</i> |
-|  [data?](./koatty.apiinput.data.md) | any | <i>(Optional)</i> |
-|  [message?](./koatty.apiinput.message.md) | string | <i>(Optional)</i> |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [code?](./koatty.apiinput.code.md) |  | number | _(Optional)_ |
+|  [data?](./koatty.apiinput.data.md) |  | any | _(Optional)_ |
+|  [message?](./koatty.apiinput.message.md) |  | string | _(Optional)_ |
 

@@ -8,7 +8,7 @@ init
 
   BaseController
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 protected init(...arg: any[]): void;
@@ -20,7 +20,7 @@ protected init(...arg: any[]): void;
 |  --- | --- | --- |
 |  arg | any\[\] |  |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

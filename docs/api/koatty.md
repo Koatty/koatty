@@ -8,23 +8,23 @@
 
 |  Class | Description |
 |  --- | --- |
-|  [BaseController](./koatty.basecontroller.md) | Base controller  BaseController  {<!-- -->IController<!-- -->} |
-|  [BaseService](./koatty.baseservice.md) | Base class  Base |
+|  [BaseController](./koatty.basecontroller.md) | <p>Base controller</p><p>  BaseController  {<!-- -->IController<!-- -->}</p> |
+|  [BaseService](./koatty.baseservice.md) | <p>Base class</p><p>  Base</p> |
 
 ## Functions
 
 |  Function | Description |
 |  --- | --- |
-|  [BindAppBootHook(func, target)](./koatty.bindappboothook.md) | bind AppReadyHookFunc example: export function TestDecorator(): ClassDecorator { return (target: any) =<!-- -->&gt; { BindAppBootHook((app: Koatty) =<!-- -->&gt; { // todo return Promise.resolve(); }<!-- -->, target) } } |
-|  [Bootstrap(bootFunc)](./koatty.bootstrap.md) | Bootstrap application |
-|  [Component(identifier)](./koatty.component.md) | Indicates that an decorated class is a "component". |
-|  [ComponentScan(scanPath)](./koatty.componentscan.md) | Define project scan path |
-|  [ConfigurationScan(scanPath)](./koatty.configurationscan.md) | Define project configuration scan path |
-|  [Controller(path)](./koatty.controller.md) | Indicates that an decorated class is a "controller". |
+|  [BindAppBootHook(func, target)](./koatty.bindappboothook.md) | <p>bind AppBootHookFunc example: export function TestDecorator(): ClassDecorator { return (target: any) =<!-- -->&gt; { BindAppBootHook((app: Koatty) =<!-- -->&gt; { // todo return Promise.resolve(); }<!-- -->, target) } }</p> |
+|  [Bootstrap(bootFunc)](./koatty.bootstrap.md) | <p>Bootstrap application</p> |
+|  [Component(identifier)](./koatty.component.md) | <p>Indicates that an decorated class is a "component".</p> |
+|  [ComponentScan(scanPath)](./koatty.componentscan.md) | <p>Define project scan path</p> |
+|  [ConfigurationScan(scanPath)](./koatty.configurationscan.md) | <p>Define project configuration scan path</p> |
+|  [Controller(path)](./koatty.controller.md) | <p>Indicates that an decorated class is a "controller".</p> |
 |  [ExecBootStrap(bootFunc)](./koatty.execbootstrap.md) | Actively perform dependency injection Parse the decorator, return the instantiated app.  ExecBootStrap |
-|  [Middleware(identifier)](./koatty.middleware.md) | Indicates that an decorated class is a "middleware". |
-|  [Plugin(identifier)](./koatty.plugin.md) | Indicates that an decorated class is a "plugin". |
-|  [Service(identifier)](./koatty.service.md) | Indicates that an decorated class is a "service". |
+|  [Middleware(identifier)](./koatty.middleware.md) | <p>Indicates that an decorated class is a "middleware".</p> |
+|  [Plugin(identifier)](./koatty.plugin.md) | <p>Indicates that an decorated class is a "plugin".</p> |
+|  [Service(identifier)](./koatty.service.md) | <p>Indicates that an decorated class is a "service".</p> |
 
 ## Interfaces
 

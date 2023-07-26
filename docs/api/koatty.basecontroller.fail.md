@@ -6,7 +6,7 @@
 
 Response to normalize json format content for fail
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 fail(msg: Error | string | ApiInput, data?: any, code?: number): void;
@@ -17,10 +17,10 @@ fail(msg: Error | string | ApiInput, data?: any, code?: number): void;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  msg | Error \| string \| [ApiInput](./koatty.apiinput.md) |  |
-|  data | any | <i>(Optional)</i> |
-|  code | number | <i>(Optional)</i> |
+|  data | any | _(Optional)_ |
+|  code | number | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 
