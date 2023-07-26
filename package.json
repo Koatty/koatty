@@ -1,6 +1,6 @@
 {
   "name": "koatty",
-  "version": "3.9.1-0",
+  "version": "3.9.1-1",
   "description": "Koa2 + Typescript = koatty. Use Typescript's decorator implement auto injection.",
   "scripts": {
     "build": "npm run build:js && npm run build:dts && npm run build:doc && npm run build:cp",
@@ -89,7 +89,7 @@
     "koatty_logger": "^2.1.1",
     "koatty_payload": "^1.4.5",
     "koatty_proto": "^1.1.12",
-    "koatty_serve": "^2.0.2",
+    "koatty_serve": "^2.0.4",
     "koatty_trace": "^1.8.4",
     "koatty_validation": "^1.2.8"
   }
