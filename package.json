@@ -89,7 +89,7 @@
     "koatty_payload": "^1.4.5",
     "koatty_proto": "^1.1.12",
     "koatty_serve": "^2.0.4",
-    "koatty_trace": "^1.9.0",
+    "koatty_trace": "^1.9.1",
     "koatty_validation": "^1.2.8"
   }
 }
