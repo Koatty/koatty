@@ -10,7 +10,7 @@ export * from "./component/BaseService";
 export * from "./component/BaseController";
 export * from "koatty_core";
 export * from "koatty_container";
-export * from "koatty_exception";
+export * from "koatty_trace";
 export * from "koatty_serve";
 export { Value, Config } from "koatty_config";
 export { Helper } from "./util/Helper";

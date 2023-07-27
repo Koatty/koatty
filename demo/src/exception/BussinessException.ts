@@ -3,11 +3,11 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2022-02-14 11:26:20
- * @LastEditTime: 2023-01-13 15:04:14
+ * @LastEditTime: 2023-07-27 23:14:28
  */
 
 import { KoattyContext } from "koatty_core";
-import { Exception, ExceptionHandler } from "koatty_exception";
+import { Exception, ExceptionHandler } from "koatty_trace";
 
 // @ExceptionHandler()
 export class BussinessException extends Exception {
