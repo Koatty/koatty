@@ -188,7 +188,7 @@ export function Bootstrap(bootFunc?: Function): ClassDecorator {
 export function ExecBootStrap(bootFunc?: Function) {
   return async (target: any) => {
     if (!(target.prototype instanceof Koatty)) {
-      throw new Error(`class ${target.name} does not inherit from TKoatty`);
+      throw new Error(`class ${target.name} does not inherit from Koatty`);
     }
     return await executeBootstrap(target, bootFunc, true);
   };
