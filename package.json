@@ -82,7 +82,7 @@
     "koatty_config": "^1.1.6",
     "koatty_container": "^1.8.1",
     "koatty_core": "^1.7.8",
-    "koatty_lib": "^1.3.3",
+    "koatty_lib": "^1.3.4",
     "koatty_loader": "^1.1.0",
     "koatty_logger": "^2.1.1",
     "koatty_payload": "^1.4.5",
