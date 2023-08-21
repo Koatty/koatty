@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.9.2](https://github.com/thinkkoa/koatty/compare/v3.9.1...v3.9.2) (2023-08-21)
+
+
+### Bug Fixes
+
+* add async_hooks config ([405a9e0](https://github.com/thinkkoa/koatty/commit/405a9e062d4d24e644b5702261563b7affa5480d))
+* up ([3b61396](https://github.com/thinkkoa/koatty/commit/3b61396481002b8e1b8a0aa79f6da1b81ebbdf26))
+
 ### [3.9.1](https://github.com/thinkkoa/koatty/compare/v3.9.1-3...v3.9.1) (2023-07-28)
 
 
