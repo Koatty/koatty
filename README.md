@@ -32,7 +32,6 @@ npm i -g koatty_cli
 ```shell
 kt new projectName
 
-npm start
 ```
 
 ### 2. Install deps
