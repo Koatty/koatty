@@ -9,7 +9,7 @@ import { Load } from "koatty_loader";
 import { Koatty } from 'koatty_core';
 import { LoadConfigs as loadConf } from "koatty_config";
 import { Logger, LogLevelType, SetLogger } from "../util/Logger";
-import { prevent } from "koatty_trace";
+import { prevent } from "koatty_exception";
 import { IMiddleware, IPlugin } from '../component/Component';
 import { AppBootHookFunc } from "./Bootstrap";
 import { checkClass, Helper } from "../util/Helper";
