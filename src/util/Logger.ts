@@ -6,6 +6,7 @@
  */
 
 import { Koatty } from "koatty_core";
+import { Helper } from "koatty_lib";
 import { DefaultLogger, LogLevelType } from "koatty_logger";
 
 // Logger
@@ -31,6 +32,8 @@ export function SetLogger(app: Koatty, config: {
     DefaultLogger.setLevel(config.logLevel);
   }
   if (config.logFilePath && !app.silent) {
+    Helper.define(app, "logsPath", config.logFilePath);
+    process.env.LOGS_PATH = config.logFilePath;
     DefaultLogger.setLogFilePath(config.logFilePath);
   }
   if (config.sensFields) {
