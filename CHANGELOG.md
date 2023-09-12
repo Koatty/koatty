@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.9.5](https://github.com/thinkkoa/koatty/compare/v3.9.4...v3.9.5) (2023-09-12)
+
+
+### Bug Fixes
+
+* import from exception ([beca23c](https://github.com/thinkkoa/koatty/commit/beca23c6b7059ad48997522feff19c716e9a084e))
+* set process.env.LOGS_PATH ([ca38881](https://github.com/thinkkoa/koatty/commit/ca3888189fd5ed37c0d395f05cdb3672df95b7ff))
+
 ### [3.9.4](https://github.com/thinkkoa/koatty/compare/v3.9.3...v3.9.4) (2023-08-30)
 
 ### [3.9.3](https://github.com/thinkkoa/koatty/compare/v3.9.2...v3.9.3) (2023-08-21)
