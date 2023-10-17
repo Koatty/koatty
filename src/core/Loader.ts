@@ -402,8 +402,12 @@ export class Loader {
     const pluginConfList = pluginsConf.list;
     for (const key of pluginConfList) {
       const handle: IPlugin = IOCContainer.get(key, "COMPONENT");
+      if (!handle) {
+        Logger.Error(`Plugin ${key} load error.`);
+        continue;
+      }
       if (!Helper.isFunction(handle.run)) {
-        Logger.Error(`plugin ${key} must be implements method 'run'.`);
+        Logger.Error(`Plugin ${key} must be implements method 'run'.`);
         continue;
       }
       if (pluginsConf.config[key] === false) {
