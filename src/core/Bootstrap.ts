@@ -4,117 +4,162 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-07-06 11:22:58
  */
-// tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
+import EventEmitter from "events";
+import { Koatty } from 'koatty_core';
+import { Loader } from "./Loader";
 import { Helper } from "../util/Helper";
 import { Logger } from "../util/Logger";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
-import { Router } from "./Router";
-import { Koatty } from '../Koatty';
-import { asyncEvent, bindProcessEvent, StartSever } from './Server';
-import { Loader } from "./Loader";
-import { COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
+import { BindProcessEvent, NewRouter, NewServe } from "koatty_serve";
+import { checkRuntime, checkUTRuntime, KOATTY_VERSION } from "../util/Check";
+import { APP_BOOT_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
 
 /**
  * execute bootstrap
  *
  * @param {*} target
  * @param {Function} bootFunc
+ * @param {boolean} [isInitiative=false] Whether to actively execute app instantiation, 
+ * mainly for unittest scenarios, you need to actively obtain app instances
  * @returns {Promise<void>}
  */
-const executeBootstrap = async function (target: any, bootFunc: Function): Promise<void> {
-    const app = Reflect.construct(target, []);
-    try {
-        console.log(LOGO);
-        Logger.Custom('think', '', '====================================');
-        Logger.Custom('think', '', 'Bootstrap');
+const executeBootstrap = async function (target: any, bootFunc: Function, isInitiative = false): Promise<Koatty> {
+  // checked runtime
+  checkRuntime();
+  // unittest running environment
+  const isUTRuntime = checkUTRuntime();
+  if (!isInitiative && isUTRuntime) {
+    return;
+  }
 
-        if (!(app instanceof Koatty)) {
-            throw new Error(`class ${target.name} does not inherit from Koatty`);
-        }
+  const app = <Koatty>Reflect.construct(target, []);
+  // unittest does not print startup logs
+  if (isUTRuntime) {
+    app.silent = true;
+    Logger.enable(false);
+  }
 
-        // exec bootFunc
-        if (Helper.isFunction(bootFunc)) {
-            Logger.Custom('think', '', 'Execute bootFunc ...');
-            await bootFunc(app);
-        }
-        // Set IOC.app
-        IOCContainer.setApp(app);
-
-        Logger.Custom('think', '', 'ComponentScan ...');
-        // component metadata
-        const componentMetas = Loader.GetComponentMetas(target, app.appPath);
-        // configuration metadata
-        const configurationMetas = Loader.GetConfigurationMetas(target);
-        // load all bean
-        const exSet = new Set();
-        Loader.LoadDirectory(componentMetas, '', (fileName: string, target: any, xpath: string) => {
-            if (target[fileName] && Helper.isClass(target[fileName])) {
-                if (exSet.has(fileName)) {
-                    throw new Error(`A same name class already exists. Please modify the \`${xpath}\`'s class name and file name.`);
-                }
-                exSet.add(fileName);
-            }
-        }, [...configurationMetas, `!${target.name ?? '.no'}.ts`]);
-        exSet.clear();
-
-        // Load configuration
-        Logger.Custom('think', '', 'Load Configurations ...');
-        Loader.LoadConfigs(app, configurationMetas);
-
-        // Load Plugin
-        Logger.Custom('think', '', 'Load Plugins ...');
-        await Loader.LoadPlugins(app, IOCContainer);
-
-        // Set Logger level
-        Loader.SetLogger(app);
-
-        // Load App ready hooks
-        Loader.LoadAppReadyHooks(target, app);
-
-        // New router
-        const KoattyRouter = new Router(app, app.config(undefined, 'router') ?? {});
-        // Middleware may depend on
-        Helper.define(app, "Router", KoattyRouter.router);
-
-        // Load Middleware
-        Logger.Custom('think', '', 'Load Middlewares ...');
-        await Loader.LoadMiddlewares(app, IOCContainer);
-
-        // Emit app ready event
-        Logger.Custom('think', '', 'Emit App Ready ...');
-        // app.emit("appReady");
-        await asyncEvent(app, 'appReady');
-        // Load Components
-        Logger.Custom('think', '', 'Load Components ...');
-        Loader.LoadComponents(app, IOCContainer);
-        // Load Services
-        Logger.Custom('think', '', 'Load Services ...');
-        Loader.LoadServices(app, IOCContainer);
-        // Load Controllers
-        Logger.Custom('think', '', 'Load Controllers ...');
-        Loader.LoadControllers(app, IOCContainer);
-        // Load Routers
-        Logger.Custom('think', '', 'Load Routers ...');
-        KoattyRouter.LoadRouter();
-
-        // Emit app started event
-        Logger.Custom('think', '', 'Emit App Start ...');
-        // app.emit("appStart");
-        await asyncEvent(app, 'appStart');
-        // binding event "appStop"
-        bindProcessEvent(app, 'appStop');
-
-        Logger.Custom('think', '', '====================================');
-        // Start server
-        StartSever(app);
-
-    } catch (err) {
-        Logger.Error(err);
-        process.exit();
+  try {
+    !app.silent && Logger.Log("Koatty", LOGO);
+    if (!(app instanceof Koatty)) {
+      throw new Error(`class ${target.name} does not inherit from Koatty`);
     }
+
+    // Initialize env
+    Loader.initialize(app);
+
+    // exec bootFunc
+    if (Helper.isFunction(bootFunc)) {
+      Logger.Log('Koatty', '', 'Execute bootFunc ...');
+      await bootFunc(app);
+    }
+
+    // Set IOCContainer.app
+    IOCContainer.setApp(app);
+
+    Logger.Log('Koatty', '', 'ComponentScan ...');
+
+    // Check all bean
+    Loader.CheckAllComponents(app, target);
+
+    // Load configuration
+    Logger.Log('Koatty', '', 'Load Configurations ...');
+    // configuration metadata
+    const configurationMetas = Loader.GetConfigurationMetas(app, target);
+    Loader.LoadConfigs(app, configurationMetas);
+
+    // Load App ready hooks
+    Loader.LoadAppBootHooks(app, target);
+    // app.emit("appBoot");
+    await asyncEvent(app, 'appBoot');
+
+    // Load Plugin
+    Logger.Log('Koatty', '', 'Load Plugins ...');
+    await Loader.LoadPlugins(app);
+    // Load Middleware
+    Logger.Log('Koatty', '', 'Load Middlewares ...');
+    await Loader.LoadMiddlewares(app);
+    // Load Components
+    Logger.Log('Koatty', '', 'Load Components ...');
+    Loader.LoadComponents(app);
+    // Load Services
+    Logger.Log('Koatty', '', 'Load Services ...');
+    Loader.LoadServices(app);
+    // Load Controllers
+    Logger.Log('Koatty', '', 'Load Controllers ...');
+    const controllers = Loader.LoadControllers(app);
+
+    // Create Server
+    // app.server = newServe(app);
+    Helper.define(app, "server", NewServe(app));
+    // Create router
+    // app.router = newRouter(app);
+    Helper.define(app, "router", NewRouter(app));
+
+    // Emit app ready event
+    Logger.Log('Koatty', '', 'Emit App Ready ...');
+    await asyncEvent(app, 'appReady');
+
+    // Load Routers
+    Logger.Log('Koatty', '', 'Load Routers ...');
+    app.router.LoadRouter(controllers);
+
+    if (!isUTRuntime) {
+      // Start Server
+      app.listen(listenCallback);
+    }
+
+    return app;
+  } catch (err) {
+    Logger.Error(err);
+    process.exit();
+  }
 };
 
+/**
+ * Listening callback function
+ *
+ * @param {Koatty} app
+ * @returns {*} 
+ */
+const listenCallback = (app: Koatty) => {
+  const options = app.server.options;
+
+  Logger.Log('Koatty', '', '====================================');
+  Logger.Log("Koatty", "", `Nodejs Version: ${process.version}`);
+  Logger.Log("Koatty", "", `Koatty Version: v${KOATTY_VERSION}`);
+  Logger.Log("Koatty", "", `App Environment: ${app.env}`);
+  Logger.Log('Koatty', '', `Server Protocol: ${(options.protocol).toUpperCase()}`);
+  Logger.Log("Koatty", "", `Server running at ${options.protocol === "http2" ? "https" : options.protocol}://${options.hostname || '127.0.0.1'}:${options.port}/`);
+  Logger.Log("Koatty", "", "====================================");
+
+  // binding event "appStop"
+  Logger.Log('Koatty', '', 'Bind App Stop event ...');
+  BindProcessEvent(app, 'appStop');
+  // tslint:disable-next-line: no-unused-expression
+  app.appDebug && Logger.Warn(`Running in debug mode.`);
+  // Set Logger
+  Loader.SetLogger(app);
+
+};
+
+/**
+ * Execute event as async
+ *
+ * @param {Koatty} event
+ * @param {string} eventName
+ */
+const asyncEvent = async function (event: EventEmitter, eventName: string) {
+  const ls: any[] = event.listeners(eventName);
+  // eslint-disable-next-line no-restricted-syntax
+  for await (const func of ls) {
+    if (Helper.isFunction(func)) {
+      func();
+    }
+  }
+  return event.removeAllListeners(eventName);
+};
 
 /**
  * Bootstrap application
@@ -124,12 +169,29 @@ const executeBootstrap = async function (target: any, bootFunc: Function): Promi
  * @returns {ClassDecorator}
  */
 export function Bootstrap(bootFunc?: Function): ClassDecorator {
-    return function (target: any) {
-        if (!(target.prototype instanceof Koatty)) {
-            throw new Error(`class does not inherit from Koatty`);
-        }
-        executeBootstrap(target, bootFunc);
-    };
+  return function (target: any) {
+    if (!(target.prototype instanceof Koatty)) {
+      throw new Error(`class does not inherit from Koatty`);
+    }
+    executeBootstrap(target, bootFunc);
+  };
+}
+
+
+/**
+ * Actively perform dependency injection
+ * Parse the decorator, return the instantiated app. 
+ * @export  ExecBootStrap
+ * @param {Function} [bootFunc] callback function
+ * @returns
+ */
+export function ExecBootStrap(bootFunc?: Function) {
+  return async (target: any) => {
+    if (!(target.prototype instanceof Koatty)) {
+      throw new Error(`class ${target.name} does not inherit from Koatty`);
+    }
+    return await executeBootstrap(target, bootFunc, true);
+  };
 }
 
 /**
@@ -140,15 +202,13 @@ export function Bootstrap(bootFunc?: Function): ClassDecorator {
  * @returns {ClassDecorator}
  */
 export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
-    Logger.Custom('think', '', 'ComponentScan');
-
-    return (target: any) => {
-        if (!(target.prototype instanceof Koatty)) {
-            throw new Error(`class does not inherit from Koatty`);
-        }
-        scanPath = scanPath ?? '';
-        IOCContainer.saveClassMetadata(TAGGED_CLS, COMPONENT_SCAN, scanPath, target);
-    };
+  return (target: any) => {
+    if (!(target.prototype instanceof Koatty)) {
+      throw new Error(`class does not inherit from Koatty`);
+    }
+    scanPath = scanPath ?? '';
+    IOCContainer.saveClassMetadata(TAGGED_CLS, COMPONENT_SCAN, scanPath, target);
+  };
 }
 
 /**
@@ -159,13 +219,34 @@ export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
  * @returns {ClassDecorator}
  */
 export function ConfigurationScan(scanPath?: string | string[]): ClassDecorator {
-    Logger.Custom('think', '', 'ConfigurationScan');
+  return (target: any) => {
+    if (!(target.prototype instanceof Koatty)) {
+      throw new Error(`class does not inherit from Koatty`);
+    }
+    scanPath = scanPath ?? '';
+    IOCContainer.saveClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, scanPath, target);
+  };
+}
 
-    return (target: any) => {
-        if (!(target.prototype instanceof Koatty)) {
-            throw new Error(`class does not inherit from Koatty`);
-        }
-        scanPath = scanPath ?? '';
-        IOCContainer.saveClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, scanPath, target);
-    };
+// type AppBootHookFunc
+export type AppBootHookFunc = (app: Koatty) => Promise<any>;
+
+/**
+ * bind AppBootHookFunc
+ * example:
+ * export function TestDecorator(): ClassDecorator {
+ *  return (target: any) => {
+ *   BindAppBootHook((app: Koatty) => {
+ *      // todo
+ *      return Promise.resolve();
+ *   }, target)   
+ *  }
+ * }
+ *
+ * @export
+ * @param {AppBootHookFunc} func
+ * @param {*} target 
+ */
+export function BindAppBootHook(func: AppBootHookFunc, target: any) {
+  IOCContainer.attachClassMetadata(TAGGED_CLS, APP_BOOT_HOOK, func, target);
 }

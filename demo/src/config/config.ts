@@ -1,16 +1,22 @@
-/**
- * @ author: richen
- * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: BSD (3-Clause)
- * @ version: 2019-09-24 11:06:12
+/*
+ * @Description: 配置数据
+ * @Usage: 静态配置数据信息
+ * @Author: xxx
+ * @Date: 2020-12-22 15:24:25
+ * @LastEditTime: 2023-03-05 01:12:39
  */
 export default {
-    "test": {
-        aa: '111111'
-    },
-    open_trace: true, //全链路debug/trace，默认: false
-    // enable_http2: true, // 是否启用HTTP2,启用需要配置证书
-    // https certificate
-    key_file: process.env.APP_PATH + "/config/server.key",
-    crt_file: process.env.APP_PATH + "/config/server.crt"
+  /*app config*/
+  app_port: 3000, // Listening port
+  app_host: "", // Hostname
+  protocol: "http", // Server protocol 'http' | 'https' | 'http2' | 'grpc' | 'ws' | 'wss'
+  open_trace: true, // Full stack debug & trace, default: false
+  http_timeout: 10, // HTTP request timeout time(seconds)
+  key_file: "", // HTTPS certificate key
+  crt_file: "", // HTTPS certificate crt
+  encoding: "utf-8", // Character Encoding
+
+  logs_level: "debug", // Level log is printed to the console, "debug" | "info" | "warning" | "error"
+  // logs_path: "./logs", // Log file directory
+  // sens_fields: ["password"] // Sensitive words
 };

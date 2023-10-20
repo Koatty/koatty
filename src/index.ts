@@ -4,17 +4,15 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-05-18 10:43:05
  */
-export * from "./Koatty";
-export * from "./controller/BaseController";
-export * from "./controller/RestController";
-export * from './core/AOP';
 export * from "./core/Bootstrap";
-export * from "./core/Component";
-export * from './core/Exception';
-export * from "./core/RequestMapping";
-export { AppReadyHookFunc, BindAppReadyHook } from "./core/Loader";
-export { Value, Config } from './core/Value';
-export * from "./service/BaseService";
+export * from "./component/Component";
+export * from "./component/BaseService";
+export * from "./component/BaseController";
+export * from "koatty_core";
 export * from "koatty_container";
+export * from "koatty_exception";
+export * from "koatty_serve";
+export * from "koatty_trace";
+export { Value, Config } from "koatty_config";
 export { Helper } from "./util/Helper";
 export { Logger } from "./util/Logger";

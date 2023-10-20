@@ -3,6 +3,9 @@
 node_modules
 coverage
 dist
-demo/logs
+temp
+logs
 npm-debug.log
 yarn-error.log
+jest_html_reporters.html
+jest-html-reporters-attach

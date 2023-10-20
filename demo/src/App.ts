@@ -1,36 +1,29 @@
-/**
- * @ author: richen
- * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: BSD (3-Clause)
- * @ version: 2020-07-06 11:15:36
+/*
+ * @Description: 入口文件
+ * @Usage: 实例化app，创建服务
+ * @Author: richen
+ * @Date: 2020-12-22 15:35:07
+ * @LastEditTime: 2021-12-23 00:58:38
  */
-import { Bootstrap, ComponentScan, Autowired, Koatty, ConfigurationScan, Logger, Helper } from '../../src/index';
-// import { EnableCacheStore } from "koatty_cacheable";
-import { EnableScheduleLock } from "koatty_schedule";
-import * as path from "path";
-// @EnableCacheStore()
-@EnableScheduleLock()
-@Bootstrap((app: any) => {
-    //调整libuv线程池大小
-    // process.env.UV_THREADPOOL_SIZE = "128";
-    //忽略https自签名验证
-    // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-    console.log("bootFunc");
+import { Koatty, Bootstrap } from "../../src/index";
+import * as path from 'path';
+
+// bootstrap function
+@Bootstrap(() => {
+  // 调整libuv线程池大小
+  process.env.UV_THREADPOOL_SIZE = '128';
+  // 忽略https自签名验证
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 })
-// @ComponentScan('./test')
-// @ConfigurationScan('./test/config')
+// 配置组件存放目录，默认: ./
+// @ComponentScan('./')
+// 配置配置文件存放目录，默认: ./config
+// @ConfigurationScan('./config')
 export class App extends Koatty {
-    rootPath: string;
-    mm1: any;
-    mm2: any;
-    test: string;
-
-    public init() {
-        this.rootPath = path.dirname(__dirname);
-        // this.appPath = `${this.rootPath}${path.sep}src`;
-        // this.appDebug = false; //线上环境请将debug模式关闭，即：appDebug:false
-    }
+  // 重写init方法，用于服务初始化前置
+  public init() {
+    // 服务运行目录
+    this.rootPath = path.dirname(__dirname);
+  }
 }
-
-

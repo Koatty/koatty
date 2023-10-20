@@ -1,81 +1,111 @@
-/**
- * @ author: xxx
- * @ copyright: Copyright (c)
- * @ license: Apache License 2.0
- * @ version: 2020-05-19 14:31:04
+/*
+ * @Description: 业务层
+ * @Usage: 接收处理路由参数
+ * @Author: xxx
+ * @Date: 2020-12-22 15:31:17
+ * @LastEditTime: 2023-07-26 21:45:00
  */
-import { Controller, GetMapping, Autowired, RequestMethod, PostMapping, Before, After, RequestBody, Get, Helper, Post, RequestParam, IOCContainer, PathVariable, BeforeEach, Exception, prevent } from "../../../src/index";
-import { Validated, Valid } from "koatty_validation";
+
+import {
+  Controller, Autowired, GetMapping, Post, PostMapping, KoattyContext,
+  Before, Get, Exception, Logger, Config, RequestBody, BaseController
+} from '../../../src/index';
+import { Valid, Validated } from "koatty_validation";
 import { App } from '../App';
-import { AdminController } from "./AdminController";
-import { TestService } from "../service/TestService";
-import { TestDto } from '../model/TestDto';
-import { TestModel } from '../model/TestModel';
 import { TestAspect } from '../aspect/TestAspect';
-import { Test2Aspect } from "../aspect/Test2Aspect";
+import { UserDto } from '../dto/UserDto';
+import { TestService } from '../service/TestService';
+import { BussinessException } from '../exception/BussinessException';
 
+@Controller('/')
+export class IndexController extends BaseController {
+  app: App;
+  ctx: KoattyContext;
 
-@Controller("/")
-@BeforeEach(TestAspect)
-export class IndexController extends AdminController {
-    app: App;
-    pageInfo: { 'appName': string; 'appVersion': string; 'appKeywords': string; 'appDescription': string; };
+  @Autowired()
+  protected TestService: TestService;
 
-    @Autowired()
-    private testService: TestService;
-    cache: {};
+  /**
+   * 前置登录检查
+   * AOP前置切面方法，等同于@BeforeEach()
+   * @returns {*}  {Promise<any>}
+   * @memberof TestController
+   */
+  // async __before(): Promise<any> {
+  //   // 登录检查
+  //   const token = this.ctx.get("x-access-token");
+  //   const isLogin = await this.TestService.checkLogin(token);
+  //   if (isLogin) {
+  //     this.ctx.userId = `${Date.now()}_${String(Math.random()).substring(2)}`;
+  //   } else {
+  //     return this.fail('no login', { needLogin: 1 });
+  //   }
+  // }
 
-    init() {
-        this.cache = {};
-    }
+  /**
+   * @api {get} / index接口
+   * @apiGroup Test
+   * 
+   * 
+   * @apiSuccessExample {json} Success
+   * {"code":1,"message":"","data":{}}
+   * 
+   * @apiErrorExample {json} Error
+   * {"code":0,"message":"错误信息","data":null}
+   */
+  @GetMapping('/')
+  index(@RequestBody() body: any): Promise<any> {
+    // this.ctx.session.username = "test"
+    return this.ok("");
+  }
 
+  /**
+   * @api {get} /get get接口
+   * @apiGroup Test
+   * 
+   * @apiParam {number} id  userId.
+   * 
+   * @apiSuccessExample {json} Success
+   * {"code":1,"message":"","data":{}}
+   * 
+   * @apiErrorExample {json} Error
+   * {"code":0,"message":"错误信息","data":null}
+   */
+  @GetMapping("/get")
+  async get(@Valid("IsNotEmpty", "id不能为空") @Get("id") id: number): Promise<any> {
+    const userInfo = await this.TestService.getUser(id);
+    return this.ok("success", userInfo);
+  }
 
-    @GetMapping("/")
-    @Before(Test2Aspect)
-    async default() {
-        const info = await this.testService.test2().catch(() => null);
-        // return { "aa": "band!!!!!!" };
-        // this.ctx.status = 403;
-        // this.fail("sfsdfsdfdsf");
-        // this.ctx.body = { "aa": "band!!!!!!" };
-        throw new Error("band");
-        // throw new Exception("band", 1, 405);
-        // ctx.body = "sss";
-        // this.ctx.throw("ssss");
-        // return prevent();
-        // return new Promise((resolve: Function) => setTimeout(() => resolve(), 200));
-        // return "Hello Koatty.";
-        // return this.ok("Hello Koatty.");
-    }
+  /**
+   * @api {post} /add add接口
+   * @apiGroup Test
+   * 
+   * @apiParamClass (src/dto/UserDto.ts) {RoleDTO}
+   * 
+   * @apiSuccessExample {json} Success
+   * {"code":1,"message":"","data":{}}
+   * 
+   * @apiErrorExample {json} Error
+   * {"code":0,"message":"错误信息","data":null}
+   */
+  @PostMapping('/add')
+  @Validated()
+  @Before(TestAspect)
+  async add(@Post() data: UserDto): Promise<any> {
+    const userId = await this.TestService.addUser(data);
+    return this.ok('success', { userId });
+  }
 
-    @GetMapping("/path/:name")
-    @Before(TestAspect)
-    async path(@Get("test") test = '666', @PathVariable("name") name: string) {
-        const info = await this.testService.test1(name);
-        // throw Error("default");
-        return this.body(info);
-        // this.type("text/plain");
-        // this.type("text/html");
-        console.log('PathVariable', name);
-        console.log('Get', test);
-        return this.fail({
-            code: 200,
-            message: "dsfsfs"
-        });
-    }
-
-    @PostMapping("/test")
-    @Validated()
-    async test(@Post() aa: TestDto) {
-        // console.log(Helper.isFunction(TestModel));
-        // const info = await this.testService.test(aa).catch((e: any) => {
-        //     return this.fail(e.message || e);
-        // });
-        // return new Promise((resolve: Function) => setTimeout(() => resolve(1), 200));
-        // throw Error("test");
-        console.log(this.app.trace.get('traceId'), '------------------------');
-        return this.ok("success", "");
-
-    }
-
+  /**
+   * hello 接口
+   *
+   * @returns
+   * @memberof TestController
+   */
+  @GetMapping('/html')
+  html(): Promise<any> {
+    this.ctx.state = { title: 'Koatty', content: 'Hello, Koatty!' };
+    return this.ctx.render('index.html');
+  }
 }

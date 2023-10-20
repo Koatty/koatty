@@ -1,18 +1,25 @@
 # koatty
 
-Koa2 + Typescript = koatty. 
+Koa2 + Typescript + IOC = koatty. 
 
 Use Typescript's decorator implement IOC and AOP.
 
 [![Version npm](https://img.shields.io/npm/v/koatty.svg?style=flat-square)](https://www.npmjs.com/package/koatty)[![npm Downloads](https://img.shields.io/npm/dm/koatty.svg?style=flat-square)](https://npmcharts.com/compare/koatty?minimal=true)
 
+## New features 
+
+* HTTP、HTTPS、HTTP2、gRPC、WebSocket server.
+* Support loading environment configuration, parsing command line parameters (process.argv) and environment variables (process.env)
+* `@ExceptionHandler()` Register global exception handling
+* graceful shutdown and pre-exit event
+
+
 ## Documentation
 
-[koatty_doc_CN](https://koatty.github.io/koatty_doc/) （In progress💪）
+[koatty_doc_CN](https://koatty.org/) （In progress💪）
 
-[koatty_doc_EN] come soon...
 
-## Installation
+## Installation CLI tools
 
 ```shell
 npm i -g koatty_cli
@@ -23,58 +30,34 @@ npm i -g koatty_cli
 ### 1.Create Project
 
 ```shell
-koatty new projectName
+kt new projectName
 
+```
+
+### 2. Install deps
+
+```
 cd ./projectName
 
-yarn install
+npm i
+```
 
+### 3. Start up
+
+```
+npm run dev
+
+// or
 npm start
 ```
 
-### 2.Create a Controller
-```shell
-koatty controller test
+## Code style
 
-```
-
-### 3.Create a Service
-
-```shell
-koatty service test
-
-```
-
-### 3.Create a Middleware （Optional）
-
-```shell
-koatty middleware test
-
-```
-### 4.Create a Model（Optional）
-
-Supports [thinkorm](https://github.com/thinkkoa/thinkorm) and [typeorm](https://github.com/typeorm/typeorm). Please expand other ORM by yourself.
-
-```shell
-//thinkorm
-koatty middleware test
-
-//typeorm
-koatty middleware -o typeorm test
-
-```
-
-### 5.Create a DTOClass （Optional）
-
-```shell
-koatty dto test
-
-```
-
-### 6.Define TestController
+default Controller:
 
 ```javascript
-import { Controller, BaseController, Autowired, GetMapping, RequestBody, PathVariable, PostMapping, RequestMapping, RequestMethod, Valid } from "koatty";
+import { Controller, BaseController, Autowired, GetMapping, RequestBody, PathVariable,
+ PostMapping, RequestMapping, RequestMethod, Valid } from "koatty";
 import { TestDTO } from "../model/dto/TestDTO";
 import { TestService } from "../service/TestService";
 import { App } from "../App";
@@ -92,8 +75,12 @@ export class IndexController extends BaseController {
 
     @RequestMapping("/:name", RequestMethod.ALL)
     async default(@PathVariable("name") @Valid("IsNotEmpty") name: string) {
-        const info = await this.testService.sayHello(name).catch((err: any) => this.fail(err.message));
-        return info;
+        try {
+            const info = await this.testService.sayHello(name);
+            return this.ok("success", info);
+        } catch (err: Error) {
+            return this.fail(err.message));
+        }
     }
 
     @PostMapping("/test")
@@ -102,6 +89,37 @@ export class IndexController extends BaseController {
         return this.ok("test", params);
     }
 }
+```
+
+## How to do Unit Testing
+
+>only support `jest` UT framework now 
+
+```javascript
+import request from 'supertest';
+import { ExecBootStrap } from 'koatty';
+import { App } from '../src/App';
+
+describe('UT example', () => {
+
+  let server: any;
+  beforeAll(async () => {
+    jest.useFakeTimers();
+    const appInstance = await ExecBootStrap()(App);
+    server = await appInstance.listen();
+  });
+
+  afterAll(done => {
+    server.close();
+    done();
+  });
+
+  it('request', async () => {
+    const rsp = await request(server).get('/');
+    expect(rsp.status).toBe(200);
+  });
+});
+
 ```
 
 ## How to debug
@@ -138,7 +156,6 @@ Select `TS Program` to debug run. Try to call `http://localhost:3000/` .
 Check out the [quick start example][quick-example].
 
 [quick-example]: https://github.com/thinkkoa/koatty_demo/
-
 
 
 
