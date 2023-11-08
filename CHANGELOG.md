@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.10.0](https://github.com/thinkkoa/koatty/compare/v3.9.5...v3.10.0) (2023-11-08)
+
+
+### Features
+
+* add app event bind ([66e7a48](https://github.com/thinkkoa/koatty/commit/66e7a488c2aa833e37e1418a9d17c91b0872d255))
+* Custom decorator based on app events ([aa9d96c](https://github.com/thinkkoa/koatty/commit/aa9d96c8bda8364793d868c20eca5d479acb4f88))
+
+
+### Bug Fixes
+
+* key is null ([d851dc5](https://github.com/thinkkoa/koatty/commit/d851dc525933de9225ddf43bcbedc2ac29922648))
+* readme ([84ed9f4](https://github.com/thinkkoa/koatty/commit/84ed9f4261d9c338c1a70d685f3b44deb35a40ee))
+
 ### [3.9.5](https://github.com/thinkkoa/koatty/compare/v3.9.4...v3.9.5) (2023-09-12)
 
 
