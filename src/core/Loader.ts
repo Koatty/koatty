@@ -6,15 +6,14 @@
  */
 import * as path from "path";
 import { Load } from "koatty_loader";
-import { Koatty } from 'koatty_core';
+import { AppEvent, AppEventArr, EventHookFunc, Koatty } from 'koatty_core';
 import { LoadConfigs as loadConf } from "koatty_config";
 import { Logger, LogLevelType, SetLogger } from "../util/Logger";
 import { prevent } from "koatty_exception";
 import { IMiddleware, IPlugin } from '../component/Component';
-import { AppBootHookFunc } from "./Bootstrap";
 import { checkClass, Helper } from "../util/Helper";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
-import { APP_BOOT_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
+import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 import { BaseController } from "../component/BaseController";
 import { TraceMiddleware } from "../middleware/TraceMiddleware";
 import { PayloadMiddleware } from "../middleware/PayloadMiddleware";
@@ -66,10 +65,11 @@ export class Loader {
     // define path
     const rootPath = app.rootPath || process.cwd();
     const appPath = app.appPath || path.resolve(rootPath, env.indexOf('ts-node') > -1 ? 'src' : 'dist');
-    const thinkPath = path.resolve(__dirname, '..');
+    const koattyPath = path.resolve(__dirname, '..');
     Helper.define(app, 'rootPath', rootPath);
     Helper.define(app, 'appPath', appPath);
-    Helper.define(app, 'thinkPath', thinkPath);
+    Helper.define(app, 'koattyPath', koattyPath);
+
 
     // 
     if (Helper.isEmpty(app.name)) {
@@ -82,13 +82,12 @@ export class Loader {
 
     process.env.ROOT_PATH = rootPath;
     process.env.APP_PATH = appPath;
-    process.env.THINK_PATH = thinkPath;
+    process.env.KOATTY_PATH = koattyPath;
 
     // Compatible with old version, will be deprecated
     Helper.define(app, 'prevent', prevent);
-    Helper.define(app, 'root_path', rootPath);
-    Helper.define(app, 'app_path', appPath);
-    Helper.define(app, 'think_path', thinkPath);
+    Helper.define(app, 'thinkPath', koattyPath);
+    process.env.THINK_PATH = koattyPath;
 
   }
 
@@ -193,20 +192,51 @@ export class Loader {
 
 
   /**
-   * Load app ready hook funcs
+   * Load app event hook funcs
    *
    * @static
    * @param {Koatty} app
    * @param {*} target
    * @memberof Loader
    */
-  public static LoadAppBootHooks(app: Koatty, target: any) {
-    const funcs = IOCContainer.getClassMetadata(TAGGED_CLS, APP_BOOT_HOOK, target);
-    if (Helper.isArray(funcs)) {
-      funcs.forEach((element: AppBootHookFunc): any => {
-        app.once('appBoot', () => element(app));
-        return null;
-      });
+  public static LoadAppEventHooks(app: Koatty, target: any) {
+    let eventFuncs: Map<string, EventHookFunc[]>;
+    for (const event of AppEventArr) {
+      let funcs: unknown;
+      switch (event) {
+        case AppEvent.appBoot:
+          funcs = IOCContainer.getClassMetadata(TAGGED_CLS, AppEvent.appBoot, target);
+          if (Helper.isArray(funcs)) {
+            eventFuncs.set(AppEvent.appBoot, funcs);
+          }
+          break;
+        case AppEvent.appReady:
+          funcs = IOCContainer.getClassMetadata(TAGGED_CLS, AppEvent.appReady, target);
+          if (Helper.isArray(funcs)) {
+            eventFuncs.set(AppEvent.appReady, funcs);
+          }
+          break;
+        case AppEvent.appStart:
+          funcs = IOCContainer.getClassMetadata(TAGGED_CLS, AppEvent.appStart, target);
+          if (Helper.isArray(funcs)) {
+            eventFuncs.set(AppEvent.appStart, funcs);
+          }
+          break;
+        case AppEvent.appStop:
+          funcs = IOCContainer.getClassMetadata(TAGGED_CLS, AppEvent.appStop, target);
+          if (Helper.isArray(funcs)) {
+            eventFuncs.set(AppEvent.appStop, funcs);
+          }
+          break;
+        default:
+          break;
+      }
+    }
+    // loop event emit
+    for (const [event, funcs] of eventFuncs) {
+      for (const func of funcs) {
+        app.once(event, () => func(app));
+      }
     }
   }
 
@@ -221,7 +251,7 @@ export class Loader {
   public static LoadConfigs(app: Koatty, loadPath?: string[]) {
     const frameConfig: any = {};
     // Logger.Debug(`Load configuration path: ${app.thinkPath}/config`);
-    Load(["./config"], app.thinkPath, function (name: string, path: string, exp: any) {
+    Load(["./config"], app.koattyPath, function (name: string, path: string, exp: any) {
       frameConfig[name] = exp;
     });
 
@@ -249,7 +279,7 @@ export class Loader {
     }
 
     //Mount default middleware
-    Load(loadPath || ["./middleware"], app.thinkPath);
+    Load(loadPath || ["./middleware"], app.koattyPath);
     //Mount application middleware
     // const middleware: any = {};
     const appMiddleware = IOCContainer.listClass("MIDDLEWARE") ?? [];

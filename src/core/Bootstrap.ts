@@ -6,14 +6,14 @@
  */
 import "reflect-metadata";
 import EventEmitter from "events";
-import { Koatty } from 'koatty_core';
+import { AppEvent, EventHookFunc, Koatty } from 'koatty_core';
 import { Loader } from "./Loader";
 import { Helper } from "../util/Helper";
 import { Logger } from "../util/Logger";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
 import { BindProcessEvent, NewRouter, NewServe } from "koatty_serve";
 import { checkRuntime, checkUTRuntime, KOATTY_VERSION } from "../util/Check";
-import { APP_BOOT_HOOK, COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
+import { COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
 
 /**
  * execute bootstrap
@@ -69,10 +69,10 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
     const configurationMetas = Loader.GetConfigurationMetas(app, target);
     Loader.LoadConfigs(app, configurationMetas);
 
-    // Load App ready hooks
-    Loader.LoadAppBootHooks(app, target);
+    // Load App event hooks
+    Loader.LoadAppEventHooks(app, target);
     // app.emit("appBoot");
-    await asyncEvent(app, 'appBoot');
+    await asyncEvent(app, AppEvent.appBoot);
 
     // Load Plugin
     Logger.Log('Koatty', '', 'Load Plugins ...');
@@ -99,7 +99,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
 
     // Emit app ready event
     Logger.Log('Koatty', '', 'Emit App Ready ...');
-    await asyncEvent(app, 'appReady');
+    await asyncEvent(app, AppEvent.appReady);
 
     // Load Routers
     Logger.Log('Koatty', '', 'Load Routers ...');
@@ -177,7 +177,6 @@ export function Bootstrap(bootFunc?: Function): ClassDecorator {
   };
 }
 
-
 /**
  * Actively perform dependency injection
  * Parse the decorator, return the instantiated app. 
@@ -228,25 +227,22 @@ export function ConfigurationScan(scanPath?: string | string[]): ClassDecorator 
   };
 }
 
-// type AppBootHookFunc
-export type AppBootHookFunc = (app: Koatty) => Promise<any>;
-
 /**
- * bind AppBootHookFunc
+ * @description: bind App event hook func
  * example:
  * export function TestDecorator(): ClassDecorator {
  *  return (target: any) => {
- *   BindAppBootHook((app: Koatty) => {
+ *   BindEventHook(AppEvent.appBoot, (app: Koatty) => {
  *      // todo
  *      return Promise.resolve();
  *   }, target)   
  *  }
  * }
- *
- * @export
- * @param {AppBootHookFunc} func
- * @param {*} target 
+ * @param {AppEvent} eventName
+ * @param {EventHookFunc} eventFunc
+ * @param {any} target
+ * @return {*}
  */
-export function BindAppBootHook(func: AppBootHookFunc, target: any) {
-  IOCContainer.attachClassMetadata(TAGGED_CLS, APP_BOOT_HOOK, func, target);
+export function BindEventHook(eventName: AppEvent, eventFunc: EventHookFunc, target: any) {
+  IOCContainer.attachClassMetadata(TAGGED_CLS, eventName, eventFunc, target);
 }
