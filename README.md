@@ -145,6 +145,7 @@ if you use vscode , edit the `.vscode/launch.json` , like this:
             "sourceMaps": true,
             "cwd": "${workspaceRoot}",
             "protocol": "inspector",
+            "outputCapture": "std",
             "internalConsoleOptions": "neverOpen"
         }
     ]
