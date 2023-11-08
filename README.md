@@ -12,6 +12,7 @@ Use Typescript's decorator implement IOC and AOP.
 * Support loading environment configuration, parsing command line parameters (process.argv) and environment variables (process.env)
 * `@ExceptionHandler()` Register global exception handling
 * graceful shutdown and pre-exit event
+* custom decorator based on app events
 
 
 ## Documentation

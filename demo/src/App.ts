@@ -3,11 +3,12 @@
  * @Usage: 实例化app，创建服务
  * @Author: richen
  * @Date: 2020-12-22 15:35:07
- * @LastEditTime: 2021-12-23 00:58:38
+ * @LastEditTime: 2023-11-08 15:18:22
  */
 
 import { Koatty, Bootstrap } from "../../src/index";
 import * as path from 'path';
+import { TestBootStrap } from "./bootstrap/TestBootStrap";
 
 // bootstrap function
 @Bootstrap(() => {
@@ -20,6 +21,7 @@ import * as path from 'path';
 // @ComponentScan('./')
 // 配置配置文件存放目录，默认: ./config
 // @ConfigurationScan('./config')
+@TestBootStrap()
 export class App extends Koatty {
   // 重写init方法，用于服务初始化前置
   public init() {

@@ -9,8 +9,6 @@ export const COMPONENT_SCAN = 'COMPONENT_SCAN';
 export const CONFIGURATION_SCAN = 'CONFIGURATION_SCAN';
 export const PRIORITY_KEY = 'PRIORITY_KEY';
 
-export const APP_BOOT_HOOK = "APP_BOOT_HOOK";
-
 // tslint:disable: no-irregular-whitespace
 export const LOGO = `
 
