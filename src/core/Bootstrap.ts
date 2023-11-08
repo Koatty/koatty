@@ -71,7 +71,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
 
     // Load App event hooks
     Loader.LoadAppEventHooks(app, target);
-    // app.emit("appBoot");
+    Logger.Log('Koatty', '', 'Emit App Boot ...');
     await asyncEvent(app, AppEvent.appBoot);
 
     // Load Plugin

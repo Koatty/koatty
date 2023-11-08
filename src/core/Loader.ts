@@ -200,7 +200,7 @@ export class Loader {
    * @memberof Loader
    */
   public static LoadAppEventHooks(app: Koatty, target: any) {
-    let eventFuncs: Map<string, EventHookFunc[]>;
+    const eventFuncs: Map<string, EventHookFunc[]> = new Map();
     for (const event of AppEventArr) {
       let funcs: unknown;
       switch (event) {
