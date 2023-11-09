@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.10.1](https://github.com/thinkkoa/koatty/compare/v3.10.0...v3.10.1) (2023-11-09)
+
+
+### Bug Fixes
+
+* jsdoc ([993970e](https://github.com/thinkkoa/koatty/commit/993970e77dab26af1b81e7d2abfeac93263648ae))
+* readme ([73078be](https://github.com/thinkkoa/koatty/commit/73078be36cc7a89767ded165dc91a7b3f11fd228))
+
 ## [3.10.0](https://github.com/thinkkoa/koatty/compare/v3.9.5...v3.10.0) (2023-11-08)
 
 
