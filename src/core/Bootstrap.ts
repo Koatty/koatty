@@ -231,7 +231,7 @@ export function ConfigurationScan(scanPath?: string | string[]): ClassDecorator 
  * @description: bind App event hook func
  * example:
  * export function TestDecorator(): ClassDecorator {
- *  return (target: any) => {
+ *  return (target: Function) => {
  *   BindEventHook(AppEvent.appBoot, (app: Koatty) => {
  *      // todo
  *      return Promise.resolve();
