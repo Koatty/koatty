@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.10.2-0](https://github.com/thinkkoa/koatty/compare/v3.10.1...v3.10.2-0) (2023-11-10)
+
+
+### Bug Fixes
+
+* rename ([738185d](https://github.com/thinkkoa/koatty/commit/738185d3eb538770f8ee186dccd4c61ead8a3659))
+
 ### [3.10.1](https://github.com/thinkkoa/koatty/compare/v3.10.0...v3.10.1) (2023-11-09)
 
 
