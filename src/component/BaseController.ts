@@ -51,7 +51,7 @@ export class BaseController implements IController {
    */
   public ok(msg: string | ApiInput, data?: any, code = 0) {
     const obj: ApiOutput = formatApiData(msg, data, code);
-    return obj;
+    return Promise.resolve(obj);
   }
 
   /**

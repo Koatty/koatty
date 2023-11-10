@@ -67,7 +67,7 @@ export interface IController {
 
   init(...arg: any[]): void;
 
-  ok(msg: string | ApiInput, data?: any, code?: number): ApiOutput;
+  ok(msg: string | ApiInput, data?: any, code?: number): Promise<ApiOutput>;
   fail(msg: Error | string | ApiInput, data?: any, code?: number): void;
 }
 
