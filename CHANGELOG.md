@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.10.2-1](https://github.com/thinkkoa/koatty/compare/v3.10.2-0...v3.10.2-1) (2023-11-10)
+
+
+### Bug Fixes
+
+* ctl.ok返回类型 ([5d76b80](https://github.com/thinkkoa/koatty/commit/5d76b800fa3a59c5685fba3bf5adca04ce27afe2))
+
 ### [3.10.2-0](https://github.com/thinkkoa/koatty/compare/v3.10.1...v3.10.2-0) (2023-11-10)
 
 
