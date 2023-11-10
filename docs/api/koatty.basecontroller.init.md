@@ -6,12 +6,12 @@
 
 init
 
-  BaseController
+ BaseController
 
 **Signature:**
 
 ```typescript
-protected init(...arg: any[]): void;
+init(...arg: any[]): void;
 ```
 
 ## Parameters

@@ -9,7 +9,7 @@ Response to normalize json format content for success
 **Signature:**
 
 ```typescript
-ok(msg: string | ApiInput, data?: any, code?: number): Promise<ApiOutput>;
+ok(msg: string | ApiInput, data?: any, code?: number): ApiOutput;
 ```
 
 ## Parameters
@@ -22,7 +22,7 @@ ok(msg: string | ApiInput, data?: any, code?: number): Promise<ApiOutput>;
 
 **Returns:**
 
-Promise&lt;[ApiOutput](./koatty.apioutput.md)<!-- -->&gt;
+[ApiOutput](./koatty.apioutput.md)
 
 {<!-- -->\*<!-- -->}  BaseController
 

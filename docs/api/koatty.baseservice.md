@@ -4,7 +4,7 @@
 
 ## BaseService class
 
-Base class
+Base service
 
   Base
 
@@ -31,5 +31,5 @@ export declare class BaseService implements IService
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
-|  [init(arg)](./koatty.baseservice.init.md) | <code>protected</code> | <p>init</p><p>  BaseController</p> |
+|  [init(arg)](./koatty.baseservice.init.md) |  | <p>init</p><p>  BaseController</p> |
 

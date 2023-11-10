@@ -19,3 +19,11 @@ export interface IController
 |  [app](./koatty.icontroller.app.md) | <code>readonly</code> | Koatty |  |
 |  [ctx](./koatty.icontroller.ctx.md) | <code>readonly</code> | KoattyContext |  |
 
+## Methods
+
+|  Method | Description |
+|  --- | --- |
+|  [fail(msg, data, code)](./koatty.icontroller.fail.md) |  |
+|  [init(arg)](./koatty.icontroller.init.md) |  |
+|  [ok(msg, data, code)](./koatty.icontroller.ok.md) |  |
+

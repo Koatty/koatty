@@ -18,3 +18,9 @@ export interface IService
 |  --- | --- | --- | --- |
 |  [app](./koatty.iservice.app.md) | <code>readonly</code> | Koatty |  |
 
+## Methods
+
+|  Method | Description |
+|  --- | --- |
+|  [init(arg)](./koatty.iservice.init.md) |  |
+

@@ -9,7 +9,7 @@
 |  Class | Description |
 |  --- | --- |
 |  [BaseController](./koatty.basecontroller.md) | <p>Base controller</p><p>  BaseController  {<!-- -->IController<!-- -->}</p> |
-|  [BaseService](./koatty.baseservice.md) | <p>Base class</p><p>  Base</p> |
+|  [BaseService](./koatty.baseservice.md) | <p>Base service</p><p>  Base</p> |
 
 ## Functions
 
