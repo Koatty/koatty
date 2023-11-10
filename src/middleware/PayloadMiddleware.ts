@@ -4,7 +4,7 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-05-18 11:16:22
  */
-import { IMiddleware } from "../component/Component";
+import { IMiddleware } from "../component/Components";
 import { Koatty } from 'koatty_core';
 import { Payload } from "koatty_payload";
 

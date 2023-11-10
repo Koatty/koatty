@@ -6,7 +6,7 @@
  */
 import { Koatty, KoattyContext } from 'koatty_core';
 import { formatApiData } from '../util/Helper';
-import { ApiInput, ApiOutput, IController } from './Component';
+import { ApiInput, ApiOutput, IController } from './Components';
 
 /**
  * Base controller
@@ -33,10 +33,9 @@ export class BaseController implements IController {
   /**
    * init
    *
-   * @protected
    * @memberof BaseController
    */
-  protected init(...arg: any[]): void {
+  init(...arg: any[]): void {
 
   }
 
@@ -52,7 +51,7 @@ export class BaseController implements IController {
    */
   public ok(msg: string | ApiInput, data?: any, code = 0) {
     const obj: ApiOutput = formatApiData(msg, data, code);
-    return Promise.resolve(obj);
+    return obj;
   }
 
   /**
