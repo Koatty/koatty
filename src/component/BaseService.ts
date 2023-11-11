@@ -1,10 +1,3 @@
-/*
- * @Description: 
- * @Usage: 
- * @Author: richen
- * @Date: 2023-11-08 15:25:22
- * @LastEditTime: 2023-11-10 09:16:35
- */
 /**
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>

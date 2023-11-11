@@ -1,10 +1,9 @@
-/*
-* @Description: 
-* @Usage: 
-* @Author: richen
-* @Date: 2021-12-17 11:54:06
- * @LastEditTime: 2022-03-15 14:22:45
-*/
+/**
+ * @ author: richen
+ * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
+ * @ license: BSD (3-Clause)
+ * @ version: 2020-05-10 11:49:15
+ */
 import { Helper } from "koatty_lib";
 import { Logger } from "./Logger";
 import { version, engines } from "../../package.json";
