@@ -64,6 +64,11 @@ export function Controller(path = ""): ClassDecorator {
 export interface IController {
   readonly app: Koatty;
   readonly ctx: KoattyContext;
+
+  init(...arg: any[]): void;
+
+  ok(msg: string | ApiInput, data?: any, code?: number): Promise<ApiOutput>;
+  fail(msg: Error | string | ApiInput, data?: any, code?: number): void;
 }
 
 /**
@@ -111,6 +116,8 @@ export function Service(identifier?: string): ClassDecorator {
  */
 export interface IService {
   readonly app: Koatty;
+
+  init(...arg: any[]): void;
 }
 
 /**

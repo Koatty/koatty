@@ -33,6 +33,6 @@ export declare class BaseController implements IController
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
 |  [fail(msg, data, code)](./koatty.basecontroller.fail.md) |  | Response to normalize json format content for fail |
-|  [init(arg)](./koatty.basecontroller.init.md) | <code>protected</code> | <p>init</p><p>  BaseController</p> |
+|  [init(arg)](./koatty.basecontroller.init.md) |  | <p>init</p><p> BaseController</p> |
 |  [ok(msg, data, code)](./koatty.basecontroller.ok.md) |  | Response to normalize json format content for success |
 

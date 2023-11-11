@@ -3,7 +3,7 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:31:17
- * @LastEditTime: 2023-07-26 21:45:00
+ * @LastEditTime: 2023-11-11 10:55:22
  */
 
 import {
@@ -91,7 +91,7 @@ export class IndexController extends BaseController {
    */
   @PostMapping('/add')
   @Validated()
-  @Before(TestAspect)
+  @Before("TestAspect")
   async add(@Post() data: UserDto): Promise<any> {
     const userId = await this.TestService.addUser(data);
     return this.ok('success', { userId });

@@ -5,7 +5,7 @@
  * @ version: 2020-05-18 10:43:05
  */
 export * from "./core/Bootstrap";
-export * from "./component/Component";
+export * from "./component/Components";
 export * from "./component/BaseService";
 export * from "./component/BaseController";
 export * from "koatty_core";

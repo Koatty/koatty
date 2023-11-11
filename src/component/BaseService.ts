@@ -5,10 +5,10 @@
  * @ version: 2020-05-18 11:24:49
  */
 import { Koatty } from 'koatty_core';
-import { IService } from './Component';
+import { IService } from './Components';
 
 /**
- * Base class
+ * Base service
  *
  * @export
  * @class Base
@@ -32,7 +32,7 @@ export class BaseService implements IService {
    * @protected
    * @memberof BaseController
    */
-  protected init(...arg: any[]): void {
+  init(...arg: any[]): void {
 
   }
 
