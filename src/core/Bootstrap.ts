@@ -74,15 +74,12 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
     Logger.Log('Koatty', '', 'Emit App Boot ...');
     await asyncEvent(app, AppEvent.appBoot);
 
-    // Load Plugin
-    Logger.Log('Koatty', '', 'Load Plugins ...');
-    await Loader.LoadPlugins(app);
+    // Load Components
+    Logger.Log('Koatty', '', 'Load Components ...');
+    await Loader.LoadComponents(app);
     // Load Middleware
     Logger.Log('Koatty', '', 'Load Middlewares ...');
     await Loader.LoadMiddlewares(app);
-    // Load Components
-    Logger.Log('Koatty', '', 'Load Components ...');
-    Loader.LoadComponents(app);
     // Load Services
     Logger.Log('Koatty', '', 'Load Services ...');
     Loader.LoadServices(app);

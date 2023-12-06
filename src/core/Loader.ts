@@ -391,45 +391,47 @@ export class Loader {
    * @param {*} app
    * @memberof Loader
    */
-  public static LoadComponents(app: Koatty) {
-    const componentList = IOCContainer.listClass("COMPONENT");
+  // public static LoadComponents(app: Koatty) {
+  //   const componentList = IOCContainer.listClass("COMPONENT");
 
-    componentList.forEach((item: ComponentItem) => {
-      item.id = (item.id ?? "").replace("COMPONENT:", "");
-      if (item.id && !(item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
-        Logger.Debug(`Load component: ${item.id}`);
-        // registering to IOC
-        IOCContainer.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
-      }
-    });
-  }
+  //   componentList.forEach((item: ComponentItem) => {
+  //     item.id = (item.id ?? "").replace("COMPONENT:", "");
+  //     if (item.id && !(item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
+  //       Logger.Debug(`Load component: ${item.id}`);
+  //       // registering to IOC
+  //       IOCContainer.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
+  //     }
+  //   });
+  // }
 
   /**
-   * Load plugins
+   * Load components
    *
    * @static
    * @param {*} app
    * @memberof Loader
    */
-  public static async LoadPlugins(app: Koatty) {
+  public static async LoadComponents(app: Koatty) {
     const componentList = IOCContainer.listClass("COMPONENT");
-
-    let pluginsConf = app.config(undefined, "plugin");
-    if (Helper.isEmpty(pluginsConf)) {
-      pluginsConf = { config: {}, list: [] };
-    }
 
     const pluginList = [];
     componentList.forEach(async (item: ComponentItem) => {
       item.id = (item.id ?? "").replace("COMPONENT:", "");
-      if (item.id && (item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
+      if (Helper.isClass(item.target)) {
+        if (item.id && (item.id).endsWith("Plugin")) {
+          pluginList.push(item.id);
+        }
         // registering to IOC
         IOCContainer.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
-        pluginList.push(item.id);
       }
     });
-
-    const pluginConfList = pluginsConf.list;
+    // load plugin config
+    let pluginsConf = app.config(undefined, "plugin");
+    if (Helper.isEmpty(pluginsConf)) {
+      pluginsConf = { config: {}, list: [] };
+    }
+    const pluginConfList = pluginsConf.list ?? [];
+    // load plugin list
     for (const key of pluginConfList) {
       const handle: IPlugin = IOCContainer.get(key, "COMPONENT");
       if (!handle) {
