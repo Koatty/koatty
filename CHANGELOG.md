@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.10.4-0](https://github.com/thinkkoa/koatty/compare/v3.10.3...v3.10.4-0) (2023-12-09)
+
+
+### Bug Fixes
+
+* 合并payload ([6d98ffb](https://github.com/thinkkoa/koatty/commit/6d98ffb94ba313b16ac4438bace3eb84680c42f2))
+
 ### [3.10.3](https://github.com/thinkkoa/koatty/compare/v3.10.3-0...v3.10.3) (2023-12-06)
 
 ### [3.10.3-0](https://github.com/thinkkoa/koatty/compare/v3.10.2...v3.10.3-0) (2023-12-06)
