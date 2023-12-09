@@ -1,8 +1,11 @@
-/**
- * @ author: richen
- * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: BSD (3-Clause)
- * @ version: 2020-04-30 14:52:34
+/*
+ * @Description: middleware config
+ * @Usage: 
+ * @Author: richen
+ * @Date: 2023-12-09 21:56:32
+ * @LastEditTime: 2023-12-09 22:40:07
+ * @License: BSD (3-Clause)
+ * @Copyright (c): <richenlin(at)gmail.com>
  */
 
 export default {
@@ -10,21 +13,6 @@ export default {
   // executed in the order of elements
   list: [],
   config: { // middleware configuration
-    "TraceMiddleware": {
-      HeaderName: 'X-Request-Id',
-    },
-    "PayloadMiddleware": {
-      "extTypes": {
-        "json": ['application/json'],
-        "form": ['application/x-www-form-urlencoded'],
-        "text": ['text/plain'],
-        "multipart": ['multipart/form-data'],
-        "xml": ['text/xml']
-      },
-      "limit": '20mb',
-      "encoding": 'utf-8',
-      "multiples": true,
-      "keepExtensions": true
-    },
+    // TODO
   }
 };

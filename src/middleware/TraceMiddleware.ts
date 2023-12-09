@@ -1,9 +1,13 @@
-/**
- * @ author: richen
- * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: BSD (3-Clause)
- * @ version: 2020-05-18 11:16:22
+/*
+ * @Description: trace & catcher middleware
+ * @Usage: 
+ * @Author: richen
+ * @Date: 2023-12-09 22:55:54
+ * @LastEditTime: 2023-12-09 23:00:44
+ * @License: BSD (3-Clause)
+ * @Copyright (c): <richenlin(at)gmail.com>
  */
+
 import { IMiddleware } from "../component/Components";
 import { Koatty } from 'koatty_core';
 import { Trace } from "koatty_trace";

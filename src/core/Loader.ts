@@ -1,9 +1,13 @@
-/**
- * @ author: richen
- * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: BSD (3-Clause)
- * @ version: 2020-07-06 11:18:01
+/*
+ * @Description: framework loader
+ * @Usage: 
+ * @Author: richen
+ * @Date: 2023-12-09 22:55:49
+ * @LastEditTime: 2023-12-09 23:00:37
+ * @License: BSD (3-Clause)
+ * @Copyright (c): <richenlin(at)gmail.com>
  */
+
 import * as path from "path";
 import { Load } from "koatty_loader";
 import { AppEvent, AppEventArr, EventHookFunc, Koatty } from 'koatty_core';
@@ -16,7 +20,6 @@ import { IOCContainer, TAGGED_CLS } from "koatty_container";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 import { BaseController } from "../component/BaseController";
 import { TraceMiddleware } from "../middleware/TraceMiddleware";
-import { PayloadMiddleware } from "../middleware/PayloadMiddleware";
 
 /**
  *
@@ -284,7 +287,6 @@ export class Loader {
     // const middleware: any = {};
     const appMiddleware = IOCContainer.listClass("MIDDLEWARE") ?? [];
     appMiddleware.push({ id: "TraceMiddleware", target: TraceMiddleware });
-    appMiddleware.push({ id: "PayloadMiddleware", target: PayloadMiddleware });
 
     appMiddleware.forEach((item: ComponentItem) => {
       item.id = (item.id ?? "").replace("MIDDLEWARE:", "");
@@ -295,13 +297,11 @@ export class Loader {
 
     const middlewareConfList = middlewareConf.list;
 
-    const defaultList = ["TraceMiddleware", "PayloadMiddleware"];
+    const defaultList = ["TraceMiddleware"];
     //de-duplication
     const appMList = new Set(defaultList);
     middlewareConfList.forEach((item: string) => {
-      if (!defaultList.includes(item)) {
-        appMList.add(item);
-      }
+      appMList.add(item);
     });
 
     //Automatically call middleware

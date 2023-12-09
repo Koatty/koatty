@@ -1,9 +1,13 @@
-/**
- * @ author: richen
- * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: BSD (3-Clause)
- * @ version: 2020-07-06 11:22:58
+/*
+ * @Description: framework bootstrap
+ * @Usage: 
+ * @Author: richen
+ * @Date: 2023-12-09 21:56:32
+ * @LastEditTime: 2023-12-09 22:59:19
+ * @License: BSD (3-Clause)
+ * @Copyright (c): <richenlin(at)gmail.com>
  */
+
 import "reflect-metadata";
 import EventEmitter from "events";
 import { AppEvent, EventHookFunc, Koatty } from 'koatty_core';

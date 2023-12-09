@@ -1,9 +1,13 @@
-/**
- * @ author: richen
- * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: BSD (3-Clause)
- * @ version: 2020-05-10 11:32:45
+/*
+ * @Description: component interface
+ * @Usage: 
+ * @Author: richen
+ * @Date: 2023-12-09 21:56:32
+ * @LastEditTime: 2023-12-09 23:03:33
+ * @License: BSD (3-Clause)
+ * @Copyright (c): <richenlin(at)gmail.com>
  */
+
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import { Koatty, KoattyContext, KoattyNext } from 'koatty_core';
