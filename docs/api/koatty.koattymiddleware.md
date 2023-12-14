@@ -9,5 +9,5 @@ Interface for Middleware
 **Signature:**
 
 ```typescript
-export declare type KoattyMiddleware = (ctx: KoattyContext, next: KoattyNext) => Promise<any>;
+export type KoattyMiddleware = (ctx: KoattyContext, next: KoattyNext) => Promise<any>;
 ```
