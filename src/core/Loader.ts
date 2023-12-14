@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 22:55:49
- * @LastEditTime: 2023-12-09 23:00:37
+ * @LastEditTime: 2023-12-14 23:10:33
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -19,7 +19,7 @@ import { checkClass, Helper } from "../util/Helper";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 import { BaseController } from "../component/BaseController";
-import { TraceMiddleware } from "../middleware/TraceMiddleware";
+import { TraceHandler } from "./Trace";
 
 /**
  *
@@ -276,18 +276,19 @@ export class Loader {
    * @memberof Loader
    */
   public static async LoadMiddlewares(app: Koatty, loadPath?: string[]) {
+    // Error handling middleware
+    TraceHandler(app);
+
     let middlewareConf = app.config(undefined, "middleware");
     if (Helper.isEmpty(middlewareConf)) {
       middlewareConf = { config: {}, list: [] };
     }
 
     //Mount default middleware
-    Load(loadPath || ["./middleware"], app.koattyPath);
+    // Load(loadPath || ["./middleware"], app.koattyPath);
     //Mount application middleware
     // const middleware: any = {};
     const appMiddleware = IOCContainer.listClass("MIDDLEWARE") ?? [];
-    appMiddleware.push({ id: "TraceMiddleware", target: TraceMiddleware });
-
     appMiddleware.forEach((item: ComponentItem) => {
       item.id = (item.id ?? "").replace("MIDDLEWARE:", "");
       if (item.id && Helper.isClass(item.target)) {
@@ -296,10 +297,8 @@ export class Loader {
     });
 
     const middlewareConfList = middlewareConf.list;
-
-    const defaultList = ["TraceMiddleware"];
     //de-duplication
-    const appMList = new Set(defaultList);
+    const appMList = new Set([]);
     middlewareConfList.forEach((item: string) => {
       appMList.add(item);
     });
@@ -312,17 +311,12 @@ export class Loader {
         continue;
       }
       if (!Helper.isFunction(handle.run)) {
-        Logger.Error(`Middleware ${key} must be implements method 'run'.`);
+        Logger.Error(`The middleware ${key} must implements interface 'IMiddleware'.`);
         continue;
       }
       if (middlewareConf.config[key] === false) {
-        // Default middleware cannot be disabled
-        if (defaultList.includes(key)) {
-          Logger.Warn(`Middleware ${key} cannot be disabled.`);
-        } else {
-          Logger.Warn(`Middleware ${key} already loaded but not effective.`);
-          continue;
-        }
+        Logger.Warn(`The middleware ${key} has been loaded but not executed.`);
+        continue;
       }
       Logger.Debug(`Load middleware: ${key}`);
       const result = await handle.run(middlewareConf.config[key] || {}, app);

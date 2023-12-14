@@ -3,12 +3,11 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 21:56:32
- * @LastEditTime: 2023-12-09 22:59:19
+ * @LastEditTime: 2023-12-14 23:06:45
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
-import "reflect-metadata";
 import EventEmitter from "events";
 import { AppEvent, EventHookFunc, Koatty } from 'koatty_core';
 import { Loader } from "./Loader";
