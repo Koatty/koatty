@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 22:55:49
- * @LastEditTime: 2023-12-14 23:10:33
+ * @LastEditTime: 2023-12-15 00:34:09
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -277,7 +277,7 @@ export class Loader {
    */
   public static async LoadMiddlewares(app: Koatty, loadPath?: string[]) {
     // Error handling middleware
-    TraceHandler(app);
+    await TraceHandler(app);
 
     let middlewareConf = app.config(undefined, "middleware");
     if (Helper.isEmpty(middlewareConf)) {
@@ -307,12 +307,10 @@ export class Loader {
     for (const key of appMList) {
       const handle: IMiddleware = IOCContainer.get(key, "MIDDLEWARE");
       if (!handle) {
-        Logger.Error(`Middleware ${key} load error.`);
-        continue;
+        throw Error(`Middleware ${key} load error.`);
       }
       if (!Helper.isFunction(handle.run)) {
-        Logger.Error(`The middleware ${key} must implements interface 'IMiddleware'.`);
-        continue;
+        throw Error(`The middleware ${key} must implements interface 'IMiddleware'.`);
       }
       if (middlewareConf.config[key] === false) {
         Logger.Warn(`The middleware ${key} has been loaded but not executed.`);
@@ -349,7 +347,7 @@ export class Loader {
         IOCContainer.reg(item.id, item.target, { scope: "Prototype", type: "CONTROLLER", args: [] });
         const ctl = IOCContainer.getInsByClass(item.target);
         if (!(ctl instanceof BaseController)) {
-          throw new Error(`class ${item.id} does not inherit from BaseController`);
+          throw Error(`Controller class ${item.id} does not inherit from BaseController`);
         }
         controllers.push(item.id);
       }
@@ -429,12 +427,10 @@ export class Loader {
     for (const key of pluginConfList) {
       const handle: IPlugin = IOCContainer.get(key, "COMPONENT");
       if (!handle) {
-        Logger.Error(`Plugin ${key} load error.`);
-        continue;
+        throw Error(`Plugin ${key} load error.`);
       }
       if (!Helper.isFunction(handle.run)) {
-        Logger.Error(`Plugin ${key} must be implements method 'run'.`);
-        continue;
+        throw Error(`Plugin ${key} must implements interface 'IPlugin'.`);
       }
       if (pluginsConf.config[key] === false) {
         Logger.Warn(`Plugin ${key} already loaded but not effective.`);
