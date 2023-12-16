@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.10.4-3](https://github.com/thinkkoa/koatty/compare/v3.10.4-2...v3.10.4-3) (2023-12-16)
+
+
+### Bug Fixes
+
+* async tracer ([098bf04](https://github.com/thinkkoa/koatty/commit/098bf040dc44cb1294cf3726acab65a2856f0548))
+* 集成tracer ([7f1ed23](https://github.com/thinkkoa/koatty/commit/7f1ed232e4aa1224132ce74d6a6f4b92aa884973))
+
 ### [3.10.4-2](https://github.com/thinkkoa/koatty/compare/v3.10.4-1...v3.10.4-2) (2023-12-14)
 
 ### [3.10.4-1](https://github.com/thinkkoa/koatty/compare/v3.10.4-0...v3.10.4-1) (2023-12-10)
