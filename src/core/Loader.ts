@@ -3,23 +3,23 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 22:55:49
- * @LastEditTime: 2023-12-15 00:34:09
+ * @LastEditTime: 2023-12-22 07:31:21
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
 import * as path from "path";
 import { Load } from "koatty_loader";
-import { AppEvent, AppEventArr, EventHookFunc, Koatty } from 'koatty_core';
-import { LoadConfigs as loadConf } from "koatty_config";
-import { Logger, LogLevelType, SetLogger } from "../util/Logger";
 import { prevent } from "koatty_exception";
-import { IMiddleware, IPlugin } from '../component/Components';
-import { checkClass, Helper } from "../util/Helper";
+import { LoadConfigs as loadConf } from "koatty_config";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
-import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
-import { BaseController } from "../component/BaseController";
+import { AppEvent, AppEventArr, EventHookFunc, Koatty } from 'koatty_core';
 import { TraceHandler } from "./Trace";
+import { checkClass, Helper } from "../util/Helper";
+import { BaseController } from "../component/BaseController";
+import { Logger, LogLevelType, SetLogger } from "../util/Logger";
+import { IMiddleware, IPlugin } from '../component/Components';
+import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 
 /**
  *
