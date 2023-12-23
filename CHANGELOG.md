@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.10.4-5](https://github.com/thinkkoa/koatty/compare/v3.10.4-4...v3.10.4-5) (2023-12-23)
+
+
+### Bug Fixes
+
+* KoattyMiddleware ([50dd7f5](https://github.com/thinkkoa/koatty/commit/50dd7f57fc6824127443ddfc614d5f61e83530ed))
+
 ### [3.10.4-4](https://github.com/thinkkoa/koatty/compare/v3.10.4-3...v3.10.4-4) (2023-12-23)
 
 
