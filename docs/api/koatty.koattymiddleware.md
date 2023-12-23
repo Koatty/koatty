@@ -2,12 +2,14 @@
 
 [Home](./index.md) &gt; [koatty](./koatty.md) &gt; [KoattyMiddleware](./koatty.koattymiddleware.md)
 
-## KoattyMiddleware type
+## KoattyMiddleware interface
 
 Interface for Middleware
 
 **Signature:**
 
 ```typescript
-export type KoattyMiddleware = (ctx: KoattyContext, next: KoattyNext) => Promise<any>;
+export interface KoattyMiddleware extends KoaMiddleware 
 ```
+**Extends:** KoaMiddleware
+

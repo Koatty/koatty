@@ -36,16 +36,11 @@
 |  [IMiddleware](./koatty.imiddleware.md) | Interface for Middleware |
 |  [IPlugin](./koatty.iplugin.md) | Interface for Plugin |
 |  [IService](./koatty.iservice.md) | Interface for Service |
+|  [KoattyMiddleware](./koatty.koattymiddleware.md) | Interface for Middleware |
 
 ## Variables
 
 |  Variable | Description |
 |  --- | --- |
 |  [Logger](./koatty.logger.md) |  |
-
-## Type Aliases
-
-|  Type Alias | Description |
-|  --- | --- |
-|  [KoattyMiddleware](./koatty.koattymiddleware.md) | Interface for Middleware |
 
