@@ -3,13 +3,14 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 21:56:32
- * @LastEditTime: 2023-12-09 23:03:33
+ * @LastEditTime: 2023-12-23 11:40:44
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
+import { Middleware as KoaMiddleware } from "koa";
 import { Koatty, KoattyContext, KoattyNext } from 'koatty_core';
 import { CONTROLLER_ROUTER } from "koatty_serve";
 import { IOCContainer } from "koatty_container";
@@ -92,7 +93,7 @@ export function Middleware(identifier?: string): ClassDecorator {
 /**
  * Interface for Middleware
  */
-export type KoattyMiddleware = (ctx: KoattyContext, next: KoattyNext) => Promise<any>;
+export interface KoattyMiddleware extends KoaMiddleware { }
 
 /**
  * Interface for Middleware
