@@ -1,9 +1,13 @@
-/**
- * @ author: richen
- * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: BSD (3-Clause)
- * @ version: 2020-05-20 15:45:24
+/*
+ * @Description: base controller 
+ * @Usage: 
+ * @Author: richen
+ * @Date: 2023-12-09 21:56:32
+ * @LastEditTime: 2023-12-09 23:03:09
+ * @License: BSD (3-Clause)
+ * @Copyright (c): <richenlin(at)gmail.com>
  */
+
 import { Koatty, KoattyContext } from 'koatty_core';
 import { formatApiData } from '../util/Helper';
 import { ApiInput, ApiOutput, IController } from './Components';

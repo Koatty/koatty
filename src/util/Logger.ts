@@ -1,9 +1,13 @@
-/**
- * @ author: richen
- * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: BSD (3-Clause)
- * @ version: 2020-05-10 11:49:15
+/*
+ * @Description: framework logger 
+ * @Usage: 
+ * @Author: richen
+ * @Date: 2023-12-09 21:56:32
+ * @LastEditTime: 2023-12-09 23:02:27
+ * @License: BSD (3-Clause)
+ * @Copyright (c): <richenlin(at)gmail.com>
  */
+
 
 import { Koatty } from "koatty_core";
 import { Helper } from "koatty_lib";

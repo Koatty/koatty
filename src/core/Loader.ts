@@ -1,22 +1,25 @@
-/**
- * @ author: richen
- * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: BSD (3-Clause)
- * @ version: 2020-07-06 11:18:01
+/*
+ * @Description: framework loader
+ * @Usage: 
+ * @Author: richen
+ * @Date: 2023-12-09 22:55:49
+ * @LastEditTime: 2023-12-24 10:10:52
+ * @License: BSD (3-Clause)
+ * @Copyright (c): <richenlin(at)gmail.com>
  */
+
 import * as path from "path";
 import { Load } from "koatty_loader";
-import { AppEvent, AppEventArr, EventHookFunc, Koatty } from 'koatty_core';
-import { LoadConfigs as loadConf } from "koatty_config";
-import { Logger, LogLevelType, SetLogger } from "../util/Logger";
 import { prevent } from "koatty_exception";
-import { IMiddleware, IPlugin } from '../component/Components';
-import { checkClass, Helper } from "../util/Helper";
+import { LoadConfigs as loadConf } from "koatty_config";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
-import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
+import { AppEvent, AppEventArr, EventHookFunc, Koatty } from 'koatty_core';
+import { TraceHandler } from "./Trace";
+import { checkClass, Helper } from "../util/Helper";
 import { BaseController } from "../component/BaseController";
-import { TraceMiddleware } from "../middleware/TraceMiddleware";
-import { PayloadMiddleware } from "../middleware/PayloadMiddleware";
+import { Logger, LogLevelType, SetLogger } from "../util/Logger";
+import { IMiddleware, IPlugin } from '../component/Components';
+import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 
 /**
  *
@@ -273,19 +276,19 @@ export class Loader {
    * @memberof Loader
    */
   public static async LoadMiddlewares(app: Koatty, loadPath?: string[]) {
+    // Error handling middleware
+    await TraceHandler(app);
+
     let middlewareConf = app.config(undefined, "middleware");
     if (Helper.isEmpty(middlewareConf)) {
       middlewareConf = { config: {}, list: [] };
     }
 
     //Mount default middleware
-    Load(loadPath || ["./middleware"], app.koattyPath);
+    // Load(loadPath || ["./middleware"], app.koattyPath);
     //Mount application middleware
     // const middleware: any = {};
     const appMiddleware = IOCContainer.listClass("MIDDLEWARE") ?? [];
-    appMiddleware.push({ id: "TraceMiddleware", target: TraceMiddleware });
-    appMiddleware.push({ id: "PayloadMiddleware", target: PayloadMiddleware });
-
     appMiddleware.forEach((item: ComponentItem) => {
       item.id = (item.id ?? "").replace("MIDDLEWARE:", "");
       if (item.id && Helper.isClass(item.target)) {
@@ -293,39 +296,29 @@ export class Loader {
       }
     });
 
-    const middlewareConfList = middlewareConf.list;
-
-    const defaultList = ["TraceMiddleware", "PayloadMiddleware"];
+    const middlewareConfList = middlewareConf.list || [];
     //de-duplication
-    const appMList = new Set(defaultList);
+    const appMList = new Set([]);
     middlewareConfList.forEach((item: string) => {
-      if (!defaultList.includes(item)) {
-        appMList.add(item);
-      }
+      appMList.add(item);
     });
 
     //Automatically call middleware
+    const middlewareConfig = middlewareConf.config || {};
     for (const key of appMList) {
       const handle: IMiddleware = IOCContainer.get(key, "MIDDLEWARE");
       if (!handle) {
-        Logger.Error(`Middleware ${key} load error.`);
-        continue;
+        throw Error(`Middleware ${key} load error.`);
       }
       if (!Helper.isFunction(handle.run)) {
-        Logger.Error(`Middleware ${key} must be implements method 'run'.`);
+        throw Error(`The middleware ${key} must implements interface 'IMiddleware'.`);
+      }
+      if (middlewareConfig[key] === false) {
+        Logger.Warn(`The middleware ${key} has been loaded but not executed.`);
         continue;
       }
-      if (middlewareConf.config[key] === false) {
-        // Default middleware cannot be disabled
-        if (defaultList.includes(key)) {
-          Logger.Warn(`Middleware ${key} cannot be disabled.`);
-        } else {
-          Logger.Warn(`Middleware ${key} already loaded but not effective.`);
-          continue;
-        }
-      }
       Logger.Debug(`Load middleware: ${key}`);
-      const result = await handle.run(middlewareConf.config[key] || {}, app);
+      const result = await handle.run(middlewareConfig[key] || {}, app);
       if (Helper.isFunction(result)) {
         if (result.length < 3) {
           app.use(result);
@@ -355,7 +348,7 @@ export class Loader {
         IOCContainer.reg(item.id, item.target, { scope: "Prototype", type: "CONTROLLER", args: [] });
         const ctl = IOCContainer.getInsByClass(item.target);
         if (!(ctl instanceof BaseController)) {
-          throw new Error(`class ${item.id} does not inherit from BaseController`);
+          throw Error(`Controller class ${item.id} does not inherit from BaseController`);
         }
         controllers.push(item.id);
       }
@@ -435,12 +428,10 @@ export class Loader {
     for (const key of pluginConfList) {
       const handle: IPlugin = IOCContainer.get(key, "COMPONENT");
       if (!handle) {
-        Logger.Error(`Plugin ${key} load error.`);
-        continue;
+        throw Error(`Plugin ${key} load error.`);
       }
       if (!Helper.isFunction(handle.run)) {
-        Logger.Error(`Plugin ${key} must be implements method 'run'.`);
-        continue;
+        throw Error(`Plugin ${key} must implements interface 'IPlugin'.`);
       }
       if (pluginsConf.config[key] === false) {
         Logger.Warn(`Plugin ${key} already loaded but not effective.`);

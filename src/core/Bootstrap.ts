@@ -1,19 +1,22 @@
-/**
- * @ author: richen
- * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: BSD (3-Clause)
- * @ version: 2020-07-06 11:22:58
+/*
+ * @Description: framework bootstrap
+ * @Usage: 
+ * @Author: richen
+ * @Date: 2023-12-09 21:56:32
+ * @LastEditTime: 2023-12-22 07:31:53
+ * @License: BSD (3-Clause)
+ * @Copyright (c): <richenlin(at)gmail.com>
  */
-import "reflect-metadata";
+
 import EventEmitter from "events";
+import { IOCContainer, TAGGED_CLS } from "koatty_container";
 import { AppEvent, EventHookFunc, Koatty } from 'koatty_core';
+import { BindProcessEvent, NewRouter, NewServe } from "koatty_serve";
 import { Loader } from "./Loader";
 import { Helper } from "../util/Helper";
 import { Logger } from "../util/Logger";
-import { IOCContainer, TAGGED_CLS } from "koatty_container";
-import { BindProcessEvent, NewRouter, NewServe } from "koatty_serve";
-import { checkRuntime, checkUTRuntime, KOATTY_VERSION } from "../util/Check";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
+import { checkRuntime, checkUTRuntime, KOATTY_VERSION } from "../util/Check";
 
 /**
  * execute bootstrap

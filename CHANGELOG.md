@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.10.4](https://github.com/thinkkoa/koatty/compare/v3.10.4-5...v3.10.4) (2023-12-24)
+
+
+### Bug Fixes
+
+* 类型断言 ([16caed6](https://github.com/thinkkoa/koatty/commit/16caed67c1b66b444a3313441d0b65b9ded4186c))
+
+### [3.10.4-5](https://github.com/thinkkoa/koatty/compare/v3.10.4-4...v3.10.4-5) (2023-12-23)
+
+
+### Bug Fixes
+
+* KoattyMiddleware ([50dd7f5](https://github.com/thinkkoa/koatty/commit/50dd7f57fc6824127443ddfc614d5f61e83530ed))
+
+### [3.10.4-4](https://github.com/thinkkoa/koatty/compare/v3.10.4-3...v3.10.4-4) (2023-12-23)
+
+
+### Bug Fixes
+
+* remove export ([b2eed18](https://github.com/thinkkoa/koatty/commit/b2eed18017838e9e91394f91cd60ea9790c59920))
+
+### [3.10.4-3](https://github.com/thinkkoa/koatty/compare/v3.10.4-2...v3.10.4-3) (2023-12-16)
+
+
+### Bug Fixes
+
+* async tracer ([098bf04](https://github.com/thinkkoa/koatty/commit/098bf040dc44cb1294cf3726acab65a2856f0548))
+* 集成tracer ([7f1ed23](https://github.com/thinkkoa/koatty/commit/7f1ed232e4aa1224132ce74d6a6f4b92aa884973))
+
+### [3.10.4-2](https://github.com/thinkkoa/koatty/compare/v3.10.4-1...v3.10.4-2) (2023-12-14)
+
+### [3.10.4-1](https://github.com/thinkkoa/koatty/compare/v3.10.4-0...v3.10.4-1) (2023-12-10)
+
+### [3.10.4-0](https://github.com/thinkkoa/koatty/compare/v3.10.3...v3.10.4-0) (2023-12-09)
+
+
+### Bug Fixes
+
+* 合并payload ([6d98ffb](https://github.com/thinkkoa/koatty/commit/6d98ffb94ba313b16ac4438bace3eb84680c42f2))
+
 ### [3.10.3](https://github.com/thinkkoa/koatty/compare/v3.10.3-0...v3.10.3) (2023-12-06)
 
 ### [3.10.3-0](https://github.com/thinkkoa/koatty/compare/v3.10.2...v3.10.3-0) (2023-12-06)

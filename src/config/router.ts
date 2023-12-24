@@ -1,9 +1,13 @@
-/**
- * @ author: richen
- * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: BSD (3-Clause)
- * @ version: 2019-11-01 18:37:35
+/*
+ * @Description: router config
+ * @Usage: 
+ * @Author: richen
+ * @Date: 2023-12-09 21:56:32
+ * @LastEditTime: 2023-12-09 22:38:08
+ * @License: BSD (3-Clause)
+ * @Copyright (c): <richenlin(at)gmail.com>
  */
+
 export default {
   // prefix: string;
 
@@ -26,6 +30,28 @@ export default {
    * account when matching routes.
    */
   // strict?: boolean;
+
+  /**
+   * gRPC protocol file
+   */
+  // protoFile?: string;
+
+  /**
+   * payload options
+   * 
+   * extTypes: {
+        json: ['application/json'],
+        form: ['application/x-www-form-urlencoded'],
+        text: ['text/plain'],
+        multipart: ['multipart/form-data'],
+        xml: ['text/xml']
+      },
+      limit: '20mb',
+      encoding: 'utf-8',
+      multiples: true,
+      keepExtensions: true,
+   */
+  // payload?: PayloadOptions;
 
   /**
    *  Other extended configuration

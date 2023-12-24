@@ -1,17 +1,22 @@
-/**
- * @ author: richen
- * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
- * @ license: BSD (3-Clause)
- * @ version: 2020-01-19 15:41:30
+/*
+ * @Description: app config
+ * @Usage: 
+ * @Author: richen
+ * @Date: 2023-12-09 21:56:32
+ * @LastEditTime: 2023-12-09 22:35:46
+ * @License: BSD (3-Clause)
+ * @Copyright (c): <richenlin(at)gmail.com>
  */
 export default {
   /*app config*/
   app_port: 3000, // Listening port
   app_host: "", // Hostname
   protocol: "http", // Server protocol 'http' | 'https' | 'http2' | 'grpc' | 'ws' | 'wss'
-  open_trace: false, // Full stack debug & trace, default: false
+  open_trace: false, // Full stack opentracing, default: false
+  trace_id: "requestId",
+  trace_header: "X-Request-Id",
   async_hooks: false, // Provides an API to track asynchronous resources, default: false
-  http_timeout: 10, // HTTP request timeout time(seconds)
+  timeout: 10, // request timeout time(seconds)
   key_file: "", // HTTPS certificate key
   crt_file: "", // HTTPS certificate crt
   encoding: "utf-8", // Character Encoding

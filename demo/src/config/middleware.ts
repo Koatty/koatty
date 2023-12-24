@@ -3,11 +3,11 @@
  * @usage: 配置待加载的中间件及加载顺序, 中间件在middleware目录下引入
  * @Author: xxx
  * @Date: 2020-12-22 15:24:25
- * @LastEditTime: 2022-10-31 16:56:01
+ * @LastEditTime: 2023-12-15 00:29:31
  */
 
 export default {
-  list: ["SessionMiddleware"], //加载的中间件列表
+  list: [], //加载的中间件列表
   config: { //中间件配置
     // 静态服务器中间件默认未开启
     StaticMiddleware: false,
