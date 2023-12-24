@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 22:55:49
- * @LastEditTime: 2023-12-22 07:31:21
+ * @LastEditTime: 2023-12-24 10:10:52
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -296,7 +296,7 @@ export class Loader {
       }
     });
 
-    const middlewareConfList = middlewareConf.list;
+    const middlewareConfList = middlewareConf.list || [];
     //de-duplication
     const appMList = new Set([]);
     middlewareConfList.forEach((item: string) => {
@@ -304,6 +304,7 @@ export class Loader {
     });
 
     //Automatically call middleware
+    const middlewareConfig = middlewareConf.config || {};
     for (const key of appMList) {
       const handle: IMiddleware = IOCContainer.get(key, "MIDDLEWARE");
       if (!handle) {
@@ -312,12 +313,12 @@ export class Loader {
       if (!Helper.isFunction(handle.run)) {
         throw Error(`The middleware ${key} must implements interface 'IMiddleware'.`);
       }
-      if (middlewareConf.config[key] === false) {
+      if (middlewareConfig[key] === false) {
         Logger.Warn(`The middleware ${key} has been loaded but not executed.`);
         continue;
       }
       Logger.Debug(`Load middleware: ${key}`);
-      const result = await handle.run(middlewareConf.config[key] || {}, app);
+      const result = await handle.run(middlewareConfig[key] || {}, app);
       if (Helper.isFunction(result)) {
         if (result.length < 3) {
           app.use(result);
