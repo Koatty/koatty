@@ -3,17 +3,17 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 21:56:32
- * @LastEditTime: 2024-01-03 21:27:20
+ * @LastEditTime: 2024-01-04 07:43:03
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
-import { Middleware as KoaMiddleware } from "koa";
+import { Middleware as KoaMiddleware, Next } from "koa";
 import { Koatty, KoattyContext, KoattyNext } from 'koatty_core';
 import { CONTROLLER_ROUTER } from "koatty_serve";
-import { IOCContainer } from "koatty_container";
+import { IAspect, IOCContainer } from "koatty_container";
 import { Helper } from "koatty_lib";
 
 
@@ -100,7 +100,7 @@ export interface KoattyMiddleware extends KoaMiddleware { }
  * Interface for Middleware
  */
 export interface IMiddleware {
-  run: (options: any, app: Koatty) => KoattyMiddleware;
+  run: (options: any, app: Koatty) => (ctx: KoattyContext, next: Next) => Promise<any>;
 }
 
 /**
@@ -123,7 +123,7 @@ export function Service(identifier?: string): ClassDecorator {
 export interface IService {
   readonly app: Koatty;
 
-  init(...arg: any[]): void;
+  // init(...arg: any[]): void;
 }
 
 /**
@@ -185,4 +185,13 @@ export function implementsServiceInterface(cls: any): cls is IService {
  */
 export function implementsPluginInterface(cls: any): cls is IPlugin {
   return 'run' in cls && Helper.isFunction(cls.run);
+}
+
+/**
+ * check is implements Aspect Interface
+ * @param cls 
+ * @returns 
+ */
+export function implementsAspectInterface(cls: any): cls is IAspect {
+  return 'app' in cls && 'run' in cls && Helper.isFunction(cls.run);
 }

@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 22:55:49
- * @LastEditTime: 2024-01-03 21:56:07
+ * @LastEditTime: 2024-01-04 05:52:31
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -16,9 +16,12 @@ import { IOCContainer, TAGGED_CLS } from "koatty_container";
 import { AppEvent, AppEventArr, EventHookFunc, Koatty } from 'koatty_core';
 import { TraceHandler } from "./Trace";
 import { checkClass, Helper } from "../util/Helper";
-import { BaseController } from "../component/BaseController";
 import { Logger, LogLevelType, SetLogger } from "../util/Logger";
-import { IMiddleware, IPlugin, implementsControllerInterface, implementsMiddlewareInterface, implementsPluginInterface, implementsServiceInterface } from '../component/Components';
+import {
+  IMiddleware, IPlugin, implementsAspectInterface,
+  implementsControllerInterface, implementsMiddlewareInterface,
+  implementsPluginInterface, implementsServiceInterface
+} from '../component/Components';
 import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 
 /**
@@ -427,6 +430,12 @@ export class Loader {
             throw Error(`The plugin ${item.id} must implements interface 'IPlugin'.`);
           }
           pluginList.push(item.id);
+        }
+        if (item.id && (item.id).endsWith("Aspect")) {
+          const ctl = IOCContainer.getInsByClass(item.target);
+          if (!implementsAspectInterface(ctl)) {
+            throw Error(`The aspect ${item.id} must implements interface 'IAspect'.`);
+          }
         }
       }
     });
