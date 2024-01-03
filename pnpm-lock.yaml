@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   koa:
-    specifier: ^2.14.2
-    version: 2.14.2
+    specifier: ^2.15.0
+    version: 2.15.0
   koatty_config:
     specifier: ^1.1.6
     version: 1.1.6(koatty_container@1.8.10)(koatty_lib@1.3.4)(koatty_loader@1.1.0)
@@ -34,13 +34,13 @@ dependencies:
     version: 1.1.12(koatty_lib@1.3.4)
   koatty_serve:
     specifier: 2.1.0
-    version: 2.1.0(koatty_container@1.8.10)(koatty_core@1.8.4)(koatty_exception@1.2.8)(koatty_lib@1.3.4)(koatty_logger@2.1.4)(koatty_proto@1.1.12)(koatty_validation@1.2.10)
+    version: 2.1.0(koatty_container@1.8.10)(koatty_core@1.8.4)(koatty_exception@1.2.8)(koatty_lib@1.3.4)(koatty_logger@2.1.4)(koatty_proto@1.1.12)(koatty_validation@1.3.0)
   koatty_trace:
     specifier: ^1.10.4
     version: 1.10.4(koatty_container@1.8.10)(koatty_core@1.8.4)(koatty_exception@1.2.8)(koatty_lib@1.3.4)(koatty_logger@2.1.4)
   koatty_validation:
-    specifier: ^1.2.10
-    version: 1.2.10(koatty_container@1.8.10)(koatty_lib@1.3.4)(koatty_logger@2.1.4)
+    specifier: ^1.3.0
+    version: 1.3.0(koatty_container@1.8.10)(koatty_lib@1.3.4)(koatty_logger@2.1.4)
 
 devDependencies:
   '@commitlint/cli':
@@ -2568,8 +2568,8 @@ packages:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
     dev: true
 
-  /cookies@0.8.0:
-    resolution: {integrity: sha512-8aPsApQfebXnuI+537McwYsDtjVxGm8gTIzQI3FDW6t5t/DAhERxtnbEPN/8RX+uZthoz4eCOgloXaE5cYyNow==}
+  /cookies@0.9.1:
+    resolution: {integrity: sha512-TG2hpqe4ELx54QER/S3HQ9SRVnQnGBtKUz5bLQWtYAQ+o6GpgMs6sYUvaiJjVxb+UXwhRhAEP3m7LbsIZ77Hmw==}
     engines: {node: '>= 0.8'}
     dependencies:
       depd: 2.0.0
@@ -2765,7 +2765,7 @@ packages:
     dev: true
 
   /delegates@1.0.0:
-    resolution: {integrity: sha1-hMbhWbgZBP3KWaDvRM2HDTElD5o=}
+    resolution: {integrity: sha512-bd2L678uiWATM6m5Z1VzNCErI3jiGzt6HGY8OVICs40JQq/HALfbyNJmp0UDakEY4pMMaN0Ly5om/B1VI/+xfQ==}
     dev: false
 
   /depd@1.1.2:
@@ -2859,7 +2859,7 @@ packages:
     dev: false
 
   /encodeurl@1.0.2:
-    resolution: {integrity: sha1-rT/0yG7C0CkyL1oCw6mmBslbP1k=}
+    resolution: {integrity: sha512-TPJXq8JqFaVYm2CWmPvnP2Iyo4ZSM7/QKcSmuMLDObfpH5fi7RUGmd/rTDf+rut/saiDiQEeVTNgAmJEdAOx0w==}
     engines: {node: '>= 0.8'}
     dev: false
 
@@ -2874,7 +2874,7 @@ packages:
     engines: {node: '>=6'}
 
   /escape-html@1.0.3:
-    resolution: {integrity: sha1-Aljq5NPQwJdN4cFpGI7wBR0dGYg=}
+    resolution: {integrity: sha512-NiSupZ4OeuGwr68lGIeym/ksIZMJodUGOSCZ/FSnTxcrekbvqrgdUxlJOMpijaKZVjAJrWrGs/6Jy8OMuyj9ow==}
     dev: false
 
   /escape-string-regexp@1.0.5:
@@ -3209,7 +3209,7 @@ packages:
     dev: false
 
   /fresh@0.5.2:
-    resolution: {integrity: sha1-PYyt2Q2XZWn6g1qx+OSyOhBWBac=}
+    resolution: {integrity: sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q==}
     engines: {node: '>= 0.6'}
     dev: false
 
@@ -4330,15 +4330,15 @@ packages:
       koa-compose: 4.1.0
     dev: false
 
-  /koa@2.14.2:
-    resolution: {integrity: sha512-VFI2bpJaodz6P7x2uyLiX6RLYpZmOJqNmoCst/Yyd7hQlszyPwG/I9CQJ63nOtKSxpt5M7NH67V6nJL2BwCl7g==}
+  /koa@2.15.0:
+    resolution: {integrity: sha512-KEL/vU1knsoUvfP4MC4/GthpQrY/p6dzwaaGI6Rt4NQuFqkw3qrvsdYF5pz3wOfi7IGTvMPHC9aZIcUKYFNxsw==}
     engines: {node: ^4.8.4 || ^6.10.1 || ^7.10.1 || >= 8.1.4}
     dependencies:
       accepts: 1.3.8
       cache-content-type: 1.0.1
       content-disposition: 0.5.4
       content-type: 1.0.5
-      cookies: 0.8.0
+      cookies: 0.9.1
       debug: 4.3.4
       delegates: 1.0.0
       depd: 2.0.0
@@ -4467,7 +4467,7 @@ packages:
       protobufjs: 7.2.5
     dev: false
 
-  /koatty_serve@2.1.0(koatty_container@1.8.10)(koatty_core@1.8.4)(koatty_exception@1.2.8)(koatty_lib@1.3.4)(koatty_logger@2.1.4)(koatty_proto@1.1.12)(koatty_validation@1.2.10):
+  /koatty_serve@2.1.0(koatty_container@1.8.10)(koatty_core@1.8.4)(koatty_exception@1.2.8)(koatty_lib@1.3.4)(koatty_logger@2.1.4)(koatty_proto@1.1.12)(koatty_validation@1.3.0):
     resolution: {integrity: sha512-uP/rBrH9zw08Pj79BRlacS+MEuyZcKosI77IKZIl77FhbPuaTgfV7M5bvIZVl4URKaqqYfsxMZ2dTiuIYSYCsQ==}
     engines: {node: '>10.0.0'}
     peerDependencies:
@@ -4489,7 +4489,7 @@ packages:
       koatty_lib: 1.3.4
       koatty_logger: 2.1.4(koatty_lib@1.3.4)(tslib@2.6.2)
       koatty_proto: 1.1.12(koatty_lib@1.3.4)
-      koatty_validation: 1.2.10(koatty_container@1.8.10)(koatty_lib@1.3.4)(koatty_logger@2.1.4)
+      koatty_validation: 1.3.0(koatty_container@1.8.10)(koatty_lib@1.3.4)(koatty_logger@2.1.4)
       on-finished: 2.4.1
       raw-body: 2.5.2
       ws: 8.15.0
@@ -4519,8 +4519,8 @@ packages:
       uuid: 9.0.1
     dev: false
 
-  /koatty_validation@1.2.10(koatty_container@1.8.10)(koatty_lib@1.3.4)(koatty_logger@2.1.4):
-    resolution: {integrity: sha512-sGaOmIIj1PXmeuk8RqPSYH1f7z6/9A6DgVkI5DluvhG5v90LAOl8JQLLmqiQTbC/N5OrAv0IbGpcRfXAqIdu7g==}
+  /koatty_validation@1.3.0(koatty_container@1.8.10)(koatty_lib@1.3.4)(koatty_logger@2.1.4):
+    resolution: {integrity: sha512-53C4tQ/ytpaRP+R0R7OllA9NOa5mxfoKXoQg2fkIimrdMTSNI6SmccIdl9phw+qeGIGdEKPQmN5xI0ptxSTpbA==}
     engines: {node: '>10.0.0'}
     peerDependencies:
       koatty_container: ^1.x.x
@@ -4737,7 +4737,7 @@ packages:
     dev: true
 
   /media-typer@0.3.0:
-    resolution: {integrity: sha1-hxDXrwqmJvj/+hzgAWhUUmMlV0g=}
+    resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
     engines: {node: '>= 0.6'}
     dev: false
 
@@ -4967,7 +4967,7 @@ packages:
     dev: true
 
   /only@0.0.2:
-    resolution: {integrity: sha1-Kv3oTQPlC5qO3EROMGEKcCle37Q=}
+    resolution: {integrity: sha512-Fvw+Jemq5fjjyWz6CpKx6w9s7xxqo3+JCyM0WXWeCSOboZ8ABkyvP8ID4CZuChA/wxSx+XSJmdOm8rGVyJ1hdQ==}
     dev: false
 
   /open@8.4.2:
@@ -6165,7 +6165,7 @@ packages:
     engines: {node: '>= 0.10'}
 
   /vary@1.1.2:
-    resolution: {integrity: sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=}
+    resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
     dev: false
 
