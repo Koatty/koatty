@@ -3,10 +3,13 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:24:25
- * @LastEditTime: 2024-01-03 22:02:09
+ * @LastEditTime: 2024-01-04 07:45:42
  */
 
-import { KoattyContext, Controller, BaseController, Autowired, RequestMapping, RequestBody } from '../../../src/index';
+import {
+  KoattyContext, Controller, Autowired, RequestMapping,
+  RequestBody, IController
+} from '../../../src/index';
 import { App } from '../App';
 import { SayHelloRequestDto } from '../dto/SayHelloRequestDto';
 import { SayHelloReplyDto } from '../dto/SayHelloReplyDto';

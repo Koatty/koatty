@@ -3,19 +3,17 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:31:17
- * @LastEditTime: 2024-01-03 22:09:11
+ * @LastEditTime: 2024-01-04 07:45:52
  */
 
 import {
   Controller, Autowired, GetMapping, Post, PostMapping, KoattyContext,
-  Before, Get, Exception, Logger, Config, RequestBody, BaseController, Output
+  Before, Get, Exception, Logger, Config, RequestBody, Output, IController
 } from '../../../src/index';
 import { Valid, Validated } from "koatty_validation";
 import { App } from '../App';
-import { TestAspect } from '../aspect/TestAspect';
 import { UserDto } from '../dto/UserDto';
 import { TestService } from '../service/TestService';
-import { BussinessException } from '../exception/BussinessException';
 
 @Controller('/')
 export class IndexController {
