@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.11.1](https://github.com/thinkkoa/koatty/compare/v3.11.0...v3.11.1) (2024-01-03)
+
+
+### Bug Fixes
+
+* aspect interface ([03b1884](https://github.com/thinkkoa/koatty/commit/03b188401d694ca116c58c71fc0270da8c163cc1))
+
 ## [3.11.0](https://github.com/thinkkoa/koatty/compare/v3.10.4...v3.11.0) (2024-01-03)
 
 
