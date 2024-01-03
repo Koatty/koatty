@@ -3,7 +3,7 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:24:25
- * @LastEditTime: 2021-12-23 00:59:23
+ * @LastEditTime: 2024-01-03 22:02:09
  */
 
 import { KoattyContext, Controller, BaseController, Autowired, RequestMapping, RequestBody } from '../../../src/index';
@@ -13,16 +13,16 @@ import { SayHelloReplyDto } from '../dto/SayHelloReplyDto';
 import { Validated } from 'koatty_validation';
 
 @Controller('/Hello') // Consistent with proto.service name
-export class HelloController extends BaseController {
+export class HelloController {
   app: App;
   ctx: KoattyContext;
 
   /**
-   * Custom constructor
+   * constructor
    *
    */
-  init() {
-    //todo
+  constructor(ctx: KoattyContext) {
+    this.ctx = ctx;
   }
 
 

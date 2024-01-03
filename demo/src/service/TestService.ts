@@ -3,7 +3,7 @@
  * @Usage: 处理具体业务逻辑
  * @Author: xxx
  * @Date: 2020-12-22 15:59:51
- * @LastEditTime: 2021-12-23 01:03:04
+ * @LastEditTime: 2024-01-03 22:13:41
  */
 
 import { Service, BaseService, Autowired, Logger } from '../../../src/index';
@@ -13,7 +13,7 @@ import { UserDto } from '../dto/UserDto';
 // import { CacheAble, CacheEvict, GetCacheStore } from "koatty_cacheable";
 
 @Service()
-export class TestService extends BaseService {
+export class TestService {
   app: App;
 
   /**
