@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.11.0](https://github.com/thinkkoa/koatty/compare/v3.10.4...v3.11.0) (2024-01-03)
+
+
+### Features
+
+* 增加Output类 ([09e43c4](https://github.com/thinkkoa/koatty/commit/09e43c49e2e6bc6c9cb85cd03081bd5f25134c5b))
+
 ### [3.10.4](https://github.com/thinkkoa/koatty/compare/v3.10.4-5...v3.10.4) (2023-12-24)
 
 
