@@ -4,6 +4,11 @@
 
 ## BaseController.fail() method
 
+> Warning: This API is now obsolete.
+> 
+> 使用 Output.fail 代替
+> 
+
 Response to normalize json format content for fail
 
 **Signature:**

@@ -4,9 +4,13 @@
 
 ## BaseController class
 
+> Warning: This API is now obsolete.
+> 
+> When the framework version is &gt; 3.10.5, do not need to inherit the Base class.  BaseController  {<!-- -->IController<!-- -->}
+> 
+
 Base controller
 
-  BaseController  {<!-- -->IController<!-- -->}
 
 **Signature:**
 

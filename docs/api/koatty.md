@@ -8,8 +8,9 @@
 
 |  Class | Description |
 |  --- | --- |
-|  [BaseController](./koatty.basecontroller.md) | <p>Base controller</p><p>  BaseController  {<!-- -->IController<!-- -->}</p> |
-|  [BaseService](./koatty.baseservice.md) | <p>Base service</p><p>  Base</p> |
+|  [BaseController](./koatty.basecontroller.md) | <p>Base controller</p> |
+|  [BaseService](./koatty.baseservice.md) | <p>Base service</p> |
+|  [Output](./koatty.output.md) |  |
 
 ## Functions
 
@@ -22,6 +23,10 @@
 |  [ConfigurationScan(scanPath)](./koatty.configurationscan.md) | <p>Define project configuration scan path</p> |
 |  [Controller(path)](./koatty.controller.md) | <p>Indicates that an decorated class is a "controller".</p> |
 |  [ExecBootStrap(bootFunc)](./koatty.execbootstrap.md) | Actively perform dependency injection Parse the decorator, return the instantiated app.  ExecBootStrap |
+|  [implementsControllerInterface(cls)](./koatty.implementscontrollerinterface.md) | check is implements Controller Interface |
+|  [implementsMiddlewareInterface(cls)](./koatty.implementsmiddlewareinterface.md) | check is implements Middleware Interface |
+|  [implementsPluginInterface(cls)](./koatty.implementsplugininterface.md) | check is implements Plugin Interface |
+|  [implementsServiceInterface(cls)](./koatty.implementsserviceinterface.md) | check is implements Service Interface |
 |  [Middleware(identifier)](./koatty.middleware.md) | <p>Indicates that an decorated class is a "middleware".</p> |
 |  [Plugin(identifier)](./koatty.plugin.md) | <p>Indicates that an decorated class is a "plugin".</p> |
 |  [Service(identifier)](./koatty.service.md) | <p>Indicates that an decorated class is a "service".</p> |

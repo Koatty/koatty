@@ -4,6 +4,11 @@
 
 ## BaseController.ok() method
 
+> Warning: This API is now obsolete.
+> 
+> 使用 Output.ok 代替
+> 
+
 Response to normalize json format content for success
 
 **Signature:**
