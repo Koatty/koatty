@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 21:56:32
- * @LastEditTime: 2023-12-23 11:40:44
+ * @LastEditTime: 2024-01-03 21:27:20
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -14,6 +14,7 @@ import { Middleware as KoaMiddleware } from "koa";
 import { Koatty, KoattyContext, KoattyNext } from 'koatty_core';
 import { CONTROLLER_ROUTER } from "koatty_serve";
 import { IOCContainer } from "koatty_container";
+import { Helper } from "koatty_lib";
 
 
 /**
@@ -70,10 +71,10 @@ export interface IController {
   readonly app: Koatty;
   readonly ctx: KoattyContext;
 
-  init(...arg: any[]): void;
-
-  ok(msg: string | ApiInput, data?: any, code?: number): Promise<ApiOutput>;
-  fail(msg: Error | string | ApiInput, data?: any, code?: number): void;
+  // new(ctx: KoattyContext, ...arg: any[]): IController;
+  // init(...arg: any[]): void;
+  // ok(msg: string | ApiInput, data?: any, code?: number): Promise<ApiOutput>;
+  // fail(msg: Error | string | ApiInput, data?: any, code?: number): void;
 }
 
 /**
@@ -148,4 +149,40 @@ export function Plugin(identifier?: string): ClassDecorator {
  */
 export interface IPlugin {
   run: (options: any, app: Koatty) => Promise<any>;
+}
+
+/**
+ * check is implements Middleware Interface
+ * @param cls 
+ * @returns 
+ */
+export function implementsMiddlewareInterface(cls: any): cls is IMiddleware {
+  return 'run' in cls && Helper.isFunction(cls.run);
+}
+
+/**
+ * check is implements Controller Interface
+ * @param cls 
+ * @returns 
+ */
+export function implementsControllerInterface(cls: any): cls is IController {
+  return 'app' in cls && 'ctx' in cls;
+}
+
+/**
+ * check is implements Service Interface
+ * @param cls 
+ * @returns 
+ */
+export function implementsServiceInterface(cls: any): cls is IService {
+  return 'app' in cls;
+}
+
+/**
+ * check is implements Plugin Interface
+ * @param cls 
+ * @returns 
+ */
+export function implementsPluginInterface(cls: any): cls is IPlugin {
+  return 'run' in cls && Helper.isFunction(cls.run);
 }

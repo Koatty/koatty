@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 22:55:49
- * @LastEditTime: 2023-12-24 10:10:52
+ * @LastEditTime: 2024-01-03 21:56:07
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -18,7 +18,7 @@ import { TraceHandler } from "./Trace";
 import { checkClass, Helper } from "../util/Helper";
 import { BaseController } from "../component/BaseController";
 import { Logger, LogLevelType, SetLogger } from "../util/Logger";
-import { IMiddleware, IPlugin } from '../component/Components';
+import { IMiddleware, IPlugin, implementsControllerInterface, implementsMiddlewareInterface, implementsPluginInterface, implementsServiceInterface } from '../component/Components';
 import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 
 /**
@@ -293,6 +293,10 @@ export class Loader {
       item.id = (item.id ?? "").replace("MIDDLEWARE:", "");
       if (item.id && Helper.isClass(item.target)) {
         IOCContainer.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
+        const ctl = IOCContainer.getInsByClass(item.target);
+        if (!implementsMiddlewareInterface(ctl)) {
+          throw Error(`The middleware ${item.id} must implements interface 'IMiddleware'.`);
+        }
       }
     });
 
@@ -347,8 +351,8 @@ export class Loader {
         // registering to IOC
         IOCContainer.reg(item.id, item.target, { scope: "Prototype", type: "CONTROLLER", args: [] });
         const ctl = IOCContainer.getInsByClass(item.target);
-        if (!(ctl instanceof BaseController)) {
-          throw Error(`Controller class ${item.id} does not inherit from BaseController`);
+        if (!implementsControllerInterface(ctl)) {
+          throw Error(`The controller ${item.id} must implements interface 'IController'.`);
         }
         controllers.push(item.id);
       }
@@ -373,6 +377,10 @@ export class Loader {
         Logger.Debug(`Load service: ${item.id}`);
         // registering to IOC
         IOCContainer.reg(item.id, item.target, { scope: "Singleton", type: "SERVICE", args: [] });
+        const ctl = IOCContainer.getInsByClass(item.target);
+        if (!implementsServiceInterface(ctl)) {
+          throw Error(`The service ${item.id} must implements interface 'IService'.`);
+        }
       }
     });
   }
@@ -411,11 +419,15 @@ export class Loader {
     componentList.forEach(async (item: ComponentItem) => {
       item.id = (item.id ?? "").replace("COMPONENT:", "");
       if (Helper.isClass(item.target)) {
-        if (item.id && (item.id).endsWith("Plugin")) {
-          pluginList.push(item.id);
-        }
         // registering to IOC
         IOCContainer.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
+        if (item.id && (item.id).endsWith("Plugin")) {
+          const ctl = IOCContainer.getInsByClass(item.target);
+          if (!implementsPluginInterface(ctl)) {
+            throw Error(`The plugin ${item.id} must implements interface 'IPlugin'.`);
+          }
+          pluginList.push(item.id);
+        }
       }
     });
     // load plugin config

@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 21:56:32
- * @LastEditTime: 2023-12-09 23:03:09
+ * @LastEditTime: 2024-01-03 21:57:20
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -16,6 +16,7 @@ import { ApiInput, ApiOutput, IController } from './Components';
  * Base controller
  *
  * @export
+ * @deprecated When the framework version is > 3.10.5, do not need to inherit the Base class.
  * @class BaseController
  * @implements {IController}
  */
@@ -47,6 +48,7 @@ export class BaseController implements IController {
   /**
    * Response to normalize json format content for success
    *
+   * @deprecated 使用 Output.ok 代替
    * @param {(string | ApiInput)} msg   待处理的message消息
    * @param {*} [data]    待处理的数据
    * @param {number} [code=200]    错误码，默认0
@@ -61,6 +63,7 @@ export class BaseController implements IController {
   /**
    * Response to normalize json format content for fail
    *
+   * @deprecated 使用 Output.fail 代替
    * @param {(string | ApiInput)} msg   
    * @param {*} [data]    
    * @param {number} [code=1]    
