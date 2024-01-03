@@ -23,6 +23,7 @@
 |  [ConfigurationScan(scanPath)](./koatty.configurationscan.md) | <p>Define project configuration scan path</p> |
 |  [Controller(path)](./koatty.controller.md) | <p>Indicates that an decorated class is a "controller".</p> |
 |  [ExecBootStrap(bootFunc)](./koatty.execbootstrap.md) | Actively perform dependency injection Parse the decorator, return the instantiated app.  ExecBootStrap |
+|  [implementsAspectInterface(cls)](./koatty.implementsaspectinterface.md) | check is implements Aspect Interface |
 |  [implementsControllerInterface(cls)](./koatty.implementscontrollerinterface.md) | check is implements Controller Interface |
 |  [implementsMiddlewareInterface(cls)](./koatty.implementsmiddlewareinterface.md) | check is implements Middleware Interface |
 |  [implementsPluginInterface(cls)](./koatty.implementsplugininterface.md) | check is implements Plugin Interface |
