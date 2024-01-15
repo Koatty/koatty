@@ -21,7 +21,7 @@ import {
   IMiddleware, IPlugin, implementsAspectInterface,
   implementsControllerInterface, implementsMiddlewareInterface,
   implementsPluginInterface, implementsServiceInterface
-} from '../component/Components';
+} from '../component/Component';
 import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 
 /**

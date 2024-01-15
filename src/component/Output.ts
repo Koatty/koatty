@@ -3,13 +3,13 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2024-01-03 22:03:34
- * @LastEditTime: 2024-01-16 01:17:54
+ * @LastEditTime: 2024-01-16 01:20:36
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
 import { KoattyContext } from "koatty_core";
-import { formatApiData } from "../util/Helper";
+import { Helper } from "koatty_lib";
 
 /**
  * Interface for Api output
@@ -61,4 +61,33 @@ export class Output {
     ctx.body = obj.data;
     ctx.throw(obj.message, obj.code, 200);
   }
+}
+
+/**
+ * Format api interface data format
+ *
+ * @private
+ * @param {Error | string | ApiInput} msg   待处理的接口数据信息｜接口msg
+ * @param {*} data    待返回的数据
+ * @param {number} defaultCode   默认错误码
+ * @returns {ApiOutput}   格式化之后的接口数据
+ * @memberof BaseController
+ */
+function formatApiData(msg: any, data: any, defaultCode: number): ApiOutput {
+  let obj: ApiOutput = {
+    code: defaultCode,
+    message: '',
+    data: null,
+  };
+  if (Helper.isError(msg)) {
+    const { code, message } = <any>msg;
+    obj.code = code || defaultCode;
+    obj.message = message;
+  } else if (Helper.isObject(msg)) {
+    obj = { ...obj, ...msg };
+  } else {
+    obj.message = msg;
+    obj.data = data;
+  }
+  return obj;
 }
