@@ -8,8 +8,6 @@
 
 |  Class | Description |
 |  --- | --- |
-|  [BaseController](./koatty.basecontroller.md) | <p>Base controller</p> |
-|  [BaseService](./koatty.baseservice.md) | <p>Base service</p> |
 |  [Output](./koatty.output.md) |  |
 
 ## Functions
@@ -36,8 +34,6 @@
 
 |  Interface | Description |
 |  --- | --- |
-|  [ApiInput](./koatty.apiinput.md) | Interface for Api input |
-|  [ApiOutput](./koatty.apioutput.md) | Interface for Api output |
 |  [IController](./koatty.icontroller.md) | Interface for Controller |
 |  [IMiddleware](./koatty.imiddleware.md) | Interface for Middleware |
 |  [IPlugin](./koatty.iplugin.md) | Interface for Plugin |

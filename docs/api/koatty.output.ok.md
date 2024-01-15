@@ -17,13 +17,13 @@ static ok(ctx: KoattyContext, msg: string | ApiInput, data?: any, code?: number)
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  ctx | KoattyContext |  |
-|  msg | string \| [ApiInput](./koatty.apiinput.md) | 待处理的message消息 |
+|  msg | string \| ApiInput | 待处理的message消息 |
 |  data | any | _(Optional)_ 待处理的数据 |
 |  code | number | _(Optional)_ 错误码，默认0 |
 
 **Returns:**
 
-Promise&lt;[ApiOutput](./koatty.apioutput.md)<!-- -->&gt;
+Promise&lt;ApiOutput&gt;
 
 {<!-- -->\*<!-- -->}  BaseController
 

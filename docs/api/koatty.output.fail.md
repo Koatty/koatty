@@ -17,7 +17,7 @@ static fail(ctx: KoattyContext, msg: Error | string | ApiInput, data?: any, code
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  ctx | KoattyContext |  |
-|  msg | Error \| string \| [ApiInput](./koatty.apiinput.md) |  |
+|  msg | Error \| string \| ApiInput |  |
 |  data | any | _(Optional)_ |
 |  code | number | _(Optional)_ |
 
