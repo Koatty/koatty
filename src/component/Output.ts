@@ -3,14 +3,32 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2024-01-03 22:03:34
- * @LastEditTime: 2024-01-03 22:07:20
+ * @LastEditTime: 2024-01-16 01:17:54
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
 import { KoattyContext } from "koatty_core";
 import { formatApiData } from "../util/Helper";
-import { ApiInput, ApiOutput } from "./Components";
+
+/**
+ * Interface for Api output
+ */
+interface ApiOutput {
+  code: number; // 错误码
+  message: string; // 消息内容
+  data: any; // 数据
+}
+
+/**
+ * Interface for Api input
+ */
+interface ApiInput {
+  code?: number; // 错误码
+  message?: string; // 消息内容
+  data?: any; // 数据
+}
+
 
 export class Output {
   /**

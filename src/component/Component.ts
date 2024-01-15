@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 21:56:32
- * @LastEditTime: 2024-01-16 01:13:21
+ * @LastEditTime: 2024-01-16 01:17:46
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -15,25 +15,6 @@ import { Koatty, KoattyContext, KoattyNext } from 'koatty_core';
 import { CONTROLLER_ROUTER } from "koatty_router";
 import { IAspect, IOCContainer } from "koatty_container";
 import { Helper } from "koatty_lib";
-
-
-/**
- * Interface for Api output
- */
-export interface ApiOutput {
-  code: number; // 错误码
-  message: string; // 消息内容
-  data: any; // 数据
-}
-
-/**
- * Interface for Api input
- */
-export interface ApiInput {
-  code?: number; // 错误码
-  message?: string; // 消息内容
-  data?: any; // 数据
-}
 
 /**
  * Indicates that an decorated class is a "component".
