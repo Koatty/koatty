@@ -3,10 +3,10 @@
  * @Usage: 处理具体业务逻辑
  * @Author: xxx
  * @Date: 2020-12-22 15:59:51
- * @LastEditTime: 2024-01-03 22:13:41
+ * @LastEditTime: 2024-01-16 01:00:28
  */
 
-import { Service, BaseService, Autowired, Logger } from '../../../src/index';
+import { Service, Autowired, Logger } from '../../../src/index';
 import { App } from '../App';
 import { UserDto } from '../dto/UserDto';
 // import { Scheduled, SchedulerLock } from "koatty_schedule";
