@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 21:56:32
- * @LastEditTime: 2024-01-04 07:43:03
+ * @LastEditTime: 2024-01-16 01:13:21
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -12,7 +12,7 @@
 import "reflect-metadata";
 import { Middleware as KoaMiddleware, Next } from "koa";
 import { Koatty, KoattyContext, KoattyNext } from 'koatty_core';
-import { CONTROLLER_ROUTER } from "koatty_serve";
+import { CONTROLLER_ROUTER } from "koatty_router";
 import { IAspect, IOCContainer } from "koatty_container";
 import { Helper } from "koatty_lib";
 
