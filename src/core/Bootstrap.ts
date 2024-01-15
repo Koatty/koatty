@@ -3,15 +3,16 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2021-12-09 21:56:32
- * @LastEditTime: 2024-01-06 10:42:42
+ * @LastEditTime: 2024-01-16 01:06:26
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
 import EventEmitter from "events";
+import { NewRouter } from "koatty_router";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
 import { AppEvent, EventHookFunc, Koatty } from 'koatty_core';
-import { BindProcessEvent, NewRouter, NewServe } from "koatty_serve";
+import { BindProcessEvent, NewServe } from "koatty_serve";
 import { Loader } from "./Loader";
 import { Helper } from "../util/Helper";
 import { Logger } from "../util/Logger";
@@ -77,6 +78,12 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
     Logger.Log('Koatty', '', 'Emit App Boot ...');
     await asyncEvent(app, AppEvent.appBoot);
 
+    // Create Server
+    // app.server = newServe(app);
+    Helper.define(app, "server", NewServe(app));
+    // Create router
+    // app.router = newRouter(app);
+    Helper.define(app, "router", NewRouter(app));
     // Load Components
     Logger.Log('Koatty', '', 'Load Components ...');
     await Loader.LoadComponents(app);
@@ -90,20 +97,13 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
     Logger.Log('Koatty', '', 'Load Controllers ...');
     const controllers = Loader.LoadControllers(app);
 
-    // Create Server
-    // app.server = newServe(app);
-    Helper.define(app, "server", NewServe(app));
-    // Create router
-    // app.router = newRouter(app);
-    Helper.define(app, "router", NewRouter(app));
-
     // Emit app ready event
     Logger.Log('Koatty', '', 'Emit App Ready ...');
     await asyncEvent(app, AppEvent.appReady);
 
     // Load Routers
     Logger.Log('Koatty', '', 'Load Routers ...');
-    app.router.LoadRouter(controllers);
+    app.router.LoadRouter(app, controllers);
 
     if (!isUTRuntime) {
       // Start Server
