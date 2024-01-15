@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.11.2-7](https://github.com/thinkkoa/koatty/compare/v3.11.2-6...v3.11.2-7) (2024-01-15)
+
+
+### Refactor
+
+* export router interface ([b6bc181](https://github.com/thinkkoa/koatty/commit/b6bc1819ca97817e5c26376a5b4d12c8992bbe62))
+* output ([286f57a](https://github.com/thinkkoa/koatty/commit/286f57ae7e4133a1bf3c6e3d58c870fb218bd575))
+* output interface ([53cd320](https://github.com/thinkkoa/koatty/commit/53cd3207ba5db6fc9fa6cf3d94543df208576833))
+* remove base class ([cebc6d7](https://github.com/thinkkoa/koatty/commit/cebc6d734bae800fe9be3321acef48760210292b))
+* 调整router、server初始化 ([2af33b8](https://github.com/thinkkoa/koatty/commit/2af33b8df554bfee4bbeac7bcac3d219fd9a7af0))
+
 ### [3.11.2-6](https://github.com/thinkkoa/koatty/compare/v3.11.2-5...v3.11.2-6) (2024-01-14)
 
 ### [3.11.2-5](https://github.com/thinkkoa/koatty/compare/v3.11.2-4...v3.11.2-5) (2024-01-07)
