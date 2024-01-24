@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 22:55:49
- * @LastEditTime: 2024-01-04 05:52:31
+ * @LastEditTime: 2024-01-24 11:54:29
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -387,26 +387,6 @@ export class Loader {
       }
     });
   }
-
-  /**
-   * Load components
-   *
-   * @static
-   * @param {*} app
-   * @memberof Loader
-   */
-  // public static LoadComponents(app: Koatty) {
-  //   const componentList = IOCContainer.listClass("COMPONENT");
-
-  //   componentList.forEach((item: ComponentItem) => {
-  //     item.id = (item.id ?? "").replace("COMPONENT:", "");
-  //     if (item.id && !(item.id).endsWith("Plugin") && Helper.isClass(item.target)) {
-  //       Logger.Debug(`Load component: ${item.id}`);
-  //       // registering to IOC
-  //       IOCContainer.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
-  //     }
-  //   });
-  // }
 
   /**
    * Load components
