@@ -4,6 +4,40 @@ module.exports = {
   //     commit: true, // 自动commit
   //     tag: true, // 自动打tag
   // },
+  "types": [
+    {
+      "type": "feat",
+      "section": "Features"
+    },
+    {
+      "type": "fix",
+      "section": "Bug Fixes"
+    },
+    {
+      "type": "chore",
+      "hidden": true
+    },
+    {
+      "type": "docs",
+      "hidden": true
+    },
+    {
+      "type": "style",
+      "hidden": true
+    },
+    {
+      "type": "refactor",
+      "section": "Refactor"
+    },
+    {
+      "type": "perf",
+      "section": "Performance"
+    },
+    {
+      "type": "test",
+      "hidden": true
+    }
+  ],
   //server-version自动commit的模板
   releaseCommitMessageFormat:
     "build: v{{currentTag}}",

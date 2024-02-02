@@ -3,34 +3,33 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2022-02-14 11:26:20
- * @LastEditTime: 2023-09-25 19:14:04
+ * @LastEditTime: 2024-02-02 09:38:35
  */
 
 import { KoattyContext } from "koatty_core";
 import { Exception, ExceptionHandler } from "koatty_exception";
+import { DefaultLogger as Logger } from "koatty_logger";
 
 @ExceptionHandler()
 export class BussinessException extends Exception {
   async handler(ctx: KoattyContext): Promise<any> {
-    ctx.status = this.status;
-    ctx.type = "application/json";
-    const body: any = JSON.stringify(ctx.body || null);
-    switch (ctx.protocol) {
-      case "ws":
-      case "wss":
-        if (ctx.websocket) {
-          ctx.websocket.send(body);
-          ctx.websocket.emit('finish');
-        }
-        break;
-      case "grpc":
-        if (ctx.rpc && ctx.rpc.callback) {
-          ctx.rpc.callback(null, body);
-        }
-        break;
-      default:
-        ctx.res.end(`{"code": ${this.code}, "message": "${this.message || ctx.message}", "data": ${body}}`);
-        break;
+    try {
+      ctx.status = this.status || ctx.status;
+      if (ctx.protocol !== "grpc") {
+        // api mode the status always be 200
+        ctx.status = 200;
+      }
+      // LOG
+      this.log(ctx);
+      let contentType = 'application/json';
+      if (ctx.encoding !== false) {
+        contentType = `${contentType}; charset=${ctx.encoding}`;
+      }
+      ctx.type = contentType;
+      const body = JSON.stringify(ctx.body || "");
+      return this.output(ctx, body);
+    } catch (error) {
+      Logger.Error(error);
     }
   }
 }

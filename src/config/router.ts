@@ -39,19 +39,21 @@ export default {
   /**
    * payload options
    * 
-   * extTypes: {
-        json: ['application/json'],
-        form: ['application/x-www-form-urlencoded'],
-        text: ['text/plain'],
-        multipart: ['multipart/form-data'],
-        xml: ['text/xml']
-      },
-      limit: '20mb',
-      encoding: 'utf-8',
-      multiples: true,
-      keepExtensions: true,
    */
   // payload?: PayloadOptions;
+  payload: {
+    extTypes: {
+      json: ['application/json'],
+      form: ['application/x-www-form-urlencoded'],
+      text: ['text/plain'],
+      multipart: ['multipart/form-data'],
+      xml: ['text/xml']
+    },
+    limit: '20mb',
+    encoding: 'utf-8',
+    multiples: true,
+    keepExtensions: true,
+  },
 
   /**
    *  Other extended configuration

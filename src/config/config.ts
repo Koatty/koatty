@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 21:56:32
- * @LastEditTime: 2023-12-09 22:35:46
+ * @LastEditTime: 2024-01-06 10:37:05
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -23,6 +23,6 @@ export default {
 
   logs_level: "debug", // Level log is printed to the console, "debug" | "info" | "warning" | "error"
   // logs_path: "./logs", // Log file directory
-  // sens_fields: ["password"] // Sensitive words
+  // sens_fields: ["password"] // Defined privacy fields will not be printed in logs.
 
 };

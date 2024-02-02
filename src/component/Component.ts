@@ -3,36 +3,18 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 21:56:32
- * @LastEditTime: 2023-12-23 11:40:44
+ * @LastEditTime: 2024-01-19 08:36:27
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
-import { Middleware as KoaMiddleware } from "koa";
+import { Middleware as KoaMiddleware, Next } from "koa";
 import { Koatty, KoattyContext, KoattyNext } from 'koatty_core';
-import { CONTROLLER_ROUTER } from "koatty_serve";
-import { IOCContainer } from "koatty_container";
-
-
-/**
- * Interface for Api output
- */
-export interface ApiOutput {
-  code: number; // 错误码
-  message: string; // 消息内容
-  data: any; // 数据
-}
-
-/**
- * Interface for Api input
- */
-export interface ApiInput {
-  code?: number; // 错误码
-  message?: string; // 消息内容
-  data?: any; // 数据
-}
+import { CONTROLLER_ROUTER } from "koatty_router";
+import { IAspect, IOCContainer } from "koatty_container";
+import { Helper } from "koatty_lib";
 
 /**
  * Indicates that an decorated class is a "component".
@@ -70,10 +52,10 @@ export interface IController {
   readonly app: Koatty;
   readonly ctx: KoattyContext;
 
-  init(...arg: any[]): void;
-
-  ok(msg: string | ApiInput, data?: any, code?: number): Promise<ApiOutput>;
-  fail(msg: Error | string | ApiInput, data?: any, code?: number): void;
+  // new(ctx: KoattyContext, ...arg: any[]): IController;
+  // init(...arg: any[]): void;
+  // ok(msg: string | ApiInput, data?: any, code?: number): Promise<ApiOutput>;
+  // fail(msg: Error | string | ApiInput, data?: any, code?: number): void;
 }
 
 /**
@@ -99,7 +81,7 @@ export interface KoattyMiddleware extends KoaMiddleware { }
  * Interface for Middleware
  */
 export interface IMiddleware {
-  run: (options: any, app: Koatty) => KoattyMiddleware;
+  run: (options: any, app: Koatty) => (ctx: KoattyContext, next: Next) => Promise<any>;
 }
 
 /**
@@ -122,7 +104,7 @@ export function Service(identifier?: string): ClassDecorator {
 export interface IService {
   readonly app: Koatty;
 
-  init(...arg: any[]): void;
+  // init(...arg: any[]): void;
 }
 
 /**
@@ -148,4 +130,49 @@ export function Plugin(identifier?: string): ClassDecorator {
  */
 export interface IPlugin {
   run: (options: any, app: Koatty) => Promise<any>;
+}
+
+/**
+ * check is implements Middleware Interface
+ * @param cls 
+ * @returns 
+ */
+export function implementsMiddlewareInterface(cls: any): cls is IMiddleware {
+  return 'run' in cls && Helper.isFunction(cls.run);
+}
+
+/**
+ * check is implements Controller Interface
+ * @param cls 
+ * @returns 
+ */
+export function implementsControllerInterface(cls: any): cls is IController {
+  return 'app' in cls && 'ctx' in cls;
+}
+
+/**
+ * check is implements Service Interface
+ * @param cls 
+ * @returns 
+ */
+export function implementsServiceInterface(cls: any): cls is IService {
+  return 'app' in cls;
+}
+
+/**
+ * check is implements Plugin Interface
+ * @param cls 
+ * @returns 
+ */
+export function implementsPluginInterface(cls: any): cls is IPlugin {
+  return 'run' in cls && Helper.isFunction(cls.run);
+}
+
+/**
+ * check is implements Aspect Interface
+ * @param cls 
+ * @returns 
+ */
+export function implementsAspectInterface(cls: any): cls is IAspect {
+  return 'app' in cls && 'run' in cls && Helper.isFunction(cls.run);
 }

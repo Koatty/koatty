@@ -57,37 +57,42 @@ npm start
 default Controller:
 
 ```javascript
-import { Controller, BaseController, Autowired, GetMapping, RequestBody, PathVariable,
- PostMapping, RequestMapping, RequestMethod, Valid } from "koatty";
+import { Controller, Autowired, GetMapping, RequestBody, PathVariable,
+ PostMapping, RequestMapping, RequestMethod, Valid, Output } from "koatty";
 import { TestDTO } from "../model/dto/TestDTO";
 import { TestService } from "../service/TestService";
 import { App } from "../App";
 
 @Controller()
-export class IndexController extends BaseController {
+export class IndexController {
     app: App;
+    ctx: KoattyContext;
 
     @Autowired()
     private testService: TestService;
 
-    init() {
-        this.cache = {};
+    /**
+     * constructor
+     *
+     */
+    constructor(ctx: KoattyContext) {
+        this.ctx = ctx;
     }
 
     @RequestMapping("/:name", RequestMethod.ALL)
     async default(@PathVariable("name") @Valid("IsNotEmpty") name: string) {
         try {
             const info = await this.testService.sayHello(name);
-            return this.ok("success", info);
+            return Output.ok(this.ctx, "success", info);
         } catch (err: Error) {
-            return this.fail(err.message));
+            return Output.fail(this.ctx, err.message));
         }
     }
 
     @PostMapping("/test")
     @Validated() //need DTOClass
     test(@RequestParam() params: TestDTO) {
-        return this.ok("test", params);
+        return Output.ok(this.ctx, "test", params);
     }
 }
 ```
@@ -157,7 +162,7 @@ Select `TS Program` to debug run. Try to call `http://localhost:3000/` .
 
 Check out the [quick start example][quick-example].
 
-[quick-example]: https://github.com/thinkkoa/koatty_demo/
+[quick-example]: https://github.com/Koatty/koatty_template
 
 
 

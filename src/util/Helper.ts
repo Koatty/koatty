@@ -3,13 +3,12 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 21:56:32
- * @LastEditTime: 2023-12-09 23:01:56
+ * @LastEditTime: 2024-01-16 01:20:17
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
 import { Helper } from "koatty_lib";
-import { ApiOutput } from "../component/Components";
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
 // export Helper
@@ -95,33 +94,4 @@ export function checkClass(fileName: string, xpath: string, target: any, exSet?:
   exSet.add(fileName);
 
   return;
-}
-
-/**
- * Format api interface data format
- *
- * @private
- * @param {Error | string | ApiInput} msg   待处理的接口数据信息｜接口msg
- * @param {*} data    待返回的数据
- * @param {number} defaultCode   默认错误码
- * @returns {ApiOutput}   格式化之后的接口数据
- * @memberof BaseController
- */
-export function formatApiData(msg: any, data: any, defaultCode: number): ApiOutput {
-  let obj: ApiOutput = {
-    code: defaultCode,
-    message: '',
-    data: null,
-  };
-  if (Helper.isError(msg)) {
-    const { code, message } = <any>msg;
-    obj.code = code || defaultCode;
-    obj.message = message;
-  } else if (Helper.isObject(msg)) {
-    obj = { ...obj, ...msg };
-  } else {
-    obj.message = msg;
-    obj.data = data;
-  }
-  return obj;
 }

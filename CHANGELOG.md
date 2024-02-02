@@ -2,6 +2,60 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.11.2](https://github.com/thinkkoa/koatty/compare/v3.11.2-8...v3.11.2) (2024-02-02)
+
+
+### Bug Fixes
+
+* 增加router配置 ([974a181](https://github.com/thinkkoa/koatty/commit/974a1812e3a65721623957ee2c3a907dcc203193))
+* 自定义exception适配新版 ([b5822e2](https://github.com/thinkkoa/koatty/commit/b5822e2959f4ba70945e640a9c0c03f38660aca9))
+
+### [3.11.2-8](https://github.com/thinkkoa/koatty/compare/v3.11.2-7...v3.11.2-8) (2024-01-16)
+
+### [3.11.2-7](https://github.com/thinkkoa/koatty/compare/v3.11.2-6...v3.11.2-7) (2024-01-15)
+
+
+### Refactor
+
+* export router interface ([b6bc181](https://github.com/thinkkoa/koatty/commit/b6bc1819ca97817e5c26376a5b4d12c8992bbe62))
+* output ([286f57a](https://github.com/thinkkoa/koatty/commit/286f57ae7e4133a1bf3c6e3d58c870fb218bd575))
+* output interface ([53cd320](https://github.com/thinkkoa/koatty/commit/53cd3207ba5db6fc9fa6cf3d94543df208576833))
+* remove base class ([cebc6d7](https://github.com/thinkkoa/koatty/commit/cebc6d734bae800fe9be3321acef48760210292b))
+* 调整router、server初始化 ([2af33b8](https://github.com/thinkkoa/koatty/commit/2af33b8df554bfee4bbeac7bcac3d219fd9a7af0))
+
+### [3.11.2-6](https://github.com/thinkkoa/koatty/compare/v3.11.2-5...v3.11.2-6) (2024-01-14)
+
+### [3.11.2-5](https://github.com/thinkkoa/koatty/compare/v3.11.2-4...v3.11.2-5) (2024-01-07)
+
+### [3.11.2-4](https://github.com/thinkkoa/koatty/compare/v3.11.2-3...v3.11.2-4) (2024-01-07)
+
+
+### Bug Fixes
+
+* commit ([1eb83d5](https://github.com/thinkkoa/koatty/commit/1eb83d5108920fee1808cdcdaaa028c88941a280))
+
+### [3.11.2-3](https://github.com/thinkkoa/koatty/compare/v3.11.2-2...v3.11.2-3) (2024-01-05)
+
+### [3.11.2-2](https://github.com/thinkkoa/koatty/compare/v3.11.2-1...v3.11.2-2) (2024-01-04)
+
+### [3.11.2-1](https://github.com/thinkkoa/koatty/compare/v3.11.2-0...v3.11.2-1) (2024-01-04)
+
+### [3.11.2-0](https://github.com/thinkkoa/koatty/compare/v3.11.1...v3.11.2-0) (2024-01-04)
+
+### [3.11.1](https://github.com/thinkkoa/koatty/compare/v3.11.0...v3.11.1) (2024-01-03)
+
+
+### Bug Fixes
+
+* aspect interface ([03b1884](https://github.com/thinkkoa/koatty/commit/03b188401d694ca116c58c71fc0270da8c163cc1))
+
+## [3.11.0](https://github.com/thinkkoa/koatty/compare/v3.10.4...v3.11.0) (2024-01-03)
+
+
+### Features
+
+* 增加Output类 ([09e43c4](https://github.com/thinkkoa/koatty/commit/09e43c49e2e6bc6c9cb85cd03081bd5f25134c5b))
+
 ### [3.10.4](https://github.com/thinkkoa/koatty/compare/v3.10.4-5...v3.10.4) (2023-12-24)
 
 

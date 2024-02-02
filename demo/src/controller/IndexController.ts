@@ -3,27 +3,34 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:31:17
- * @LastEditTime: 2023-11-11 10:55:22
+ * @LastEditTime: 2024-02-02 15:29:22
  */
 
 import {
   Controller, Autowired, GetMapping, Post, PostMapping, KoattyContext,
-  Before, Get, Exception, Logger, Config, RequestBody, BaseController
+  Before, Get, Exception, Logger, Config, RequestBody, Output, IController
 } from '../../../src/index';
 import { Valid, Validated } from "koatty_validation";
 import { App } from '../App';
-import { TestAspect } from '../aspect/TestAspect';
 import { UserDto } from '../dto/UserDto';
 import { TestService } from '../service/TestService';
 import { BussinessException } from '../exception/BussinessException';
 
 @Controller('/')
-export class IndexController extends BaseController {
+export class IndexController {
   app: App;
   ctx: KoattyContext;
 
   @Autowired()
   protected TestService: TestService;
+
+  /**
+   * constructor
+   *
+   */
+  constructor(ctx: KoattyContext) {
+    this.ctx = ctx;
+  }
 
   /**
    * 前置登录检查
@@ -56,7 +63,7 @@ export class IndexController extends BaseController {
   @GetMapping('/')
   index(@RequestBody() body: any): Promise<any> {
     // this.ctx.session.username = "test"
-    return this.ok("");
+    return Output.ok(this.ctx, "Hello, koatty!");
   }
 
   /**
@@ -74,7 +81,7 @@ export class IndexController extends BaseController {
   @GetMapping("/get")
   async get(@Valid("IsNotEmpty", "id不能为空") @Get("id") id: number): Promise<any> {
     const userInfo = await this.TestService.getUser(id);
-    return this.ok("success", userInfo);
+    return Output.ok(this.ctx, "success", userInfo);
   }
 
   /**
@@ -94,7 +101,7 @@ export class IndexController extends BaseController {
   @Before("TestAspect")
   async add(@Post() data: UserDto): Promise<any> {
     const userId = await this.TestService.addUser(data);
-    return this.ok('success', { userId });
+    return Output.ok(this.ctx, 'success', { userId });
   }
 
   /**
