@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.11.2](https://github.com/thinkkoa/koatty/compare/v3.11.2-8...v3.11.2) (2024-02-02)
+
+
+### Bug Fixes
+
+* 增加router配置 ([974a181](https://github.com/thinkkoa/koatty/commit/974a1812e3a65721623957ee2c3a907dcc203193))
+* 自定义exception适配新版 ([b5822e2](https://github.com/thinkkoa/koatty/commit/b5822e2959f4ba70945e640a9c0c03f38660aca9))
+
 ### [3.11.2-8](https://github.com/thinkkoa/koatty/compare/v3.11.2-7...v3.11.2-8) (2024-01-16)
 
 ### [3.11.2-7](https://github.com/thinkkoa/koatty/compare/v3.11.2-6...v3.11.2-7) (2024-01-15)
