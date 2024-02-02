@@ -66,6 +66,7 @@ import { App } from "../App";
 @Controller()
 export class IndexController {
     app: App;
+    ctx: KoattyContext;
 
     @Autowired()
     private testService: TestService;
@@ -161,7 +162,7 @@ Select `TS Program` to debug run. Try to call `http://localhost:3000/` .
 
 Check out the [quick start example][quick-example].
 
-[quick-example]: https://github.com/thinkkoa/koatty_demo/
+[quick-example]: https://github.com/Koatty/koatty_template
 
 
 
