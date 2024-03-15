@@ -4,12 +4,6 @@
 
 ## koatty package
 
-## Classes
-
-|  Class | Description |
-|  --- | --- |
-|  [Output](./koatty.output.md) |  |
-
 ## Functions
 
 |  Function | Description |
