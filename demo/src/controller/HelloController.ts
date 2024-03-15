@@ -3,7 +3,7 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:24:25
- * @LastEditTime: 2024-01-04 07:45:42
+ * @LastEditTime: 2024-03-15 07:57:51
  */
 
 import {
@@ -40,6 +40,8 @@ export class HelloController {
   SayHello(@RequestBody() params: SayHelloRequestDto): Promise<SayHelloReplyDto> {
     const res = new SayHelloReplyDto();
     res.message = params.name;
+    throw new Error("xxxx");
+
     return Promise.resolve(res);
   }
 

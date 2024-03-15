@@ -3,7 +3,7 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:31:17
- * @LastEditTime: 2024-02-02 15:29:22
+ * @LastEditTime: 2024-03-15 06:18:10
  */
 
 import {
@@ -61,9 +61,9 @@ export class IndexController {
    * {"code":0,"message":"错误信息","data":null}
    */
   @GetMapping('/')
-  index(@RequestBody() body: any): Promise<any> {
+  index(@RequestBody() body: any) {
     // this.ctx.session.username = "test"
-    return Output.ok(this.ctx, "Hello, koatty!");
+    return Output.ok("Hello, koatty!");
   }
 
   /**
@@ -81,7 +81,7 @@ export class IndexController {
   @GetMapping("/get")
   async get(@Valid("IsNotEmpty", "id不能为空") @Get("id") id: number): Promise<any> {
     const userInfo = await this.TestService.getUser(id);
-    return Output.ok(this.ctx, "success", userInfo);
+    return Output.ok("success", userInfo);
   }
 
   /**
@@ -101,7 +101,7 @@ export class IndexController {
   @Before("TestAspect")
   async add(@Post() data: UserDto): Promise<any> {
     const userId = await this.TestService.addUser(data);
-    return Output.ok(this.ctx, 'success', { userId });
+    return Output.ok('success', { userId });
   }
 
   /**

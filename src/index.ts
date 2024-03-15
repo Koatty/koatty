@@ -3,14 +3,13 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 21:56:32
- * @LastEditTime: 2024-01-16 01:14:19
+ * @LastEditTime: 2024-03-15 06:13:13
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
 export * from "./core/Bootstrap";
 export * from "./component/Component";
-export * from "./component/Output";
 export * from "koatty_core";
 export * from "koatty_container";
 export * from "koatty_exception";
