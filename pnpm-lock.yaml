@@ -30,14 +30,14 @@ dependencies:
     specifier: ~2.1.4
     version: 2.1.4(koatty_lib@1.3.4)(tslib@2.6.2)
   koatty_proto:
-    specifier: ~1.1.12
-    version: 1.1.12(koatty_lib@1.3.4)
+    specifier: ~1.1.13
+    version: 1.1.13(koatty_lib@1.3.4)
   koatty_router:
     specifier: ~1.9.2
-    version: 1.9.2(koatty_container@1.8.10)(koatty_core@1.9.0)(koatty_exception@1.4.2)(koatty_lib@1.3.4)(koatty_logger@2.1.4)(koatty_proto@1.1.12)(koatty_validation@1.3.2)
+    version: 1.9.2(koatty_container@1.8.10)(koatty_core@1.9.0)(koatty_exception@1.4.2)(koatty_lib@1.3.4)(koatty_logger@2.1.4)(koatty_proto@1.1.13)(koatty_validation@1.3.2)
   koatty_serve:
-    specifier: ~2.1.2
-    version: 2.1.2(koatty_container@1.8.10)(koatty_core@1.9.0)(koatty_exception@1.4.2)(koatty_lib@1.3.4)(koatty_logger@2.1.4)(koatty_proto@1.1.12)(koatty_validation@1.3.2)
+    specifier: ~2.1.4
+    version: 2.1.4(koatty_container@1.8.10)(koatty_core@1.9.0)(koatty_exception@1.4.2)(koatty_lib@1.3.4)(koatty_logger@2.1.4)(koatty_proto@1.1.13)(koatty_validation@1.3.2)
   koatty_trace:
     specifier: ~1.12.3
     version: 1.12.3(koatty_container@1.8.10)(koatty_core@1.9.0)(koatty_exception@1.4.2)(koatty_lib@1.3.4)(koatty_logger@2.1.4)
@@ -699,22 +699,22 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@grpc/grpc-js@1.9.13:
-    resolution: {integrity: sha512-OEZZu9v9AA+7/tghMDE8o5DAMD5THVnwSqDWuh7PPYO5287rTyqy0xEHT6/e4pbqSrhyLPdQFsam4TwFQVVIIw==}
-    engines: {node: ^8.13.0 || >=10.10.0}
+  /@grpc/grpc-js@1.10.6:
+    resolution: {integrity: sha512-xP58G7wDQ4TCmN/cMUHh00DS7SRDv/+lC+xFLrTkMIN8h55X5NhZMLYbvy7dSELP15qlI6hPhNCRWVMtZMwqLA==}
+    engines: {node: '>=12.10.0'}
     dependencies:
-      '@grpc/proto-loader': 0.7.10
-      '@types/node': 20.10.4
+      '@grpc/proto-loader': 0.7.12
+      '@js-sdsl/ordered-map': 4.4.2
     dev: false
 
-  /@grpc/proto-loader@0.7.10:
-    resolution: {integrity: sha512-CAqDfoaQ8ykFd9zqBDn4k6iWT9loLAlc2ETmDFS9JCD70gDcnA4L3AFEo2iV7KyAtAAHFW9ftq1Fz+Vsgq80RQ==}
+  /@grpc/proto-loader@0.7.12:
+    resolution: {integrity: sha512-DCVwMxqYzpUCiDMl7hQ384FqP4T3DbNpXU8pt681l3UWCip1WUiD5JrkImUwCB9a7f2cq4CUTmi5r/xIMRPY1Q==}
     engines: {node: '>=6'}
     hasBin: true
     dependencies:
       lodash.camelcase: 4.3.0
       long: 5.2.3
-      protobufjs: 7.2.5
+      protobufjs: 7.2.6
       yargs: 17.7.2
     dev: false
 
@@ -1014,6 +1014,10 @@ packages:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
+
+  /@js-sdsl/ordered-map@4.4.2:
+    resolution: {integrity: sha512-iUKgm52T8HOE/makSxjqoWhe95ZJA1/G1sYsGev2JDKUSS14KAgg1LHb+Ba+IPow0xflbnSkOsZcO08C7w1gYw==}
+    dev: false
 
   /@koa/router@12.0.1:
     resolution: {integrity: sha512-ribfPYfHb+Uw3b27Eiw6NPqjhIhTpVFzEWLwyc/1Xp+DCdwRRyIlAUODX+9bPARF6aQtUu1+/PHzdNvRzcs/+Q==}
@@ -4464,19 +4468,19 @@ packages:
       winston-daily-rotate-file: 4.7.1(winston@3.11.0)
     dev: false
 
-  /koatty_proto@1.1.12(koatty_lib@1.3.4):
-    resolution: {integrity: sha512-cN6ymXGX3CgEP6mEin9b9SzaUS9RtbBlY0k95iAJVfB4gWG+IkAGEwERtaaNO1DHUab1AKLfkakIkoP4Q+xqLQ==}
+  /koatty_proto@1.1.13(koatty_lib@1.3.4):
+    resolution: {integrity: sha512-AQcIDLnAfLPL3LCVjEjtOhvWhb7YXlBB2qfpPgKjq7+Ir2fbJ4xYdqvNxNue9LWaWcPWvYodTTltR7MMOfQs8A==}
     engines: {node: '>10.0.0'}
     peerDependencies:
       koatty_lib: ^1.x.x
     dependencies:
-      '@grpc/grpc-js': 1.9.13
-      '@grpc/proto-loader': 0.7.10
+      '@grpc/grpc-js': 1.10.6
+      '@grpc/proto-loader': 0.7.12
       koatty_lib: 1.3.4
-      protobufjs: 7.2.5
+      protobufjs: 7.2.6
     dev: false
 
-  /koatty_router@1.9.2(koatty_container@1.8.10)(koatty_core@1.9.0)(koatty_exception@1.4.2)(koatty_lib@1.3.4)(koatty_logger@2.1.4)(koatty_proto@1.1.12)(koatty_validation@1.3.2):
+  /koatty_router@1.9.2(koatty_container@1.8.10)(koatty_core@1.9.0)(koatty_exception@1.4.2)(koatty_lib@1.3.4)(koatty_logger@2.1.4)(koatty_proto@1.1.13)(koatty_validation@1.3.2):
     resolution: {integrity: sha512-2WgBK9K6UwSxxhsKIj+UTZd4w+2X+rZk2SlG+EjilTt4MKDVd+2gE2MOoJBNG83Oxe9LTPgGIR1HBkbBaJI0wQ==}
     engines: {node: '>10.0.0'}
     peerDependencies:
@@ -4496,7 +4500,7 @@ packages:
       koatty_exception: 1.4.2(koa@2.15.2)(koatty_container@1.8.10)(koatty_lib@1.3.4)(koatty_logger@2.1.4)
       koatty_lib: 1.3.4
       koatty_logger: 2.1.4(koatty_lib@1.3.4)(tslib@2.6.2)
-      koatty_proto: 1.1.12(koatty_lib@1.3.4)
+      koatty_proto: 1.1.13(koatty_lib@1.3.4)
       koatty_validation: 1.3.2(koatty_container@1.8.10)(koatty_lib@1.3.4)(koatty_logger@2.1.4)
       on-finished: 2.4.1
       raw-body: 2.5.2
@@ -4505,8 +4509,8 @@ packages:
       - supports-color
     dev: false
 
-  /koatty_serve@2.1.2(koatty_container@1.8.10)(koatty_core@1.9.0)(koatty_exception@1.4.2)(koatty_lib@1.3.4)(koatty_logger@2.1.4)(koatty_proto@1.1.12)(koatty_validation@1.3.2):
-    resolution: {integrity: sha512-e8iFcKTou4vcMamn0bM5fXR3uQqZ73REEQO11u/CzrjC1efMA91niBnQIWsG+LjTWralFxmvsH5UpjxB41EB5w==}
+  /koatty_serve@2.1.4(koatty_container@1.8.10)(koatty_core@1.9.0)(koatty_exception@1.4.2)(koatty_lib@1.3.4)(koatty_logger@2.1.4)(koatty_proto@1.1.13)(koatty_validation@1.3.2):
+    resolution: {integrity: sha512-e7SABVyuZGr29PFNnEXcB4fIkc3BWOvRkbrLfutrN3jhDOKex9bKGsC8rZIfdBIiJsKr0FSLFSTajI1lLPBXkw==}
     engines: {node: '>10.0.0'}
     peerDependencies:
       koatty_container: ^1.x.x
@@ -4517,13 +4521,13 @@ packages:
       koatty_proto: ^1.x.x
       koatty_validation: ^1.x.x
     dependencies:
-      '@grpc/grpc-js': 1.9.13
+      '@grpc/grpc-js': 1.10.6
       koatty_container: 1.8.10(koatty_lib@1.3.4)(koatty_logger@2.1.4)(reflect-metadata@0.1.14)(tslib@2.6.2)
       koatty_core: 1.9.0(koa@2.15.2)(koatty_container@1.8.10)(koatty_exception@1.4.2)(koatty_lib@1.3.4)(koatty_logger@2.1.4)
       koatty_exception: 1.4.2(koa@2.15.2)(koatty_container@1.8.10)(koatty_lib@1.3.4)(koatty_logger@2.1.4)
       koatty_lib: 1.3.4
       koatty_logger: 2.1.4(koatty_lib@1.3.4)(tslib@2.6.2)
-      koatty_proto: 1.1.12(koatty_lib@1.3.4)
+      koatty_proto: 1.1.13(koatty_lib@1.3.4)
       koatty_validation: 1.3.2(koatty_container@1.8.10)(koatty_lib@1.3.4)(koatty_logger@2.1.4)
       ws: 8.16.0
     transitivePeerDependencies:
@@ -5266,8 +5270,8 @@ packages:
       sisteransi: 1.0.5
     dev: true
 
-  /protobufjs@7.2.5:
-    resolution: {integrity: sha512-gGXRSXvxQ7UiPgfw8gevrfRWcTlSbOFg+p/N+JVJEK5VhueL2miT6qTymqAmjr1Q5WbOCyJbyrk6JfWKwlFn6A==}
+  /protobufjs@7.2.6:
+    resolution: {integrity: sha512-dgJaEDDL6x8ASUZ1YqWciTRrdOuYNzoOf27oHNfdyvKqHr5i0FV7FSLU+aIeFjyFgVxrpTOtQUi0BLLBymZaBw==}
     engines: {node: '>=12.0.0'}
     requiresBuild: true
     dependencies:
