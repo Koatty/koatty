@@ -36,8 +36,8 @@ dependencies:
     specifier: ~1.9.2
     version: 1.9.2(koatty_container@1.8.10)(koatty_core@1.9.0)(koatty_exception@1.4.2)(koatty_lib@1.3.4)(koatty_logger@2.1.4)(koatty_proto@1.1.13)(koatty_validation@1.3.2)
   koatty_serve:
-    specifier: ~2.1.4
-    version: 2.1.4(koatty_container@1.8.10)(koatty_core@1.9.0)(koatty_exception@1.4.2)(koatty_lib@1.3.4)(koatty_logger@2.1.4)(koatty_proto@1.1.13)(koatty_validation@1.3.2)
+    specifier: ~2.1.5
+    version: 2.1.5(koatty_container@1.8.10)(koatty_core@1.9.0)(koatty_exception@1.4.2)(koatty_lib@1.3.4)(koatty_logger@2.1.4)(koatty_proto@1.1.13)(koatty_validation@1.3.2)
   koatty_trace:
     specifier: ~1.12.3
     version: 1.12.3(koatty_container@1.8.10)(koatty_core@1.9.0)(koatty_exception@1.4.2)(koatty_lib@1.3.4)(koatty_logger@2.1.4)
@@ -699,6 +699,14 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
+  /@grpc/grpc-js@1.10.10:
+    resolution: {integrity: sha512-HPa/K5NX6ahMoeBv15njAc/sfF4/jmiXLar9UlC2UfHFKZzsCVLc3wbe7+7qua7w9VPh2/L6EBxyAV7/E8Wftg==}
+    engines: {node: '>=12.10.0'}
+    dependencies:
+      '@grpc/proto-loader': 0.7.13
+      '@js-sdsl/ordered-map': 4.4.2
+    dev: false
+
   /@grpc/grpc-js@1.10.6:
     resolution: {integrity: sha512-xP58G7wDQ4TCmN/cMUHh00DS7SRDv/+lC+xFLrTkMIN8h55X5NhZMLYbvy7dSELP15qlI6hPhNCRWVMtZMwqLA==}
     engines: {node: '>=12.10.0'}
@@ -709,6 +717,17 @@ packages:
 
   /@grpc/proto-loader@0.7.12:
     resolution: {integrity: sha512-DCVwMxqYzpUCiDMl7hQ384FqP4T3DbNpXU8pt681l3UWCip1WUiD5JrkImUwCB9a7f2cq4CUTmi5r/xIMRPY1Q==}
+    engines: {node: '>=6'}
+    hasBin: true
+    dependencies:
+      lodash.camelcase: 4.3.0
+      long: 5.2.3
+      protobufjs: 7.2.6
+      yargs: 17.7.2
+    dev: false
+
+  /@grpc/proto-loader@0.7.13:
+    resolution: {integrity: sha512-AiXO/bfe9bmxBjxxtYxFAXGZvMaN5s8kO+jBHAJCON8rJoB5YS/D6X7ZNc6XQkuHNmyl4CYaMI1fJ/Gn27RGGw==}
     engines: {node: '>=6'}
     hasBin: true
     dependencies:
@@ -4509,8 +4528,8 @@ packages:
       - supports-color
     dev: false
 
-  /koatty_serve@2.1.4(koatty_container@1.8.10)(koatty_core@1.9.0)(koatty_exception@1.4.2)(koatty_lib@1.3.4)(koatty_logger@2.1.4)(koatty_proto@1.1.13)(koatty_validation@1.3.2):
-    resolution: {integrity: sha512-e7SABVyuZGr29PFNnEXcB4fIkc3BWOvRkbrLfutrN3jhDOKex9bKGsC8rZIfdBIiJsKr0FSLFSTajI1lLPBXkw==}
+  /koatty_serve@2.1.5(koatty_container@1.8.10)(koatty_core@1.9.0)(koatty_exception@1.4.2)(koatty_lib@1.3.4)(koatty_logger@2.1.4)(koatty_proto@1.1.13)(koatty_validation@1.3.2):
+    resolution: {integrity: sha512-NhDyv88tBpHOhfL0SdutoC+eT2ZVt5q5uoZYEfKdYXSsfE4UDOAt2uLDJuKwmMDmqtnGvxTezB2siuA0L8N7HA==}
     engines: {node: '>10.0.0'}
     peerDependencies:
       koatty_container: ^1.x.x
@@ -4521,7 +4540,7 @@ packages:
       koatty_proto: ^1.x.x
       koatty_validation: ^1.x.x
     dependencies:
-      '@grpc/grpc-js': 1.10.6
+      '@grpc/grpc-js': 1.10.10
       koatty_container: 1.8.10(koatty_lib@1.3.4)(koatty_logger@2.1.4)(reflect-metadata@0.1.14)(tslib@2.6.2)
       koatty_core: 1.9.0(koa@2.15.3)(koatty_container@1.8.10)(koatty_exception@1.4.2)(koatty_lib@1.3.4)(koatty_logger@2.1.4)
       koatty_exception: 1.4.2(koa@2.15.3)(koatty_container@1.8.10)(koatty_lib@1.3.4)(koatty_logger@2.1.4)
@@ -4529,7 +4548,7 @@ packages:
       koatty_logger: 2.1.4(koatty_lib@1.3.4)(tslib@2.6.2)
       koatty_proto: 1.1.13(koatty_lib@1.3.4)
       koatty_validation: 1.3.2(koatty_container@1.8.10)(koatty_lib@1.3.4)(koatty_logger@2.1.4)
-      ws: 8.16.0
+      ws: 8.17.1
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -6285,8 +6304,8 @@ packages:
       signal-exit: 3.0.7
     dev: true
 
-  /ws@8.16.0:
-    resolution: {integrity: sha512-HS0c//TP7Ina87TfiPUz1rQzMhHrl/SG2guqRcTOIUYD2q8uhUdNHZYJUaQ8aTGPzCh+c6oawMKW35nFl1dxyQ==}
+  /ws@8.17.1:
+    resolution: {integrity: sha512-6XQFvXTkbfUOZOKKILFG1PDK2NDQs4azKQl26T0YS5CxqWLgXajbPZ+h4gZekJyRqFU8pvnbAbbs/3TgRPy+GQ==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       bufferutil: ^4.0.1
