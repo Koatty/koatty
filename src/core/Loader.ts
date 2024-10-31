@@ -3,26 +3,28 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 22:55:49
- * @LastEditTime: 2024-01-24 11:54:29
+ * @LastEditTime: 2024-10-31 17:52:06
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
-import * as path from "path";
-import { Load } from "koatty_loader";
-import { prevent } from "koatty_exception";
 import { LoadConfigs as loadConf } from "koatty_config";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
-import { AppEvent, AppEventArr, EventHookFunc, Koatty } from 'koatty_core';
-import { TraceHandler } from "./Trace";
+import { AppEvent, AppEventArr, EventHookFunc, KoattyApplication } from 'koatty_core';
+import { prevent } from "koatty_exception";
+import { Load } from "koatty_loader";
+import * as path from "path";
+import {
+  IMiddleware,
+  implementsAspectInterface,
+  implementsControllerInterface, implementsMiddlewareInterface,
+  implementsPluginInterface, implementsServiceInterface,
+  IPlugin
+} from '../component/Component';
 import { checkClass, Helper } from "../util/Helper";
 import { Logger, LogLevelType, SetLogger } from "../util/Logger";
-import {
-  IMiddleware, IPlugin, implementsAspectInterface,
-  implementsControllerInterface, implementsMiddlewareInterface,
-  implementsPluginInterface, implementsServiceInterface
-} from '../component/Component';
 import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
+import { TraceHandler } from "./Trace";
 
 /**
  *
@@ -43,10 +45,10 @@ export class Loader {
    * initialize env
    *
    * @static
-   * @param {Koatty} app
+   * @param {KoattyApplication} app
    * @memberof Loader
    */
-  public static initialize(app: Koatty) {
+  public static initialize(app: KoattyApplication) {
     const env = (process.execArgv ?? []).join(",");
     if (env.indexOf('ts-node') > -1 || env.indexOf('--debug') > -1) {
       app.appDebug = true;
@@ -101,12 +103,12 @@ export class Loader {
    * Get component metadata
    *
    * @static
-   * @param {Koatty} app
+   * @param {KoattyApplication} app
    * @param {*} target
    * @returns {*}  {any[]}
    * @memberof Loader
    */
-  public static GetComponentMetas(app: Koatty, target: any): any[] {
+  public static GetComponentMeta(app: KoattyApplication, target: any): any[] {
     let componentMetas = [];
     const componentMeta = IOCContainer.getClassMetadata(TAGGED_CLS, COMPONENT_SCAN, target);
     if (componentMeta) {
@@ -126,15 +128,15 @@ export class Loader {
    * Load all bean, excepted config/*、App.ts
    *
    * @static
-   * @param {Koatty} app
+   * @param {KoattyApplication} app
    * @param {*} target
    * @memberof Loader
    */
-  public static CheckAllComponents(app: Koatty, target: any) {
+  public static CheckAllComponents(app: KoattyApplication, target: any) {
     // component metadata
-    const componentMetas = Loader.GetComponentMetas(app, target);
+    const componentMetas = Loader.GetComponentMeta(app, target);
     // configuration metadata
-    const configurationMetas = Loader.GetConfigurationMetas(app, target);
+    const configurationMetas = Loader.GetConfigurationMeta(app, target);
     const exSet = new Set();
     Load(componentMetas, '', (fileName: string, xpath: string, xTarget: any) => {
       checkClass(fileName, xpath, xTarget, exSet);
@@ -146,12 +148,12 @@ export class Loader {
    * Get configuration metadata
    *
    * @static
-   * @param {Koatty} app
+   * @param {KoattyApplication} app
    * @param {*} target
    * @returns {*}  {any[]}
    * @memberof Loader
    */
-  public static GetConfigurationMetas(app: Koatty, target: any): any[] {
+  public static GetConfigurationMeta(app: KoattyApplication, target: any): any[] {
     const confMeta = IOCContainer.getClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, target);
     let configurationMetas = [];
     if (confMeta) {
@@ -168,10 +170,10 @@ export class Loader {
    * Set Logger level
    *
    * @static
-   * @param {Koatty} app
+   * @param {KoattyApplication} app
    * @memberof Loader
    */
-  public static SetLogger(app: Koatty) {
+  public static SetLogger(app: KoattyApplication) {
     const data = app.getMetaData('_configs') || [];
     const configs = data[0] || {};
     //Logger
@@ -201,11 +203,11 @@ export class Loader {
    * Load app event hook funcs
    *
    * @static
-   * @param {Koatty} app
+   * @param {KoattyApplication} app
    * @param {*} target
    * @memberof Loader
    */
-  public static LoadAppEventHooks(app: Koatty, target: any) {
+  public static LoadAppEventHooks(app: KoattyApplication, target: any) {
     const eventFuncs: Map<string, EventHookFunc[]> = new Map();
     for (const event of AppEventArr) {
       let funcs: unknown;
@@ -250,11 +252,11 @@ export class Loader {
    * Load configuration
    *
    * @static
-   * @param {Koatty} app
+   * @param {KoattyApplication} app
    * @param {string[]} [loadPath]
    * @memberof Loader
    */
-  public static LoadConfigs(app: Koatty, loadPath?: string[]) {
+  public static LoadConfigs(app: KoattyApplication, loadPath?: string[]) {
     const frameConfig: any = {};
     // Logger.Debug(`Load configuration path: ${app.thinkPath}/config`);
     Load(["./config"], app.koattyPath, function (name: string, path: string, exp: any) {
@@ -275,10 +277,10 @@ export class Loader {
    * [async]
    * @static
    * @param {*} app
-   * @param {(string | string[])} [loadPath]
+   * @param {(string | string[])} [_loadPath]
    * @memberof Loader
    */
-  public static async LoadMiddlewares(app: Koatty, loadPath?: string[]) {
+  public static async LoadMiddlewares(app: KoattyApplication, _loadPath?: string[]) {
     // Error handling middleware
     await TraceHandler(app);
 
@@ -340,10 +342,10 @@ export class Loader {
    * Load controllers
    *
    * @static
-   * @param {*} app
+   * @param {*} _app
    * @memberof Loader
    */
-  public static LoadControllers(app: Koatty) {
+  public static LoadControllers(_app: KoattyApplication) {
     const controllerList = IOCContainer.listClass("CONTROLLER");
 
     const controllers: string[] = [];
@@ -368,10 +370,10 @@ export class Loader {
    * Load services
    *
    * @static
-   * @param {*} app
+   * @param {*} _app
    * @memberof Loader
    */
-  public static LoadServices(app: Koatty) {
+  public static LoadServices(_app: KoattyApplication) {
     const serviceList = IOCContainer.listClass("SERVICE");
 
     serviceList.forEach((item: ComponentItem) => {
@@ -395,7 +397,7 @@ export class Loader {
    * @param {*} app
    * @memberof Loader
    */
-  public static async LoadComponents(app: Koatty) {
+  public static async LoadComponents(app: KoattyApplication) {
     const componentList = IOCContainer.listClass("COMPONENT");
 
     const pluginList = [];

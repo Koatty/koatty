@@ -8,13 +8,14 @@
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
-export * from "./core/Bootstrap";
-export * from "./component/Component";
-export * from "koatty_core";
+export { Config, Value } from "koatty_config";
 export * from "koatty_container";
+export * from "koatty_core";
 export * from "koatty_exception";
 export * from "koatty_router";
 export * from "koatty_serve";
-export { Value, Config } from "koatty_config";
+export * from "./component/Component";
+export * from "./core/Bootstrap";
 export { Helper } from "./util/Helper";
 export { Logger } from "./util/Logger";
+

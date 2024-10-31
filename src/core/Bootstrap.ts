@@ -3,21 +3,21 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2021-12-09 21:56:32
- * @LastEditTime: 2024-01-16 01:06:26
+ * @LastEditTime: 2024-10-31 17:51:33
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
 import EventEmitter from "events";
-import { NewRouter } from "koatty_router";
 import { IOCContainer, TAGGED_CLS } from "koatty_container";
-import { AppEvent, EventHookFunc, Koatty } from 'koatty_core';
+import { AppEvent, EventHookFunc, Koatty, KoattyApplication, KoattyServer } from 'koatty_core';
+import { NewRouter } from "koatty_router";
 import { BindProcessEvent, NewServe } from "koatty_serve";
-import { Loader } from "./Loader";
+import { checkRuntime, checkUTRuntime, KOATTY_VERSION } from "../util/Check";
 import { Helper } from "../util/Helper";
 import { Logger } from "../util/Logger";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
-import { checkRuntime, checkUTRuntime, KOATTY_VERSION } from "../util/Check";
+import { Loader } from "./Loader";
 
 /**
  * execute bootstrap
@@ -28,7 +28,7 @@ import { checkRuntime, checkUTRuntime, KOATTY_VERSION } from "../util/Check";
  * mainly for unittest scenarios, you need to actively obtain app instances
  * @returns {Promise<void>}
  */
-const executeBootstrap = async function (target: any, bootFunc: Function, isInitiative = false): Promise<Koatty> {
+const executeBootstrap = async function (target: any, bootFunc: Function, isInitiative = false): Promise<KoattyApplication> {
   // checked runtime
   checkRuntime();
   // unittest running environment
@@ -37,7 +37,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
     return;
   }
 
-  const app = <Koatty>Reflect.construct(target, []);
+  const app = <KoattyApplication>Reflect.construct(target, []);
   // unittest does not print startup logs
   if (isUTRuntime) {
     app.silent = true;
@@ -45,7 +45,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
   }
 
   try {
-    !app.silent && Logger.Log("Koatty", LOGO);
+    if (!app.silent) Logger.Log("Koatty", LOGO);
     if (!(app instanceof Koatty)) {
       throw new Error(`class ${target.name} does not inherit from Koatty`);
     }
@@ -70,8 +70,8 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
     // Load configuration
     Logger.Log('Koatty', '', 'Load Configurations ...');
     // configuration metadata
-    const configurationMetas = Loader.GetConfigurationMetas(app, target);
-    Loader.LoadConfigs(app, configurationMetas);
+    const configurationMeta = Loader.GetConfigurationMeta(app, target);
+    Loader.LoadConfigs(app, configurationMeta);
 
     // Load App event hooks
     Loader.LoadAppEventHooks(app, target);
@@ -123,25 +123,31 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
  * @param {Koatty} app
  * @returns {*} 
  */
-const listenCallback = (app: Koatty) => {
-  const options = app.server.options;
-
+const listenCallback = (app: KoattyApplication) => {
+  let servers: KoattyServer[] = [];
+  if (!Array.isArray(app.server)) {
+    servers = [app.server];
+  } else {
+    servers = app.server;
+  }
   Logger.Log('Koatty', '', '====================================');
   Logger.Log("Koatty", "", `Nodejs Version: ${process.version}`);
   Logger.Log("Koatty", "", `Koatty Version: v${KOATTY_VERSION}`);
   Logger.Log("Koatty", "", `App Environment: ${app.env}`);
-  Logger.Log('Koatty', '', `Server Protocol: ${(options.protocol).toUpperCase()}`);
-  Logger.Log("Koatty", "", `Server running at ${options.protocol === "http2" ? "https" : options.protocol}://${options.hostname || '127.0.0.1'}:${options.port}/`);
+  servers.forEach(s => {
+    Logger.Log('Koatty', '', `Server Protocol: ${(s.options.protocol).toUpperCase()}`);
+    Logger.Log("Koatty", "", `Server running at ${s.options.protocol === "http2" ? "https" :
+      s.options.protocol}://${s.options.hostname || '127.0.0.1'}:${s.options.port}/`);
+  });
+
   Logger.Log("Koatty", "", "====================================");
 
   // binding event "appStop"
   Logger.Log('Koatty', '', 'Bind App Stop event ...');
   BindProcessEvent(app, 'appStop');
-  // tslint:disable-next-line: no-unused-expression
-  app.appDebug && Logger.Warn(`Running in debug mode.`);
+  if (app.appDebug) Logger.Warn(`Running in debug mode.`);
   // Set Logger
   Loader.SetLogger(app);
-
 };
 
 /**
@@ -232,7 +238,7 @@ export function ConfigurationScan(scanPath?: string | string[]): ClassDecorator 
  * example:
  * export function TestDecorator(): ClassDecorator {
  *  return (target: Function) => {
- *   BindEventHook(AppEvent.appBoot, (app: Koatty) => {
+ *   BindEventHook(AppEvent.appBoot, (app: KoattyApplication) => {
  *      // todo
  *      return Promise.resolve();
  *   }, target)   
