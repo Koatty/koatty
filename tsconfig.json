@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
     /* Basic Options */
-    "target": "ES2021" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'. */,
-    "module": "CommonJS" /* Specify module code generation: 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */,
+    "target": "ESNext" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'. */,
+    "module": "ES2022" /* Specify module code generation: 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */,
     "lib": [
-      "ES2021"
+      "ES2022"
     ]
     /* Specify library files to be included in the compilation:  */ ,
     // "allowJs": true /* Allow javascript files to be compiled. */,
@@ -20,13 +20,12 @@
     // "noEmit": true /* Do not emit outputs. */,
     "importHelpers": true /* Import emit helpers from 'tslib'. */,
     "downlevelIteration": true /* Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'. */,
-    // "isolatedModules": true,               /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
+    "isolatedModules": false, /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
     /* Strict Type-Checking Options */
     "stripInternal": true, /* Enable all strict type-checking options. */
     "noImplicitAny": true /* Raise error on expressions and declarations with an implied 'any' type. */,
-    "strictNullChecks": false, /* Enable strict null checks. */
+    // "strictNullChecks": true,              /* Enable strict null checks. */
     "noImplicitThis": false /* Raise error on 'this' expressions with an implied 'any' type. */,
-    "strictFunctionTypes": false, /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
     // "alwaysStrict": true,                  /* Parse in strict mode and emit "use strict" for each source file. */
     "pretty": true, /* pretty source file. */
     /* Additional Checks */
@@ -44,7 +43,8 @@
       // "./typings/*"
     ] /* List of folders to include type definitions from. */,
     "types": [
-      "node"
+      "node",
+      "jest"
     ] /* Type declaration files to be included in compilation. */,
     "allowSyntheticDefaultImports": true /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */,
     "resolveJsonModule": true,

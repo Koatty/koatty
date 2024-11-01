@@ -3,18 +3,18 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 21:56:32
- * @LastEditTime: 2024-01-19 08:36:27
+ * @LastEditTime: 2024-11-01 09:43:09
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
 // tslint:disable-next-line: no-import-side-effect
-import "reflect-metadata";
-import { Middleware as KoaMiddleware, Next } from "koa";
-import { Koatty, KoattyContext, KoattyNext } from 'koatty_core';
-import { CONTROLLER_ROUTER } from "koatty_router";
+import { Next } from "koa";
 import { IAspect, IOCContainer } from "koatty_container";
+import { KoattyApplication, KoattyContext } from 'koatty_core';
 import { Helper } from "koatty_lib";
+import { CONTROLLER_ROUTER } from "koatty_router";
+import "reflect-metadata";
 
 /**
  * Indicates that an decorated class is a "component".
@@ -49,7 +49,7 @@ export function Controller(path = ""): ClassDecorator {
  * Interface for Controller
  */
 export interface IController {
-  readonly app: Koatty;
+  readonly app: KoattyApplication;
   readonly ctx: KoattyContext;
 
   // new(ctx: KoattyContext, ...arg: any[]): IController;
@@ -75,13 +75,13 @@ export function Middleware(identifier?: string): ClassDecorator {
 /**
  * Interface for Middleware
  */
-export interface KoattyMiddleware extends KoaMiddleware { }
+export type KoattyMiddleware = (ctx: KoattyContext, next: Next) => Promise<any>;
 
 /**
  * Interface for Middleware
  */
 export interface IMiddleware {
-  run: (options: any, app: Koatty) => (ctx: KoattyContext, next: Next) => Promise<any>;
+  run: (options: any, app: KoattyApplication) => KoattyMiddleware;
 }
 
 /**
@@ -102,7 +102,7 @@ export function Service(identifier?: string): ClassDecorator {
  * Interface for Service
  */
 export interface IService {
-  readonly app: Koatty;
+  readonly app: KoattyApplication;
 
   // init(...arg: any[]): void;
 }
@@ -129,7 +129,7 @@ export function Plugin(identifier?: string): ClassDecorator {
  * Interface for Plugin
  */
 export interface IPlugin {
-  run: (options: any, app: Koatty) => Promise<any>;
+  run: (options: any, app: KoattyApplication) => Promise<any>;
 }
 
 /**

@@ -1,11 +1,5 @@
-/*
- * @Description: 
- * @Usage: 
- * @Author: richen
- * @Date: 2023-11-08 15:25:22
- * @LastEditTime: 2023-12-11 05:17:55
- * @License: BSD (3-Clause)
- * @Copyright (c): <richenlin(at)gmail.com>
+/**
+ * 
  */
 module.exports = {
   root: true,
@@ -28,7 +22,7 @@ module.exports = {
   },
   rules: {
     "@typescript-eslint/no-explicit-any": "off",
-    // "@typescript-eslint/no-require-imports": "off",
+    "@typescript-eslint/no-require-imports": "warn",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/member-ordering": "off",
     "@typescript-eslint/consistent-type-assertions": "off",
@@ -36,14 +30,15 @@ module.exports = {
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/no-unused-vars": "warn",
-    "@typescript-eslint/ban-types": ["error",
+    "@typescript-eslint/no-unsafe-function-type": "warn",
+    "@typescript-eslint/ban-types": "off",
+    '@typescript-eslint/no-unused-vars': [
+      'error',
       {
-        "types": {
-          "Object": false,
-          "Function": false,
-        },
-        "extendDefaults": true
+        vars: 'all', // 检查所有变量
+        varsIgnorePattern: '^_', // 允许以 _ 开头的变量
+        args: 'after-used', // 仅检查被使用的参数
+        argsIgnorePattern: '^_', // 允许以 _ 开头的参数
       }
     ],
   },
