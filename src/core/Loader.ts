@@ -3,24 +3,22 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 22:55:49
- * @LastEditTime: 2024-10-31 17:52:06
+ * @LastEditTime: 2024-11-06 18:53:56
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
 import { LoadConfigs as loadConf } from "koatty_config";
-import { IOCContainer, TAGGED_CLS } from "koatty_container";
-import { AppEvent, AppEventArr, EventHookFunc, KoattyApplication } from 'koatty_core';
+import { IMiddleware, IOC, TAGGED_CLS } from "koatty_container";
+import {
+  AppEvent, AppEventArr, EventHookFunc, implementsAspectInterface,
+  implementsControllerInterface, implementsMiddlewareInterface,
+  implementsPluginInterface, implementsServiceInterface, IPlugin,
+  KoattyApplication
+} from 'koatty_core';
 import { prevent } from "koatty_exception";
 import { Load } from "koatty_loader";
 import * as path from "path";
-import {
-  IMiddleware,
-  implementsAspectInterface,
-  implementsControllerInterface, implementsMiddlewareInterface,
-  implementsPluginInterface, implementsServiceInterface,
-  IPlugin
-} from '../component/Component';
 import { checkClass, Helper } from "../util/Helper";
 import { Logger, LogLevelType, SetLogger } from "../util/Logger";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
@@ -110,7 +108,7 @@ export class Loader {
    */
   public static GetComponentMeta(app: KoattyApplication, target: any): any[] {
     let componentMetas = [];
-    const componentMeta = IOCContainer.getClassMetadata(TAGGED_CLS, COMPONENT_SCAN, target);
+    const componentMeta = IOC.getClassMetadata(TAGGED_CLS, COMPONENT_SCAN, target);
     if (componentMeta) {
       if (Helper.isArray(componentMeta)) {
         componentMetas = componentMeta;
@@ -154,7 +152,7 @@ export class Loader {
    * @memberof Loader
    */
   public static GetConfigurationMeta(app: KoattyApplication, target: any): any[] {
-    const confMeta = IOCContainer.getClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, target);
+    const confMeta = IOC.getClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, target);
     let configurationMetas = [];
     if (confMeta) {
       if (Helper.isArray(confMeta)) {
@@ -213,25 +211,25 @@ export class Loader {
       let funcs: unknown;
       switch (event) {
         case AppEvent.appBoot:
-          funcs = IOCContainer.getClassMetadata(TAGGED_CLS, AppEvent.appBoot, target);
+          funcs = IOC.getClassMetadata(TAGGED_CLS, AppEvent.appBoot, target);
           if (Helper.isArray(funcs)) {
             eventFuncs.set(AppEvent.appBoot, funcs);
           }
           break;
         case AppEvent.appReady:
-          funcs = IOCContainer.getClassMetadata(TAGGED_CLS, AppEvent.appReady, target);
+          funcs = IOC.getClassMetadata(TAGGED_CLS, AppEvent.appReady, target);
           if (Helper.isArray(funcs)) {
             eventFuncs.set(AppEvent.appReady, funcs);
           }
           break;
         case AppEvent.appStart:
-          funcs = IOCContainer.getClassMetadata(TAGGED_CLS, AppEvent.appStart, target);
+          funcs = IOC.getClassMetadata(TAGGED_CLS, AppEvent.appStart, target);
           if (Helper.isArray(funcs)) {
             eventFuncs.set(AppEvent.appStart, funcs);
           }
           break;
         case AppEvent.appStop:
-          funcs = IOCContainer.getClassMetadata(TAGGED_CLS, AppEvent.appStop, target);
+          funcs = IOC.getClassMetadata(TAGGED_CLS, AppEvent.appStop, target);
           if (Helper.isArray(funcs)) {
             eventFuncs.set(AppEvent.appStop, funcs);
           }
@@ -293,12 +291,12 @@ export class Loader {
     // Load(loadPath || ["./middleware"], app.koattyPath);
     //Mount application middleware
     // const middleware: any = {};
-    const appMiddleware = IOCContainer.listClass("MIDDLEWARE") ?? [];
+    const appMiddleware = IOC.listClass("MIDDLEWARE") ?? [];
     appMiddleware.forEach((item: ComponentItem) => {
       item.id = (item.id ?? "").replace("MIDDLEWARE:", "");
       if (item.id && Helper.isClass(item.target)) {
-        IOCContainer.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
-        const ctl = IOCContainer.getInsByClass(item.target);
+        IOC.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
+        const ctl = IOC.getInsByClass(item.target);
         if (!implementsMiddlewareInterface(ctl)) {
           throw Error(`The middleware ${item.id} must implements interface 'IMiddleware'.`);
         }
@@ -315,7 +313,7 @@ export class Loader {
     //Automatically call middleware
     const middlewareConfig = middlewareConf.config || {};
     for (const key of appMList) {
-      const handle: IMiddleware = IOCContainer.get(key, "MIDDLEWARE");
+      const handle: IMiddleware = IOC.get(key, "MIDDLEWARE");
       if (!handle) {
         throw Error(`Middleware ${key} load error.`);
       }
@@ -346,7 +344,7 @@ export class Loader {
    * @memberof Loader
    */
   public static LoadControllers(_app: KoattyApplication) {
-    const controllerList = IOCContainer.listClass("CONTROLLER");
+    const controllerList = IOC.listClass("CONTROLLER");
 
     const controllers: string[] = [];
     controllerList.forEach((item: ComponentItem) => {
@@ -354,8 +352,8 @@ export class Loader {
       if (item.id && Helper.isClass(item.target)) {
         Logger.Debug(`Load controller: ${item.id}`);
         // registering to IOC
-        IOCContainer.reg(item.id, item.target, { scope: "Prototype", type: "CONTROLLER", args: [] });
-        const ctl = IOCContainer.getInsByClass(item.target);
+        IOC.reg(item.id, item.target, { scope: "Prototype", type: "CONTROLLER", args: [] });
+        const ctl = IOC.getInsByClass(item.target);
         if (!implementsControllerInterface(ctl)) {
           throw Error(`The controller ${item.id} must implements interface 'IController'.`);
         }
@@ -374,15 +372,15 @@ export class Loader {
    * @memberof Loader
    */
   public static LoadServices(_app: KoattyApplication) {
-    const serviceList = IOCContainer.listClass("SERVICE");
+    const serviceList = IOC.listClass("SERVICE");
 
     serviceList.forEach((item: ComponentItem) => {
       item.id = (item.id ?? "").replace("SERVICE:", "");
       if (item.id && Helper.isClass(item.target)) {
         Logger.Debug(`Load service: ${item.id}`);
         // registering to IOC
-        IOCContainer.reg(item.id, item.target, { scope: "Singleton", type: "SERVICE", args: [] });
-        const ctl = IOCContainer.getInsByClass(item.target);
+        IOC.reg(item.id, item.target, { scope: "Singleton", type: "SERVICE", args: [] });
+        const ctl = IOC.getInsByClass(item.target);
         if (!implementsServiceInterface(ctl)) {
           throw Error(`The service ${item.id} must implements interface 'IService'.`);
         }
@@ -398,23 +396,23 @@ export class Loader {
    * @memberof Loader
    */
   public static async LoadComponents(app: KoattyApplication) {
-    const componentList = IOCContainer.listClass("COMPONENT");
+    const componentList = IOC.listClass("COMPONENT");
 
     const pluginList = [];
     componentList.forEach(async (item: ComponentItem) => {
       item.id = (item.id ?? "").replace("COMPONENT:", "");
       if (Helper.isClass(item.target)) {
         // registering to IOC
-        IOCContainer.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
+        IOC.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
         if (item.id && (item.id).endsWith("Plugin")) {
-          const ctl = IOCContainer.getInsByClass(item.target);
+          const ctl = IOC.getInsByClass(item.target);
           if (!implementsPluginInterface(ctl)) {
             throw Error(`The plugin ${item.id} must implements interface 'IPlugin'.`);
           }
           pluginList.push(item.id);
         }
         if (item.id && (item.id).endsWith("Aspect")) {
-          const ctl = IOCContainer.getInsByClass(item.target);
+          const ctl = IOC.getInsByClass(item.target);
           if (!implementsAspectInterface(ctl)) {
             throw Error(`The aspect ${item.id} must implements interface 'IAspect'.`);
           }
@@ -429,7 +427,7 @@ export class Loader {
     const pluginConfList = pluginsConf.list ?? [];
     // load plugin list
     for (const key of pluginConfList) {
-      const handle: IPlugin = IOCContainer.get(key, "COMPONENT");
+      const handle: IPlugin = IOC.get(key, "COMPONENT");
       if (!handle) {
         throw Error(`Plugin ${key} load error.`);
       }

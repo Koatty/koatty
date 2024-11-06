@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-readonly app: Koatty;
+readonly app: KoattyApplication;
 ```

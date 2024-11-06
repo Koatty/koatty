@@ -9,7 +9,7 @@
  */
 
 import EventEmitter from "events";
-import { IOCContainer, TAGGED_CLS } from "koatty_container";
+import { IOC, TAGGED_CLS } from "koatty_container";
 import { AppEvent, EventHookFunc, Koatty, KoattyApplication, KoattyServer } from 'koatty_core';
 import { NewRouter } from "koatty_router";
 import { BindProcessEvent, NewServe } from "koatty_serve";
@@ -59,8 +59,8 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
       await bootFunc(app);
     }
 
-    // Set IOCContainer.app
-    IOCContainer.setApp(app);
+    // Set IOC.app
+    IOC.setApp(app);
 
     Logger.Log('Koatty', '', 'ComponentScan ...');
 
@@ -212,7 +212,7 @@ export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
       throw new Error(`class does not inherit from Koatty`);
     }
     scanPath = scanPath ?? '';
-    IOCContainer.saveClassMetadata(TAGGED_CLS, COMPONENT_SCAN, scanPath, target);
+    IOC.saveClassMetadata(TAGGED_CLS, COMPONENT_SCAN, scanPath, target);
   };
 }
 
@@ -229,7 +229,7 @@ export function ConfigurationScan(scanPath?: string | string[]): ClassDecorator 
       throw new Error(`class does not inherit from Koatty`);
     }
     scanPath = scanPath ?? '';
-    IOCContainer.saveClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, scanPath, target);
+    IOC.saveClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, scanPath, target);
   };
 }
 
@@ -250,5 +250,5 @@ export function ConfigurationScan(scanPath?: string | string[]): ClassDecorator 
  * @return {*}
  */
 export function BindEventHook(eventName: AppEvent, eventFunc: EventHookFunc, target: any) {
-  IOCContainer.attachClassMetadata(TAGGED_CLS, eventName, eventFunc, target);
+  IOC.attachClassMetadata(TAGGED_CLS, eventName, eventFunc, target);
 }

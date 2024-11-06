@@ -4,7 +4,7 @@
 
 ## BindEventHook() function
 
-@<!-- -->description: bind App event hook func example: export function TestDecorator(): ClassDecorator { return (target: Function) =<!-- -->&gt; { BindEventHook(AppEvent.appBoot, (app: Koatty) =<!-- -->&gt; { // todo return Promise.resolve(); }<!-- -->, target) } }
+@<!-- -->description: bind App event hook func example: export function TestDecorator(): ClassDecorator { return (target: Function) =<!-- -->&gt; { BindEventHook(AppEvent.appBoot, (app: KoattyApplication) =<!-- -->&gt; { // todo return Promise.resolve(); }<!-- -->, target) } }
 
 **Signature:**
 

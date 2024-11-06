@@ -9,7 +9,7 @@ Actively perform dependency injection Parse the decorator, return the instantiat
 **Signature:**
 
 ```typescript
-export declare function ExecBootStrap(bootFunc?: Function): (target: any) => Promise<Koatty>;
+export declare function ExecBootStrap(bootFunc?: Function): (target: any) => Promise<KoattyApplication>;
 ```
 
 ## Parameters
@@ -20,6 +20,6 @@ export declare function ExecBootStrap(bootFunc?: Function): (target: any) => Pro
 
 **Returns:**
 
-(target: any) =&gt; Promise&lt;Koatty&gt;
+(target: any) =&gt; Promise&lt;KoattyApplication&gt;
 
 

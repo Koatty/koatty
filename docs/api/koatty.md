@@ -8,7 +8,7 @@
 
 |  Function | Description |
 |  --- | --- |
-|  [BindEventHook(eventName, eventFunc, target)](./koatty.bindeventhook.md) | @<!-- -->description: bind App event hook func example: export function TestDecorator(): ClassDecorator { return (target: Function) =<!-- -->&gt; { BindEventHook(AppEvent.appBoot, (app: Koatty) =<!-- -->&gt; { // todo return Promise.resolve(); }<!-- -->, target) } } |
+|  [BindEventHook(eventName, eventFunc, target)](./koatty.bindeventhook.md) | @<!-- -->description: bind App event hook func example: export function TestDecorator(): ClassDecorator { return (target: Function) =<!-- -->&gt; { BindEventHook(AppEvent.appBoot, (app: KoattyApplication) =<!-- -->&gt; { // todo return Promise.resolve(); }<!-- -->, target) } } |
 |  [Bootstrap(bootFunc)](./koatty.bootstrap.md) | <p>Bootstrap application</p> |
 |  [Component(identifier)](./koatty.component.md) | <p>Indicates that an decorated class is a "component".</p> |
 |  [ComponentScan(scanPath)](./koatty.componentscan.md) | <p>Define project scan path</p> |
@@ -32,11 +32,16 @@
 |  [IMiddleware](./koatty.imiddleware.md) | Interface for Middleware |
 |  [IPlugin](./koatty.iplugin.md) | Interface for Plugin |
 |  [IService](./koatty.iservice.md) | Interface for Service |
-|  [KoattyMiddleware](./koatty.koattymiddleware.md) | Interface for Middleware |
 
 ## Variables
 
 |  Variable | Description |
 |  --- | --- |
 |  [Logger](./koatty.logger.md) |  |
+
+## Type Aliases
+
+|  Type Alias | Description |
+|  --- | --- |
+|  [KoattyMiddleware](./koatty.koattymiddleware.md) | Interface for Middleware |
 

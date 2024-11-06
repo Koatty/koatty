@@ -16,5 +16,5 @@ export interface IPlugin
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [run](./koatty.iplugin.run.md) |  | (options: any, app: Koatty) =&gt; Promise&lt;any&gt; |  |
+|  [run](./koatty.iplugin.run.md) |  | (options: any, app: KoattyApplication) =&gt; Promise&lt;any&gt; |  |
 

@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-run: (options: any, app: Koatty) => (ctx: KoattyContext, next: Next) => Promise<any>;
+run: (options: any, app: KoattyApplication) => KoattyMiddleware;
 ```

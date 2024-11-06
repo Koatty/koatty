@@ -31,7 +31,6 @@ module.exports = {
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-unsafe-function-type": "warn",
-    "@typescript-eslint/ban-types": "off",
     '@typescript-eslint/no-unused-vars': [
       'error',
       {
