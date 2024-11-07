@@ -3,20 +3,19 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 22:55:49
- * @LastEditTime: 2024-11-06 18:53:56
+ * @LastEditTime: 2024-11-07 16:53:56
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
 import { LoadConfigs as loadConf } from "koatty_config";
-import { IMiddleware, IOC, TAGGED_CLS } from "koatty_container";
+import { IOC, TAGGED_CLS } from "koatty_container";
 import {
-  AppEvent, AppEventArr, EventHookFunc, implementsAspectInterface,
+  AppEvent, AppEventArr, EventHookFunc, IMiddleware, implementsAspectInterface,
   implementsControllerInterface, implementsMiddlewareInterface,
   implementsPluginInterface, implementsServiceInterface, IPlugin,
   KoattyApplication
 } from 'koatty_core';
-import { prevent } from "koatty_exception";
 import { Load } from "koatty_loader";
 import * as path from "path";
 import { checkClass, Helper } from "../util/Helper";
@@ -91,7 +90,6 @@ export class Loader {
     process.env.KOATTY_PATH = koattyPath;
 
     // Compatible with old version, will be deprecated
-    Helper.define(app, 'prevent', prevent);
     Helper.define(app, 'thinkPath', koattyPath);
     process.env.THINK_PATH = koattyPath;
 

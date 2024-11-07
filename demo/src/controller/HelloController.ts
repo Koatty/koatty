@@ -3,15 +3,15 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:24:25
- * @LastEditTime: 2024-11-06 18:44:49
+ * @LastEditTime: 2024-11-07 16:52:05
  */
 
+import { Validated } from 'koatty_validation';
 import {
-  Controller,
   ComponentType,
+  Controller,
   KoattyContext,
   RequestBody,
-  Validated,
   RequestMapping,
 } from '../../../src/index';
 import { App } from '../App';
