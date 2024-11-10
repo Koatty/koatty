@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 22:55:49
- * @LastEditTime: 2024-11-07 16:53:56
+ * @LastEditTime: 2024-11-11 00:10:36
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -21,7 +21,6 @@ import * as path from "path";
 import { checkClass, Helper } from "../util/Helper";
 import { Logger, LogLevelType, SetLogger } from "../util/Logger";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
-import { TraceHandler } from "./Trace";
 
 /**
  *
@@ -277,9 +276,6 @@ export class Loader {
    * @memberof Loader
    */
   public static async LoadMiddlewares(app: KoattyApplication, _loadPath?: string[]) {
-    // Error handling middleware
-    await TraceHandler(app);
-
     let middlewareConf = app.config(undefined, "middleware");
     if (Helper.isEmpty(middlewareConf)) {
       middlewareConf = { config: {}, list: [] };

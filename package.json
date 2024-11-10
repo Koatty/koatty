@@ -60,6 +60,7 @@
     "@rollup/plugin-commonjs": "^28.x.x",
     "@rollup/plugin-json": "^6.x.x",
     "@rollup/plugin-node-resolve": "^15.x.x",
+    "@types/formidable": "^3.x.x",
     "@types/jest": "^29.x.x",
     "@types/koa": "^2.x.x",
     "@types/koa-compose": "^3.x.x",
