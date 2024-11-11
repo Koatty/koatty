@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2021-12-09 21:56:32
- * @LastEditTime: 2024-10-31 17:51:33
+ * @LastEditTime: 2024-11-11 18:51:13
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -12,7 +12,7 @@ import EventEmitter from "events";
 import { IOC, TAGGED_CLS } from "koatty_container";
 import { AppEvent, EventHookFunc, Koatty, KoattyApplication, KoattyServer } from 'koatty_core';
 import { NewRouter } from "koatty_router";
-import { BindProcessEvent, NewServe } from "koatty_serve";
+import { NewServe } from "koatty_serve";
 import { checkRuntime, checkUTRuntime, KOATTY_VERSION } from "../util/Check";
 import { Helper } from "../util/Helper";
 import { Logger } from "../util/Logger";
@@ -135,16 +135,12 @@ const listenCallback = (app: KoattyApplication) => {
   Logger.Log("Koatty", "", `Koatty Version: v${KOATTY_VERSION}`);
   Logger.Log("Koatty", "", `App Environment: ${app.env}`);
   servers.forEach(s => {
-    Logger.Log('Koatty', '', `Server Protocol: ${(s.options.protocol).toUpperCase()}`);
-    Logger.Log("Koatty", "", `Server running at ${s.options.protocol === "http2" ? "https" :
-      s.options.protocol}://${s.options.hostname || '127.0.0.1'}:${s.options.port}/`);
+    Logger.Log('Koatty', '', `Server: ${(s.options.protocol).toUpperCase()} running at ${s.options.protocol === "http2" ?
+      "https" : s.options.protocol}://${s.options.hostname || '127.0.0.1'}:${s.options.port}/`);
   });
 
   Logger.Log("Koatty", "", "====================================");
 
-  // binding event "appStop"
-  Logger.Log('Koatty', '', 'Bind App Stop event ...');
-  BindProcessEvent(app, 'appStop');
   if (app.appDebug) Logger.Warn(`Running in debug mode.`);
   // Set Logger
   Loader.SetLogger(app);
