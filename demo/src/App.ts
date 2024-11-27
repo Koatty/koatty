@@ -3,11 +3,11 @@
  * @Usage: 实例化app，创建服务
  * @Author: richen
  * @Date: 2020-12-22 15:35:07
- * @LastEditTime: 2023-11-08 15:18:22
+ * @LastEditTime: 2024-11-20 10:01:14
  */
 
-import { Koatty, Bootstrap } from "../../src/index";
 import * as path from 'path';
+import { Bootstrap, Koatty } from "../../src/index";
 import { TestBootStrap } from "./bootstrap/TestBootStrap";
 
 // bootstrap function
