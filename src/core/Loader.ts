@@ -68,7 +68,7 @@ export class Loader {
 
     // define path
     const rootPath = app.rootPath || process.cwd();
-    const appPath = app.appPath || path.resolve(rootPath, env.indexOf('ts-node') > -1 ? 'src' : 'dist');
+    const appPath = app.appPath || path.resolve(rootPath, app.appDebug ? 'src' : 'dist');
     const koattyPath = path.resolve(__dirname, '..');
     Helper.define(app, 'rootPath', rootPath);
     Helper.define(app, 'appPath', appPath);
