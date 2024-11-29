@@ -17,7 +17,6 @@
     "release:major": "npm run release -- --release-as major",
     "release:minor": "npm run release -- --release-as minor",
     "test": "npm run eslint && jest --passWithNoTests",
-    "tsc": "tsc",
     "test:cov": "jest --collectCoverage --detectOpenHandles",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
