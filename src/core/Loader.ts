@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 22:55:49
- * @LastEditTime: 2024-11-11 00:10:36
+ * @LastEditTime: 2024-11-29 17:22:46
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -436,6 +436,14 @@ export class Loader {
       // sync exec 
       await handle.run(pluginsConf.config[key] ?? {}, app);
     }
+  }
+
+  public static LoadRouter(app: KoattyApplication, ctls: string[]) {
+    // load router
+    app.on(AppEvent.appReady, async () => {
+      Logger.Log('Koatty', '', 'Load Routers ...');
+      await app.router.LoadRouter(app, ctls);
+    })
   }
 }
 

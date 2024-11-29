@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2021-12-09 21:56:32
- * @LastEditTime: 2024-11-11 18:51:13
+ * @LastEditTime: 2024-11-29 11:37:07
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -79,11 +79,15 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
     await asyncEvent(app, AppEvent.appBoot);
 
     // Create Server
-    // app.server = newServe(app);
-    Helper.define(app, "server", NewServe(app));
+    const serveOpts = {
+      hostname: app.config('app_host'),
+      port: app.config('app_port'),
+      protocol: app.config('protocol'),
+    };
+    Helper.define(app, "server", NewServe(app, serveOpts));
     // Create router
-    // app.router = newRouter(app);
-    Helper.define(app, "router", NewRouter(app));
+    const routerOpts = app.config(undefined, 'router') ?? {};
+    Helper.define(app, "router", NewRouter(app, routerOpts));
     // Load Components
     Logger.Log('Koatty', '', 'Load Components ...');
     await Loader.LoadComponents(app);
@@ -97,13 +101,12 @@ const executeBootstrap = async function (target: any, bootFunc: Function, isInit
     Logger.Log('Koatty', '', 'Load Controllers ...');
     const controllers = Loader.LoadControllers(app);
 
+    // Load Routers
+    Loader.LoadRouter(app, controllers);
+
     // Emit app ready event
     Logger.Log('Koatty', '', 'Emit App Ready ...');
     await asyncEvent(app, AppEvent.appReady);
-
-    // Load Routers
-    Logger.Log('Koatty', '', 'Load Routers ...');
-    app.router.LoadRouter(app, controllers);
 
     if (!isUTRuntime) {
       // Start Server

@@ -15,12 +15,12 @@
     "sourceMap": true /* Generates corresponding '.map' file. */,
     // "outFile": "./",                       /* Concatenate and emit output to single file. */
     "outDir": "./temp" /* Redirect output structure to the directory. */,
-    // "rootDir": "./",                       /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+    "rootDir": "./src", /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
     "removeComments": false /* Do not emit comments to output. */,
     // "noEmit": true /* Do not emit outputs. */,
     "importHelpers": true /* Import emit helpers from 'tslib'. */,
     "downlevelIteration": true /* Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'. */,
-    "isolatedModules": false, /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
+    // "isolatedModules": true,               /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
     /* Strict Type-Checking Options */
     "stripInternal": true, /* Enable all strict type-checking options. */
     "noImplicitAny": true /* Raise error on expressions and declarations with an implied 'any' type. */,
@@ -43,8 +43,7 @@
       // "./typings/*"
     ] /* List of folders to include type definitions from. */,
     "types": [
-      "node",
-      "jest"
+      "node"
     ] /* Type declaration files to be included in compilation. */,
     "allowSyntheticDefaultImports": true /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */,
     "resolveJsonModule": true,

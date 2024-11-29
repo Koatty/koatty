@@ -14,12 +14,67 @@ export declare function BindEventHook(eventName: AppEvent, eventFunc: EventHookF
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  eventName | AppEvent |  |
-|  eventFunc | EventHookFunc |  |
-|  target | any |  {<!-- -->\*<!-- -->} |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+eventName
+
+
+</td><td>
+
+AppEvent
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+eventFunc
+
+
+</td><td>
+
+EventHookFunc
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+target
+
+
+</td><td>
+
+any
+
+
+</td><td>
+
+ {<!-- -->\*<!-- -->}
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 void
