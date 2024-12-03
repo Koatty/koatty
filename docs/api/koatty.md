@@ -35,7 +35,7 @@ Description
 
 </td><td>
 
-Bootstrap application
+Bootstrap application decorator
 
 
 

@@ -4,7 +4,7 @@
 
 ## Bootstrap() function
 
-Bootstrap application
+Bootstrap application decorator
 
 
 **Signature:**
