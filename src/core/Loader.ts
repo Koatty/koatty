@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 22:55:49
- * @LastEditTime: 2024-11-29 17:22:46
+ * @LastEditTime: 2024-11-29 18:20:23
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -17,6 +17,8 @@ import {
   KoattyApplication
 } from 'koatty_core';
 import { Load } from "koatty_loader";
+import { NewRouter } from "koatty_router";
+import { NewServe } from "koatty_serve";
 import * as path from "path";
 import { checkClass, Helper } from "../util/Helper";
 import { Logger, LogLevelType, SetLogger } from "../util/Logger";
@@ -36,6 +38,16 @@ interface ComponentItem {
  * 
  */
 export class Loader {
+  app: KoattyApplication;
+
+  /**
+   * Creates an instance of Loader.
+   * @param {KoattyApplication} app
+   * @memberof Loader
+   */
+  constructor(app: KoattyApplication) {
+    this.app = app;
+  }
 
   /**
    * initialize env
@@ -120,26 +132,6 @@ export class Loader {
   }
 
   /**
-   * Load all bean, excepted config/*、App.ts
-   *
-   * @static
-   * @param {KoattyApplication} app
-   * @param {*} target
-   * @memberof Loader
-   */
-  public static CheckAllComponents(app: KoattyApplication, target: any) {
-    // component metadata
-    const componentMetas = Loader.GetComponentMeta(app, target);
-    // configuration metadata
-    const configurationMetas = Loader.GetConfigurationMeta(app, target);
-    const exSet = new Set();
-    Load(componentMetas, '', (fileName: string, xpath: string, xTarget: any) => {
-      checkClass(fileName, xpath, xTarget, exSet);
-    }, ['**/**.js', '**/**.ts', '!**/**.d.ts'], [...configurationMetas, `${target.name || '.no'}.ts`]);
-    exSet.clear();
-  }
-
-  /**
    * Get configuration metadata
    *
    * @static
@@ -159,6 +151,26 @@ export class Loader {
       }
     }
     return configurationMetas;
+  }
+
+  /**
+   * Load all bean, excepted config/*、App.ts
+   *
+   * @static
+   * @param {KoattyApplication} app
+   * @param {*} target
+   * @memberof Loader
+   */
+  public static CheckAllComponents(app: KoattyApplication, target: any) {
+    // component metadata
+    const componentMetas = Loader.GetComponentMeta(app, target);
+    // configuration metadata
+    const configurationMetas = Loader.GetConfigurationMeta(app, target);
+    const exSet = new Set();
+    Load(componentMetas, '', (fileName: string, xpath: string, xTarget: any) => {
+      checkClass(fileName, xpath, xTarget, exSet);
+    }, ['**/**.js', '**/**.ts', '!**/**.d.ts'], [...configurationMetas, `${target.name || '.no'}.ts`]);
+    exSet.clear();
   }
 
   /**
@@ -192,7 +204,6 @@ export class Loader {
       SetLogger(app, { logLevel, logFilePath, sensFields });
     }
   }
-
 
   /**
    * Load app event hook funcs
@@ -244,39 +255,74 @@ export class Loader {
   }
 
   /**
+   * LoadAllComponents
+   */
+  public static async LoadAllComponents(app: KoattyApplication, target: any) {
+    // Load configuration
+    Logger.Log('Koatty', '', 'Load Configurations ...');
+    // configuration metadata
+    const configurationMeta = Loader.GetConfigurationMeta(app, target);
+    const loader = new Loader(app);
+    loader.LoadConfigs(configurationMeta);
+
+    // Create Server
+    const serveOpts = {
+      hostname: app.config('app_host'),
+      port: app.config('app_port'),
+      protocol: app.config('protocol'),
+    };
+    Helper.define(app, "server", NewServe(app, serveOpts));
+    // Create router
+    const routerOpts = app.config(undefined, 'router') ?? {};
+    Helper.define(app, "router", NewRouter(app, routerOpts));
+
+    // Load Components
+    Logger.Log('Koatty', '', 'Load Components ...');
+    await loader.LoadComponents();
+    // Load Middleware
+    Logger.Log('Koatty', '', 'Load Middlewares ...');
+    await loader.LoadMiddlewares();
+    // Load Services
+    Logger.Log('Koatty', '', 'Load Services ...');
+    await loader.LoadServices();
+    // Load Controllers
+    Logger.Log('Koatty', '', 'Load Controllers ...');
+    const controllers = await loader.LoadControllers();
+
+    // Load Routers
+    Logger.Log('Koatty', '', 'Load Routers ...');
+    loader.LoadRouter(controllers);
+  }
+
+  /**
    * Load configuration
    *
-   * @static
-   * @param {KoattyApplication} app
    * @param {string[]} [loadPath]
    * @memberof Loader
    */
-  public static LoadConfigs(app: KoattyApplication, loadPath?: string[]) {
+  protected LoadConfigs(loadPath?: string[]) {
     const frameConfig: any = {};
     // Logger.Debug(`Load configuration path: ${app.thinkPath}/config`);
-    Load(["./config"], app.koattyPath, function (name: string, path: string, exp: any) {
+    Load(["./config"], this.app.koattyPath, function (name: string, path: string, exp: any) {
       frameConfig[name] = exp;
     });
 
     if (Helper.isArray(loadPath)) {
       loadPath = loadPath.length > 0 ? loadPath : ["./config"];
     }
-    let appConfig = loadConf(loadPath, app.appPath);
+    let appConfig = loadConf(loadPath, this.app.appPath);
     appConfig = Helper.extend(frameConfig, appConfig, true);
 
-    app.setMetaData("_configs", appConfig);
+    this.app.setMetaData("_configs", appConfig);
   }
 
   /**
    * Load middlewares
    * [async]
-   * @static
-   * @param {*} app
-   * @param {(string | string[])} [_loadPath]
    * @memberof Loader
    */
-  public static async LoadMiddlewares(app: KoattyApplication, _loadPath?: string[]) {
-    let middlewareConf = app.config(undefined, "middleware");
+  protected async LoadMiddlewares() {
+    let middlewareConf = this.app.config(undefined, "middleware");
     if (Helper.isEmpty(middlewareConf)) {
       middlewareConf = { config: {}, list: [] };
     }
@@ -319,12 +365,12 @@ export class Loader {
         continue;
       }
       Logger.Debug(`Load middleware: ${key}`);
-      const result = await handle.run(middlewareConfig[key] || {}, app);
+      const result = await handle.run(middlewareConfig[key] || {}, this.app);
       if (Helper.isFunction(result)) {
         if (result.length < 3) {
-          app.use(result);
+          this.app.use(result);
         } else {
-          app.useExp(result);
+          this.app.useExp(result);
         }
       }
     }
@@ -333,11 +379,9 @@ export class Loader {
   /**
    * Load controllers
    *
-   * @static
-   * @param {*} _app
    * @memberof Loader
    */
-  public static LoadControllers(_app: KoattyApplication) {
+  protected async LoadControllers() {
     const controllerList = IOC.listClass("CONTROLLER");
 
     const controllers: string[] = [];
@@ -361,11 +405,9 @@ export class Loader {
   /**
    * Load services
    *
-   * @static
-   * @param {*} _app
    * @memberof Loader
    */
-  public static LoadServices(_app: KoattyApplication) {
+  protected async LoadServices() {
     const serviceList = IOC.listClass("SERVICE");
 
     serviceList.forEach((item: ComponentItem) => {
@@ -385,11 +427,9 @@ export class Loader {
   /**
    * Load components
    *
-   * @static
-   * @param {*} app
    * @memberof Loader
    */
-  public static async LoadComponents(app: KoattyApplication) {
+  protected async LoadComponents() {
     const componentList = IOC.listClass("COMPONENT");
 
     const pluginList = [];
@@ -414,7 +454,7 @@ export class Loader {
       }
     });
     // load plugin config
-    let pluginsConf = app.config(undefined, "plugin");
+    let pluginsConf = this.app.config(undefined, "plugin");
     if (Helper.isEmpty(pluginsConf)) {
       pluginsConf = { config: {}, list: [] };
     }
@@ -434,16 +474,18 @@ export class Loader {
       }
 
       // sync exec 
-      await handle.run(pluginsConf.config[key] ?? {}, app);
+      await handle.run(pluginsConf.config[key] ?? {}, this.app);
     }
   }
 
-  public static LoadRouter(app: KoattyApplication, ctls: string[]) {
+  /**
+   * @description: load router
+   * @param {string} ctls
+   * @return {*}
+   */
+  protected async LoadRouter(ctls: string[]) {
     // load router
-    app.on(AppEvent.appReady, async () => {
-      Logger.Log('Koatty', '', 'Load Routers ...');
-      await app.router.LoadRouter(app, ctls);
-    })
+    await this.app.router.LoadRouter(this.app, ctls);
   }
 }
 
