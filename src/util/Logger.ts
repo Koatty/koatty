@@ -3,13 +3,13 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 21:56:32
- * @LastEditTime: 2023-12-09 23:02:27
+ * @LastEditTime: 2024-10-31 17:52:43
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
 
-import { Koatty } from "koatty_core";
+import { KoattyApplication } from "koatty_core";
 import { Helper } from "koatty_lib";
 import { DefaultLogger, LogLevelType } from "koatty_logger";
 
@@ -27,7 +27,7 @@ export { ILogger, LogLevelType } from "koatty_logger";
  *     sensFields?: string[];
  * }} config
  */
-export function SetLogger(app: Koatty, config: {
+export function SetLogger(app: KoattyApplication, config: {
   logLevel?: LogLevelType;
   logFilePath?: string;
   sensFields?: string[];

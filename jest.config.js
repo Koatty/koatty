@@ -24,6 +24,7 @@ module.exports = {
     'jest-html-reporters'
   ], // 测试用例报告
   collectCoverage: true, // 是否收集测试时的覆盖率信息
+  clearMocks: true,
   coverageReporters: [
     'html',
     'lcov',

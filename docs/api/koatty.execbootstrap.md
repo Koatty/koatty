@@ -9,17 +9,46 @@ Actively perform dependency injection Parse the decorator, return the instantiat
 **Signature:**
 
 ```typescript
-export declare function ExecBootStrap(bootFunc?: Function): (target: any) => Promise<Koatty>;
+export declare function ExecBootStrap(bootFunc?: Function): (target: any) => Promise<KoattyApplication>;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  bootFunc | Function | _(Optional)_ callback function |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+bootFunc
+
+
+</td><td>
+
+Function
+
+
+</td><td>
+
+_(Optional)_ callback function
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
-(target: any) =&gt; Promise&lt;Koatty&gt;
+(target: any) =&gt; Promise&lt;KoattyApplication&gt;
 
 

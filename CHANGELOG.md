@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.11.6](https://github.com/thinkkoa/koatty/compare/v3.11.4-2...v3.11.6) (2024-12-05)
+
+
+### Bug Fixes
+
+* 暂存 ([4ba0d2b](https://github.com/thinkkoa/koatty/commit/4ba0d2b625a4a329d620a487456452907db9bc91))
+* apppath changed in debug mod ([95e0d7b](https://github.com/thinkkoa/koatty/commit/95e0d7b22387da1ecbce5cc0d6faccdb70aee179))
+* module ([25a7d7a](https://github.com/thinkkoa/koatty/commit/25a7d7a6a7cb58096907da7aeb6babc0ce2097fc))
+
+### [3.11.4-2](https://github.com/thinkkoa/koatty/compare/v3.11.4-1...v3.11.4-2) (2024-04-14)
+
+### [3.11.4-1](https://github.com/thinkkoa/koatty/compare/v3.11.4-0...v3.11.4-1) (2024-04-01)
+
+### [3.11.4-0](https://github.com/thinkkoa/koatty/compare/v3.11.3...v3.11.4-0) (2024-03-15)
+
+### [3.11.3](https://github.com/thinkkoa/koatty/compare/v3.11.2...v3.11.3) (2024-03-15)
+
+
+### Bug Fixes
+
+* output迁移到exception库 ([e59428e](https://github.com/thinkkoa/koatty/commit/e59428e11687c0388089b82e80d6dece17fe7b07))
+
 ### [3.11.2](https://github.com/thinkkoa/koatty/compare/v3.11.2-8...v3.11.2) (2024-02-02)
 
 

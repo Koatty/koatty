@@ -4,45 +4,99 @@
 
 ## koatty package
 
-## Classes
-
-|  Class | Description |
-|  --- | --- |
-|  [Output](./koatty.output.md) |  |
-
 ## Functions
 
-|  Function | Description |
-|  --- | --- |
-|  [BindEventHook(eventName, eventFunc, target)](./koatty.bindeventhook.md) | @<!-- -->description: bind App event hook func example: export function TestDecorator(): ClassDecorator { return (target: Function) =<!-- -->&gt; { BindEventHook(AppEvent.appBoot, (app: Koatty) =<!-- -->&gt; { // todo return Promise.resolve(); }<!-- -->, target) } } |
-|  [Bootstrap(bootFunc)](./koatty.bootstrap.md) | <p>Bootstrap application</p> |
-|  [Component(identifier)](./koatty.component.md) | <p>Indicates that an decorated class is a "component".</p> |
-|  [ComponentScan(scanPath)](./koatty.componentscan.md) | <p>Define project scan path</p> |
-|  [ConfigurationScan(scanPath)](./koatty.configurationscan.md) | <p>Define project configuration scan path</p> |
-|  [Controller(path)](./koatty.controller.md) | <p>Indicates that an decorated class is a "controller".</p> |
-|  [ExecBootStrap(bootFunc)](./koatty.execbootstrap.md) | Actively perform dependency injection Parse the decorator, return the instantiated app.  ExecBootStrap |
-|  [implementsAspectInterface(cls)](./koatty.implementsaspectinterface.md) | check is implements Aspect Interface |
-|  [implementsControllerInterface(cls)](./koatty.implementscontrollerinterface.md) | check is implements Controller Interface |
-|  [implementsMiddlewareInterface(cls)](./koatty.implementsmiddlewareinterface.md) | check is implements Middleware Interface |
-|  [implementsPluginInterface(cls)](./koatty.implementsplugininterface.md) | check is implements Plugin Interface |
-|  [implementsServiceInterface(cls)](./koatty.implementsserviceinterface.md) | check is implements Service Interface |
-|  [Middleware(identifier)](./koatty.middleware.md) | <p>Indicates that an decorated class is a "middleware".</p> |
-|  [Plugin(identifier)](./koatty.plugin.md) | <p>Indicates that an decorated class is a "plugin".</p> |
-|  [Service(identifier)](./koatty.service.md) | <p>Indicates that an decorated class is a "service".</p> |
+<table><thead><tr><th>
 
-## Interfaces
+Function
 
-|  Interface | Description |
-|  --- | --- |
-|  [IController](./koatty.icontroller.md) | Interface for Controller |
-|  [IMiddleware](./koatty.imiddleware.md) | Interface for Middleware |
-|  [IPlugin](./koatty.iplugin.md) | Interface for Plugin |
-|  [IService](./koatty.iservice.md) | Interface for Service |
-|  [KoattyMiddleware](./koatty.koattymiddleware.md) | Interface for Middleware |
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[BindEventHook(eventName, eventFunc, target)](./koatty.bindeventhook.md)
+
+
+</td><td>
+
+@<!-- -->description: bind App event hook func example: export function TestDecorator(): ClassDecorator { return (target: Function) =<!-- -->&gt; { BindEventHook(AppEvent.appBoot, (app: KoattyApplication) =<!-- -->&gt; { // todo return Promise.resolve(); }<!-- -->, target) } }
+
+
+</td></tr>
+<tr><td>
+
+[Bootstrap(bootFunc)](./koatty.bootstrap.md)
+
+
+</td><td>
+
+Bootstrap application decorator
+
+
+
+</td></tr>
+<tr><td>
+
+[ComponentScan(scanPath)](./koatty.componentscan.md)
+
+
+</td><td>
+
+Define project scan path
+
+
+
+</td></tr>
+<tr><td>
+
+[ConfigurationScan(scanPath)](./koatty.configurationscan.md)
+
+
+</td><td>
+
+Define project configuration scan path
+
+
+
+</td></tr>
+<tr><td>
+
+[ExecBootStrap(bootFunc)](./koatty.execbootstrap.md)
+
+
+</td><td>
+
+Actively perform dependency injection Parse the decorator, return the instantiated app.  ExecBootStrap
+
+
+</td></tr>
+</tbody></table>
 
 ## Variables
 
-|  Variable | Description |
-|  --- | --- |
-|  [Logger](./koatty.logger.md) |  |
+<table><thead><tr><th>
 
+Variable
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[Logger](./koatty.logger.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

@@ -3,22 +3,27 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:24:25
- * @LastEditTime: 2024-01-04 07:45:42
+ * @LastEditTime: 2024-11-13 10:11:21
  */
 
+import { Validated } from 'koatty_validation';
 import {
-  KoattyContext, Controller, Autowired, RequestMapping,
-  RequestBody, IController
+  ComponentType,
+  Controller,
+  KoattyContext,
+  PostMapping,
+  RequestBody
 } from '../../../src/index';
 import { App } from '../App';
-import { SayHelloRequestDto } from '../dto/SayHelloRequestDto';
 import { SayHelloReplyDto } from '../dto/SayHelloReplyDto';
-import { Validated } from 'koatty_validation';
+import { SayHelloRequestDto } from '../dto/SayHelloRequestDto';
 
 @Controller('/Hello') // Consistent with proto.service name
 export class HelloController {
   app: App;
   ctx: KoattyContext;
+
+  comType: ComponentType;
 
   /**
    * constructor
@@ -35,11 +40,13 @@ export class HelloController {
    * @param {SayHelloRequestDto} data
    * @returns
    */
-  @RequestMapping('/SayHello') // Consistent with proto.service.method name
+  @PostMapping('/SayHello') // Consistent with proto.service.method name
   @Validated()
   SayHello(@RequestBody() params: SayHelloRequestDto): Promise<SayHelloReplyDto> {
     const res = new SayHelloReplyDto();
     res.message = params.name;
+    throw new Error("xxxx");
+
     return Promise.resolve(res);
   }
 

@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2022-02-14 11:26:20
- * @LastEditTime: 2024-02-02 09:38:35
+ * @LastEditTime: 2024-11-07 18:50:12
  */
 
 import { KoattyContext } from "koatty_core";
@@ -26,8 +26,7 @@ export class BussinessException extends Exception {
         contentType = `${contentType}; charset=${ctx.encoding}`;
       }
       ctx.type = contentType;
-      const body = JSON.stringify(ctx.body || "");
-      return this.output(ctx, body);
+      return this.output(ctx);
     } catch (error) {
       Logger.Error(error);
     }

@@ -81,6 +81,11 @@ export class IndexController {
         this.ctx = ctx;
     }
 
+    @GetMapping('/')
+    index() {
+        return Output.ok("Hello, koatty!");
+    }
+
     @RequestMapping("/:name", RequestMethod.ALL)
     async default(@PathVariable("name") @Valid("IsNotEmpty") name: string) {
         try {
@@ -110,21 +115,25 @@ import { App } from '../src/App';
 
 describe('UT example', () => {
 
-  let server: any;
+  let app: KoattyApplication;
   beforeAll(async () => {
     jest.useFakeTimers();
-    const appInstance = await ExecBootStrap()(App);
-    server = await appInstance.listen();
+    // test env
+    process.env.KOATTY_ENV = 'ts-node';
+    app = await ExecBootStrap()(App);
+    // app.use(async (ctx: any) => {
+    //   ctx.body = 'Hello, World!';
+    // });
   });
 
   afterAll(done => {
-    server.close();
     done();
+    jest.clearAllMocks();
   });
 
   it('request', async () => {
-    const rsp = await request(server).get('/');
-    expect(rsp.status).toBe(200);
+    const res = await request(app.callback()).get('/');
+    expect(res.status).toBe(200);
   });
 });
 

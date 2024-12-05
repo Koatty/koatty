@@ -4,7 +4,7 @@
 
 ## Bootstrap() function
 
-Bootstrap application
+Bootstrap application decorator
 
 
 **Signature:**
@@ -15,10 +15,39 @@ export declare function Bootstrap(bootFunc?: Function): ClassDecorator;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  bootFunc | Function | _(Optional)_ |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+bootFunc
+
+
+</td><td>
+
+Function
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 ClassDecorator
