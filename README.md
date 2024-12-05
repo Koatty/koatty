@@ -14,7 +14,7 @@ Use Typescript's decorator implement IOC and AOP.
 * graceful shutdown and pre-exit event.✔️
 * custom decorator based on app events.✔️
 * GraphQL supporting. 💪
-* Multi-protocol server. 💪
+* OpenTelemetry . 💪
 
 
 ## Documentation
