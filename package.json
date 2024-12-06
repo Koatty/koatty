@@ -67,6 +67,7 @@
     "@types/lodash": "^4.x.x",
     "@types/node": "^22.x.x",
     "@types/on-finished": "^2.x.x",
+    "@types/supertest": "^6.x.x",
     "@types/ws": "^8.x.x",
     "@typescript-eslint/eslint-plugin": "^8.x.x",
     "@typescript-eslint/parser": "^8.x.x",
