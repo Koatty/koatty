@@ -1,6 +1,6 @@
 {
   "name": "koatty",
-  "version": "3.11.6",
+  "version": "3.11.7",
   "description": "Koa2 + Typescript = koatty. Use Typescript's decorator implement auto injection.",
   "scripts": {
     "build": "npm run build:js && npm run build:dts && npm run build:doc && npm run build:cp",
@@ -9,7 +9,7 @@
     "build:doc": "npx api-documenter markdown --input temp --output docs/api",
     "build:dts": "npx tsc && npx api-extractor run --local --verbose",
     "eslint": "eslint --ext .ts,.js ./",
-    "lock": "npx del-cli --force node_modules && npm i --package-lock-only && npx pnpm i",
+    "lock": "npx del-cli --force node_modules && npm i --package-lock-only && npm audit fix && npx pnpm i",
     "prepublishOnly": "npm test && npm run build && git push --follow-tags origin",
     "prerelease": "npm run lock && npm test && npm run build",
     "release": "standard-version",
