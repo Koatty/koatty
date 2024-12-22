@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.11.7](https://github.com/thinkkoa/koatty/compare/v3.11.6...v3.11.7) (2024-12-06)
+
+
+### Bug Fixes
+
+* export koatty_exception ([93e96bc](https://github.com/thinkkoa/koatty/commit/93e96bc703da57c0e555d5b384f0eb93501e3cfb))
+
 ### [3.11.6](https://github.com/thinkkoa/koatty/compare/v3.11.4-2...v3.11.6) (2024-12-05)
 
 

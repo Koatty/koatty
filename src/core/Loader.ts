@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 22:55:49
- * @LastEditTime: 2024-11-29 18:20:23
+ * @LastEditTime: 2024-12-06 10:38:29
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -255,7 +255,10 @@ export class Loader {
   }
 
   /**
-   * LoadAllComponents
+   * @description: Load all components
+   * @param {KoattyApplication} app
+   * @param {any} target
+   * @return {*}
    */
   public static async LoadAllComponents(app: KoattyApplication, target: any) {
     // Load configuration
