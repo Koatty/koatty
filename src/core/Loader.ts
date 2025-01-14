@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 22:55:49
- * @LastEditTime: 2025-01-14 14:21:56
+ * @LastEditTime: 2025-01-14 16:12:59
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -20,9 +20,10 @@ import { Load } from "koatty_loader";
 import { NewRouter } from "koatty_router";
 import { NewServe } from "koatty_serve";
 import * as path from "path";
-import { checkClass, Helper } from "../util/Helper";
+import { checkClass } from "../util/Helper";
 import { Logger, LogLevelType, SetLogger } from "../util/Logger";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
+import { Helper } from "koatty_lib";
 
 /**
  *

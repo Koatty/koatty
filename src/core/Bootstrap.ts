@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2021-12-09 21:56:32
- * @LastEditTime: 2024-11-29 18:13:06
+ * @LastEditTime: 2025-01-14 16:11:21
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -11,8 +11,8 @@
 import EventEmitter from "events";
 import { IOC, TAGGED_CLS } from "koatty_container";
 import { AppEvent, EventHookFunc, Koatty, KoattyApplication, KoattyServer } from 'koatty_core';
-import { checkRuntime, checkUTRuntime, KOATTY_VERSION } from "../util/Check";
-import { Helper } from "../util/Helper";
+import { Helper } from "koatty_lib";
+import { checkRuntime, checkUTRuntime, KOATTY_VERSION } from "../util/Helper";
 import { Logger } from "../util/Logger";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
 import { Loader } from "./Loader";

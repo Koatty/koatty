@@ -3,16 +3,20 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 21:56:32
- * @LastEditTime: 2024-01-16 01:20:17
+ * @LastEditTime: 2025-01-14 16:14:10
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
 import { Helper } from "koatty_lib";
+import { engines, version } from "../../package.json";
+import { Logger } from "./Logger";
+
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
-// export Helper
-export { Helper } from "koatty_lib";
+
+export const KOATTY_VERSION = version;
+export const ENGINES_VERSION = engines.node.slice(1) || '12.0.0';
 
 /**
  *
@@ -95,3 +99,37 @@ export function checkClass(fileName: string, xpath: string, target: any, exSet?:
 
   return;
 }
+
+/**
+ * check node version
+ * @return {void} []
+ */
+export function checkRuntime() {
+  let nodeEngines = ENGINES_VERSION;
+  nodeEngines = nodeEngines.slice(0, nodeEngines.lastIndexOf('.'));
+  let nodeVersion = process.version;
+  if (nodeVersion[0] === 'v') {
+    nodeVersion = nodeVersion.slice(1);
+  }
+  nodeVersion = nodeVersion.slice(0, nodeVersion.lastIndexOf('.'));
+
+  if (Helper.toNumber(nodeEngines) > Helper.toNumber(nodeVersion)) {
+    Logger.Error(`Koatty need node version > ${nodeEngines}, current version is ${nodeVersion}, please upgrade it.`);
+    process.exit(-1);
+  }
+}
+
+/**
+ * unittest running environment detection
+ * only support jest
+ * @returns {boolean}
+ */
+export const checkUTRuntime = (): boolean => {
+  let isUTRuntime = false;
+  // UT运行环境判断，暂时先只判断jest
+  const argv = JSON.stringify(process.argv[1]);
+  if (argv.indexOf('jest') > -1) {
+    isUTRuntime = true;
+  }
+  return isUTRuntime;
+};
