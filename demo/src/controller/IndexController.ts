@@ -3,7 +3,7 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:31:17
- * @LastEditTime: 2024-11-07 18:53:45
+ * @LastEditTime: 2025-01-14 10:27:33
  */
 
 import { Output } from 'koatty_exception';
@@ -11,6 +11,7 @@ import { Valid, Validated } from "koatty_validation";
 import {
   Autowired,
   Before,
+  Config,
   Controller,
   Get,
   GetMapping,
@@ -19,6 +20,7 @@ import {
   RequestBody
 } from '../../../src/index';
 import { App } from '../App';
+import { Conf } from '../dto/conf';
 import { UserDto } from '../dto/UserDto';
 import { TestService } from '../service/TestService';
 
@@ -26,6 +28,9 @@ import { TestService } from '../service/TestService';
 export class IndexController {
   app: App;
   ctx: KoattyContext;
+
+  @Config("DataBase", "db")
+  dbConf: Conf;
 
   @Autowired()
   protected TestService: TestService;
@@ -69,6 +74,7 @@ export class IndexController {
   @GetMapping('/')
   index(@RequestBody() body: any) {
     // this.ctx.session.username = "test"
+    console.log(this.dbConf.replication.slaves);
     return Output.ok("Hello, koatty!");
   }
 
