@@ -3,7 +3,7 @@
  * @Usage: 实例化app，创建服务
  * @Author: richen
  * @Date: 2020-12-22 15:35:07
- * @LastEditTime: 2024-11-20 10:01:14
+ * @LastEditTime: 2025-01-14 14:55:19
  */
 
 import * as path from 'path';
@@ -25,6 +25,7 @@ import { TestBootStrap } from "./bootstrap/TestBootStrap";
 export class App extends Koatty {
   // 重写init方法，用于服务初始化前置
   public init() {
+    this.appDebug = true;
     // 服务运行目录
     this.rootPath = path.dirname(__dirname);
   }
