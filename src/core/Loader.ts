@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 22:55:49
- * @LastEditTime: 2025-01-14 16:12:59
+ * @LastEditTime: 2025-01-17 09:47:52
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -16,6 +16,7 @@ import {
   implementsPluginInterface, implementsServiceInterface, IPlugin,
   KoattyApplication
 } from 'koatty_core';
+import { Helper } from "koatty_lib";
 import { Load } from "koatty_loader";
 import { NewRouter } from "koatty_router";
 import { NewServe } from "koatty_serve";
@@ -23,7 +24,6 @@ import * as path from "path";
 import { checkClass } from "../util/Helper";
 import { Logger, LogLevelType, SetLogger } from "../util/Logger";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
-import { Helper } from "koatty_lib";
 
 /**
  *
@@ -272,14 +272,14 @@ export class Loader {
     await loader.LoadMiddlewares();
     // Load Services
     Logger.Log('Koatty', '', 'Load Services ...');
-    await loader.LoadServices();
+    loader.LoadServices();
     // Load Controllers
     Logger.Log('Koatty', '', 'Load Controllers ...');
-    const controllers = await loader.LoadControllers();
+    const controllers = loader.LoadControllers();
 
     // Load Routers
     Logger.Log('Koatty', '', 'Load Routers ...');
-    loader.LoadRouter(controllers);
+    await loader.LoadRouter(controllers);
   }
 
   /**
@@ -369,7 +369,7 @@ export class Loader {
    *
    * @memberof Loader
    */
-  protected async LoadControllers() {
+  protected LoadControllers() {
     const controllerList = IOC.listClass("CONTROLLER");
 
     const controllers: string[] = [];
@@ -395,7 +395,7 @@ export class Loader {
    *
    * @memberof Loader
    */
-  protected async LoadServices() {
+  protected LoadServices() {
     const serviceList = IOC.listClass("SERVICE");
 
     serviceList.forEach((item: ComponentItem) => {

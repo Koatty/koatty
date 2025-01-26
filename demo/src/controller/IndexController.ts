@@ -3,7 +3,7 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:31:17
- * @LastEditTime: 2025-01-14 10:27:33
+ * @LastEditTime: 2025-01-17 14:41:28
  */
 
 import { Output } from 'koatty_exception';
@@ -22,6 +22,7 @@ import {
 import { App } from '../App';
 import { Conf } from '../dto/conf';
 import { UserDto } from '../dto/UserDto';
+import { ApiOperation, ApiParameter, ApiResponse } from '../middleware/Swagger';
 import { TestService } from '../service/TestService';
 
 @Controller('/')
@@ -111,6 +112,9 @@ export class IndexController {
   @PostMapping('/add')
   @Validated()
   @Before("TestAspect")
+  @ApiParameter({ in: "body", name: "data", schema: { $ref: UserDto } })
+  @ApiResponse({ status: 200, type: 'application/json', schema: { $ref: UserDto } })
+  @ApiOperation({ path: '/add/aaa/bb/:1', method: 'post' })
   async add(@Post() data: UserDto): Promise<any> {
     const userId = await this.TestService.addUser(data);
     return Output.ok('success', { userId });
