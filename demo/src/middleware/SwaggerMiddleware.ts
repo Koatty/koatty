@@ -5,27 +5,32 @@
  * @ version: 2020-05-18 11:17:26
  */
 // import { ui } from 'swagger2-koa';
-import { koaSwagger } from 'koa2-swagger-ui';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { IMiddleware, Middleware } from '../../../src/index';
 import { App } from '../App';
-import { swaggerDoc } from './Swagger';
-
-import * as spec from "../resource/data1.json";
 
 @Middleware()
 export class SwaggerMiddleware implements IMiddleware {
   run(options: any, app: App) {
-    let swaggerSpec: any = swaggerDoc({
-      info: {
-        title: `Test API`,
-        version: '1.0.0',
-        description: `Test API`
-      },
-    });
+    // let swaggerSpec: any = swaggerDoc({
+    //   info: {
+    //     title: `Test API`,
+    //     version: '1.0.0',
+    //     description: `Test API`
+    //   },
+    // });
 
-    console.log(JSON.stringify(swaggerSpec));
+    // console.log(JSON.stringify(swaggerSpec));
 
-    return koaSwagger({ routePrefix: false, swaggerOptions: { spec } });
+    const config = new DocumentBuilder()
+      .setTitle('Cats example')
+      .setDescription('The cats API description')
+      .setVersion('1.0')
+      .addTag('cats')
+      .build();
+    const documentFactory = () => SwaggerModule.createDocument(app as any, config);
+
+    // return koaSwagger({ routePrefix: false, swaggerOptions: { spec: data } });
     //   return function (ctx: KoattyContext, next: KoattyNext) {
     //     return next();
     //   }

@@ -14,9 +14,22 @@
       "url": "/api/v3"
     }
   ],
+  "tags": [
+    {
+      "name": "pet",
+      "description": "Everything about your Pets",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "http://swagger.io"
+      }
+    }
+  ],
   "paths": {
     "/add/aaa/bb/{1}": {
       "post": {
+        "tags": [
+          "pet"
+        ],
         "summary": "Update an existing pet",
         "description": "Update an existing pet by Id",
         "requestBody": {
@@ -60,7 +73,10 @@
           "phoneNum": {
             "type": "string",
             "example": ""
-          }
+          },
+          // "category": {
+          //   "$ref": "#/components/schemas/Category"
+          // },
         }
       }
     },
