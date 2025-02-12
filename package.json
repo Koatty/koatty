@@ -91,7 +91,7 @@
     "typescript": "^5.x.x"
   },
   "dependencies": {
-    "koa": "~2.15.4",
+    "koa": "~2.16.0",
     "koatty_config": "~1.2.0",
     "koatty_container": "~1.10.1",
     "koatty_core": "~1.11.5",
