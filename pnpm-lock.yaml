@@ -10,16 +10,16 @@ importers:
     dependencies:
       koa:
         specifier: ~2.15.3
-        version: 2.15.3
+        version: 2.15.4
       koatty_config:
         specifier: ~1.2.0
-        version: 1.2.0(koa@2.15.3)(koatty_container@1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_loader@1.1.0(koatty_lib@1.4.0))(koatty_trace@1.13.1)(tslib@2.8.1)
+        version: 1.2.0(koa@2.15.4)(koatty_container@1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_loader@1.1.0(koatty_lib@1.4.0))(koatty_trace@1.13.1)(tslib@2.8.1)
       koatty_container:
         specifier: ~1.9.4
         version: 1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1)
       koatty_core:
         specifier: ~1.11.0
-        version: 1.11.0(koa@2.15.3)(koatty_container@1.9.4)(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_trace@1.13.1)
+        version: 1.11.0(koa@2.15.4)(koatty_container@1.9.4)(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_trace@1.13.1)
       koatty_exception:
         specifier: ~1.5.3
         version: 1.5.3(koatty_container@1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_core@1.11.0)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))
@@ -1181,8 +1181,16 @@ packages:
     resolution: {integrity: sha512-IKufZ1o4Ut42YUrZSo8+qnMTrFuKkvyoLXUywKz9GJ5BrhOFGhLdkx9sG4KAnVvbY6kEcSFjLQul+DVmBm2bgA==}
     engines: {node: '>= 6.0.0'}
 
+  call-bind-apply-helpers@1.0.2:
+    resolution: {integrity: sha512-Sp1ablJ0ivDkSzjcaJdxEunN5/XvksFJ2sMBFfq6x0ryhQV/2b/KwFe21cMpmHtPOSij8K99/wSfoEuTObmuMQ==}
+    engines: {node: '>= 0.4'}
+
   call-bind@1.0.7:
     resolution: {integrity: sha512-GHTSNSYICQ7scH7sZ+M2rFopRoLh8t2bLSW6BbgrtLsahOIB5iyAVJf9GjWK3cYTDaMj4XdBpM1cA6pIS0Kv2w==}
+    engines: {node: '>= 0.4'}
+
+  call-bound@1.0.3:
+    resolution: {integrity: sha512-YTd+6wGlNlPxSuri7Y6X8tY2dmm12UMH66RpKMhiX6rsk5wXXnYgbUcOt8kiS31/AjfoTOvCsE+w8nZQLQnzHA==}
     engines: {node: '>= 0.4'}
 
   callsites@3.1.0:
@@ -1520,6 +1528,15 @@ packages:
       supports-color:
         optional: true
 
+  debug@4.4.0:
+    resolution: {integrity: sha512-6WTZ/IxCY/T6BALoZHaE4ctp9xm+Z5kY/pzYaCHRFeyVhojxlrm+46y68HA6hr0TcwEssoxNiDEUJQjfPZ/RYA==}
+    engines: {node: '>=6.0'}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+
   decamelize-keys@1.1.1:
     resolution: {integrity: sha512-WiPxgEirIV0/eIOMcnFBA3/IJZAZqKnwAwWyvvdi4lsr1WCN22nhdf/3db3DoZcUjTV2SqfzIwNyp6y2xs3nmg==}
     engines: {node: '>=0.10.0'}
@@ -1616,6 +1633,10 @@ packages:
     resolution: {integrity: sha512-sCm11ak2oY6DglEPpCB8TixLjWAxd3kJTs6UIcSasNYxXdFPV+YKlye92c8H4kKFqV5qYMIh7d+cYecEg0dIkA==}
     engines: {node: '>=6'}
 
+  dunder-proto@1.0.1:
+    resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
+    engines: {node: '>= 0.4'}
+
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
@@ -1648,12 +1669,16 @@ packages:
   error-ex@1.3.2:
     resolution: {integrity: sha512-7dFHNmqeFSEt2ZBsCriorKnn3Z2pj+fd9kmI6QoWw4//DL+icEBfc0U7qJCisqrTsKTjw4fNFy2pW9OqStD84g==}
 
-  es-define-property@1.0.0:
-    resolution: {integrity: sha512-jxayLKShrEqqzJ0eumQbVhTYQM27CfT1T35+gCgDFoL82JLsXqTJ76zv6A0YLOgEnLUMvLzsDsGIrl8NFpT2gQ==}
+  es-define-property@1.0.1:
+    resolution: {integrity: sha512-e3nRfgfUZ4rNGL232gUgX06QNyyez04KdjFrF+LTRoOXmrOgFKDg4BCdsjW8EnT69eqdYGmRpJwiPVYNrCaW3g==}
     engines: {node: '>= 0.4'}
 
   es-errors@1.3.0:
     resolution: {integrity: sha512-Zf5H2Kxt2xjTvbJvP2ZWLEICxA6j+hAmMzIlypy4xcBg1vKVnx89Wy0GbS+kf5cwCVFFzdCFh2XSCFNULS6csw==}
+    engines: {node: '>= 0.4'}
+
+  es-object-atoms@1.1.1:
+    resolution: {integrity: sha512-FGgH2h8zKNim9ljj7dankFPcICIK9Cp5bm+c2gQSYePhpaG5+esrLODihIorn+Pe6FGJzWhXQotPv73jTaldXA==}
     engines: {node: '>= 0.4'}
 
   escalade@3.2.0:
@@ -1880,8 +1905,8 @@ packages:
     resolution: {integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==}
     engines: {node: 6.* || 8.* || >= 10.*}
 
-  get-intrinsic@1.2.4:
-    resolution: {integrity: sha512-5uYhsJH8VJBTv7oslg4BznJYhDoRI6waYCxMmCdnTrcCrHA/fCFKoTFz2JKKE0HdDFUF7/oQuhzumXJK7paBRQ==}
+  get-intrinsic@1.2.7:
+    resolution: {integrity: sha512-VW6Pxhsrk0KAOqs3WEd0klDiF/+V7gQOpAvY1jVU/LHmaD/kQO4523aiJuikX/QAKYiW6x8Jh+RJej1almdtCA==}
     engines: {node: '>= 0.4'}
 
   get-package-type@0.1.0:
@@ -1892,6 +1917,10 @@ packages:
     resolution: {integrity: sha512-2+QbHjFRfGB74v/pYWjd5OhU3TDIC2Gv/YKUTk/tCvAz0pkn/Mz6P3uByuBimLOcPvN2jYdScl3xGFSrx0jEcA==}
     engines: {node: '>=6.9.0'}
     hasBin: true
+
+  get-proto@1.0.1:
+    resolution: {integrity: sha512-sTSfBjoXBp89JvIKIefqw7U2CCebsc74kiY6awiGogKtoSGbgjYE/G/+l9sF3MWFPNc9IcoOC4ODfKHfxFmp0g==}
+    engines: {node: '>= 0.4'}
 
   get-stream@6.0.1:
     resolution: {integrity: sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==}
@@ -1990,10 +2019,6 @@ packages:
 
   has-property-descriptors@1.0.2:
     resolution: {integrity: sha512-55JNKuIW+vq4Ke1BjOTjM2YctQIvCT7GFzHwmfZPGo5wnrgkid0YQtnAleFSqumZm4az3n2BS+erby5ipJdgrg==}
-
-  has-proto@1.1.0:
-    resolution: {integrity: sha512-QLdzI9IIO1Jg7f9GT1gXpPpXArAn6cS31R1eEZqz08Gc+uQ8/XiqHWt17Fiw+2p6oTTIq5GXEpQkAlA88YRl/Q==}
-    engines: {node: '>= 0.4'}
 
   has-symbols@1.1.0:
     resolution: {integrity: sha512-1cDNdwJ2Jaohmb3sg4OmKaMBwuC48sYni5HUw2DvsC8LjGTLK9h+eb1X6RyuOHe4hT0ULCW68iomhjUoKUqlPQ==}
@@ -2131,8 +2156,8 @@ packages:
     resolution: {integrity: sha512-cTIB4yPYL/Grw0EaSzASzg6bBy9gqCofvWN8okThAYIxKJZC+udlRAmGbM0XLeniEJSs8uEgHPGuHSe1XsOLSQ==}
     engines: {node: '>=6'}
 
-  is-generator-function@1.0.10:
-    resolution: {integrity: sha512-jsEjy9l3yiXEQ+PsXdmBwEPcOxaXWLspKdplFUVI9vq1iZgIekeC0L167qeu86czQaxed3q/Uzuw0swL0irL8A==}
+  is-generator-function@1.1.0:
+    resolution: {integrity: sha512-nPUB5km40q9e8UfN/Zc24eLlzdSf9OfKByBw9CIdw4H1giPMeA0OIJvbchsCu4npfI2QcMVBsGEBHKZ7wLTWmQ==}
     engines: {node: '>= 0.4'}
 
   is-glob@4.0.3:
@@ -2164,6 +2189,10 @@ packages:
 
   is-reference@1.2.1:
     resolution: {integrity: sha512-U82MsXXiFIrjCK4otLT+o2NA2Cd2g5MLoOVXUZjIOhLurrRxpEXzI8O0KZHr3IjLvlAH1kTPYSuqer5T9ZVBKQ==}
+
+  is-regex@1.2.1:
+    resolution: {integrity: sha512-MjYsKHO5O7mCsmRGxWcLWheFqN9DJ/2TmngvjKXihe6efViPqc274+Fx/4fYj/r03+ESvBdTXK0V6tA3rgez1g==}
+    engines: {node: '>= 0.4'}
 
   is-stream@2.0.1:
     resolution: {integrity: sha512-hFoiJiTl63nn+kstHGBtewWSKnQLpyb155KHheA1l39uvtO9nWIop1p3udqPcUd/xbF1VLMO4n7OI6p7RbngDg==}
@@ -2433,8 +2462,8 @@ packages:
     resolution: {integrity: sha512-asOvN6bFlSnxewce2e/DK3p4tltyfC4VM7ZwuTuepI7dEQVcvpyFuBcEARu1+Hxg8DIwytce2n7jrZtRlPrARA==}
     engines: {node: '>= 10'}
 
-  koa@2.15.3:
-    resolution: {integrity: sha512-j/8tY9j5t+GVMLeioLaxweJiKUayFhlGqNTzf2ZGwL0ZCQijd2RLHK0SLW5Tsko8YyyqCZC2cojIb0/s62qTAg==}
+  koa@2.15.4:
+    resolution: {integrity: sha512-7fNBIdrU2PEgLljXoPWoyY4r1e+ToWCmzS/wwMPbUNs7X+5MMET1ObhJBlUkF5uZG9B6QhM2zS1TsH6adegkiQ==}
     engines: {node: ^4.8.4 || ^6.10.1 || ^7.10.1 || >= 8.1.4}
 
   'koatty@file:':
@@ -2659,6 +2688,10 @@ packages:
   map-obj@4.3.0:
     resolution: {integrity: sha512-hdN1wVrZbb29eBGiGjJbeP8JbKjq1urkHJ/LIP/NY48MZ1QVXUsQBV1G1zvYFHn1XE06cwjBsOI2K3Ulnj1YXQ==}
     engines: {node: '>=8'}
+
+  math-intrinsics@1.1.0:
+    resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
+    engines: {node: '>= 0.4'}
 
   media-typer@0.3.0:
     resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
@@ -3114,6 +3147,10 @@ packages:
 
   safe-buffer@5.2.1:
     resolution: {integrity: sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==}
+
+  safe-regex-test@1.1.0:
+    resolution: {integrity: sha512-x/+Cz4YrimQxQccJf5mKEbIa1NzeCRNI5Ecl/ekmlYaampdNLPalVyIcCZNNH3MvmqBugV5TMYZXv0ljslUlaw==}
+    engines: {node: '>= 0.4'}
 
   safe-stable-stringify@2.5.0:
     resolution: {integrity: sha512-b3rppTKm9T+PsVCBEOUR46GWI7fdOs00VKZ1+9c1EWDaDMvjQc6tUwuFyIprgGgTcWoVHSKrU8H31ZHA2e0RHA==}
@@ -3661,7 +3698,7 @@ snapshots:
       '@babel/traverse': 7.26.3
       '@babel/types': 7.26.3
       convert-source-map: 2.0.0
-      debug: 4.3.7
+      debug: 4.4.0
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -3815,7 +3852,7 @@ snapshots:
       '@babel/parser': 7.26.3
       '@babel/template': 7.25.9
       '@babel/types': 7.26.3
-      debug: 4.3.7
+      debug: 4.4.0
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -4664,7 +4701,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/typescript-estree': 8.17.0(typescript@5.7.2)
       '@typescript-eslint/utils': 8.17.0(eslint@8.57.1)(typescript@5.7.2)
-      debug: 4.3.7
+      debug: 4.4.0
       eslint: 8.57.1
       ts-api-utils: 1.4.3(typescript@5.7.2)
     optionalDependencies:
@@ -4906,13 +4943,23 @@ snapshots:
       mime-types: 2.1.35
       ylru: 1.4.0
 
-  call-bind@1.0.7:
+  call-bind-apply-helpers@1.0.2:
     dependencies:
-      es-define-property: 1.0.0
       es-errors: 1.3.0
       function-bind: 1.1.2
-      get-intrinsic: 1.2.4
+
+  call-bind@1.0.7:
+    dependencies:
+      es-define-property: 1.0.1
+      es-errors: 1.3.0
+      function-bind: 1.1.2
+      get-intrinsic: 1.2.7
       set-function-length: 1.2.2
+
+  call-bound@1.0.3:
+    dependencies:
+      call-bind-apply-helpers: 1.0.2
+      get-intrinsic: 1.2.7
 
   callsites@3.1.0: {}
 
@@ -5305,6 +5352,10 @@ snapshots:
     dependencies:
       ms: 2.1.3
 
+  debug@4.4.0:
+    dependencies:
+      ms: 2.1.3
+
   decamelize-keys@1.1.1:
     dependencies:
       decamelize: 1.2.0
@@ -5324,7 +5375,7 @@ snapshots:
 
   define-data-property@1.1.4:
     dependencies:
-      es-define-property: 1.0.0
+      es-define-property: 1.0.1
       es-errors: 1.3.0
       gopd: 1.2.0
 
@@ -5381,6 +5432,12 @@ snapshots:
       find-up: 3.0.0
       minimatch: 3.1.2
 
+  dunder-proto@1.0.1:
+    dependencies:
+      call-bind-apply-helpers: 1.0.2
+      es-errors: 1.3.0
+      gopd: 1.2.0
+
   ee-first@1.1.1: {}
 
   ejs@3.1.10:
@@ -5403,11 +5460,13 @@ snapshots:
     dependencies:
       is-arrayish: 0.2.1
 
-  es-define-property@1.0.0:
-    dependencies:
-      get-intrinsic: 1.2.4
+  es-define-property@1.0.1: {}
 
   es-errors@1.3.0: {}
+
+  es-object-atoms@1.1.1:
+    dependencies:
+      es-errors: 1.3.0
 
   escalade@3.2.0: {}
 
@@ -5661,13 +5720,18 @@ snapshots:
 
   get-caller-file@2.0.5: {}
 
-  get-intrinsic@1.2.4:
+  get-intrinsic@1.2.7:
     dependencies:
+      call-bind-apply-helpers: 1.0.2
+      es-define-property: 1.0.1
       es-errors: 1.3.0
+      es-object-atoms: 1.1.1
       function-bind: 1.1.2
-      has-proto: 1.1.0
+      get-proto: 1.0.1
+      gopd: 1.2.0
       has-symbols: 1.1.0
       hasown: 2.0.2
+      math-intrinsics: 1.1.0
 
   get-package-type@0.1.0: {}
 
@@ -5677,6 +5741,11 @@ snapshots:
       hosted-git-info: 4.1.0
       through2: 2.0.5
       yargs: 16.2.0
+
+  get-proto@1.0.1:
+    dependencies:
+      dunder-proto: 1.0.1
+      es-object-atoms: 1.1.1
 
   get-stream@6.0.1: {}
 
@@ -5794,11 +5863,7 @@ snapshots:
 
   has-property-descriptors@1.0.2:
     dependencies:
-      es-define-property: 1.0.0
-
-  has-proto@1.1.0:
-    dependencies:
-      call-bind: 1.0.7
+      es-define-property: 1.0.1
 
   has-symbols@1.1.0: {}
 
@@ -5917,9 +5982,12 @@ snapshots:
 
   is-generator-fn@2.1.0: {}
 
-  is-generator-function@1.0.10:
+  is-generator-function@1.1.0:
     dependencies:
+      call-bound: 1.0.3
+      get-proto: 1.0.1
       has-tostringtag: 1.0.2
+      safe-regex-test: 1.1.0
 
   is-glob@4.0.3:
     dependencies:
@@ -5940,6 +6008,13 @@ snapshots:
   is-reference@1.2.1:
     dependencies:
       '@types/estree': 1.0.6
+
+  is-regex@1.2.1:
+    dependencies:
+      call-bound: 1.0.3
+      gopd: 1.2.0
+      has-tostringtag: 1.0.2
+      hasown: 2.0.2
 
   is-stream@2.0.1: {}
 
@@ -5989,7 +6064,7 @@ snapshots:
 
   istanbul-lib-source-maps@4.0.1:
     dependencies:
-      debug: 4.3.7
+      debug: 4.4.0
       istanbul-lib-coverage: 3.2.2
       source-map: 0.6.1
     transitivePeerDependencies:
@@ -6390,14 +6465,14 @@ snapshots:
       co: 4.6.0
       koa-compose: 4.1.0
 
-  koa@2.15.3:
+  koa@2.15.4:
     dependencies:
       accepts: 1.3.8
       cache-content-type: 1.0.1
       content-disposition: 0.5.4
       content-type: 1.0.5
       cookies: 0.9.1
-      debug: 4.3.7
+      debug: 4.4.0
       delegates: 1.0.0
       depd: 2.0.0
       destroy: 1.2.0
@@ -6406,7 +6481,7 @@ snapshots:
       fresh: 0.5.2
       http-assert: 1.5.0
       http-errors: 1.8.1
-      is-generator-function: 1.0.10
+      is-generator-function: 1.1.0
       koa-compose: 4.1.0
       koa-convert: 2.0.0
       on-finished: 2.4.1
@@ -6420,10 +6495,10 @@ snapshots:
 
   koatty@file:(koatty_validation@1.3.6)(tslib@2.8.1):
     dependencies:
-      koa: 2.15.3
-      koatty_config: 1.2.0(koa@2.15.3)(koatty_container@1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_loader@1.1.0(koatty_lib@1.4.0))(koatty_trace@1.13.1)(tslib@2.8.1)
+      koa: 2.15.4
+      koatty_config: 1.2.0(koa@2.15.4)(koatty_container@1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_loader@1.1.0(koatty_lib@1.4.0))(koatty_trace@1.13.1)(tslib@2.8.1)
       koatty_container: 1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1)
-      koatty_core: 1.11.0(koa@2.15.3)(koatty_container@1.9.4)(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_trace@1.13.1)
+      koatty_core: 1.11.0(koa@2.15.4)(koatty_container@1.9.4)(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_trace@1.13.1)
       koatty_exception: 1.5.3(koatty_container@1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_core@1.11.0)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))
       koatty_lib: 1.4.0
       koatty_loader: 1.1.0(koatty_lib@1.4.0)
@@ -6439,10 +6514,10 @@ snapshots:
       - tslib
       - utf-8-validate
 
-  koatty_config@1.2.0(koa@2.15.3)(koatty_container@1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_loader@1.1.0(koatty_lib@1.4.0))(koatty_trace@1.13.1)(tslib@2.8.1):
+  koatty_config@1.2.0(koa@2.15.4)(koatty_container@1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_loader@1.1.0(koatty_lib@1.4.0))(koatty_trace@1.13.1)(tslib@2.8.1):
     dependencies:
       koatty_container: 1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1)
-      koatty_core: 1.11.0(koa@2.15.3)(koatty_container@1.9.4)(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_trace@1.13.1)
+      koatty_core: 1.11.0(koa@2.15.4)(koatty_container@1.9.4)(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_trace@1.13.1)
       koatty_lib: 1.4.0
       koatty_loader: 1.1.0(koatty_lib@1.4.0)
       koatty_logger: 2.1.8(koatty_lib@1.4.0)(koatty_validation@1.3.6)(tslib@2.8.1)
@@ -6465,10 +6540,10 @@ snapshots:
       - tslib
       - utf-8-validate
 
-  koatty_core@1.11.0(koa@2.15.3)(koatty_container@1.9.4)(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_trace@1.13.1):
+  koatty_core@1.11.0(koa@2.15.4)(koatty_container@1.9.4)(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_trace@1.13.1):
     dependencies:
       http-assert: 1.5.0
-      koa: 2.15.3
+      koa: 2.15.4
       koa-compose: 4.1.0
       koatty_container: 1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1)
       koatty_exception: 1.5.3(koatty_container@1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_core@1.11.0)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))
@@ -6480,7 +6555,7 @@ snapshots:
   koatty_exception@1.5.3(koatty_container@1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_core@1.11.0)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1)):
     dependencies:
       koatty_container: 1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1)
-      koatty_core: 1.11.0(koa@2.15.3)(koatty_container@1.9.4)(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_trace@1.13.1)
+      koatty_core: 1.11.0(koa@2.15.4)(koatty_container@1.9.4)(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_trace@1.13.1)
       koatty_lib: 1.4.0
       koatty_logger: 2.1.8(koatty_lib@1.4.0)(koatty_validation@1.3.6)(tslib@2.8.1)
       opentracing: 0.14.7
@@ -6523,7 +6598,7 @@ snapshots:
       formidable: 3.5.2
       inflation: 2.1.0
       koatty_container: 1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1)
-      koatty_core: 1.11.0(koa@2.15.3)(koatty_container@1.9.4)(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_trace@1.13.1)
+      koatty_core: 1.11.0(koa@2.15.4)(koatty_container@1.9.4)(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_trace@1.13.1)
       koatty_exception: 1.5.3(koatty_container@1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_core@1.11.0)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))
       koatty_lib: 1.4.0
       koatty_logger: 2.1.8(koatty_lib@1.4.0)(koatty_validation@1.3.6)(tslib@2.8.1)
@@ -6537,7 +6612,7 @@ snapshots:
     dependencies:
       '@grpc/grpc-js': 1.12.4
       koatty_container: 1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1)
-      koatty_core: 1.11.0(koa@2.15.3)(koatty_container@1.9.4)(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_trace@1.13.1)
+      koatty_core: 1.11.0(koa@2.15.4)(koatty_container@1.9.4)(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_trace@1.13.1)
       koatty_exception: 1.5.3(koatty_container@1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_core@1.11.0)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))
       koatty_lib: 1.4.0
       koatty_logger: 2.1.8(koatty_lib@1.4.0)(koatty_validation@1.3.6)(tslib@2.8.1)
@@ -6551,7 +6626,7 @@ snapshots:
   koatty_trace@1.13.1(koatty_container@1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_core@1.11.0)(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1)):
     dependencies:
       koatty_container: 1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1)
-      koatty_core: 1.11.0(koa@2.15.3)(koatty_container@1.9.4)(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_trace@1.13.1)
+      koatty_core: 1.11.0(koa@2.15.4)(koatty_container@1.9.4)(koatty_exception@1.5.3)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_trace@1.13.1)
       koatty_exception: 1.5.3(koatty_container@1.9.4(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_core@1.11.0)(koatty_lib@1.4.0)(koatty_logger@2.1.8(koatty_lib@1.4.0)(tslib@2.8.1))
       koatty_lib: 1.4.0
       koatty_logger: 2.1.8(koatty_lib@1.4.0)(koatty_validation@1.3.6)(tslib@2.8.1)
@@ -6673,6 +6748,8 @@ snapshots:
   map-obj@1.0.1: {}
 
   map-obj@4.3.0: {}
+
+  math-intrinsics@1.1.0: {}
 
   media-typer@0.3.0: {}
 
@@ -7132,6 +7209,12 @@ snapshots:
 
   safe-buffer@5.2.1: {}
 
+  safe-regex-test@1.1.0:
+    dependencies:
+      call-bound: 1.0.3
+      es-errors: 1.3.0
+      is-regex: 1.2.1
+
   safe-stable-stringify@2.5.0: {}
 
   safer-buffer@2.1.2: {}
@@ -7157,7 +7240,7 @@ snapshots:
       define-data-property: 1.1.4
       es-errors: 1.3.0
       function-bind: 1.1.2
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.2.7
       gopd: 1.2.0
       has-property-descriptors: 1.0.2
 
@@ -7173,7 +7256,7 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       es-errors: 1.3.0
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.2.7
       object-inspect: 1.13.3
 
   signal-exit@3.0.7: {}
@@ -7289,7 +7372,7 @@ snapshots:
     dependencies:
       component-emitter: 1.3.1
       cookiejar: 2.1.4
-      debug: 4.3.7
+      debug: 4.4.0
       fast-safe-stringify: 2.1.1
       form-data: 4.0.1
       formidable: 3.5.2
