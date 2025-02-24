@@ -17,23 +17,16 @@ Koa2 + Typescript + IOC = koatty. **Koatty** is a progressive Node.js framework 
 - 🌐 **Protocol Agnostic**: Write once, deploy as HTTP/gRPC/WebSocket services
 
 
-## Quick Start ⚡
+## New features ✨
 
-1. **Install CLI**:
-```bash
-npm install -g koatty_cli
-```
+* HTTP、HTTPS、HTTP2、gRPC、WebSocket server.✔️
+* Support loading environment configuration, parsing command line parameters (process.argv) and environment variables (process.env).✔️
+* `@ExceptionHandler()` Register global exception handling.✔️
+* graceful shutdown and pre-exit event.✔️
+* custom decorator based on app events.✔️
+* GraphQL supporting. 💪
+* OpenTelemetry . 💪
 
-2. **Create Project**:
-```bash
-koatty new awesome-app
-```
-
-3. **Run Development Server**:
-```bash
-cd awesome-app
-npm run dev
-```
 
 ## Core Features ✨
 
@@ -103,16 +96,6 @@ export class LoggerPlugin implements IPlugin {
 }
 ```
 
-## New features ✨
-
-* HTTP、HTTPS、HTTP2、gRPC、WebSocket server.✔️
-* Support loading environment configuration, parsing command line parameters (process.argv) and environment variables (process.env).✔️
-* `@ExceptionHandler()` Register global exception handling.✔️
-* graceful shutdown and pre-exit event.✔️
-* custom decorator based on app events.✔️
-* GraphQL supporting. 💪
-* OpenTelemetry . 💪
-
 
 ## Benchmarks 📊
 
@@ -131,6 +114,25 @@ export class LoggerPlugin implements IPlugin {
 - [API Reference](https://koatty.org/#/?id=api)
 - [Recipes & Best Practices](https://github.com/Koatty/koatty_awesome)
 - [Example](https://github.com/Koatty/koatty_demo)
+
+
+## Quick Start ⚡
+
+1. **Install CLI**:
+```bash
+npm install -g koatty_cli
+```
+
+2. **Create Project**:
+```bash
+koatty new awesome-app
+```
+
+3. **Run Development Server**:
+```bash
+cd awesome-app
+npm run dev
+```
 
 
 ## Community 🌍
