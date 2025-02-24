@@ -115,6 +115,7 @@ export function LoggerPlugin: IPlugin {
 ## Benchmarks 📊
 
 [CN](https://koatty.org/) 
+
 [EN](https://github.com/Koatty/koatty_doc/blob/master/docs/README-en.md)
 
 ## Community 🌍
