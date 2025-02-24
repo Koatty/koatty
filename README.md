@@ -19,8 +19,8 @@ Use Typescript's decorator implement IOC and AOP.
 
 ## Documentation
 
-[koatty_doc_CN](https://koatty.org/) （In progress💪）
-
+[CN](https://koatty.org/) 
+[EN](https://github.com/Koatty/koatty_doc/blob/master/docs/README-en.md)
 
 ## Installation CLI tools
 
