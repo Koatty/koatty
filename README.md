@@ -114,22 +114,8 @@ export function LoggerPlugin: IPlugin {
 
 ## Benchmarks 📊
 
-| Framework  | Requests/sec | Latency | Memory Usage |
-| ---------- | ------------ | ------- | ------------ |
-| **Koatty** | 13,321       | 1.43ms  | 54MB         |
-| Express    | 12,456       | 1.45ms  | 52MB         |
-| NestJS     | 11,892       | 1.51ms  | 63MB         |
-
-*Tested on AWS t3.micro with 100 concurrent connections*
-
-## Documentation 📚
-
-- [中文文档](https://koatty.org/)
-- [Getting Started Guide](https://github.com/Koatty/koatty_doc/blob/master/docs/README-en.md)
-- [API Reference](https://koatty.org/#/?id=api)
-- [Recipes & Best Practices](https://github.com/Koatty/koatty_awesome)
-- [Example](https://github.com/Koatty/koatty_demo)
-
+[CN](https://koatty.org/) 
+[EN](https://github.com/Koatty/koatty_doc/blob/master/docs/README-en.md)
 
 ## Community 🌍
 
