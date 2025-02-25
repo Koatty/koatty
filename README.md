@@ -63,10 +63,10 @@ export class IndexController {
     ...
 
     @Autowired()
-    private testService: TestService;
+    private userService: UserService;
 
-    async test() {
-        const info = await this.testService.sayHello(name);
+    async test(id: number) {
+        const info = await this.userService.findUser(id);
         ...
     }
 }
@@ -75,12 +75,11 @@ export class IndexController {
 ### ✂️ Aspect-Oriented Programming
 ```javascript
 @Aspect()
-export class LogAspect implements KoattyAspect {
-  async around(point: Pointcut) {
-    console.log('Before execution');
-    const result = await point.proceed();
-    console.log('After execution');
-    return result;
+export class LogAspect implements IAspect {
+  app: App;
+
+  run() {
+    console.log('LogAspect');
   }
 }
 
@@ -93,9 +92,11 @@ export class UserController {}
 ### 🔌 Plugin System
 ```javascript
 // plugin/logger.ts
-export function LoggerPlugin: KoattyPlugin {
-  async ready() {
-    Logger.info('Custom plugin initialized!');
+export function LoggerPlugin: IPlugin {
+  run(options: any, app: App) {
+    // todo something or hook on app.event
+    Logger.Debug("LoggerPlugin");
+    return Promise.resolve();
   }
 }
 ```
