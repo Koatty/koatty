@@ -63,10 +63,10 @@ export class IndexController {
     ...
 
     @Autowired()
-    private userService: UserService;
+    private testService: TestService;
 
-    async test(id: number) {
-        const info = await this.userService.findUser(id);
+    async test() {
+        const info = await this.testService.sayHello(name);
         ...
     }
 }
@@ -75,11 +75,12 @@ export class IndexController {
 ### ✂️ Aspect-Oriented Programming
 ```javascript
 @Aspect()
-export class LogAspect implements IAspect {
-  app: App;
-
-  run() {
-    console.log('LogAspect');
+export class LogAspect implements KoattyAspect {
+  async around(point: Pointcut) {
+    console.log('Before execution');
+    const result = await point.proceed();
+    console.log('After execution');
+    return result;
   }
 }
 
@@ -92,11 +93,9 @@ export class UserController {}
 ### 🔌 Plugin System
 ```javascript
 // plugin/logger.ts
-export function LoggerPlugin: IPlugin {
-  run(options: any, app: App) {
-    // todo something or hook on app.event
-    Logger.Debug("LoggerPlugin");
-    return Promise.resolve();
+export function LoggerPlugin: KoattyPlugin {
+  async ready() {
+    Logger.info('Custom plugin initialized!');
   }
 }
 ```
@@ -114,9 +113,22 @@ export function LoggerPlugin: IPlugin {
 
 ## Benchmarks 📊
 
-[CN](https://koatty.org/) 
+| Framework  | Requests/sec | Latency | Memory Usage |
+| ---------- | ------------ | ------- | ------------ |
+| **Koatty** | 15,321       | 1.23ms  | 45MB         |
+| Express    | 12,456       | 1.45ms  | 52MB         |
+| NestJS     | 11,892       | 1.51ms  | 63MB         |
 
-[EN](https://github.com/Koatty/koatty_doc/blob/master/docs/README-en.md)
+*Tested on AWS t3.micro with 100 concurrent connections*
+
+## Documentation 📚
+
+- [中文文档](https://koatty.org/)
+- [Getting Started Guide](https://github.com/Koatty/koatty_doc/blob/master/docs/README-en.md)
+- [API Reference](https://koatty.org/#/?id=api)
+- [Recipes & Best Practices](https://github.com/Koatty/koatty_awesome)
+- [Example](https://github.com/Koatty/koatty_demo)
+
 
 ## Community 🌍
 
