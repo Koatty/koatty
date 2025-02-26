@@ -116,7 +116,7 @@ export function LoggerPlugin: IPlugin {
 
 | Framework  | Requests/sec | Latency | Memory Usage |
 | ---------- | ------------ | ------- | ------------ |
-| **Koatty** | 15,321       | 1.23ms  | 45MB         |
+| **Koatty** | 13,321       | 1.43ms  | 62MB         |
 | Express    | 12,456       | 1.45ms  | 52MB         |
 | NestJS     | 11,892       | 1.51ms  | 63MB         |
 
