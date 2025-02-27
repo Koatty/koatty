@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       koa:
-        specifier: ~2.15.3
+        specifier: ~2.15.4
         version: 2.15.4
       koatty_config:
         specifier: ~1.2.0
