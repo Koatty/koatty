@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.11.9](https://github.com/thinkkoa/koatty/compare/v3.11.8...v3.11.9) (2025-01-14)
+
+### [3.11.8](https://github.com/thinkkoa/koatty/compare/v3.11.7...v3.11.8) (2025-01-14)
+
+
+### Bug Fixes
+
+* 调整app.env定义逻辑 ([eb4ae59](https://github.com/thinkkoa/koatty/commit/eb4ae5983831543e93eabac52c272f0dad2fb907))
+* enable debug mode and update dependencies ([651f1c8](https://github.com/thinkkoa/koatty/commit/651f1c85c85fcd166ee8f0c07d445baf4ffd662a))
+
 ### [3.11.7](https://github.com/thinkkoa/koatty/compare/v3.11.6...v3.11.7) (2024-12-06)
 
 

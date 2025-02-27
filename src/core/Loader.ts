@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 22:55:49
- * @LastEditTime: 2024-12-06 10:38:29
+ * @LastEditTime: 2025-01-14 16:12:59
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -20,9 +20,10 @@ import { Load } from "koatty_loader";
 import { NewRouter } from "koatty_router";
 import { NewServe } from "koatty_serve";
 import * as path from "path";
-import { checkClass, Helper } from "../util/Helper";
+import { checkClass } from "../util/Helper";
 import { Logger, LogLevelType, SetLogger } from "../util/Logger";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
+import { Helper } from "koatty_lib";
 
 /**
  *
@@ -57,24 +58,9 @@ export class Loader {
    * @memberof Loader
    */
   public static initialize(app: KoattyApplication) {
-    const env = (process.execArgv ?? []).join(",");
-    if (env.indexOf('ts-node') > -1 || env.indexOf('--debug') > -1) {
-      app.appDebug = true;
-    }
-    // app.env
-    app.env = process.env.KOATTY_ENV || process.env.NODE_ENV;
-    if ((env.indexOf('--production') > -1) || ((app.env ?? '').indexOf('pro') > -1)) {
-      app.appDebug = false;
-    }
-
-    if (app.appDebug) {
-      app.env = 'development';
-      process.env.NODE_ENV = 'development';
-      process.env.APP_DEBUG = 'true';
+    if (app.env == 'development') {
       Logger.setLevel("debug");
     } else {
-      app.env = 'production';
-      process.env.NODE_ENV = 'production';
       Logger.setLevel("info");
     }
 
@@ -85,7 +71,6 @@ export class Loader {
     Helper.define(app, 'rootPath', rootPath);
     Helper.define(app, 'appPath', appPath);
     Helper.define(app, 'koattyPath', koattyPath);
-
 
     // 
     if (Helper.isEmpty(app.name)) {

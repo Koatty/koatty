@@ -8,7 +8,8 @@ describe('UT example', () => {
   beforeAll(async () => {
     jest.useFakeTimers();
     // test env
-    process.env.KOATTY_ENV = 'ts-node';
+    process.env.KOATTY_ENV = 'development';
+    process.execArgv.push("--debug");
     app = await ExecBootStrap()(App);
     // app.use(async (ctx: any) => {
     //   ctx.body = 'Hello, koatty!';
