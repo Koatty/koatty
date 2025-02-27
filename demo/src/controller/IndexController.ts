@@ -3,7 +3,7 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:31:17
- * @LastEditTime: 2025-01-14 10:27:33
+ * @LastEditTime: 2025-02-26 18:43:13
  */
 
 import { Output } from 'koatty_exception';
@@ -74,7 +74,7 @@ export class IndexController {
   @GetMapping('/')
   index(@RequestBody() body: any) {
     // this.ctx.session.username = "test"
-    console.log(this.dbConf.replication.slaves);
+    // console.log(this.dbConf.replication.slaves);
     return Output.ok("Hello, koatty!");
   }
 
