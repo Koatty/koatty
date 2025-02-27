@@ -92,8 +92,10 @@ export class UserController {}
 ### 🔌 Plugin System
 ```javascript
 // plugin/logger.ts
-export function LoggerPlugin: IPlugin {
-  run(options: any, app: App) {
+export class LoggerPlugin implements IPlugin {
+  app: App;
+
+  run() {
     // todo something or hook on app.event
     Logger.Debug("LoggerPlugin");
     return Promise.resolve();
