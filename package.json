@@ -74,9 +74,11 @@
     "conventional-changelog-cli": "^5.x.x",
     "eslint": "^8.x.x",
     "eslint-plugin-jest": "^28.x.x",
+    "graphql": "^16.10.0",
     "husky": "^4.x.x",
     "jest": "^29.x.x",
     "jest-html-reporters": "^3.x.x",
+    "koa-graphql": "^0.12.0",
     "koatty_exception": "~1.x.x",
     "koatty_validation": "~1.x.x",
     "reflect-metadata": "^0.x.x",
@@ -100,7 +102,7 @@
     "koatty_loader": "~1.1.0",
     "koatty_logger": "~2.1.8",
     "koatty_proto": "~1.2.0",
-    "koatty_router": "~1.11.0",
+    "koatty_router": "~1.12.0",
     "koatty_serve": "~2.3.0",
     "koatty_trace": "~1.13.1"
   }
