@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2023-12-09 22:55:49
- * @LastEditTime: 2025-01-14 16:12:59
+ * @LastEditTime: 2025-03-13 16:44:39
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -16,6 +16,7 @@ import {
   implementsPluginInterface, implementsServiceInterface, IPlugin,
   KoattyApplication
 } from 'koatty_core';
+import { Helper } from "koatty_lib";
 import { Load } from "koatty_loader";
 import { NewRouter } from "koatty_router";
 import { NewServe } from "koatty_serve";
@@ -23,7 +24,6 @@ import * as path from "path";
 import { checkClass } from "../util/Helper";
 import { Logger, LogLevelType, SetLogger } from "../util/Logger";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
-import { Helper } from "koatty_lib";
 
 /**
  *
@@ -254,15 +254,16 @@ export class Loader {
     loader.LoadConfigs(configurationMeta);
 
     // Create Server
+    const protocol = app.config('protocol');
     const serveOpts = {
       hostname: app.config('app_host'),
       port: app.config('app_port'),
-      protocol: app.config('protocol'),
+      protocol: protocol,
     };
     Helper.define(app, "server", NewServe(app, serveOpts));
-    // Create router
+    // Create router 
     const routerOpts = app.config(undefined, 'router') ?? {};
-    Helper.define(app, "router", NewRouter(app, routerOpts));
+    Helper.define(app, "router", NewRouter(app, { protocol, ...routerOpts }));
 
     // Load Components
     Logger.Log('Koatty', '', 'Load Components ...');
@@ -348,12 +349,13 @@ export class Loader {
       if (!Helper.isFunction(handle.run)) {
         throw Error(`The middleware ${key} must implements interface 'IMiddleware'.`);
       }
-      if (middlewareConfig[key] === false) {
-        Logger.Warn(`The middleware ${key} has been loaded but not executed.`);
-        continue;
-      }
+      // if (middlewareConfig[key] === false) {
+      //   Logger.Warn(`The middleware ${key} has been loaded but not executed.`);
+      //   continue;
+      // }
       Logger.Debug(`Load middleware: ${key}`);
-      const result = await handle.run(middlewareConfig[key] || {}, this.app);
+      const middlewareOpt = middlewareConfig[key] || {};
+      const result = await handle.run(middlewareOpt, this.app);
       if (Helper.isFunction(result)) {
         if (result.length < 3) {
           this.app.use(result);

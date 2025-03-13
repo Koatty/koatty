@@ -31,7 +31,7 @@ export default {
    *  Other extended configuration
    */
   ext: {
-    protoFile: process.env.APP_PATH + "resource/proto/Hello.proto", // gRPC proto file
-    schemaFile: process.env.APP_PATH + "resource/proto/Hello.graphql", // graphQL schema file
+    protoFile: process.env.APP_PATH + "/resource/proto/Hello.proto", // gRPC proto file
+    schemaFile: process.env.APP_PATH + "/resource/graphql/User.graphql", // graphQL schema file
   }
 };

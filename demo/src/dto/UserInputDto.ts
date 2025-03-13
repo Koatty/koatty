@@ -3,10 +3,10 @@
  * @Usage:
  * @Author: xxx
  * @Date: 2020-12-22 15:24:25
- * @LastEditTime: 2024-03-14 23:01:17
+ * @LastEditTime: 2025-03-13 13:09:41
  */
-import { Component } from "koatty";
-import { IsNotEmpty, IsDefined } from "koatty_validation";
+import { IsDefined } from "koatty_validation";
+import { Component } from "../../../src/index";
 //_ENUM_IMPORT
 
 @Component()
