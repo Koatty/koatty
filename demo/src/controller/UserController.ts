@@ -3,22 +3,26 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:24:25
- * @LastEditTime: 2025-03-13 11:31:47
+ * @LastEditTime: 2025-03-14 17:58:00
  */
 
 import { Validated } from "koatty_validation";
 import {
   Controller,
   Get,
+  GetMapping,
+  GraphQLController,
   KoattyContext,
-  Post
+  Post,
+  PostMapping,
+  RequestParam
 } from '../../../src/index';
 import { App } from "../App";
 import { UserDto } from "../dto/UserDto";
 
 import { UserInputDto } from "../dto/UserInputDto";
 
-@Controller('/graphql') // Consistent with graphql name
+@GraphQLController('/graphql') // Consistent with graphql name
 export class UserController {
   app: App;
   ctx: KoattyContext;
@@ -31,14 +35,21 @@ export class UserController {
     this.ctx = ctx;
   }
 
-  async getUser(@Get() id: string): Promise<UserDto> {
+  @GetMapping()
+  async getUser(@RequestParam() id: string, @RequestParam() username: string): Promise<UserDto> {
     const result = new UserDto();
+    result.id = id;
+    result.username = username;
+    result.email = "aa";
+    result.createdAt = "aaa";
+    result.phoneNum = "111";
     // TODO: Implement business logic here
-    return Promise.resolve(result);
+    return result;
   }
 
+  @PostMapping()
   @Validated()
-  async createUser(@Post() input: UserInputDto): Promise<UserDto> {
+  async createUser(@RequestParam() input: UserInputDto): Promise<UserDto> {
     const result = new UserDto();
     // TODO: Implement business logic here
     return Promise.resolve(result);
