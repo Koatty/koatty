@@ -10,6 +10,7 @@ import { Validated } from 'koatty_validation';
 import {
   ComponentType,
   Controller,
+  GrpcController,
   KoattyContext,
   PostMapping,
   RequestBody
@@ -18,7 +19,7 @@ import { App } from '../App';
 import { SayHelloReplyDto } from '../dto/SayHelloReplyDto';
 import { SayHelloRequestDto } from '../dto/SayHelloRequestDto';
 
-@Controller('/Hello') // Consistent with proto.service name
+@GrpcController('/Hello') // Consistent with proto.service name
 export class HelloController {
   app: App;
   ctx: KoattyContext;

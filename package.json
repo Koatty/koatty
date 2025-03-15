@@ -1,6 +1,6 @@
 {
   "name": "koatty",
-  "version": "3.11.9",
+  "version": "3.12.0",
   "description": "Koa2 + Typescript = koatty. Use Typescript's decorator implement auto injection.",
   "scripts": {
     "build": "npm run build:js && npm run build:dts && npm run build:doc && npm run build:cp",
@@ -9,7 +9,7 @@
     "build:doc": "npx api-documenter markdown --input temp --output docs/api",
     "build:dts": "npx tsc && npx api-extractor run --local --verbose",
     "eslint": "eslint --ext .ts,.js ./",
-    "lock": "npx del-cli --force node_modules && npm i --package-lock-only && npm audit fix && npx pnpm i",
+    "lock": "npm i --package-lock-only && npm audit fix && npx pnpm i",
     "prepublishOnly": "npm test && npm run build && git push --follow-tags origin",
     "prerelease": "npm run lock && npm test && npm run build",
     "release": "standard-version",
@@ -60,6 +60,7 @@
     "@rollup/plugin-commonjs": "^28.x.x",
     "@rollup/plugin-json": "^6.x.x",
     "@rollup/plugin-node-resolve": "^15.x.x",
+    "@rollup/plugin-terser": "^0.x.x",
     "@types/formidable": "^3.x.x",
     "@types/jest": "^29.x.x",
     "@types/koa": "^2.x.x",
@@ -77,7 +78,6 @@
     "husky": "^4.x.x",
     "jest": "^29.x.x",
     "jest-html-reporters": "^3.x.x",
-    "koatty_exception": "~1.x.x",
     "koatty_validation": "~1.x.x",
     "reflect-metadata": "^0.x.x",
     "rollup": "^4.x.x",
@@ -91,17 +91,17 @@
     "typescript": "^5.x.x"
   },
   "dependencies": {
-    "koa": "~2.15.4",
+    "koa": "~2.16.0",
     "koatty_config": "~1.2.0",
     "koatty_container": "~1.10.1",
-    "koatty_core": "~1.11.5",
+    "koatty_core": "~1.13.0",
     "koatty_exception": "~1.5.3",
     "koatty_lib": "~1.4.0",
     "koatty_loader": "~1.1.0",
     "koatty_logger": "~2.1.8",
-    "koatty_proto": "~1.2.0",
-    "koatty_router": "~1.11.0",
+    "koatty_router": "~1.14.1",
     "koatty_serve": "~2.3.0",
-    "koatty_trace": "~1.13.1"
+    "koatty_trace": "~1.13.1",
+    "ts-morph": "^25.0.1"
   }
 }

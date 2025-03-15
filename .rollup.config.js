@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2021-12-17 10:20:44
- * @LastEditTime: 2024-11-29 17:33:44
+ * @LastEditTime: 2025-03-15 18:06:51
  */
 import commonjs from '@rollup/plugin-commonjs';
 import json from "@rollup/plugin-json";
@@ -12,6 +12,7 @@ import { builtinModules } from 'module';
 import del from "rollup-plugin-delete";
 import typescript from 'rollup-plugin-typescript2';
 // import babel from '@rollup/plugin-babel';
+// import terser from '@rollup/plugin-terser';
 const pkg = require('./package.json');
 
 export default [
@@ -49,11 +50,17 @@ export default [
             module: "ESNext"
           }
         }
-      })
+      }),
+      // terser({
+      //   format: { comments: false },
+      //   compress: false,
+      //   mangle: false
+      // }),
     ],
     external: [
       ...builtinModules, // 排除 Node.js 内置模块
       ...Object.keys(pkg.dependencies || {}), // 排除 package.json 中的外部依赖
+      ...Object.keys(pkg.devDependencies || {}),
     ],
   },
 
