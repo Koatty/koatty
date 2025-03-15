@@ -99,7 +99,7 @@
     "koatty_lib": "~1.4.0",
     "koatty_loader": "~1.1.0",
     "koatty_logger": "~2.1.8",
-    "koatty_router": "~1.12.1",
+    "koatty_router": "~1.14.0",
     "koatty_serve": "~2.3.0",
     "koatty_trace": "~1.13.1",
     "ts-morph": "^25.0.1"
