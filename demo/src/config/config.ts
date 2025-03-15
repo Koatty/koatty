@@ -3,13 +3,13 @@
  * @Usage: 静态配置数据信息
  * @Author: xxx
  * @Date: 2020-12-22 15:24:25
- * @LastEditTime: 2023-03-05 01:12:39
+ * @LastEditTime: 2025-03-15 17:22:27
  */
 export default {
   /*app config*/
   app_port: 3000, // Listening port
   app_host: "", // Hostname
-  protocol: "graphql", // Server protocol 'http' | 'https' | 'http2' | 'grpc' | 'ws' | 'wss' | 'graphql'
+  protocol: "http", // Server protocol 'http' | 'https' | 'http2' | 'grpc' | 'ws' | 'wss' | 'graphql'
   open_trace: true, // Full stack debug & trace, default: false
   http_timeout: 10, // HTTP request timeout time(seconds)
   key_file: "", // HTTPS certificate key
