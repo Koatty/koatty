@@ -22,8 +22,8 @@ Koa2 + Typescript + IOC = koatty. **Koatty** is a progressive Node.js framework 
 * HTTP、HTTPS、HTTP2、gRPC、WebSocket server.✔️
 * Support loading configurations based on the environment, support command-line argument parsing(process.argv), and support environment variable parsing(process.env).✔️
 * `@ExceptionHandler()` Register global exception handling.✔️
-* graceful shutdown and pre-exit event.✔️
-* custom decorator based on app events.✔️
+* Graceful shutdown and pre-exit event.✔️
+* Supports custom decorators, bound to app events for execution.✔️
 * GraphQL supporting. ✔️
 * OpenTelemetry . 💪
 
