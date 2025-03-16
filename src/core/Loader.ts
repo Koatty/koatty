@@ -26,9 +26,10 @@ import { Logger, LogLevelType, SetLogger } from "../util/Logger";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 
 /**
- *
- *
+ * Interface representing a component item.
  * @interface ComponentItem
+ * @property {string} id - Unique identifier for the component
+ * @property {any} target - Target object or instance of the component
  */
 interface ComponentItem {
   id: string;
@@ -36,7 +37,18 @@ interface ComponentItem {
 }
 
 /**
+ * Loader class for Koatty framework.
+ * Handles initialization, loading and configuration of application components.
  * 
+ * Responsibilities:
+ * - Initialize environment and paths
+ * - Load configurations, components, middlewares, services and controllers
+ * - Set up logging
+ * - Handle application event hooks
+ * - Load and configure router
+ * 
+ * @export
+ * @class Loader
  */
 export class Loader {
   app: KoattyApplication;
@@ -51,11 +63,16 @@ export class Loader {
   }
 
   /**
-   * initialize env
-   *
-   * @static
-   * @param {KoattyApplication} app
-   * @memberof Loader
+   * Initialize application configuration and environment settings.
+   * Sets up logging levels, defines essential paths, and loads application metadata.
+   * 
+   * @param {KoattyApplication} app - The Koatty application instance
+   * @description
+   * - Sets logging level based on environment
+   * - Defines root, app and framework paths
+   * - Loads application name and version from package.json
+   * - Sets environment variables for paths
+   * - Maintains backward compatibility with legacy path variables
    */
   public static initialize(app: KoattyApplication) {
     if (app.env == 'development') {
@@ -92,13 +109,14 @@ export class Loader {
   }
 
   /**
-   * Get component metadata
-   *
+   * Get component metadata from target class.
+   * 
+   * @param {KoattyApplication} app - The Koatty application instance
+   * @param {any} target - The target class to get metadata from
+   * @returns {any[]} Array of component metadata paths
+   * 
    * @static
-   * @param {KoattyApplication} app
-   * @param {*} target
-   * @returns {*}  {any[]}
-   * @memberof Loader
+   * @public
    */
   public static GetComponentMeta(app: KoattyApplication, target: any): any[] {
     let componentMetas = [];
@@ -117,13 +135,11 @@ export class Loader {
   }
 
   /**
-   * Get configuration metadata
-   *
-   * @static
-   * @param {KoattyApplication} app
-   * @param {*} target
-   * @returns {*}  {any[]}
-   * @memberof Loader
+   * Get configuration metadata from target class.
+   * 
+   * @param {KoattyApplication} app Application instance
+   * @param {any} target Target class
+   * @returns {any[]} Array of configuration metadata
    */
   public static GetConfigurationMeta(app: KoattyApplication, target: any): any[] {
     const confMeta = IOC.getClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, target);
@@ -139,12 +155,12 @@ export class Loader {
   }
 
   /**
-   * Load all bean, excepted config/*、App.ts
-   *
+   * Check and load all components(excepted config/*、App.ts) in the application.
+   * 
+   * @param {KoattyApplication} app - The Koatty application instance
+   * @param {any} target - The target class or object to check components from
    * @static
-   * @param {KoattyApplication} app
-   * @param {*} target
-   * @memberof Loader
+   * @public
    */
   public static CheckAllComponents(app: KoattyApplication, target: any) {
     // component metadata
@@ -159,11 +175,12 @@ export class Loader {
   }
 
   /**
-   * Set Logger level
-   *
-   * @static
-   * @param {KoattyApplication} app
-   * @memberof Loader
+   * Set logger configuration for the Koatty application.
+   * 
+   * @param {KoattyApplication} app - The Koatty application instance
+   * @description Configures logging settings based on application environment and config options.
+   * Handles log level, log file path, and sensitive fields configuration.
+   * In production environment, default log level is 'info', otherwise 'debug'.
    */
   public static SetLogger(app: KoattyApplication) {
     const data = app.getMetaData('_configs') || [];
@@ -191,12 +208,12 @@ export class Loader {
   }
 
   /**
-   * Load app event hook funcs
-   *
+   * Load application event hooks from target class.
+   * Register event handlers for application lifecycle events (boot, ready, start, stop).
+   * 
+   * @param app KoattyApplication instance
+   * @param target Target class to load event hooks from
    * @static
-   * @param {KoattyApplication} app
-   * @param {*} target
-   * @memberof Loader
    */
   public static LoadAppEventHooks(app: KoattyApplication, target: any) {
     const eventFuncs: Map<string, EventHookFunc[]> = new Map();
@@ -240,10 +257,19 @@ export class Loader {
   }
 
   /**
-   * @description: Load all components
-   * @param {KoattyApplication} app
-   * @param {any} target
-   * @return {*}
+   * Load all components and initialize the application.
+   * 
+   * @param app - The KoattyApplication instance
+   * @param target - The target class or object containing configuration metadata
+   * 
+   * This method performs the following initialization steps:
+   * 1. Loads configurations
+   * 2. Creates server and router instances
+   * 3. Loads components, middlewares, services and controllers
+   * 4. Sets up routing
+   * 
+   * @static
+   * @async
    */
   public static async LoadAllComponents(app: KoattyApplication, target: any) {
     // Load configuration
@@ -284,10 +310,13 @@ export class Loader {
   }
 
   /**
-   * Load configuration
-   *
-   * @param {string[]} [loadPath]
-   * @memberof Loader
+   * Load configuration files from specified paths.
+   * First loads framework configurations from './config' directory,
+   * then loads application configurations from custom paths.
+   * Finally merges both configurations with framework configs as lower priority.
+   * 
+   * @protected
+   * @param {string[]} [loadPath] - Optional array of paths to load application configs from
    */
   protected LoadConfigs(loadPath?: string[]) {
     const frameConfig: any = {};
@@ -306,9 +335,14 @@ export class Loader {
   }
 
   /**
-   * Load middlewares
-   * [async]
-   * @memberof Loader
+   * Load and register middleware components.
+   * Processes middleware configuration, registers middleware classes with IOC container,
+   * and mounts middleware to the application.
+   * 
+   * @protected
+   * @returns {Promise<void>}
+   * @throws {Error} When middleware doesn't implement IMiddleware interface
+   * @throws {Error} When middleware loading fails
    */
   protected async LoadMiddlewares() {
     let middlewareConf = this.app.config(undefined, "middleware");
@@ -367,9 +401,12 @@ export class Loader {
   }
 
   /**
-   * Load controllers
-   *
-   * @memberof Loader
+   * Load and register controller classes from IOC container.
+   * Each controller must implement the IController interface.
+   * 
+   * @returns {Promise<string[]>} A promise that resolves to an array of controller IDs.
+   * @protected
+   * @throws {Error} If a controller does not implement the IController interface.
    */
   protected async LoadControllers() {
     const controllerList = IOC.listClass("CONTROLLER");
@@ -393,9 +430,13 @@ export class Loader {
   }
 
   /**
-   * Load services
-   *
-   * @memberof Loader
+   * Load and register service components into IOC container.
+   * Each service must implement the IService interface.
+   * Services are registered with singleton scope.
+   * 
+   * @protected
+   * @returns {Promise<void>}
+   * @throws {Error} When service does not implement IService interface
    */
   protected async LoadServices() {
     const serviceList = IOC.listClass("SERVICE");
@@ -415,9 +456,15 @@ export class Loader {
   }
 
   /**
-   * Load components
-   *
-   * @memberof Loader
+   * Load and initialize components, plugins and aspects.
+   * Components with suffix 'Plugin' must implement IPlugin interface.
+   * Components with suffix 'Aspect' must implement IAspect interface.
+   * Plugins are loaded based on configuration and executed synchronously.
+   * 
+   * @protected
+   * @returns {Promise<void>}
+   * @throws {Error} When plugin/aspect doesn't implement required interface
+   * @throws {Error} When plugin loading fails
    */
   protected async LoadComponents() {
     const componentList = IOC.listClass("COMPONENT");
@@ -469,9 +516,9 @@ export class Loader {
   }
 
   /**
-   * @description: load router
-   * @param {string} ctls
-   * @return {*}
+   * Load router configuration from controller files.
+   * @param ctls Array of controller file paths to be loaded
+   * @protected
    */
   protected async LoadRouter(ctls: string[]) {
     // load router
