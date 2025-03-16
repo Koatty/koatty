@@ -10,11 +10,11 @@ export default {
   list: [], //加载的中间件列表
   config: { //中间件配置
     // 静态服务器中间件默认未开启
-    StaticMiddleware: false,
+    // StaticMiddleware: false,
     // 需要开启请修改为:
-    // StaticMiddleware: {
-    //     cache: true
-    // },
+    StaticMiddleware: {
+      cache: true
+    },
 
     SessionMiddleware: {
       key: 'koa.sess', /** (string) cookie key (default is koa.sess) */
