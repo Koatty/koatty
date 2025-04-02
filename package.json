@@ -73,7 +73,7 @@
     "@typescript-eslint/eslint-plugin": "^8.x.x",
     "@typescript-eslint/parser": "^8.x.x",
     "conventional-changelog-cli": "^5.x.x",
-    "eslint": "^8.x.x",
+    "eslint": "^9.x.x",
     "eslint-plugin-jest": "^28.x.x",
     "husky": "^4.x.x",
     "jest": "^29.x.x",
@@ -81,6 +81,7 @@
     "koatty_validation": "~1.x.x",
     "reflect-metadata": "^0.x.x",
     "rollup": "^4.x.x",
+    "rollup-plugin-cleanup": "^3.x.x",
     "rollup-plugin-delete": "^2.x.x",
     "rollup-plugin-typescript2": "^0.x.x",
     "standard-version": "^9.x.x",
@@ -101,7 +102,7 @@
     "koatty_logger": "~2.1.8",
     "koatty_router": "~1.14.1",
     "koatty_serve": "~2.3.0",
-    "koatty_trace": "~1.14.0",
+    "koatty_trace": "~1.14.1",
     "ts-morph": "^25.0.1"
   }
 }

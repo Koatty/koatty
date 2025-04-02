@@ -16,6 +16,7 @@ import {
   Get,
   GetMapping,
   KoattyContext,
+  PathVariable,
   Post, PostMapping,
   RequestBody
 } from '../../../src/index';
@@ -90,8 +91,8 @@ export class IndexController {
    * @apiErrorExample {json} Error
    * {"code":0,"message":"错误信息","data":null}
    */
-  @GetMapping("/get")
-  async get(@Valid("IsNotEmpty", "id不能为空") @Get("id") id: number): Promise<any> {
+  @GetMapping("/get/:id")
+  async get(@Valid("IsNotEmpty", "id不能为空") @PathVariable("id") id: number): Promise<any> {
     const userInfo = await this.TestService.getUser(id);
     return Output.ok("success", userInfo);
   }
