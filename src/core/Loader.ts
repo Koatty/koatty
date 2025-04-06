@@ -423,9 +423,9 @@ export class Loader {
         continue;
       }
       Logger.Debug(`Load router middleware: ${key}`);
-      const result = await handle.run(middlewareConfig[key] || {}, app);
+      const result = await handle.run(middlewareConfig[key] || {}, this.app);
       if (Helper.isFunction(result)) {
-        app.setMetaData(`routerMiddleware_${key}`, result);
+        this.app.setMetaData(`routerMiddleware_${key}`, result);
       }
     }
   }
