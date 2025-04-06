@@ -347,7 +347,7 @@ export class Loader {
   protected async LoadMiddlewares() {
     let middlewareConf = this.app.config(undefined, "middleware");
     if (Helper.isEmpty(middlewareConf)) {
-      middlewareConf = { config: {}, list: [] };
+      middlewareConf = { config: {}, list: [], routeList: [] };
     }
 
     //Mount default middleware
@@ -366,11 +366,21 @@ export class Loader {
       }
     });
 
-    const middlewareConfList = middlewareConf.list || [];
+    const middlewareList = middlewareConf.list || [];
     //de-duplication
     const appMList = new Set([]);
-    middlewareConfList.forEach((item: string) => {
+    middlewareList.forEach((item: string) => {
       appMList.add(item);
+    });
+    const middelwareRouterList = middlewareConf.routeList || [];
+    const routerList = new Set([]);
+    middelwareRouterList.forEach((item: string) => {
+      routerList.add(item);
+    });
+    //de-duplication
+    const appRList = new Set([]);
+    routerList.forEach((item: string) => {
+      appRList.add(item);
     });
 
     //Automatically call middleware
@@ -396,6 +406,26 @@ export class Loader {
         } else {
           this.app.useExp(result);
         }
+      }
+    }
+
+    // Automatically call router middleware
+    for (const key of routerList) {
+      const handle: IMiddleware = IOC.get(key, "MIDDLEWARE");
+      if (!handle) {
+        throw Error(`Router middleware ${key} load error.`);
+      }
+      if (!Helper.isFunction(handle.run)) {
+        throw Error(`The router middleware ${key} must implements interface 'IMiddleware'.`);
+      }
+      if (middlewareConfig[key] === false) {
+        Logger.Warn(`The router middleware ${key} has been loaded but not executed.`);
+        continue;
+      }
+      Logger.Debug(`Load router middleware: ${key}`);
+      const result = await handle.run(middlewareConfig[key] || {}, app);
+      if (Helper.isFunction(result)) {
+        app.setMetaData(`routerMiddleware_${key}`, result);
       }
     }
   }
