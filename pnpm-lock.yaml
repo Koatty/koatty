@@ -18,11 +18,11 @@ importers:
         specifier: ~1.10.3
         version: 1.10.3(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
       koatty_core:
-        specifier: ~1.13.0
-        version: 1.13.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1)
+        specifier: ~1.15.0
+        version: 1.15.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1)
       koatty_exception:
         specifier: ~1.6.0
-        version: 1.6.0(koatty_container@1.10.3)(koatty_core@1.13.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+        version: 1.6.0(koatty_container@1.10.3)(koatty_core@1.15.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
       koatty_lib:
         specifier: ~1.4.1
         version: 1.4.1
@@ -34,13 +34,13 @@ importers:
         version: 2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)
       koatty_router:
         specifier: ~1.14.1
-        version: 1.14.1(graphql@16.10.0)(koatty_container@1.10.3)(koatty_core@1.13.0)(koatty_exception@1.6.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)
+        version: 1.14.1(graphql@16.10.0)(koatty_container@1.10.3)(koatty_core@1.15.0)(koatty_exception@1.6.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)
       koatty_serve:
         specifier: ~2.3.0
-        version: 2.3.0(koatty_container@1.10.3)(koatty_core@1.13.0)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)
+        version: 2.3.0(koatty_container@1.10.3)(koatty_core@1.15.0)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)
       koatty_trace:
         specifier: ~1.14.1
-        version: 1.14.1(koatty_container@1.10.3)(koatty_core@1.13.0)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+        version: 1.14.1(koatty_container@1.10.3)(koatty_core@1.15.0)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
       ts-morph:
         specifier: ^25.0.1
         version: 25.0.1
@@ -138,6 +138,9 @@ importers:
       rollup-plugin-delete:
         specifier: ^2.x.x
         version: 2.2.0(rollup@4.35.0)
+      rollup-plugin-terser:
+        specifier: ^7.x.x
+        version: 7.0.2(rollup@4.35.0)
       rollup-plugin-typescript2:
         specifier: ^0.x.x
         version: 0.36.0(rollup@4.35.0)(typescript@5.8.2)
@@ -2067,7 +2070,7 @@ packages:
         optional: true
 
   deep-equal@1.0.1:
-    resolution: {integrity: sha512-bHtC0iYvWhyaTzvV3CZgPeZQqCOBGyGsVV7v4eevpdkLHfiSrXUdBG+qAuSz4RI70sszvjQ1QSZ98An1yNwpSw==}
+    resolution: {integrity: sha1-9dJgKStmDghO/0zbyfCK0yR0SLU=}
 
   deep-extend@0.6.0:
     resolution: {integrity: sha512-LOHxIOaPYdHlJRtCQfDIVZtfw/ufM8+rVj649RIHzcm/vGwQRXFt6OPqIFWsm2XEMrNIEtWR64sY1LEKD2vAOA==}
@@ -2916,6 +2919,10 @@ packages:
     resolution: {integrity: sha512-49Fg7WXkU3Vl2h6LbLtMQ/HyB6rXSIX7SqvBLQmssRBGN9I0PNvPmAmCWSOY6SOvrjhI/F7/bGAv9RtnsPA03g==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
 
+  jest-worker@26.6.2:
+    resolution: {integrity: sha512-KWYVV1c4i+jbMpaBC+U++4Va0cp8OisU185o73T1vo99hqi7w8tSJfUXYswwqqrjzwxa6KpRK54WhPvwf5w6PQ==}
+    engines: {node: '>= 10.13.0'}
+
   jest-worker@29.7.0:
     resolution: {integrity: sha512-eIz2msL/EzL9UFTFFx7jBTkeZfku0yUAyZZZmJ93H2TYEiroIx2PQjEXcwYtYl8zXCxb+PAmA2hLIt/6ZEkPHw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -3048,8 +3055,8 @@ packages:
       koatty_lib: ^1.x.x
       koatty_logger: ^2.x.x
 
-  koatty_core@1.13.0:
-    resolution: {integrity: sha512-AiHj4NyPL7C9ZkXvSddrdlkWHp72pyh1NRI+lROuRjGRDYYE95qVyl+S+tNB+8v0X+FWUh2KGyl3JHRntilRjA==}
+  koatty_core@1.15.0:
+    resolution: {integrity: sha512-iKlA5qn+2DiC1EC556jFlTooxOoYOCKT9ScUSejlFg4BV5CoslccGAOh1yOtYhLJZTwe2xSh8p7CoZuDesD3+A==}
     engines: {node: '>10.0.0'}
     peerDependencies:
       koa: ^2.x.x
@@ -3757,6 +3764,12 @@ packages:
     peerDependencies:
       rollup: '*'
 
+  rollup-plugin-terser@7.0.2:
+    resolution: {integrity: sha512-w3iIaU4OxcF52UUXiZNsNeuXIMDvFrr+ZXK6bFZ0Q60qyVfq4uLptoS4bbq3paG3x216eQllFZX7zt6TIImguQ==}
+    deprecated: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-terser
+    peerDependencies:
+      rollup: ^2.0.0
+
   rollup-plugin-typescript2@0.36.0:
     resolution: {integrity: sha512-NB2CSQDxSe9+Oe2ahZbf+B4bh7pHwjV5L+RSYpCu7Q5ROuN94F9b6ioWwKfz3ueL3KTtmX4o2MUH2cgHDIEUsw==}
     peerDependencies:
@@ -3822,6 +3835,9 @@ packages:
     resolution: {integrity: sha512-hlq8tAfn0m/61p4BVRcPzIGr6LKiMwo4VM6dGi6pt4qcRkmNzTcWq6eCEjEh+qXjkMDvPlOFFSGwQjoEa6gyMA==}
     engines: {node: '>=10'}
     hasBin: true
+
+  serialize-javascript@4.0.0:
+    resolution: {integrity: sha512-GaNA54380uFefWghODBWEGisLZFj00nS5ACs6yHa9nLqlLpVLO8ChDGeKRjZnV4Nh4n0Qi7nhYZD/9fCPzEqkw==}
 
   serialize-javascript@6.0.2:
     resolution: {integrity: sha512-Saa1xPByTTq2gdeFZYLLo+RFE35NHZkAbqZeWNd3BpzppeVisAqpDjcp8dyf6uIvEqJRd46jemmyA4iFIeVk8g==}
@@ -7821,6 +7837,12 @@ snapshots:
       jest-util: 29.7.0
       string-length: 4.0.2
 
+  jest-worker@26.6.2:
+    dependencies:
+      '@types/node': 22.13.10
+      merge-stream: 2.0.0
+      supports-color: 7.2.0
+
   jest-worker@29.7.0:
     dependencies:
       '@types/node': 22.13.10
@@ -7955,14 +7977,14 @@ snapshots:
       koa: 2.16.0
       koatty_config: 1.2.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_loader@1.1.0(koatty_lib@1.4.1))(koatty_trace@1.14.1)(tslib@2.8.1)
       koatty_container: 1.10.3(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_core: 1.13.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1)
-      koatty_exception: 1.6.0(koatty_container@1.10.3)(koatty_core@1.13.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_core: 1.15.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1)
+      koatty_exception: 1.6.0(koatty_container@1.10.3)(koatty_core@1.15.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
       koatty_lib: 1.4.1
       koatty_loader: 1.1.0(koatty_lib@1.4.1)
       koatty_logger: 2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)
-      koatty_router: 1.14.1(graphql@16.10.0)(koatty_container@1.10.3)(koatty_core@1.13.0)(koatty_exception@1.6.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)
-      koatty_serve: 2.3.0(koatty_container@1.10.3)(koatty_core@1.13.0)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)
-      koatty_trace: 1.14.1(koatty_container@1.10.3)(koatty_core@1.13.0)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_router: 1.14.1(graphql@16.10.0)(koatty_container@1.10.3)(koatty_core@1.15.0)(koatty_exception@1.6.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)
+      koatty_serve: 2.3.0(koatty_container@1.10.3)(koatty_core@1.15.0)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)
+      koatty_trace: 1.14.1(koatty_container@1.10.3)(koatty_core@1.15.0)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
       ts-morph: 25.0.1
     transitivePeerDependencies:
       - bufferutil
@@ -7978,7 +8000,7 @@ snapshots:
   koatty_config@1.2.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_loader@1.1.0(koatty_lib@1.4.1))(koatty_trace@1.14.1)(tslib@2.8.1):
     dependencies:
       koatty_container: 1.10.3(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_core: 1.13.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(koatty_lib@1.4.1)(tslib@2.8.1))(koatty_trace@1.14.1)
+      koatty_core: 1.15.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(koatty_lib@1.4.1)(tslib@2.8.1))(koatty_trace@1.14.1)
       koatty_lib: 1.4.1
       koatty_loader: 1.1.0(koatty_lib@1.4.1)
       koatty_logger: 2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)
@@ -7994,36 +8016,36 @@ snapshots:
       koatty_lib: 1.4.1
       koatty_logger: 2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)
 
-  koatty_core@1.13.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1):
+  koatty_core@1.15.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1):
     dependencies:
       http-assert: 1.5.0
       koa: 2.16.0
       koa-compose: 4.1.0
       koatty_container: 1.10.3(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_exception: 1.6.0(koatty_container@1.10.3)(koatty_core@1.13.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_exception: 1.6.0(koatty_container@1.10.3)(koatty_core@1.15.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
       koatty_lib: 1.4.1
       koatty_logger: 2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)
-      koatty_trace: 1.14.1(koatty_container@1.10.3)(koatty_core@1.13.0)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_trace: 1.14.1(koatty_container@1.10.3)(koatty_core@1.15.0)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
       on-finished: 2.4.1
 
-  koatty_core@1.13.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(koatty_lib@1.4.1)(tslib@2.8.1))(koatty_trace@1.14.1):
+  koatty_core@1.15.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(koatty_lib@1.4.1)(tslib@2.8.1))(koatty_trace@1.14.1):
     dependencies:
       http-assert: 1.5.0
       koa: 2.16.0
       koa-compose: 4.1.0
       koatty_container: 1.10.3(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_exception: 1.6.0(koatty_container@1.10.3)(koatty_core@1.13.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_exception: 1.6.0(koatty_container@1.10.3)(koatty_core@1.15.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
       koatty_lib: 1.4.1
       koatty_logger: 2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)
-      koatty_trace: 1.14.1(koatty_container@1.10.3)(koatty_core@1.13.0)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_trace: 1.14.1(koatty_container@1.10.3)(koatty_core@1.15.0)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
       on-finished: 2.4.1
 
-  koatty_exception@1.6.0(koatty_container@1.10.3)(koatty_core@1.13.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)):
+  koatty_exception@1.6.0(koatty_container@1.10.3)(koatty_core@1.15.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)):
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/semantic-conventions': 1.30.0
       koatty_container: 1.10.3(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_core: 1.13.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1)
+      koatty_core: 1.15.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1)
       koatty_lib: 1.4.1
       koatty_logger: 2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)
 
@@ -8068,15 +8090,15 @@ snapshots:
       koatty_lib: 1.4.1
       protobufjs: 7.4.0
 
-  koatty_router@1.14.1(graphql@16.10.0)(koatty_container@1.10.3)(koatty_core@1.13.0)(koatty_exception@1.6.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6):
+  koatty_router@1.14.1(graphql@16.10.0)(koatty_container@1.10.3)(koatty_core@1.15.0)(koatty_exception@1.6.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6):
     dependencies:
       '@koa/router': 13.1.0
       formidable: 3.5.2
       inflation: 2.1.0
       koa-graphql: 0.12.0(graphql@16.10.0)
       koatty_container: 1.10.3(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_core: 1.13.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1)
-      koatty_exception: 1.6.0(koatty_container@1.10.3)(koatty_core@1.13.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_core: 1.15.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1)
+      koatty_exception: 1.6.0(koatty_container@1.10.3)(koatty_core@1.15.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
       koatty_graphql: 1.1.0(koatty_lib@1.4.1)
       koatty_lib: 1.4.1
       koatty_logger: 2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)
@@ -8088,12 +8110,12 @@ snapshots:
     transitivePeerDependencies:
       - graphql
 
-  koatty_serve@2.3.0(koatty_container@1.10.3)(koatty_core@1.13.0)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6):
+  koatty_serve@2.3.0(koatty_container@1.10.3)(koatty_core@1.15.0)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6):
     dependencies:
       '@grpc/grpc-js': 1.13.0
       koatty_container: 1.10.3(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_core: 1.13.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1)
-      koatty_exception: 1.6.0(koatty_container@1.10.3)(koatty_core@1.13.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_core: 1.15.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1)
+      koatty_exception: 1.6.0(koatty_container@1.10.3)(koatty_core@1.15.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
       koatty_lib: 1.4.1
       koatty_logger: 2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)
       koatty_proto: 1.2.0(koatty_lib@1.4.1)
@@ -8103,7 +8125,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  koatty_trace@1.14.1(koatty_container@1.10.3)(koatty_core@1.13.0)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)):
+  koatty_trace@1.14.1(koatty_container@1.10.3)(koatty_core@1.15.0)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)):
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/auto-instrumentations-node': 0.57.0(@opentelemetry/api@1.9.0)
@@ -8118,8 +8140,8 @@ snapshots:
       '@opentelemetry/sdk-trace-node': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/semantic-conventions': 1.30.0
       koatty_container: 1.10.3(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_core: 1.13.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1)
-      koatty_exception: 1.6.0(koatty_container@1.10.3)(koatty_core@1.13.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_core: 1.15.0(koa@2.16.0)(koatty_container@1.10.3)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1)
+      koatty_exception: 1.6.0(koatty_container@1.10.3)(koatty_core@1.15.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
       koatty_lib: 1.4.1
       koatty_logger: 2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)
       uuid: 9.0.1
@@ -8713,6 +8735,14 @@ snapshots:
       del: 6.1.1
       rollup: 4.35.0
 
+  rollup-plugin-terser@7.0.2(rollup@4.35.0):
+    dependencies:
+      '@babel/code-frame': 7.26.2
+      jest-worker: 26.6.2
+      rollup: 4.35.0
+      serialize-javascript: 4.0.0
+      terser: 5.39.0
+
   rollup-plugin-typescript2@0.36.0(rollup@4.35.0)(typescript@5.8.2):
     dependencies:
       '@rollup/pluginutils': 4.2.1
@@ -8792,6 +8822,10 @@ snapshots:
       lru-cache: 6.0.0
 
   semver@7.7.1: {}
+
+  serialize-javascript@4.0.0:
+    dependencies:
+      randombytes: 2.1.0
 
   serialize-javascript@6.0.2:
     dependencies:

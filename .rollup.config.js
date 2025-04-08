@@ -15,7 +15,7 @@ import del from "rollup-plugin-delete";
 import typescript from 'rollup-plugin-typescript2';
 import cleanup from 'rollup-plugin-cleanup';
 // import babel from '@rollup/plugin-babel';
-// import { terser } from "@rollup/plugin-terser";
+import { terser } from "rollup-plugin-terser";
 const pkg = require('./package.json');
 
 export default [
@@ -31,7 +31,7 @@ export default [
         format: 'es',
         file: './dist/index.mjs',
         banner: require('./scripts/copyright'),
-      },
+      }
     ],
     plugins: [
       del({ targets: ["dist/*", "temp/*", "docs/api"] }),
@@ -54,7 +54,25 @@ export default [
           }
         }
       }),
-      // terser(),
+      terser({
+        compress: {
+          // 关键性压缩选项        
+          defaults: false, // 禁用预设优化 
+          arrows: true,    // 仅转换箭头函数 
+          booleans: true,  // 简化布尔表达式      
+          drop_console: false, // 保留 console 语句    
+          keep_fnames: true    // 保持函数名    
+        },
+        mangle: {
+          reserved: ['$super'], // 保留关键标识符       
+          keep_classnames: true // 类名不动     
+        },
+        format: {
+          beautify: true,      // 启用格式化     
+          indent_level: 2,     // 缩进层级   
+          // comments: /@license|@preserve/ // 保留特定注释     
+        },
+      }),
       cleanup({ comments: "istanbul", extensions: ["js", "ts"] }),
     ],
     external: [
