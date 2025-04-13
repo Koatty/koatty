@@ -14,7 +14,7 @@ import {
   AppEvent, AppEventArr, EventHookFunc, IMiddleware, implementsAspectInterface,
   implementsControllerInterface, implementsMiddlewareInterface,
   implementsPluginInterface, implementsServiceInterface, IPlugin,
-  KoattyApplication
+  KoattyApplication, parseExp
 } from 'koatty_core';
 import { Helper } from "koatty_lib";
 import { Load } from "koatty_loader";
@@ -194,14 +194,14 @@ export class Loader {
       if (app.env === "production") {
         logLevel = "info";
       }
-      if (opt.logs_level) {
-        logLevel = (opt.logs_level).toLowerCase();
+      if (opt.logsLevel) {
+        logLevel = (opt.logsLevel).toLowerCase();
       }
-      if (opt.logs_path) {
-        logFilePath = opt.logs_path;
+      if (opt.logsPath) {
+        logFilePath = opt.logsPath;
       }
-      if (opt.sens_fields) {
-        sensFields = opt.sens_fields;
+      if (opt.sensFields) {
+        sensFields = opt.sensFields;
       }
       SetLogger(app, { logLevel, logFilePath, sensFields });
     }
@@ -280,12 +280,8 @@ export class Loader {
     loader.LoadConfigs(configurationMeta);
 
     // Create Server
-    const protocol = app.config('protocol');
-    const serveOpts = {
-      hostname: app.config('app_host'),
-      port: app.config('app_port'),
-      protocol: protocol,
-    };
+    const serveOpts = app.config('server') ?? { protocol: "http" };
+    const protocol = serveOpts.protocol ?? "http";
     Helper.define(app, "server", NewServe(app, serveOpts));
     // Create router 
     const routerOpts = app.config(undefined, 'router') ?? {};
@@ -372,15 +368,10 @@ export class Loader {
     middlewareList.forEach((item: string) => {
       appMList.add(item);
     });
-    const middelwareRouterList = middlewareConf.routeList || [];
-    const routerList = new Set([]);
-    middelwareRouterList.forEach((item: string) => {
-      routerList.add(item);
-    });
-    //de-duplication
-    const appRList = new Set([]);
-    routerList.forEach((item: string) => {
-      appRList.add(item);
+    const middlewareRouterList = middlewareConf.routeList || [];
+    const routerRList = new Set([]);
+    middlewareRouterList.forEach((item: string) => {
+      routerRList.add(item);
     });
 
     //Automatically call middleware
@@ -394,7 +385,7 @@ export class Loader {
         throw Error(`The middleware ${key} must implements interface 'IMiddleware'.`);
       }
       // if (middlewareConfig[key] === false) {
-      //   Logger.Warn(`The middleware ${key} has been loaded but not executed.`);
+      //   Logger.Warn(`The middleware ${key} has been loaded but will not be executed.`);
       //   continue;
       // }
       Logger.Debug(`Load middleware: ${key}`);
@@ -410,7 +401,7 @@ export class Loader {
     }
 
     // Automatically call router middleware
-    for (const key of routerList) {
+    for (const key of routerRList) {
       const handle: IMiddleware = IOC.get(key, "MIDDLEWARE");
       if (!handle) {
         throw Error(`Router middleware ${key} load error.`);
@@ -418,14 +409,14 @@ export class Loader {
       if (!Helper.isFunction(handle.run)) {
         throw Error(`The router middleware ${key} must implements interface 'IMiddleware'.`);
       }
-      if (middlewareConfig[key] === false) {
-        Logger.Warn(`The router middleware ${key} has been loaded but not executed.`);
-        continue;
-      }
+      // if (middlewareConfig[key] === false) {
+      //   Logger.Warn(`The router middleware ${key} has been loaded but will not be executed.`);
+      //   continue;
+      // }
       Logger.Debug(`Load router middleware: ${key}`);
       const result = await handle.run(middlewareConfig[key] || {}, this.app);
       if (Helper.isFunction(result)) {
-        this.app.setMetaData(`routerMiddleware_${key}`, result);
+        this.app.setMetaData(`routerMiddleware_${key}`, result.length > 2 ? parseExp(result) : result);
       }
     }
   }

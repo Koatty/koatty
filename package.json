@@ -91,17 +91,17 @@
     "typescript": "^5.x.x"
   },
   "dependencies": {
-    "koa": "~2.16.0",
+    "koa": "~2.16.1",
     "koatty_config": "~1.2.0",
-    "koatty_container": "~1.10.2",
-    "koatty_core": "~1.15.0",
-    "koatty_exception": "~1.5.3",
+    "koatty_container": "~1.11.1",
+    "koatty_core": "~1.16.1",
+    "koatty_exception": "~1.6.0",
     "koatty_lib": "~1.4.1",
     "koatty_loader": "~1.1.0",
     "koatty_logger": "~2.1.8",
     "koatty_router": "~1.14.1",
-    "koatty_serve": "~2.3.0",
-    "koatty_trace": "~1.13.1",
+    "koatty_serve": "~2.4.0",
+    "koatty_trace": "~1.14.1",
     "ts-morph": "^25.0.1"
   }
 }

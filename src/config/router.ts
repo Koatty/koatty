@@ -47,7 +47,10 @@ export default {
       form: ['application/x-www-form-urlencoded'],
       text: ['text/plain'],
       multipart: ['multipart/form-data'],
-      xml: ['text/xml']
+      xml: ['text/xml'],
+      grpc: ['application/grpc'],
+      graphql: ['application/graphql+json'],
+      websocket: ['application/websocket']
     },
     limit: '20mb',
     encoding: 'utf-8',
@@ -58,5 +61,11 @@ export default {
   /**
    *  Other extended configuration
    */
-  // ext?: any;
+  // ext?: Record<string, any>;
+  // {
+  //  // gRPC protocol file
+  //  protoFile ?: string;
+  //  // graphql schema file
+  //  schemaFile ?: string;
+  //}
 };

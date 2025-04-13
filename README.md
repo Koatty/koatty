@@ -24,8 +24,11 @@ Koa2 + Typescript + IOC = koatty. **Koatty** is a progressive Node.js framework 
 * `@ExceptionHandler()` Register global exception handling.✔️
 * Graceful shutdown and pre-exit event.✔️
 * Supports custom decorators, bound to app events for execution.✔️
-* GraphQL supporting. ✔️
-* OpenTelemetry . 💪
+* GraphQL integration is available. ✔️
+* Full-stack tracing capability through OpenTelemetry . ✔️
+* Middleware can be bound to controllers and their method routes.✔️
+* gRPC streaming is now supported. ✔️
+* Added support for Swagger OpenAPI 3.0. 💪
 
 
 ## Core Features ✨
@@ -35,7 +38,7 @@ Koa2 + Typescript + IOC = koatty. **Koatty** is a progressive Node.js framework 
 // config/config.ts
 export default {
   ...
-  protocol: "grpc", // Server protocol 'http' | 'https' | 'http2' | 'grpc' | 'ws' | 'wss'
+  protocol: "grpc", // Server protocol 'http' | 'https' | 'http2' | 'grpc' | 'ws' | 'wss' | 'graphql'
   ...
 }
 ```
@@ -53,6 +56,8 @@ export class UserService {
 export class IndexController {
     app: App;
     ctx: KoattyContext;
+    @Config("protocol")
+    conf: { protocol: string };
     ...
 
     @Autowired()
@@ -79,7 +84,13 @@ export class LogAspect implements IAspect {
 // Apply aspect to controller
 @Controller()
 @BeforeEach(LogAspect)
-export class UserController {}
+export class UserController {
+  ...
+  @After(LogAspect)
+  test() {
+    ...
+  }
+}
 ```
 
 ### 🔌 Plugin System

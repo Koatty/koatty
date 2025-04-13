@@ -16,6 +16,6 @@ export default {
   // executed only for specified routes
   routeList: [],
   config: { // middleware configuration
-    // TODO
+    
   }
 };
