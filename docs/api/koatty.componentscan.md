@@ -4,8 +4,7 @@
 
 ## ComponentScan() function
 
-Define project scan path
-
+Component scan decorator for Koatty application. Scans the specified path(s) for components and registers them in the IOC container.
 
 **Signature:**
 
@@ -43,7 +42,7 @@ string \| string\[\]
 
 </td><td>
 
-_(Optional)_
+_(Optional)_ The path or array of paths to scan for components
 
 
 </td></tr>
@@ -52,5 +51,19 @@ _(Optional)_
 
 ClassDecorator
 
-{<!-- -->ClassDecorator<!-- -->}
+{<!-- -->ClassDecorator<!-- -->} A class decorator that enables component scanning
+
+## Exceptions
+
+{<!-- -->Error<!-- -->} If the decorated class does not inherit from Koatty
+
+## Example
+
+
+```typescript
+@ComponentScan()
+export class App extends Koatty {
+  // ...
+}
+```
 

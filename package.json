@@ -59,7 +59,7 @@
     "@microsoft/api-extractor": "^7.x.x",
     "@rollup/plugin-commonjs": "^28.x.x",
     "@rollup/plugin-json": "^6.x.x",
-    "@rollup/plugin-node-resolve": "^15.x.x",
+    "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-terser": "^0.x.x",
     "@types/formidable": "^3.x.x",
     "@types/jest": "^29.x.x",
@@ -94,14 +94,14 @@
     "koa": "~2.16.1",
     "koatty_config": "~1.2.0",
     "koatty_container": "~1.11.1",
-    "koatty_core": "~1.16.1",
+    "koatty_core": "~1.16.2",
     "koatty_exception": "~1.6.0",
     "koatty_lib": "~1.4.1",
     "koatty_loader": "~1.1.0",
     "koatty_logger": "~2.1.8",
     "koatty_router": "~1.14.1",
     "koatty_serve": "~2.4.0",
-    "koatty_trace": "~1.14.1",
+    "koatty_trace": "~1.15.1",
     "ts-morph": "^25.0.1"
   }
 }

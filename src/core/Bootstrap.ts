@@ -7,10 +7,8 @@
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
-
-import EventEmitter from "events";
 import { IOC, TAGGED_CLS } from "koatty_container";
-import { AppEvent, EventHookFunc, Koatty, KoattyApplication, KoattyServer } from 'koatty_core';
+import { AppEvent, EventHookFunc, Koatty, KoattyApplication, KoattyServer, asyncEvent } from 'koatty_core';
 import { Helper } from "koatty_lib";
 import { checkRuntime, checkUTRuntime, KOATTY_VERSION } from "../util/Helper";
 import { Logger } from "../util/Logger";
@@ -243,22 +241,4 @@ const listenCallback = (app: KoattyApplication) => {
   if (app.appDebug) Logger.Warn(`Running in debug mode.`);
   // Set Logger
   Loader.SetLogger(app);
-};
-
-/**
- * Execute event listeners asynchronously and remove them after execution.
- * 
- * @param event The EventEmitter instance
- * @param eventName The name of the event to handle
- * @returns Promise that resolves after all listeners are executed and removed
- */
-const asyncEvent = async function (event: EventEmitter, eventName: string) {
-  const ls: any[] = event.listeners(eventName);
-  // eslint-disable-next-line no-restricted-syntax
-  for await (const func of ls) {
-    if (Helper.isFunction(func)) {
-      func();
-    }
-  }
-  return event.removeAllListeners(eventName);
 };

@@ -4,7 +4,7 @@
 
 ## BindEventHook() function
 
-@<!-- -->description: bind App event hook func example: export function TestDecorator(): ClassDecorator { return (target: Function) =<!-- -->&gt; { BindEventHook(AppEvent.appBoot, (app: KoattyApplication) =<!-- -->&gt; { // todo return Promise.resolve(); }<!-- -->, target) } }
+Bind event hook to target class.
 
 **Signature:**
 
@@ -42,6 +42,8 @@ AppEvent
 
 </td><td>
 
+The application event name to bind
+
 
 </td></tr>
 <tr><td>
@@ -55,6 +57,8 @@ EventHookFunc
 
 
 </td><td>
+
+The event hook function to be executed
 
 
 </td></tr>
@@ -70,7 +74,7 @@ any
 
 </td><td>
 
- {<!-- -->\*<!-- -->}
+The target class to bind the event hook
 
 
 </td></tr>
@@ -78,4 +82,14 @@ any
 **Returns:**
 
 void
+
+{<!-- -->\*<!-- -->}
+
+## Exceptions
+
+Error if the decorated class does not inherit from Koatty.
+
+## Example
+
+\`\`\`<!-- -->typescript export function TestDecorator(): ClassDecorator { return (target: Function) =<!-- -->&gt; { BindEventHook(AppEvent.appBoot, (app: KoattyApplication) =<!-- -->&gt; { // todo return Promise.resolve(); }<!-- -->, target) } }
 

@@ -4,8 +4,7 @@
 
 ## ConfigurationScan() function
 
-Define project configuration scan path
-
+Configuration scan decorator, used to scan and load configuration files.
 
 **Signature:**
 
@@ -43,7 +42,7 @@ string \| string\[\]
 
 </td><td>
 
-_(Optional)_
+_(Optional)_ The path or array of paths to scan for configuration files. If not provided, defaults to empty string.
 
 
 </td></tr>
@@ -52,5 +51,13 @@ _(Optional)_
 
 ClassDecorator
 
-{<!-- -->ClassDecorator<!-- -->}
+A class decorator function that registers configuration scan metadata.
+
+## Exceptions
+
+Error if the decorated class does not inherit from Koatty.
+
+## Example
+
+\`\`\`<!-- -->typescript @<!-- -->ConfigurationScan() export class App extends Koatty { // ... }
 

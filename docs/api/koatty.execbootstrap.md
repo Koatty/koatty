@@ -4,7 +4,7 @@
 
 ## ExecBootStrap() function
 
-Actively perform dependency injection Parse the decorator, return the instantiated app.  ExecBootStrap
+Decorator function for bootstrapping a Koatty application.
 
 **Signature:**
 
@@ -42,7 +42,7 @@ Function
 
 </td><td>
 
-_(Optional)_ callback function
+_(Optional)_ Optional function to be executed during bootstrap process
 
 
 </td></tr>
@@ -51,4 +51,16 @@ _(Optional)_ callback function
 
 (target: any) =&gt; Promise&lt;KoattyApplication&gt;
 
+A decorator function that validates and executes the bootstrap process
+
+## Exceptions
+
+Error if the target class does not inherit from Koatty
+
+## Example
+
+
+```typescript
+app = await ExecBootStrap()(App);
+```
 
