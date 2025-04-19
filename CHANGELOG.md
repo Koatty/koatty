@@ -1,3 +1,21 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [3.13.0](https://github.com/thinkkoa/koatty/compare/v3.12.0...v3.13.0) (2025-04-19)
+
+
+### Features
+
+* add route-specific middleware support in Loader ([e4b9826](https://github.com/thinkkoa/koatty/commit/e4b98269f5320abd79a16e857051c9e910a3a153))
+* enhance trace configuration with additional options ([2c0c7fb](https://github.com/thinkkoa/koatty/commit/2c0c7fb5e846c694f8b2613c6bf559ee1bd6666b))
+
+
+### Bug Fixes
+
+* enhance Bootstrap and Loader decorators with detailed documentation and error handling ([4b51d8a](https://github.com/thinkkoa/koatty/commit/4b51d8a960fa523300235c0cdcca699a13ec9ad9))
+* use correct app instance reference in Loader middleware execution ([fe8bd4e](https://github.com/thinkkoa/koatty/commit/fe8bd4e5f6af712b3049ae46eb4f7cac3bbedf0d))
+
 ## 3.12.0 (2025-03-15)
 
 * build: bump koatty_router from ~1.12.1 to ~1.14.0 ([142465e](https://github.com/thinkkoa/koatty/commit/142465e))
