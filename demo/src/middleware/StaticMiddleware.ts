@@ -9,7 +9,7 @@ import { App } from '../App';
 // import { Static } from "koatty_static";
 
 @Middleware()
-export class StaticMiddleware implements IMiddleware {
+export class StaticMiddleware {
   run(options: any, app: App) {
     return function (ctx: KoattyContext, next: KoattyNext) {
       return next();

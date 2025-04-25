@@ -7,10 +7,8 @@
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
-
-import EventEmitter from "events";
 import { IOC, TAGGED_CLS } from "koatty_container";
-import { AppEvent, EventHookFunc, Koatty, KoattyApplication, KoattyServer } from 'koatty_core';
+import { AppEvent, EventHookFunc, Koatty, KoattyApplication, KoattyServer, asyncEvent } from 'koatty_core';
 import { Helper } from "koatty_lib";
 import { checkRuntime, checkUTRuntime, KOATTY_VERSION } from "../util/Helper";
 import { Logger } from "../util/Logger";
@@ -18,11 +16,19 @@ import { COMPONENT_SCAN, CONFIGURATION_SCAN, LOGO } from "./Constants";
 import { Loader } from "./Loader";
 
 /**
- * Bootstrap application decorator
- *
- * @export
- * @param {Function} [bootFunc]
- * @returns {ClassDecorator}
+ * Bootstrap decorator for Koatty application class.
+ * 
+ * @param bootFunc Optional function to execute during bootstrap process
+ * @returns ClassDecorator
+ * @throws Error if target class does not inherit from Koatty
+ * 
+ * @example
+ * ```ts
+ * @Bootstrap()
+ * export class App extends Koatty {
+ *   // ...
+ * }
+ * ```
  */
 export function Bootstrap(bootFunc?: Function): ClassDecorator {
   return function (target: any) {
@@ -34,11 +40,16 @@ export function Bootstrap(bootFunc?: Function): ClassDecorator {
 }
 
 /**
- * Actively perform dependency injection
- * Parse the decorator, return the instantiated app. 
- * @export  ExecBootStrap
- * @param {Function} [bootFunc] callback function
- * @returns
+ * Decorator function for bootstrapping a Koatty application.
+ * 
+ * @param bootFunc Optional function to be executed during bootstrap process
+ * @returns A decorator function that validates and executes the bootstrap process
+ * @throws Error if the target class does not inherit from Koatty
+ * 
+ * @example
+ * ```typescript
+ * app = await ExecBootStrap()(App);
+ * ```
  */
 export function ExecBootStrap(bootFunc?: Function) {
   return async (target: any) => {
@@ -50,11 +61,19 @@ export function ExecBootStrap(bootFunc?: Function) {
 }
 
 /**
- * Define project scan path
- *
- * @export
- * @param {(string | string[])} [scanPath]
- * @returns {ClassDecorator}
+ * Component scan decorator for Koatty application.
+ * Scans the specified path(s) for components and registers them in the IOC container.
+ * 
+ * @param {string | string[]} [scanPath] - The path or array of paths to scan for components
+ * @returns {ClassDecorator} A class decorator that enables component scanning
+ * @throws {Error} If the decorated class does not inherit from Koatty
+ * @example
+ * ```typescript
+ * @ComponentScan()
+ * export class App extends Koatty {
+ *   // ...
+ * }
+ * ```
  */
 export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
   return (target: any) => {
@@ -67,11 +86,17 @@ export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
 }
 
 /**
- * Define project configuration scan path
- *
- * @export
- * @param {(string | string[])} [scanPath]
- * @returns {ClassDecorator}
+ * Configuration scan decorator, used to scan and load configuration files.
+ * 
+ * @param scanPath - The path or array of paths to scan for configuration files. If not provided, defaults to empty string.
+ * @returns A class decorator function that registers configuration scan metadata.
+ * @throws Error if the decorated class does not inherit from Koatty.
+ * @example
+ * ```typescript
+ * @ConfigurationScan()
+ * export class App extends Koatty {
+ *   // ...
+ * }
  */
 export function ConfigurationScan(scanPath?: string | string[]): ClassDecorator {
   return (target: any) => {
@@ -84,33 +109,45 @@ export function ConfigurationScan(scanPath?: string | string[]): ClassDecorator 
 }
 
 /**
- * @description: bind App event hook func
- * example:
+ * Bind event hook to target class.
+ * 
+ * @param eventName - The application event name to bind
+ * @param eventFunc - The event hook function to be executed
+ * @param target - The target class to bind the event hook
+ * @returns {*}
+ * @throws Error if the decorated class does not inherit from Koatty.
+ * @example
+ * ```typescript
  * export function TestDecorator(): ClassDecorator {
- *  return (target: Function) => {
- *   BindEventHook(AppEvent.appBoot, (app: KoattyApplication) => {
+ *   return (target: Function) => {
+ *     BindEventHook(AppEvent.appBoot, (app: KoattyApplication) => {
  *      // todo
  *      return Promise.resolve();
  *   }, target)   
  *  }
  * }
- * @param {AppEvent} eventName
- * @param {EventHookFunc} eventFunc
- * @param {any} target
- * @return {*}
  */
 export function BindEventHook(eventName: AppEvent, eventFunc: EventHookFunc, target: any) {
   IOC.attachClassMetadata(TAGGED_CLS, eventName, eventFunc, target);
 }
 
 /**
- * execute bootstrap
- *
- * @param {*} target
- * @param {Function} bootFunc
- * @param {boolean} [isInitiative=false] Whether to actively execute app instantiation, 
- * mainly for unittest scenarios, you need to actively obtain app instances
- * @returns {Promise<void>}
+ * Execute bootstrap process for Koatty application.
+ * 
+ * @param target - The target class to instantiate the application
+ * @param bootFunc - Function to execute during bootstrap process
+ * @param isInitiative - Whether the bootstrap is initiated manually
+ * @returns Promise<KoattyApplication> The bootstrapped application instance
+ * 
+ * This function performs the following steps:
+ * 1. Checks runtime environment
+ * 2. Creates application instance
+ * 3. Initializes environment
+ * 4. Executes boot function
+ * 5. Sets up IOC container
+ * 6. Scans and loads components
+ * 7. Triggers application events
+ * 8. Starts server (except in test environment)
  */
 const executeBootstrap = async function (target: any, bootFunc: Function,
   isInitiative = false): Promise<KoattyApplication> {
@@ -175,10 +212,13 @@ const executeBootstrap = async function (target: any, bootFunc: Function,
 };
 
 /**
- * Listening callback function
- *
- * @param {Koatty} app
- * @returns {*} 
+ * Server listen callback function.
+ * Print server information and initialize logger settings.
+ * 
+ * @param {KoattyApplication} app - The Koatty application instance
+ * @returns {void}
+ * 
+ * @internal
  */
 const listenCallback = (app: KoattyApplication) => {
   let servers: KoattyServer[] = [];
@@ -201,21 +241,4 @@ const listenCallback = (app: KoattyApplication) => {
   if (app.appDebug) Logger.Warn(`Running in debug mode.`);
   // Set Logger
   Loader.SetLogger(app);
-};
-
-/**
- * Execute event as async
- *
- * @param {Koatty} event
- * @param {string} eventName
- */
-const asyncEvent = async function (event: EventEmitter, eventName: string) {
-  const ls: any[] = event.listeners(eventName);
-  // eslint-disable-next-line no-restricted-syntax
-  for await (const func of ls) {
-    if (Helper.isFunction(func)) {
-      func();
-    }
-  }
-  return event.removeAllListeners(eventName);
 };

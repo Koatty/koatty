@@ -12,7 +12,7 @@
 
 
 // @Middleware()
-// export class SessionMiddleware implements IMiddleware {
+// export class SessionMiddleware {
 //   run(options: any, app: App) {
 //     return session(options, app);
 //   }

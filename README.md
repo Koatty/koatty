@@ -3,30 +3,31 @@
 [![npm version](https://img.shields.io/npm/v/koatty)](https://www.npmjs.com/package/koatty)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
-Koa2 + Typescript + IOC = koatty. **Koatty** is a progressive Node.js framework for building efficient and scalable server-side applications. Perfect for crafting enterprise-level APIs, microservices, and full-stack applications with TypeScript excellence.
+Koa2 + TypeScript + IOC = Koatty. **Koatty** is a progressive Node.js framework for building efficient and scalable server-side applications. It's perfect for crafting enterprise-level APIs, microservices, and full-stack applications with TypeScript excellence.
 
 ## Why Koatty? 💡
 
 - 🚄 **High Performance**: Built on top of Koa2 with optimized architecture
-- 🧩 **Full-Featured**: Supports gRPC, HTTP, WebSocket, Schedule tasks, and more
+- 🧩 **Full-Featured**: Supports gRPC, HTTP, WebSocket, scheduled tasks, and more
 - 🧠 **TypeScript First**: Native TypeScript support with elegant OOP design
 - 🌀 **Spring-like IOC Container**: Powerful dependency injection system with autowiring
 - ✂️ **AOP Support**: Aspect-oriented programming with decorator-based interceptors
 - 🔌 **Extensible Architecture**: Plugin system with dependency injection
-- 📦 **Modern Tooling**: CLI scaffolding, testing utilities, and production-ready configs
+- 📦 **Modern Tooling**: CLI scaffolding, testing utilities, and production-ready configurations
 - 🌐 **Protocol Agnostic**: Write once, deploy as HTTP/gRPC/WebSocket services
 
+## New Features ✨
 
-## New features ✨
-
-* HTTP、HTTPS、HTTP2、gRPC、WebSocket server.✔️
-* Support loading configurations based on the environment, support command-line argument parsing(process.argv), and support environment variable parsing(process.env).✔️
-* `@ExceptionHandler()` Register global exception handling.✔️
-* Graceful shutdown and pre-exit event.✔️
-* Supports custom decorators, bound to app events for execution.✔️
-* GraphQL supporting. ✔️
-* OpenTelemetry . 💪
-
+- HTTP, HTTPS, HTTP2, gRPC, and WebSocket server support ✔️
+- Environment-based configuration loading, command-line argument parsing (process.argv), and environment variable parsing (process.env) ✔️
+- `@ExceptionHandler()` for global exception handling ✔️
+- Graceful shutdown and pre-exit events ✔️
+- Custom decorators bound to app events ✔️
+- GraphQL integration ✔️
+- Full-stack tracing through OpenTelemetry ✔️
+- Middleware binding to controllers and method routes ✔️
+- gRPC streaming support ✔️
+- Swagger OpenAPI 3.0 support 💪
 
 ## Core Features ✨
 
@@ -35,7 +36,7 @@ Koa2 + Typescript + IOC = koatty. **Koatty** is a progressive Node.js framework 
 // config/config.ts
 export default {
   ...
-  protocol: "grpc", // Server protocol 'http' | 'https' | 'http2' | 'grpc' | 'ws' | 'wss'
+  protocol: "grpc", // Server protocol 'http' | 'https' | 'http2' | 'grpc' | 'ws' | 'wss' | 'graphql'
   ...
 }
 ```
@@ -53,6 +54,8 @@ export class UserService {
 export class IndexController {
     app: App;
     ctx: KoattyContext;
+    @Config("protocol")
+    conf: { protocol: string };
     ...
 
     @Autowired()
@@ -66,7 +69,7 @@ export class IndexController {
 ```
 
 ### ✂️ Aspect-Oriented Programming
-```javascript
+```typescript
 @Aspect()
 export class LogAspect implements IAspect {
   app: App;
@@ -79,11 +82,17 @@ export class LogAspect implements IAspect {
 // Apply aspect to controller
 @Controller()
 @BeforeEach(LogAspect)
-export class UserController {}
+export class UserController {
+  ...
+  @After(LogAspect)
+  test() {
+    ...
+  }
+}
 ```
 
 ### 🔌 Plugin System
-```javascript
+```typescript
 // plugin/logger.ts
 export class LoggerPlugin implements IPlugin {
   app: App;
@@ -95,7 +104,6 @@ export class LoggerPlugin implements IPlugin {
   }
 }
 ```
-
 
 ## Benchmarks 📊
 
@@ -115,7 +123,6 @@ export class LoggerPlugin implements IPlugin {
 - [Recipes & Best Practices](https://github.com/Koatty/koatty_awesome)
 - [Example](https://github.com/Koatty/koatty_demo)
 
-
 ## Quick Start ⚡
 
 1. **Install CLI**:
@@ -134,7 +141,6 @@ cd awesome-app
 npm run dev
 ```
 
-
 ## Community 🌍
 
 - [GitHub Discussions](https://github.com/Koatty/koatty/discussions)
@@ -144,7 +150,6 @@ npm run dev
 Thanks to these amazing developers:
 
 <!-- Add contributor list here -->
-
 
 ## License 📄
 

@@ -15,7 +15,7 @@ import { DefaultLogger, LogLevelType } from "koatty_logger";
 
 // Logger
 export const Logger = DefaultLogger;
-export { ILogger, LogLevelType } from "koatty_logger";
+export { LogLevelType } from "koatty_logger";
 
 /**
  * SetLogger

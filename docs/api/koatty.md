@@ -24,7 +24,7 @@ Description
 
 </td><td>
 
-@<!-- -->description: bind App event hook func example: export function TestDecorator(): ClassDecorator { return (target: Function) =<!-- -->&gt; { BindEventHook(AppEvent.appBoot, (app: KoattyApplication) =<!-- -->&gt; { // todo return Promise.resolve(); }<!-- -->, target) } }
+Bind event hook to target class.
 
 
 </td></tr>
@@ -35,8 +35,7 @@ Description
 
 </td><td>
 
-Bootstrap application decorator
-
+Bootstrap decorator for Koatty application class.
 
 
 </td></tr>
@@ -47,8 +46,7 @@ Bootstrap application decorator
 
 </td><td>
 
-Define project scan path
-
+Component scan decorator for Koatty application. Scans the specified path(s) for components and registers them in the IOC container.
 
 
 </td></tr>
@@ -59,8 +57,7 @@ Define project scan path
 
 </td><td>
 
-Define project configuration scan path
-
+Configuration scan decorator, used to scan and load configuration files.
 
 
 </td></tr>
@@ -71,7 +68,7 @@ Define project configuration scan path
 
 </td><td>
 
-Actively perform dependency injection Parse the decorator, return the instantiated app.  ExecBootStrap
+Decorator function for bootstrapping a Koatty application.
 
 
 </td></tr>

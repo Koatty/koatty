@@ -4,8 +4,7 @@
 
 ## Bootstrap() function
 
-Bootstrap application decorator
-
+Bootstrap decorator for Koatty application class.
 
 **Signature:**
 
@@ -43,7 +42,7 @@ Function
 
 </td><td>
 
-_(Optional)_
+_(Optional)_ Optional function to execute during bootstrap process
 
 
 </td></tr>
@@ -52,5 +51,19 @@ _(Optional)_
 
 ClassDecorator
 
-{<!-- -->ClassDecorator<!-- -->}
+ClassDecorator
+
+## Exceptions
+
+Error if target class does not inherit from Koatty
+
+## Example
+
+
+```ts
+@Bootstrap()
+export class App extends Koatty {
+  // ...
+}
+```
 

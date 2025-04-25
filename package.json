@@ -1,6 +1,6 @@
 {
   "name": "koatty",
-  "version": "3.12.0",
+  "version": "3.13.2",
   "description": "Koa2 + Typescript = koatty. Use Typescript's decorator implement auto injection.",
   "scripts": {
     "build": "npm run build:js && npm run build:dts && npm run build:doc && npm run build:cp",
@@ -9,9 +9,8 @@
     "build:doc": "npx api-documenter markdown --input temp --output docs/api",
     "build:dts": "npx tsc && npx api-extractor run --local --verbose",
     "eslint": "eslint --ext .ts,.js ./",
-    "lock": "npm i --package-lock-only && npm audit fix && npx pnpm i",
     "prepublishOnly": "npm test && npm run build && git push --follow-tags origin",
-    "prerelease": "npm run lock && npm test && npm run build",
+    "prerelease": "npm test && npm run build",
     "release": "standard-version",
     "release:pre": "npm run release -- --prerelease",
     "release:major": "npm run release -- --release-as major",
@@ -59,7 +58,7 @@
     "@microsoft/api-extractor": "^7.x.x",
     "@rollup/plugin-commonjs": "^28.x.x",
     "@rollup/plugin-json": "^6.x.x",
-    "@rollup/plugin-node-resolve": "^15.x.x",
+    "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-terser": "^0.x.x",
     "@types/formidable": "^3.x.x",
     "@types/jest": "^29.x.x",
@@ -91,17 +90,17 @@
     "typescript": "^5.x.x"
   },
   "dependencies": {
-    "koa": "~2.16.0",
+    "koa": "~2.16.1",
     "koatty_config": "~1.2.0",
-    "koatty_container": "~1.10.1",
-    "koatty_core": "~1.13.0",
-    "koatty_exception": "~1.5.3",
-    "koatty_lib": "~1.4.0",
+    "koatty_container": "~1.12.0",
+    "koatty_core": "~1.16.2",
+    "koatty_exception": "~1.6.0",
+    "koatty_lib": "~1.4.2",
     "koatty_loader": "~1.1.0",
-    "koatty_logger": "~2.1.8",
-    "koatty_router": "~1.14.1",
-    "koatty_serve": "~2.3.0",
-    "koatty_trace": "~1.13.1",
+    "koatty_logger": "~2.2.0",
+    "koatty_router": "~1.15.0",
+    "koatty_serve": "~2.4.0",
+    "koatty_trace": "~1.15.2",
     "ts-morph": "^25.0.1"
   }
 }
