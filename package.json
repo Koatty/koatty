@@ -92,15 +92,15 @@
   "dependencies": {
     "koa": "~2.16.1",
     "koatty_config": "~1.2.0",
-    "koatty_container": "~1.11.1",
+    "koatty_container": "~1.12.0",
     "koatty_core": "~1.16.2",
     "koatty_exception": "~1.6.0",
-    "koatty_lib": "~1.4.1",
+    "koatty_lib": "~1.4.2",
     "koatty_loader": "~1.1.0",
-    "koatty_logger": "~2.1.8",
-    "koatty_router": "~1.14.1",
+    "koatty_logger": "~2.2.0",
+    "koatty_router": "~1.15.0",
     "koatty_serve": "~2.4.0",
-    "koatty_trace": "~1.15.1",
+    "koatty_trace": "~1.15.2",
     "ts-morph": "^25.0.1"
   }
 }
