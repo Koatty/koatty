@@ -13,16 +13,16 @@ importers:
         version: 3.0.1
       koatty_config:
         specifier: ~1.2.0
-        version: 1.2.0(koa@3.0.1)(koatty_container@1.12.0)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_loader@1.1.0(koatty_lib@1.4.2))(koatty_trace@1.15.2)(tslib@2.8.1)
+        version: 1.2.0(koa@2.16.1)(koatty_container@1.11.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_loader@1.1.0(koatty_lib@1.4.1))(koatty_trace@1.14.1)(tslib@2.8.1)
       koatty_container:
         specifier: ~1.12.0
         version: 1.12.0(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
       koatty_core:
-        specifier: ~1.16.2
-        version: 1.16.2(koa@3.0.1)(koatty_container@1.12.0)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.15.2)
+        specifier: ~1.16.1
+        version: 1.16.1(koa@2.16.1)(koatty_container@1.11.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1)
       koatty_exception:
         specifier: ~1.6.0
-        version: 1.6.0(koatty_container@1.12.0)(koatty_core@1.16.2)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
+        version: 1.6.0(koatty_container@1.11.1)(koatty_core@1.16.1)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
       koatty_lib:
         specifier: ~1.4.2
         version: 1.4.2
@@ -33,14 +33,14 @@ importers:
         specifier: ~2.2.0
         version: 2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1)
       koatty_router:
-        specifier: ~1.15.0
-        version: 1.15.0(graphql@16.10.0)(koatty_container@1.12.0)(koatty_core@1.16.2)(koatty_exception@1.6.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)
+        specifier: ~1.14.1
+        version: 1.14.1(graphql@16.10.0)(koatty_container@1.11.1)(koatty_core@1.16.1)(koatty_exception@1.6.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)
       koatty_serve:
         specifier: ~2.4.0
-        version: 2.4.0(koatty_container@1.12.0)(koatty_core@1.16.2)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)
+        version: 2.4.0(koatty_container@1.11.1)(koatty_core@1.16.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)
       koatty_trace:
-        specifier: ~1.15.2
-        version: 1.15.2(koatty_container@1.12.0)(koatty_core@1.16.2)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
+        specifier: ~1.14.1
+        version: 1.14.1(koatty_container@1.11.1)(koatty_core@1.16.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
       ts-morph:
         specifier: ^25.0.1
         version: 25.0.1
@@ -442,8 +442,8 @@ packages:
     resolution: {integrity: sha512-GsFaMXCkMqkKIvwCQjCrwH+GHbPKBjhwo/8ZuUkWHqbI73Kky9I+pQltrlT0+MWpedCoosda53lgjYfyEPgxBg==}
     engines: {node: '>=12.10.0'}
 
-  '@grpc/proto-loader@0.7.15':
-    resolution: {integrity: sha512-tMXdRCfYVixjuFK+Hk0Q1s38gV9zDiDJfWL3h1rv4Qc39oILCu1TRTDt7+fGUI8K4G1Fj125Hx/ru3azECWTyQ==}
+  '@grpc/proto-loader@0.7.13':
+    resolution: {integrity: sha512-AiXO/bfe9bmxBjxxtYxFAXGZvMaN5s8kO+jBHAJCON8rJoB5YS/D6X7ZNc6XQkuHNmyl4CYaMI1fJ/Gn27RGGw==}
     engines: {node: '>=6'}
     hasBin: true
 
@@ -628,8 +628,20 @@ packages:
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.10.0'
 
+  '@opentelemetry/context-async-hooks@2.0.1':
+    resolution: {integrity: sha512-XuY23lSI3d4PEqKA+7SLtAgwqIfc6E/E9eAQWLN1vlpC53ybO3o6jW4BsXo1xvz9lYyyWItfQDDLzezER01mCw==}
+    engines: {node: ^18.19.0 || >=20.6.0}
+    peerDependencies:
+      '@opentelemetry/api': '>=1.0.0 <1.10.0'
+
   '@opentelemetry/core@2.0.0':
     resolution: {integrity: sha512-SLX36allrcnVaPYG3R78F/UZZsBsvbc7lMCLx37LyH5MJ1KAAZ2E3mW9OAD3zGz0G8q/BtoS5VUrjzDydhD6LQ==}
+    engines: {node: ^18.19.0 || >=20.6.0}
+    peerDependencies:
+      '@opentelemetry/api': '>=1.0.0 <1.10.0'
+
+  '@opentelemetry/core@2.0.1':
+    resolution: {integrity: sha512-MaZk9SJIDgo1peKevlbhP6+IwIiNPNmswNL4AF0WaQJLbHXjr9SrZMgS12+iqr9ToV4ZVosCcc0f8Rg67LXjxw==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.10.0'
@@ -706,8 +718,8 @@ packages:
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
 
-  '@opentelemetry/instrumentation-aws-lambda@0.51.0':
-    resolution: {integrity: sha512-yPtnDum6vykhxA1xZ2kKc3DGmrLdbRAkJG0HiQUcOas47j716wmtqsLCctHyXgO0NpmS/BCzbUnOxxPG6kln7A==}
+  '@opentelemetry/instrumentation-aws-lambda@0.51.1':
+    resolution: {integrity: sha512-DxUihz1ZcJtkCKFMnsr5IpQtU1TFnz/QhTEkcb95yfVvmdWx97ezbcxE4lGFjvQYMT8q2NsZjor8s8W/jrMU2w==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
@@ -808,8 +820,8 @@ packages:
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
 
-  '@opentelemetry/instrumentation-kafkajs@0.9.1':
-    resolution: {integrity: sha512-eGl5WKBqd0unOKm7PJKjEa1G+ac9nvpDjyv870nUYuSnUkyDc/Fag5keddIjHixTJwRp3FmyP7n+AadAjh52Vw==}
+  '@opentelemetry/instrumentation-kafkajs@0.9.2':
+    resolution: {integrity: sha512-aRnrLK3gQv6LP64oiXEDdRVwxNe7AvS98SCtNWEGhHy4nv3CdxpN7b7NU53g3PCF7uPQZ1fVW2C6Xc2tt1SIkg==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
@@ -844,8 +856,8 @@ packages:
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
 
-  '@opentelemetry/instrumentation-mongoose@0.47.0':
-    resolution: {integrity: sha512-zg4ixMNmuACda75eOFa1m5h794zC9wp397stX0LAZvOylSb6dWT52P6ElkVQMV42C/27liEdQWxpabsamB+XPQ==}
+  '@opentelemetry/instrumentation-mongoose@0.47.1':
+    resolution: {integrity: sha512-0OcL5YpZX9PtF55Oi1RtWUdjElJscR9u6NzAdww81EQc3wFfQWmdREUEBeWaDH5jpiomdFp6zDXms622ofEOjg==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
@@ -958,8 +970,8 @@ packages:
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
 
-  '@opentelemetry/propagation-utils@0.31.0':
-    resolution: {integrity: sha512-Gnxes8Mwm7BwLCDobUD1A5YoFWIKDch6WQWvO+jc0uvfI4vujDExVghbGg5sTJhHc2Sg2cU0+ANgV/jUjdS79w==}
+  '@opentelemetry/propagation-utils@0.31.1':
+    resolution: {integrity: sha512-YLNt7SWy4HZwI9d+4+OevQs2Gmof27TkjR3v029UGw8zFOcyONyIQhHHx7doyRbrLpWZtUc91cnCA4mKhArCXw==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.0.0
@@ -980,14 +992,14 @@ packages:
     resolution: {integrity: sha512-tJwgE6jt32bLs/9J6jhQRKU2EZnsD8qaO13aoFyXwF6s4LhpT7YFHf3Z03MqdILk6BA2BFUhoyh7k9fj9i032A==}
     engines: {node: ^18.19.0 || >=20.6.0}
 
-  '@opentelemetry/resource-detector-alibaba-cloud@0.31.0':
-    resolution: {integrity: sha512-Ty3GkSnht10UySMdHC1ngwGEYMbTBxt0/PMpjwbM6ibxkgf57apx04cSeHVm9TwBE/vm9+4/zt4RciCqyWQwtA==}
+  '@opentelemetry/resource-detector-alibaba-cloud@0.31.1':
+    resolution: {integrity: sha512-RPitvB5oHZsECnK7xtUAFdyBXRdtJbY0eEzQPBrLMQv4l/FN4pETijqv6LcKBbn6tevaoBU2bqOGnVoL4uX4Tg==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.0.0
 
-  '@opentelemetry/resource-detector-aws@2.0.0':
-    resolution: {integrity: sha512-jvHvLAXzFPJJhj0AdbMOpup+Fchef32sHM1Suj4NgJGKxTO47T84i5OjKiG/81YEoCaKmlTefezNbuaGCrPd3w==}
+  '@opentelemetry/resource-detector-aws@2.1.0':
+    resolution: {integrity: sha512-7QG5wQXMiHseKIyU69m8vfZgLhrxFx48DdyaQEYj6GXjE/Xrv1nS3bUwhICjb6+4NorB9+1pFCvJ/4S01CCCjQ==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.0.0
@@ -998,8 +1010,8 @@ packages:
     peerDependencies:
       '@opentelemetry/api': ^1.0.0
 
-  '@opentelemetry/resource-detector-container@0.7.0':
-    resolution: {integrity: sha512-B6DmocHE6bCJt6Iy6z7p+ESjrp7WI4MJN2jWa2MBj9UEZ60Mj/q4BZ8qv0NSmcOYuJhjykNqCUmA+dAOnQn/Kw==}
+  '@opentelemetry/resource-detector-container@0.7.1':
+    resolution: {integrity: sha512-I2vXgdA8mhIlAktIp7NovicalqKPaas9APH5wQxIzMK6jPjZmwS5x0MBW+sTsaFM4pnOf/Md9enoDnnR5CLq5A==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.0.0
@@ -1012,6 +1024,12 @@ packages:
 
   '@opentelemetry/resources@2.0.0':
     resolution: {integrity: sha512-rnZr6dML2z4IARI4zPGQV4arDikF/9OXZQzrC01dLmn0CZxU5U5OLd/m1T7YkGRj5UitjeoCtg/zorlgMQcdTg==}
+    engines: {node: ^18.19.0 || >=20.6.0}
+    peerDependencies:
+      '@opentelemetry/api': '>=1.3.0 <1.10.0'
+
+  '@opentelemetry/resources@2.0.1':
+    resolution: {integrity: sha512-dZOB3R6zvBwDKnHDTB4X1xtMArB/d324VsbiPkX/Yu0Q8T2xceRthoIVFhJdvgVM2QhGVUyX9tzwiNxGtoBJUw==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': '>=1.3.0 <1.10.0'
@@ -1040,14 +1058,26 @@ packages:
     peerDependencies:
       '@opentelemetry/api': '>=1.3.0 <1.10.0'
 
+  '@opentelemetry/sdk-trace-base@2.0.1':
+    resolution: {integrity: sha512-xYLlvk/xdScGx1aEqvxLwf6sXQLXCjk3/1SQT9X9AoN5rXRhkdvIFShuNNmtTEPRBqcsMbS4p/gJLNI2wXaDuQ==}
+    engines: {node: ^18.19.0 || >=20.6.0}
+    peerDependencies:
+      '@opentelemetry/api': '>=1.3.0 <1.10.0'
+
   '@opentelemetry/sdk-trace-node@2.0.0':
     resolution: {integrity: sha512-omdilCZozUjQwY3uZRBwbaRMJ3p09l4t187Lsdf0dGMye9WKD4NGcpgZRvqhI1dwcH6og+YXQEtoO9Wx3ykilg==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.10.0'
 
-  '@opentelemetry/semantic-conventions@1.32.0':
-    resolution: {integrity: sha512-s0OpmpQFSfMrmedAn9Lhg4KWJELHCU6uU9dtIJ28N8UGhf9Y55im5X8fEzwhwDwiSqN+ZPSNrDJF7ivf/AuRPQ==}
+  '@opentelemetry/sdk-trace-node@2.0.1':
+    resolution: {integrity: sha512-UhdbPF19pMpBtCWYP5lHbTogLWx9N0EBxtdagvkn5YtsAnCBZzL7SjktG+ZmupRgifsHMjwUaCCaVmqGfSADmA==}
+    engines: {node: ^18.19.0 || >=20.6.0}
+    peerDependencies:
+      '@opentelemetry/api': '>=1.0.0 <1.10.0'
+
+  '@opentelemetry/semantic-conventions@1.34.0':
+    resolution: {integrity: sha512-aKcOkyrorBGlajjRdVoJWHTxfxO1vCNHLJVlSDaRHDIdjU+pX8IYQPvPDkYiujKLbRnWU+1TBwEt0QRgSm4SGA==}
     engines: {node: '>=14'}
 
   '@opentelemetry/sql-common@0.41.0':
@@ -1055,9 +1085,6 @@ packages:
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
-
-  '@paralleldrive/cuid2@2.2.2':
-    resolution: {integrity: sha512-ZOBkgDwEdoYVlSeRbYYXs0S9MejQofiVYoTbKzy/6GQa39/q5tQU2IX46+shYnUkpEl3wc+J6wRlar7r2EK2xA==}
 
   '@protobufjs/aspromise@1.1.2':
     resolution: {integrity: sha512-j+gKExEuLmKwvz3OgROXtrJ2UG2x8Ch2YZUxahh+s1F2HZ+wAceUNLkvy6zKCPVRkU++ZWQrdxsUeQXmcg4uoQ==}
@@ -1386,8 +1413,8 @@ packages:
   '@types/mysql@2.15.26':
     resolution: {integrity: sha512-DSLCOXhkvfS5WNNPbfn2KdICAmk8lLc+/PNvnPnF7gOdMZCxopXduqv0OQ13y/yA/zXTSikZZqVgybUxOEg6YQ==}
 
-  '@types/node@22.14.1':
-    resolution: {integrity: sha512-u0HuPQwe/dHrItgHHpmw3N2fYCR6x4ivMNbPHRkBVP4CvN+kiRrKHWk3i8tXiO/joPwXLMYvF9TTF0eqgHIuOw==}
+  '@types/node@22.13.10':
+    resolution: {integrity: sha512-I6LPUvlRH+O6VRUqYOcMudhaIdUVWfsjnZavnsraHvpBwaEyMN29ry+0UVJhImYL16xsscu0aske3yA+uPOWfw==}
 
   '@types/node@22.16.5':
     resolution: {integrity: sha512-bJFoMATwIGaxxx8VJPeM8TonI8t579oRvgAuT8zFugJsJZgzqv0Fu8Mhp68iecjzG7cnN3mO2dJQ5uUM2EFrgQ==}
@@ -1436,6 +1463,9 @@ packages:
 
   '@types/supertest@6.0.3':
     resolution: {integrity: sha512-8WzXq62EXFhJ7QsH3Ocb/iKQ/Ty9ZVWnVzoTKc9tyyFRRF3a74Tk2+TLFgaFFw364Ere+npzHKEJ6ga2LzIL7w==}
+
+  '@types/tedious@4.0.14':
+    resolution: {integrity: sha512-KHPsfX/FoVbUGbyYvk1q9MMQHLPeRZhRJZdO45Q4YjvFkv4hMNghCWTvy7rdKessBsmtz4euWCWAB6/tVpI1Iw==}
 
   '@types/tedious@4.0.14':
     resolution: {integrity: sha512-KHPsfX/FoVbUGbyYvk1q9MMQHLPeRZhRJZdO45Q4YjvFkv4hMNghCWTvy7rdKessBsmtz4euWCWAB6/tVpI1Iw==}
@@ -2301,9 +2331,6 @@ packages:
   extend@3.0.2:
     resolution: {integrity: sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==}
 
-  fast-decode-uri-component@1.0.1:
-    resolution: {integrity: sha512-WKgKWg5eUxvRZGwW8FvfbaH7AXSh2cL+3j5fMGzUMCxWBJ3dV3a7Wz8y2f/uQ0e3B6WmodD3oS54jTQ9HVTIIg==}
-
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
 
@@ -2422,8 +2449,11 @@ packages:
   forwarded-parse@2.1.2:
     resolution: {integrity: sha512-alTFZZQDKMporBH77856pXgzhEzaUVmLCDk+egLgIgHst3Tpndzz8MnKe+GzRJRfvVdn69HhpW7cmXzvtLvJAw==}
 
+  forwarded-parse@2.1.2:
+    resolution: {integrity: sha512-alTFZZQDKMporBH77856pXgzhEzaUVmLCDk+egLgIgHst3Tpndzz8MnKe+GzRJRfvVdn69HhpW7cmXzvtLvJAw==}
+
   fresh@0.5.2:
-    resolution: {integrity: sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q==}
+    resolution: {integrity: sha1-PYyt2Q2XZWn6g1qx+OSyOhBWBac=}
     engines: {node: '>= 0.6'}
 
   fs-extra@10.1.0:
@@ -2648,8 +2678,8 @@ packages:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
     engines: {node: '>=6'}
 
-  import-in-the-middle@1.13.1:
-    resolution: {integrity: sha512-k2V9wNm9B+ysuelDTHjI9d5KPc4l8zAZTGqj+pcynvWkypZd857ryzN8jNC7Pg2YZXNMJcHRPpaDyCBbNyVRpA==}
+  import-in-the-middle@1.14.0:
+    resolution: {integrity: sha512-g5zLT0HaztRJWysayWYiUq/7E5H825QIiecMD2pI5QO7Wzr847l6GDvPvmZaDIdrDtS2w7qRczywxiK6SL5vRw==}
 
   import-lazy@4.0.0:
     resolution: {integrity: sha512-rKtvo6a868b5Hu3heneU+L4yEQ4jYKLtjpnPeUdK7h0yzXGmyBTypknlkCvHFBqfX9YlorEiMM6Dnq/5atfHkw==}
@@ -3028,12 +3058,9 @@ packages:
     peerDependencies:
       graphql: ^14.7.0 || ^15.3.0
 
-  koa-is-json@1.0.0:
-    resolution: {integrity: sha512-+97CtHAlWDx0ndt0J8y3P12EWLwTLMXIfMnYDev3wOTwH/RpBGMlfn4bDXlMEg1u73K6XRE9BbUp+5ZAYoRYWw==}
-
-  koa@3.0.1:
-    resolution: {integrity: sha512-oDxVkRwPOHhGlxKIDiDB2h+/l05QPtefD7nSqRgDfZt8P+QVYFWjfeK8jANf5O2YXjk8egd7KntvXKYx82wOag==}
-    engines: {node: '>= 18'}
+  koa@2.16.1:
+    resolution: {integrity: sha512-umfX9d3iuSxTQP4pnzLOz0HKnPg0FaUUIKcye2lOiz3KPu1Y3M3xlz76dISdFPQs37P9eJz1wUpcTS6KDPn9fA==}
+    engines: {node: ^4.8.4 || ^6.10.1 || ^7.10.1 || >= 8.1.4}
 
   'koatty@file:':
     resolution: {directory: '', type: directory}
@@ -3128,8 +3155,8 @@ packages:
       koatty_proto: ^1.x.x
       koatty_validation: ^1.x.x
 
-  koatty_trace@1.15.2:
-    resolution: {integrity: sha512-rpxfcv3XSK1F11xOKj4H2slTA9i4dhExJS+3dsyu4N2+XNZp4epvU8JYbD8z312kt3ig+yOHiLdRjb+j/qmsew==}
+  koatty_trace@1.14.1:
+    resolution: {integrity: sha512-ro5hZqmVODt92qabjmi6GFKml6+tTr3/2Lzg7OyRg6nubU37aMaEOt/sHLX1H6+Ho+CNTH6H6nKEvMn9uyeHnA==}
     engines: {node: '>10.0.0'}
     peerDependencies:
       koatty_container: ^1.x.x
@@ -3354,8 +3381,8 @@ packages:
     resolution: {integrity: sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==}
     engines: {node: '>=0.10.0'}
 
-  module-details-from-path@1.0.3:
-    resolution: {integrity: sha512-ySViT69/76t8VhE1xXHK6Ch4NcDd26gx0MzKXLO+F7NOtnqH68d9zF94nT8ZWSxXh8ELOERsnJO/sWt1xZYw5A==}
+  module-details-from-path@1.0.4:
+    resolution: {integrity: sha512-EGWKgxALGMgzvxYF1UyGTy0HXX/2vHLkw6+NvDKW2jypWbHpjQuj4UMcqQWXHERJhVGKikolT06G3bcKe4fi7w==}
 
   moment@2.30.1:
     resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==}
@@ -3431,6 +3458,9 @@ packages:
   onetime@5.1.2:
     resolution: {integrity: sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg==}
     engines: {node: '>=6'}
+
+  only@0.0.2:
+    resolution: {integrity: sha1-Kv3oTQPlC5qO3EROMGEKcCle37Q=}
 
   open@8.4.2:
     resolution: {integrity: sha512-7x81NCL719oNbsq/3mh+hVrAWmFuEYUqrq/Iw3kUzH8ReypT9QQ0BLoJS7/G9k6N81XjW4qHWtjWwe/9eLy1EQ==}
@@ -3553,8 +3583,8 @@ packages:
     resolution: {integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==}
     engines: {node: '>=4.0.0'}
 
-  pg-protocol@1.8.0:
-    resolution: {integrity: sha512-jvuYlEkL03NRvOoyoRktBK7+qU5kOvlAwvmrH8sr3wbLrOdVWsRxQfz8mMy9sZFsqJ1hEWNfdWKI4SAmoL+j7g==}
+  pg-protocol@1.10.0:
+    resolution: {integrity: sha512-IpdytjudNuLv8nhlHs/UrVBhU0e78J0oIS/0AVdTbWxSOkFUVdsHC/NrorO6nXsQNDTT1kzDSOMJubBQviX18Q==}
 
   pg-types@2.2.0:
     resolution: {integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==}
@@ -3599,7 +3629,7 @@ packages:
     engines: {node: '>=4'}
 
   postgres-bytea@1.0.0:
-    resolution: {integrity: sha512-xy3pmLuQqRBZBXDULy7KbaitYqLcmxigw14Q5sj8QBVLqEwXfeybIKVWiqAXTlcvdvb0+xkOtDbfQMOf4lST1w==}
+    resolution: {integrity: sha1-AntTPAqokOJtFy1Hz5zOzFIazTU=}
     engines: {node: '>=0.10.0'}
 
   postgres-date@1.0.7:
@@ -4231,7 +4261,7 @@ packages:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
 
   whatwg-url@5.0.0:
-    resolution: {integrity: sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==}
+    resolution: {integrity: sha1-lmRU6HZUYuN2RNNib2dCzotwll0=}
 
   which-pm-runs@1.1.0:
     resolution: {integrity: sha512-n1brCuqClxfFfq/Rb0ICg9giSZqCS+pLtccdag6C2HyufBrh3fBOiy9nb6ggRMvWOVH5GrdJskj5iGTZNxd7SA==}
@@ -4686,10 +4716,10 @@ snapshots:
 
   '@grpc/grpc-js@1.13.4':
     dependencies:
-      '@grpc/proto-loader': 0.7.15
+      '@grpc/proto-loader': 0.7.13
       '@js-sdsl/ordered-map': 4.4.2
 
-  '@grpc/proto-loader@0.7.15':
+  '@grpc/proto-loader@0.7.13':
     dependencies:
       lodash.camelcase: 4.3.0
       long: 5.3.2
@@ -4992,7 +5022,7 @@ snapshots:
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-amqplib': 0.47.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-aws-lambda': 0.51.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/instrumentation-aws-lambda': 0.51.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-aws-sdk': 0.51.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-bunyan': 0.46.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-cassandra-driver': 0.46.0(@opentelemetry/api@1.9.0)
@@ -5009,13 +5039,13 @@ snapshots:
       '@opentelemetry/instrumentation-hapi': 0.46.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-http': 0.200.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-ioredis': 0.48.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-kafkajs': 0.9.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/instrumentation-kafkajs': 0.9.2(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-knex': 0.45.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-koa': 0.48.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-lru-memoizer': 0.45.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-memcached': 0.44.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-mongodb': 0.53.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-mongoose': 0.47.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/instrumentation-mongoose': 0.47.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-mysql': 0.46.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-mysql2': 0.46.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-nestjs-core': 0.46.0(@opentelemetry/api@1.9.0)
@@ -5030,12 +5060,12 @@ snapshots:
       '@opentelemetry/instrumentation-tedious': 0.19.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-undici': 0.11.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-winston': 0.45.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/resource-detector-alibaba-cloud': 0.31.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/resource-detector-aws': 2.0.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resource-detector-alibaba-cloud': 0.31.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resource-detector-aws': 2.1.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/resource-detector-azure': 0.7.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/resource-detector-container': 0.7.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resource-detector-container': 0.7.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/resource-detector-gcp': 0.34.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/resources': 2.0.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources': 2.0.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-node': 0.200.0(@opentelemetry/api@1.9.0)
     transitivePeerDependencies:
       - encoding
@@ -5045,14 +5075,23 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
 
+  '@opentelemetry/context-async-hooks@2.0.1(@opentelemetry/api@1.9.0)':
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+
   '@opentelemetry/core@2.0.0(@opentelemetry/api@1.9.0)':
     dependencies:
       '@opentelemetry/api': 1.9.0
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
+
+  '@opentelemetry/core@2.0.1(@opentelemetry/api@1.9.0)':
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/semantic-conventions': 1.34.0
 
   '@opentelemetry/exporter-logs-otlp-grpc@0.200.0(@opentelemetry/api@1.9.0)':
     dependencies:
-      '@grpc/grpc-js': 1.13.3
+      '@grpc/grpc-js': 1.13.0
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/otlp-exporter-base': 0.200.0(@opentelemetry/api@1.9.0)
@@ -5082,7 +5121,7 @@ snapshots:
 
   '@opentelemetry/exporter-metrics-otlp-grpc@0.200.0(@opentelemetry/api@1.9.0)':
     dependencies:
-      '@grpc/grpc-js': 1.13.3
+      '@grpc/grpc-js': 1.13.0
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/exporter-metrics-otlp-http': 0.200.0(@opentelemetry/api@1.9.0)
@@ -5120,7 +5159,7 @@ snapshots:
 
   '@opentelemetry/exporter-trace-otlp-grpc@0.200.0(@opentelemetry/api@1.9.0)':
     dependencies:
-      '@grpc/grpc-js': 1.13.3
+      '@grpc/grpc-js': 1.13.0
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/otlp-exporter-base': 0.200.0(@opentelemetry/api@1.9.0)
@@ -5153,22 +5192,22 @@ snapshots:
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/resources': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-base': 2.0.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
 
   '@opentelemetry/instrumentation-amqplib@0.47.0(@opentelemetry/api@1.9.0)':
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
-  '@opentelemetry/instrumentation-aws-lambda@0.51.0(@opentelemetry/api@1.9.0)':
+  '@opentelemetry/instrumentation-aws-lambda@0.51.1(@opentelemetry/api@1.9.0)':
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
       '@types/aws-lambda': 8.10.147
     transitivePeerDependencies:
       - supports-color
@@ -5178,8 +5217,8 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/propagation-utils': 0.31.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/propagation-utils': 0.31.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
@@ -5196,7 +5235,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
@@ -5205,7 +5244,7 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
       '@types/connect': 3.4.38
     transitivePeerDependencies:
       - supports-color
@@ -5214,7 +5253,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
@@ -5237,7 +5276,7 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
@@ -5246,7 +5285,7 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
@@ -5276,7 +5315,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
@@ -5285,7 +5324,7 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
@@ -5294,7 +5333,7 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
       forwarded-parse: 2.1.2
     transitivePeerDependencies:
       - supports-color
@@ -5304,15 +5343,15 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/redis-common': 0.37.0
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
-  '@opentelemetry/instrumentation-kafkajs@0.9.1(@opentelemetry/api@1.9.0)':
+  '@opentelemetry/instrumentation-kafkajs@0.9.2(@opentelemetry/api@1.9.0)':
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
@@ -5320,7 +5359,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
@@ -5329,7 +5368,7 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
@@ -5344,7 +5383,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
       '@types/memcached': 2.2.10
     transitivePeerDependencies:
       - supports-color
@@ -5353,16 +5392,16 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
-  '@opentelemetry/instrumentation-mongoose@0.47.0(@opentelemetry/api@1.9.0)':
+  '@opentelemetry/instrumentation-mongoose@0.47.1(@opentelemetry/api@1.9.0)':
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
@@ -5370,7 +5409,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
       '@opentelemetry/sql-common': 0.41.0(@opentelemetry/api@1.9.0)
     transitivePeerDependencies:
       - supports-color
@@ -5379,7 +5418,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
       '@types/mysql': 2.15.26
     transitivePeerDependencies:
       - supports-color
@@ -5388,7 +5427,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
@@ -5396,7 +5435,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
@@ -5405,7 +5444,7 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
       '@opentelemetry/sql-common': 0.41.0(@opentelemetry/api@1.9.0)
       '@types/pg': 8.6.1
       '@types/pg-pool': 2.0.6
@@ -5426,7 +5465,7 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/redis-common': 0.37.0
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
@@ -5435,7 +5474,7 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/redis-common': 0.37.0
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
@@ -5444,7 +5483,7 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
@@ -5452,7 +5491,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
@@ -5460,7 +5499,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
@@ -5468,7 +5507,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
       '@types/tedious': 4.0.14
     transitivePeerDependencies:
       - supports-color
@@ -5494,7 +5533,7 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/api-logs': 0.200.0
       '@types/shimmer': 1.2.0
-      import-in-the-middle: 1.13.1
+      import-in-the-middle: 1.14.0
       require-in-the-middle: 7.5.2
       shimmer: 1.2.1
     transitivePeerDependencies:
@@ -5508,7 +5547,7 @@ snapshots:
 
   '@opentelemetry/otlp-grpc-exporter-base@0.200.0(@opentelemetry/api@1.9.0)':
     dependencies:
-      '@grpc/grpc-js': 1.13.3
+      '@grpc/grpc-js': 1.13.0
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/otlp-exporter-base': 0.200.0(@opentelemetry/api@1.9.0)
@@ -5523,9 +5562,9 @@ snapshots:
       '@opentelemetry/sdk-logs': 0.200.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-metrics': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-base': 2.0.0(@opentelemetry/api@1.9.0)
-      protobufjs: 7.5.0
+      protobufjs: 7.4.0
 
-  '@opentelemetry/propagation-utils@0.31.0(@opentelemetry/api@1.9.0)':
+  '@opentelemetry/propagation-utils@0.31.1(@opentelemetry/api@1.9.0)':
     dependencies:
       '@opentelemetry/api': 1.9.0
 
@@ -5541,40 +5580,40 @@ snapshots:
 
   '@opentelemetry/redis-common@0.37.0': {}
 
-  '@opentelemetry/resource-detector-alibaba-cloud@0.31.0(@opentelemetry/api@1.9.0)':
+  '@opentelemetry/resource-detector-alibaba-cloud@0.31.1(@opentelemetry/api@1.9.0)':
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/resources': 2.0.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/resources': 2.0.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions': 1.34.0
 
-  '@opentelemetry/resource-detector-aws@2.0.0(@opentelemetry/api@1.9.0)':
+  '@opentelemetry/resource-detector-aws@2.1.0(@opentelemetry/api@1.9.0)':
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/resources': 2.0.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/resources': 2.0.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions': 1.34.0
 
   '@opentelemetry/resource-detector-azure@0.7.0(@opentelemetry/api@1.9.0)':
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/resources': 2.0.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/resources': 2.0.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions': 1.34.0
 
-  '@opentelemetry/resource-detector-container@0.7.0(@opentelemetry/api@1.9.0)':
+  '@opentelemetry/resource-detector-container@0.7.1(@opentelemetry/api@1.9.0)':
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/resources': 2.0.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/resources': 2.0.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions': 1.34.0
 
   '@opentelemetry/resource-detector-gcp@0.34.0(@opentelemetry/api@1.9.0)':
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/resources': 2.0.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/resources': 2.0.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions': 1.34.0
       gcp-metadata: 6.1.1
     transitivePeerDependencies:
       - encoding
@@ -5584,7 +5623,13 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
+
+  '@opentelemetry/resources@2.0.1(@opentelemetry/api@1.9.0)':
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 2.0.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions': 1.34.0
 
   '@opentelemetry/sdk-logs@0.200.0(@opentelemetry/api@1.9.0)':
     dependencies:
@@ -5623,7 +5668,7 @@ snapshots:
       '@opentelemetry/sdk-metrics': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-base': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-node': 2.0.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
     transitivePeerDependencies:
       - supports-color
 
@@ -5632,7 +5677,14 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/resources': 2.0.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
+      '@opentelemetry/semantic-conventions': 1.34.0
+
+  '@opentelemetry/sdk-trace-base@2.0.1(@opentelemetry/api@1.9.0)':
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 2.0.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources': 2.0.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions': 1.34.0
 
   '@opentelemetry/sdk-trace-node@2.0.0(@opentelemetry/api@1.9.0)':
     dependencies:
@@ -5641,16 +5693,19 @@ snapshots:
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-base': 2.0.0(@opentelemetry/api@1.9.0)
 
-  '@opentelemetry/semantic-conventions@1.32.0': {}
+  '@opentelemetry/sdk-trace-node@2.0.1(@opentelemetry/api@1.9.0)':
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/context-async-hooks': 2.0.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/core': 2.0.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-base': 2.0.1(@opentelemetry/api@1.9.0)
+
+  '@opentelemetry/semantic-conventions@1.34.0': {}
 
   '@opentelemetry/sql-common@0.41.0(@opentelemetry/api@1.9.0)':
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
-
-  '@paralleldrive/cuid2@2.2.2':
-    dependencies:
-      '@noble/hashes': 1.7.2
 
   '@protobufjs/aspromise@1.1.2': {}
 
@@ -5880,6 +5935,10 @@ snapshots:
     dependencies:
       '@types/node': 22.14.1
 
+  '@types/bunyan@1.8.11':
+    dependencies:
+      '@types/node': 22.13.10
+
   '@types/connect@3.4.38':
     dependencies:
       '@types/node': 22.14.1
@@ -5962,7 +6021,7 @@ snapshots:
 
   '@types/memcached@2.2.10':
     dependencies:
-      '@types/node': 22.14.1
+      '@types/node': 22.13.10
 
   '@types/methods@1.1.4': {}
 
@@ -5971,6 +6030,10 @@ snapshots:
   '@types/minimist@1.2.5': {}
 
   '@types/mysql@2.15.26':
+    dependencies:
+      '@types/node': 22.13.10
+
+  '@types/node@22.13.10':
     dependencies:
       '@types/node': 22.14.1
 
@@ -5996,8 +6059,8 @@ snapshots:
 
   '@types/pg@8.6.1':
     dependencies:
-      '@types/node': 22.14.1
-      pg-protocol: 1.8.0
+      '@types/node': 22.13.10
+      pg-protocol: 1.10.0
       pg-types: 2.2.0
 
   '@types/qs@6.9.18': {}
@@ -6037,7 +6100,7 @@ snapshots:
 
   '@types/tedious@4.0.14':
     dependencies:
-      '@types/node': 22.14.1
+      '@types/node': 22.13.10
 
   '@types/triple-beam@1.3.5': {}
 
@@ -6993,8 +7056,6 @@ snapshots:
 
   extend@3.0.2: {}
 
-  fast-decode-uri-component@1.0.1: {}
-
   fast-deep-equal@3.1.3: {}
 
   fast-glob@3.3.3:
@@ -7109,12 +7170,6 @@ snapshots:
       mime-types: 2.1.35
 
   formidable@3.5.3:
-    dependencies:
-      '@paralleldrive/cuid2': 2.2.2
-      dezalgo: 1.0.4
-      once: 1.4.0
-
-  formidable@3.5.4:
     dependencies:
       '@paralleldrive/cuid2': 2.2.2
       dezalgo: 1.0.4
@@ -7389,12 +7444,12 @@ snapshots:
       parent-module: 1.0.1
       resolve-from: 4.0.0
 
-  import-in-the-middle@1.13.1:
+  import-in-the-middle@1.14.0:
     dependencies:
       acorn: 8.14.1
       acorn-import-attributes: 1.9.5(acorn@8.14.1)
       cjs-module-lexer: 1.4.3
-      module-details-from-path: 1.0.3
+      module-details-from-path: 1.0.4
 
   import-lazy@4.0.0: {}
 
@@ -7920,9 +7975,7 @@ snapshots:
       graphql: 16.10.0
       http-errors: 1.8.1
 
-  koa-is-json@1.0.0: {}
-
-  koa@3.0.1:
+  koa@2.16.1:
     dependencies:
       accepts: 1.3.8
       content-disposition: 0.5.4
@@ -7945,17 +7998,17 @@ snapshots:
 
   koatty@file:(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1):
     dependencies:
-      koa: 3.0.1
-      koatty_config: 1.2.0(koa@3.0.1)(koatty_container@1.12.0)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_loader@1.1.0(koatty_lib@1.4.2))(koatty_trace@1.15.2)(tslib@2.8.1)
-      koatty_container: 1.12.0(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_core: 1.16.2(koa@3.0.1)(koatty_container@1.12.0)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.15.2)
-      koatty_exception: 1.6.0(koatty_container@1.12.0)(koatty_core@1.16.2)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_lib: 1.4.2
-      koatty_loader: 1.1.0(koatty_lib@1.4.2)
-      koatty_logger: 2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1)
-      koatty_router: 1.15.0(graphql@16.10.0)(koatty_container@1.12.0)(koatty_core@1.16.2)(koatty_exception@1.6.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)
-      koatty_serve: 2.4.0(koatty_container@1.12.0)(koatty_core@1.16.2)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)
-      koatty_trace: 1.15.2(koatty_container@1.12.0)(koatty_core@1.16.2)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koa: 2.16.1
+      koatty_config: 1.2.0(koa@2.16.1)(koatty_container@1.11.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_loader@1.1.0(koatty_lib@1.4.1))(koatty_trace@1.14.1)(tslib@2.8.1)
+      koatty_container: 1.11.1(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_core: 1.16.1(koa@2.16.1)(koatty_container@1.11.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1)
+      koatty_exception: 1.6.0(koatty_container@1.11.1)(koatty_core@1.16.1)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_lib: 1.4.1
+      koatty_loader: 1.1.0(koatty_lib@1.4.1)
+      koatty_logger: 2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)
+      koatty_router: 1.14.1(graphql@16.10.0)(koatty_container@1.11.1)(koatty_core@1.16.1)(koatty_exception@1.6.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)
+      koatty_serve: 2.4.0(koatty_container@1.11.1)(koatty_core@1.16.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)
+      koatty_trace: 1.14.1(koatty_container@1.11.1)(koatty_core@1.16.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
       ts-morph: 25.0.1
     transitivePeerDependencies:
       - bufferutil
@@ -7968,13 +8021,13 @@ snapshots:
       - tslib
       - utf-8-validate
 
-  koatty_config@1.2.0(koa@3.0.1)(koatty_container@1.12.0)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_loader@1.1.0(koatty_lib@1.4.2))(koatty_trace@1.15.2)(tslib@2.8.1):
+  koatty_config@1.2.0(koa@2.16.1)(koatty_container@1.11.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_loader@1.1.0(koatty_lib@1.4.1))(koatty_trace@1.14.1)(tslib@2.8.1):
     dependencies:
-      koatty_container: 1.12.0(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_core: 1.16.2(koa@3.0.1)(koatty_container@1.12.0)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_logger@2.2.0(koatty_lib@1.4.2)(tslib@2.8.1))(koatty_trace@1.15.2)
-      koatty_lib: 1.4.2
-      koatty_loader: 1.1.0(koatty_lib@1.4.2)
-      koatty_logger: 2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1)
+      koatty_container: 1.11.1(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_core: 1.16.1(koa@2.16.1)(koatty_container@1.11.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(koatty_lib@1.4.1)(tslib@2.8.1))(koatty_trace@1.14.1)
+      koatty_lib: 1.4.1
+      koatty_loader: 1.1.0(koatty_lib@1.4.1)
+      koatty_logger: 2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)
       run-con: 1.3.2
     transitivePeerDependencies:
       - koa
@@ -7987,36 +8040,36 @@ snapshots:
       koatty_lib: 1.4.2
       koatty_logger: 2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1)
 
-  koatty_core@1.16.2(koa@3.0.1)(koatty_container@1.12.0)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.15.2):
+  koatty_core@1.16.1(koa@2.16.1)(koatty_container@1.11.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1):
     dependencies:
       koa: 3.0.1
       koa-compose: 4.1.0
-      koatty_container: 1.12.0(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_exception: 1.6.0(koatty_container@1.12.0)(koatty_core@1.16.2)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_lib: 1.4.2
-      koatty_logger: 2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1)
-      koatty_trace: 1.15.2(koatty_container@1.12.0)(koatty_core@1.16.2)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_container: 1.11.1(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_exception: 1.6.0(koatty_container@1.11.1)(koatty_core@1.16.1)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_lib: 1.4.1
+      koatty_logger: 2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)
+      koatty_trace: 1.14.1(koatty_container@1.11.1)(koatty_core@1.16.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
       on-finished: 2.4.1
 
-  koatty_core@1.16.2(koa@3.0.1)(koatty_container@1.12.0)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_logger@2.2.0(koatty_lib@1.4.2)(tslib@2.8.1))(koatty_trace@1.15.2):
+  koatty_core@1.16.1(koa@2.16.1)(koatty_container@1.11.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(koatty_lib@1.4.1)(tslib@2.8.1))(koatty_trace@1.14.1):
     dependencies:
       koa: 3.0.1
       koa-compose: 4.1.0
-      koatty_container: 1.12.0(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_exception: 1.6.0(koatty_container@1.12.0)(koatty_core@1.16.2)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_lib: 1.4.2
-      koatty_logger: 2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1)
-      koatty_trace: 1.15.2(koatty_container@1.12.0)(koatty_core@1.16.2)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_container: 1.11.1(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_exception: 1.6.0(koatty_container@1.11.1)(koatty_core@1.16.1)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_lib: 1.4.1
+      koatty_logger: 2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)
+      koatty_trace: 1.14.1(koatty_container@1.11.1)(koatty_core@1.16.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
       on-finished: 2.4.1
 
-  koatty_exception@1.6.0(koatty_container@1.12.0)(koatty_core@1.16.2)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1)):
+  koatty_exception@1.6.0(koatty_container@1.11.1)(koatty_core@1.16.1)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)):
     dependencies:
       '@opentelemetry/api': 1.9.0
-      '@opentelemetry/semantic-conventions': 1.32.0
-      koatty_container: 1.12.0(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_core: 1.16.2(koa@3.0.1)(koatty_container@1.12.0)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.15.2)
-      koatty_lib: 1.4.2
-      koatty_logger: 2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1)
+      '@opentelemetry/semantic-conventions': 1.34.0
+      koatty_container: 1.11.1(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_core: 1.16.1(koa@2.16.1)(koatty_container@1.11.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1)
+      koatty_lib: 1.4.1
+      koatty_logger: 2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)
 
   koatty_graphql@1.1.0(koatty_lib@1.4.2):
     dependencies:
@@ -8060,7 +8113,7 @@ snapshots:
       koatty_lib: 1.4.2
       protobufjs: 7.5.3
 
-  koatty_router@1.15.0(graphql@16.10.0)(koatty_container@1.12.0)(koatty_core@1.16.2)(koatty_exception@1.6.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6):
+  koatty_router@1.14.1(graphql@16.10.0)(koatty_container@1.11.1)(koatty_core@1.16.1)(koatty_exception@1.6.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6):
     dependencies:
       '@koa/router': 13.1.0
       fast-querystring: 1.1.2
@@ -8069,57 +8122,54 @@ snapshots:
       inflation: 2.1.0
       koa-compose: 4.1.0
       koa-graphql: 0.12.0(graphql@16.10.0)
-      koatty_container: 1.12.0(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_core: 1.16.2(koa@3.0.1)(koatty_container@1.12.0)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.15.2)
-      koatty_exception: 1.6.0(koatty_container@1.12.0)(koatty_core@1.16.2)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_graphql: 1.1.0(koatty_lib@1.4.2)
-      koatty_lib: 1.4.2
-      koatty_logger: 2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1)
-      koatty_proto: 1.2.0(koatty_lib@1.4.2)
-      koatty_validation: 1.3.6(koatty_container@1.12.0)(koatty_lib@1.4.2)(koatty_logger@2.2.0)
+      koatty_container: 1.11.1(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_core: 1.16.1(koa@2.16.1)(koatty_container@1.11.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1)
+      koatty_exception: 1.6.0(koatty_container@1.11.1)(koatty_core@1.16.1)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_graphql: 1.1.0(koatty_lib@1.4.1)
+      koatty_lib: 1.4.1
+      koatty_logger: 2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)
+      koatty_proto: 1.2.0(koatty_lib@1.4.1)
+      koatty_validation: 1.3.6(koatty_container@1.11.1)(koatty_lib@1.4.1)(koatty_logger@2.1.8)
       on-finished: 2.4.1
       raw-body: 3.0.0
     transitivePeerDependencies:
       - graphql
 
-  koatty_serve@2.4.0(koatty_container@1.12.0)(koatty_core@1.16.2)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6):
+  koatty_serve@2.4.0(koatty_container@1.11.1)(koatty_core@1.16.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6):
     dependencies:
-      '@grpc/grpc-js': 1.13.3
-      koatty_container: 1.12.0(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_core: 1.16.2(koa@3.0.1)(koatty_container@1.12.0)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.15.2)
-      koatty_exception: 1.6.0(koatty_container@1.12.0)(koatty_core@1.16.2)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_lib: 1.4.2
-      koatty_logger: 2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1)
-      koatty_proto: 1.2.0(koatty_lib@1.4.2)
-      koatty_validation: 1.3.6(koatty_container@1.12.0)(koatty_lib@1.4.2)(koatty_logger@2.2.0)
+      '@grpc/grpc-js': 1.13.4
+      koatty_container: 1.11.1(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_core: 1.16.1(koa@2.16.1)(koatty_container@1.11.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1)
+      koatty_exception: 1.6.0(koatty_container@1.11.1)(koatty_core@1.16.1)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_lib: 1.4.1
+      koatty_logger: 2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)
+      koatty_proto: 1.2.0(koatty_lib@1.4.1)
+      koatty_validation: 1.3.6(koatty_container@1.11.1)(koatty_lib@1.4.1)(koatty_logger@2.1.8)
       ws: 8.18.1
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
 
-  koatty_trace@1.15.2(koatty_container@1.12.0)(koatty_core@1.16.2)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1)):
+  koatty_trace@1.14.1(koatty_container@1.11.1)(koatty_core@1.16.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)):
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/auto-instrumentations-node': 0.57.1(@opentelemetry/api@1.9.0)(@opentelemetry/core@2.0.0(@opentelemetry/api@1.9.0))
       '@opentelemetry/core': 2.0.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/exporter-prometheus': 0.200.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/exporter-trace-otlp-http': 0.200.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation': 0.200.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-http': 0.200.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-koa': 0.48.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/resources': 2.0.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/sdk-metrics': 2.0.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources': 2.0.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-node': 0.200.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/sdk-trace-base': 2.0.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/sdk-trace-node': 2.0.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.32.0
-      brotli-wasm: 1.3.1
-      koa-compress: 5.1.1
-      koatty_container: 1.12.0(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_core: 1.16.2(koa@3.0.1)(koatty_container@1.12.0)(koatty_exception@1.6.0)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.15.2)
-      koatty_exception: 1.6.0(koatty_container@1.12.0)(koatty_core@1.16.2)(koatty_lib@1.4.2)(koatty_logger@2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1))
-      koatty_lib: 1.4.2
-      koatty_logger: 2.2.0(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.2))(koatty_lib@1.4.2)(koatty_proto@1.2.0(koatty_lib@1.4.2))(koatty_validation@1.3.6)(tslib@2.8.1)
+      '@opentelemetry/sdk-trace-base': 2.0.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-node': 2.0.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions': 1.34.0
+      koatty_container: 1.11.1(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_core: 1.16.1(koa@2.16.1)(koatty_container@1.11.1)(koatty_exception@1.6.0)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))(koatty_trace@1.14.1)
+      koatty_exception: 1.6.0(koatty_container@1.11.1)(koatty_core@1.16.1)(koatty_lib@1.4.1)(koatty_logger@2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1))
+      koatty_lib: 1.4.1
+      koatty_logger: 2.1.8(graphql@16.10.0)(koatty_graphql@1.1.0(koatty_lib@1.4.1))(koatty_lib@1.4.1)(koatty_proto@1.2.0(koatty_lib@1.4.1))(koatty_validation@1.3.6)(tslib@2.8.1)
+      uuid: 9.0.1
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -8317,7 +8367,7 @@ snapshots:
 
   modify-values@1.0.1: {}
 
-  module-details-from-path@1.0.3: {}
+  module-details-from-path@1.0.4: {}
 
   moment@2.30.1: {}
 
@@ -8494,7 +8544,7 @@ snapshots:
 
   pg-int8@1.0.1: {}
 
-  pg-protocol@1.8.0: {}
+  pg-protocol@1.10.0: {}
 
   pg-types@2.2.0:
     dependencies:
@@ -8685,7 +8735,7 @@ snapshots:
   require-in-the-middle@7.5.2:
     dependencies:
       debug: 4.4.0
-      module-details-from-path: 1.0.3
+      module-details-from-path: 1.0.4
       resolve: 1.22.10
     transitivePeerDependencies:
       - supports-color

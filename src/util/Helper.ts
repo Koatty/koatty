@@ -19,7 +19,7 @@ export const KOATTY_VERSION = version;
 export const ENGINES_VERSION = engines.node.slice(1) || '12.0.0';
 
 /**
- *
+ * require default export
  *
  * @export
  * @param {string} p
@@ -32,7 +32,7 @@ export function requireDefault(p: string) {
 }
 
 /**
- *
+ * controller match
  *
  * @export
  * @param {string} name
@@ -126,7 +126,7 @@ export function checkRuntime() {
  */
 export const checkUTRuntime = (): boolean => {
   let isUTRuntime = false;
-  // UT运行环境判断，暂时先只判断jest
+  // UT runtime detection, only support jest
   const argv = JSON.stringify(process.argv[1]);
   if (argv.indexOf('jest') > -1) {
     isUTRuntime = true;
