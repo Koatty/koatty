@@ -16,8 +16,8 @@ export class TestAspect implements IAspect {
   @Autowired()
   sayHelloRequestDto: SayHelloRequestDto;
 
-  run(name: string) {
-    Logger.Debug(name);
+  run(args: any[], proceed?: Function) {
+    Logger.Debug(args);
     return Promise.resolve();
   }
 }

@@ -167,7 +167,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function,
   }
 
   try {
-    if (!app.silent) Logger.Log("Koatty", LOGO);
+    if (!app.silent) console.log(LOGO);
     if (!(app instanceof Koatty)) {
       throw new Error(`class ${target.name} does not inherit from Koatty`);
     }

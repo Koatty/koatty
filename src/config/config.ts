@@ -16,7 +16,8 @@ export default {
   server: { // server configuration
     hostname: process.env.IP || '127.0.0.1', // server hostname
     port: process.env.PORT || process.env.APP_PORT || 3000, // server port
-    protocol: "http", // Server protocol 'http' | 'https' | 'http2' | 'grpc' | 'ws' | 'wss' | 'graphql'
+    protocol: ["http","grpc"], // Server protocol 'http' | 'https' | 'http2' | 'grpc' | 'ws' | 'wss' | 'graphql'
+    trace: false, // Full stack debug & trace, default: false
     ext: { // ext configuration
       keyFile: "", // key file path
       crtFile: "", // crt file path

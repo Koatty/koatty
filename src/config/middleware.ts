@@ -12,10 +12,8 @@ export default {
   // List of loaded middleware(except for the middleware loaded by default), 
   // executed in the order of elements
   list: [],
-  // List of route-specific middleware, 
-  // executed only for specified routes
-  routeList: [],
-  config: { // middleware configuration
+  // middleware configuration
+  config: { 
     
   }
 };
