@@ -11,10 +11,10 @@
 import { LoadConfigs as loadConf } from "koatty_config";
 import { IOC, TAGGED_CLS } from "koatty_container";
 import {
-  AppEvent, AppEventArr, EventHookFunc, IMiddleware, IMiddlewareOptions, protocolMiddleware,
-  implementsAspectInterface, implementsControllerInterface,
-  implementsMiddlewareInterface, implementsPluginInterface,
-  implementsServiceInterface, IPlugin, KoattyApplication, KoattyServer, MIDDLEWARE_OPTIONS
+  AppEvent, AppEventArr, EventHookFunc, IMiddleware, implementsAspectInterface,
+  implementsControllerInterface, implementsMiddlewareInterface,
+  implementsPluginInterface, implementsServiceInterface, IPlugin,
+  KoattyApplication
 } from 'koatty_core';
 import { Helper } from "koatty_lib";
 import { Load } from "koatty_loader";
@@ -490,43 +490,6 @@ export class Loader {
         } catch {
           // If metadata not found, use empty object
           decoratorOptions = {};
-        }
-      }
-      
-      // Merge decorator options with config options (config has higher priority)
-      const mergedOptions: IMiddlewareOptions = { ...decoratorOptions, ...middlewareOpt };
-      
-      // Check if middleware is disabled
-      if (mergedOptions.enabled === false) {
-        Logger.Warn(`The middleware ${key} has been loaded but is disabled.`);
-        continue;
-      }
-      
-      // Execute middleware handler
-      const result = await handle.run(mergedOptions, this.app);
-      if (Helper.isFunction(result)) {
-        let middleware = result;
-        
-        // Wrap with protocol filter if protocol option is specified
-        if (mergedOptions.protocol) {
-          const protocols = Helper.isArray(mergedOptions.protocol) 
-            ? mergedOptions.protocol 
-            : [mergedOptions.protocol];
-          
-          Logger.Log(
-            'Koatty', 
-            '', 
-            `Middleware ${key} limited to protocols: ${protocols.join(', ')}`
-          );
-          
-          middleware = protocolMiddleware(protocols, result);
-        }
-        
-        // Mount middleware
-        if (middleware.length < 3) {
-          this.app.use(middleware);
-        } else {
-          this.app.useExp(middleware);
         }
       }
     }

@@ -15,19 +15,13 @@ export default {
 
   server: { // server configuration
     hostname: process.env.IP || '127.0.0.1', // server hostname
-    // server port: single value (e.g. 3000) or array (e.g. [3000, 3001])
-    // For multi-protocol: if port is array, each port maps to corresponding protocol
-    // If port is single value, first protocol uses it, others auto-increment (3000, 3001, 3002...)
-    port: process.env.PORT || process.env.APP_PORT || 3000,
-    protocol: ["http", "grpc"], // Server protocol 'http' | 'https' | 'http2' |  'http3' | 'grpc' | 'ws' | 'wss' | 'graphql'
+    port: process.env.PORT || process.env.APP_PORT || 3000, // server port
+    protocol: ["http","grpc"], // Server protocol 'http' | 'https' | 'http2' | 'grpc' | 'ws' | 'wss' | 'graphql'
     trace: false, // Full stack debug & trace, default: false
-    ssl: {
-      mode: 'auto', // 'auto' | 'manual' | 'mutual_tls'
-      key: '',  // key file path
-      cert: '',  // crt file path
-      ca: ''  // ca file path
-    },
-    ext: {}
+    ext: { // ext configuration
+      keyFile: "", // key file path
+      crtFile: "", // crt file path
+    }
   },
   trace: { // trace configuration
     // response timeout in milliseconds
