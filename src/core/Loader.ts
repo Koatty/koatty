@@ -14,7 +14,7 @@ import {
   AppEvent, AppEventArr, EventHookFunc, IMiddleware, implementsAspectInterface,
   implementsControllerInterface, implementsMiddlewareInterface,
   implementsPluginInterface, implementsServiceInterface, IPlugin,
-  KoattyApplication, parseExp
+  KoattyApplication
 } from 'koatty_core';
 import { Helper } from "koatty_lib";
 import { Load } from "koatty_loader";
@@ -272,6 +272,8 @@ export class Loader {
    * @async
    */
   public static async LoadAllComponents(app: KoattyApplication, target: any) {
+    // Preload all metadata to populate cache
+    IOC.preloadMetadata();
     // Load configuration
     Logger.Log('Koatty', '', 'Load Configurations ...');
     // configuration metadata
@@ -343,11 +345,9 @@ export class Loader {
   protected async LoadMiddlewares() {
     let middlewareConf = this.app.config(undefined, "middleware");
     if (Helper.isEmpty(middlewareConf)) {
-      middlewareConf = { config: {}, list: [], routeList: [] };
+      middlewareConf = { config: {}, list: []};
     }
 
-    //Mount default middleware
-    // Load(loadPath || ["./middleware"], app.koattyPath);
     //Mount application middleware
     // const middleware: any = {};
     const appMiddleware = IOC.listClass("MIDDLEWARE") ?? [];
@@ -367,11 +367,6 @@ export class Loader {
     const appMList = new Set([]);
     middlewareList.forEach((item: string) => {
       appMList.add(item);
-    });
-    const middlewareRouterList = middlewareConf.routeList || [];
-    const routerRList = new Set([]);
-    middlewareRouterList.forEach((item: string) => {
-      routerRList.add(item);
     });
 
     //Automatically call middleware
@@ -397,26 +392,6 @@ export class Loader {
         } else {
           this.app.useExp(result);
         }
-      }
-    }
-
-    // Automatically call router middleware
-    for (const key of routerRList) {
-      const handle: IMiddleware = IOC.get(key, "MIDDLEWARE");
-      if (!handle) {
-        throw Error(`Router middleware ${key} load error.`);
-      }
-      if (!Helper.isFunction(handle.run)) {
-        throw Error(`The router middleware ${key} must implements interface 'IMiddleware'.`);
-      }
-      // if (middlewareConfig[key] === false) {
-      //   Logger.Warn(`The router middleware ${key} has been loaded but will not be executed.`);
-      //   continue;
-      // }
-      Logger.Debug(`Load router middleware: ${key}`);
-      const result = await handle.run(middlewareConfig[key] || {}, this.app);
-      if (Helper.isFunction(result)) {
-        this.app.setMetaData(`routerMiddleware_${key}`, result.length > 2 ? parseExp(result) : result);
       }
     }
   }

@@ -24,7 +24,24 @@ module.exports = {
     'jest-html-reporters'
   ], // 测试用例报告
   collectCoverage: true, // 是否收集测试时的覆盖率信息
-  clearMocks: true,
+  // 配置覆盖率收集的文件范围，只统计src目录下的源代码
+  collectCoverageFrom: [
+    'src/**/*.{js,ts}',
+    '!src/**/*.d.ts',
+    '!src/**/*.test.{js,ts}',
+    '!src/**/*.spec.{js,ts}',
+  ],
+  // 排除不需要统计覆盖率的目录和文件
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    '/test/',
+    '/dist/',
+    '/coverage/',
+    '/docs/',
+    '\\.d\\.ts$',
+    '\\.test\\.(js|ts)$',
+    '\\.spec\\.(js|ts)$',
+  ],
   coverageReporters: [
     'html',
     'lcov',
