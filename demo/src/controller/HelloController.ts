@@ -41,14 +41,11 @@ export class HelloController {
    * @param {SayHelloRequestDto} data
    * @returns
    */
-  @PostMapping('/SayHello') // Consistent with proto.service.method name
-  @Validated()
-  SayHello(@RequestBody() params: SayHelloRequestDto): Promise<SayHelloReplyDto> {
+  // @Validated()  // gRPC 方法不需要 @PostMapping 装饰器
+  SayHello(@RequestBody() params: SayHelloRequestDto): SayHelloReplyDto {
     const res = new SayHelloReplyDto();
-    res.message = params.name;
-    throw new Error("xxxx");
-
-    return Promise.resolve(res);
+    res.message = `Hello, ${params.name}! Your ID is ${params.id}`;
+    return res;
   }
 
 }

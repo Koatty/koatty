@@ -7,5 +7,12 @@
  */
 export default {
   /*app config*/
+  logsLevel: "debug", // Level log is printed to the console, "debug" | "info" | "warning" | "error"
 
+  server: { // server configuration
+    hostname: '127.0.0.1', // server hostname
+    port: 3000, // server port
+    protocol: ["http", "grpc", "graphql"], // Server protocol 'http' | 'https' | 'http2' | 'grpc' | 'ws' | 'wss' | 'graphql'
+    trace: false, // Full stack debug & trace, default: false
+  },
 };
