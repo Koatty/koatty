@@ -14,7 +14,8 @@ import {
   AppEvent, AppEventArr, EventHookFunc, IMiddleware, implementsAspectInterface,
   implementsControllerInterface, implementsMiddlewareInterface,
   implementsPluginInterface, implementsServiceInterface, IPlugin,
-  KoattyApplication
+  KoattyApplication,
+  KoattyServer
 } from 'koatty_core';
 import { Helper } from "koatty_lib";
 import { Load } from "koatty_loader";
@@ -406,6 +407,134 @@ export class Loader {
   }
 
   /**
+   * Map GraphQL protocol to underlying HTTP/HTTP2 transport.
+   * GraphQL is an application-layer protocol that runs over HTTP/HTTP2.
+   * 
+   * @static
+   * @private
+   * @param {string} proto - The protocol name
+   * @param {any} opts - Server options containing SSL configuration
+   * @returns {string} The transport protocol (http, http2, or original protocol)
+   */
+  private static MapProtocolToTransport(proto: string, opts: any): string {
+    if (proto === 'graphql') {
+      // Check if SSL/TLS is configured for GraphQL
+      // If ext.graphql has keyFile/crtFile or global ext has SSL config, use http2
+      const graphqlExt = opts.ext?.graphql || {};
+      const globalExt = opts.ext || {};
+      if (graphqlExt.keyFile || graphqlExt.crtFile || globalExt.keyFile || globalExt.crtFile) {
+        return 'http2';
+      }
+      return 'http';
+    }
+    return proto;
+  }
+
+  /**
+   * Create and configure servers for all protocols.
+   * Supports both single protocol and multi-protocol configurations.
+   * 
+   * @static
+   * @param {KoattyApplication} app - The Koatty application instance
+   * @param {any} serveOpts - Server configuration options
+   * @param {string[]} protocols - Array of protocol names
+   * @returns {KoattyServer | KoattyServer[]} Single server or array of servers
+   */
+  public static CreateServers(app: KoattyApplication, serveOpts: any, protocols: string[]): KoattyServer | KoattyServer[] {
+    if (protocols.length > 1) {
+      // Multi-protocol: create multiple server instances
+      const servers: KoattyServer[] = [];
+      
+      // Handle port allocation for multi-protocol
+      // Support: port as array [3000, 3001] or single value 3000 (auto-increment)
+      const basePort = Helper.isArray(serveOpts.port) ? serveOpts.port : [serveOpts.port];
+      const ports: number[] = [];
+      
+      for (let i = 0; i < protocols.length; i++) {
+        if (i < basePort.length) {
+          // Use port from array
+          ports.push(Helper.toNumber(basePort[i]));
+        } else {
+          // Auto-increment from first port to prevent conflicts
+          ports.push(Helper.toNumber(basePort[0]) + i);
+        }
+      }
+      
+      for (let i = 0; i < protocols.length; i++) {
+        const proto = protocols[i];
+        const protoServerOpts = { ...serveOpts, protocol: proto, port: ports[i] };
+        
+        // Map GraphQL to HTTP/HTTP2 transport
+        // GraphQL uses HTTP/HTTP2 as transport layer
+        const transportProtocol = Loader.MapProtocolToTransport(proto, protoServerOpts);
+        if (proto === 'graphql') {
+          Logger.Debug(`GraphQL protocol mapped to ${transportProtocol.toUpperCase()} transport`);
+          protoServerOpts.protocol = transportProtocol;
+        }
+        
+        // Create server with transport protocol
+        servers.push(NewServe(app, protoServerOpts));
+      }
+      
+      return servers;
+    } else {
+      // Single protocol: create single server instance (backward compatibility)
+      const singleProto = protocols[0];
+      const singleServerOpts = { protocol: singleProto, ...serveOpts };
+      const transportProtocol = Loader.MapProtocolToTransport(singleProto, singleServerOpts);
+      
+      if (singleProto === 'graphql') {
+        Logger.Debug(`GraphQL protocol mapped to ${transportProtocol.toUpperCase()} transport`);
+        singleServerOpts.protocol = transportProtocol;
+      }
+      
+      // Create server with transport protocol
+      return NewServe(app, singleServerOpts);
+    }
+  }
+
+  /**
+   * Create and configure routers for all protocols.
+   * Supports both single protocol and multi-protocol configurations.
+   * 
+   * Each protocol needs its own router instance with isolated context
+   * to avoid property redefinition conflicts.
+   * 
+   * @static
+   * @param {KoattyApplication} app - The Koatty application instance
+   * @param {any} routerOpts - Router configuration options
+   * @param {string[]} protocols - Array of protocol names
+   * @returns {any} Single router or dictionary of routers (Record<protocol, router>)
+   */
+  public static CreateRouters(app: KoattyApplication, routerOpts: any, protocols: string[]): any {
+    if (protocols.length > 1) {
+      // Multi-protocol: router is Record<string, KoattyRouter>
+      // CRITICAL: Each protocol needs its own context to avoid property redefinition conflicts
+      // Problem: koatty_router defines readonly properties (like requestParam) on app.context
+      // When multiple routers try to define the same property, it causes "Cannot redefine property" error
+      const routers: Record<string, any> = {};
+      
+      for (const proto of protocols) {
+        const protoRouterOpts = { protocol: proto, ...routerOpts };
+        
+        // Support protocol-specific ext config
+        if (routerOpts.ext && routerOpts.ext[proto]) {
+          protoRouterOpts.ext = routerOpts.ext[proto];
+        }
+        
+        // Create router with original protocol name (for routing logic)
+        routers[proto] = NewRouter(app, protoRouterOpts);
+      }
+      
+      return routers;
+    } else {
+      // Single protocol: router is KoattyRouter (backward compatibility)
+      const singleProto = protocols[0];
+      return NewRouter(app, { protocol: singleProto, ...routerOpts });
+    }
+  }
+
+  /**
    * Load configuration files from specified paths.
    * First loads framework configurations from './config' directory,
    * then loads application configurations from custom paths.
@@ -618,33 +747,23 @@ export class Loader {
    */
   protected async LoadRouter(ctls: string[]) {
     const router = this.app.router;
-    Logger.Info('[LOADER] ============ LoadRouter START ============');
-    Logger.Info('[LOADER] router type:', typeof router);
-    Logger.Info('[LOADER] router is object:', Helper.isObject(router));
-    Logger.Info('[LOADER] router has LoadRouter:', Helper.isFunction((router as any)?.LoadRouter));
-    Logger.Info('[LOADER] Controllers to load:', ctls);
     
     // load router for multi-protocol or single protocol
     if (Helper.isObject(router) && !Helper.isFunction((router as any).LoadRouter)) {
       // Multi-protocol routers (router is an object with protocol keys)
       const routers = router as Record<string, any>;
-      Logger.Info(`[LOADER] Multi-protocol routing: found ${Object.keys(routers).length} routers (${Object.keys(routers).join(', ')})`);
+      Logger.Debug(`Multi-protocol routing: found ${Object.keys(routers).length} routers (${Object.keys(routers).join(', ')})`);
       for (const proto in routers) {
-        Logger.Info(`[LOADER] Checking protocol: ${proto}, has LoadRouter:`, Helper.isFunction(routers[proto]?.LoadRouter));
         if (routers[proto] && Helper.isFunction(routers[proto].LoadRouter)) {
-          Logger.Info(`[LOADER] Loading routes for protocol: ${proto}`);
+          Logger.Debug(`Loading routes for protocol: ${proto}`);
           await routers[proto].LoadRouter(this.app, ctls);
-          Logger.Info(`[LOADER] Completed loading routes for protocol: ${proto}`);
         }
       }
     } else if (Helper.isFunction((router as any).LoadRouter)) {
       // Single protocol router (backward compatibility)
-      Logger.Info('[LOADER] Single protocol routing');
+      Logger.Debug('Single protocol routing');
       await (router as any).LoadRouter(this.app, ctls);
-    } else {
-      Logger.Warn('[LOADER] No valid router found! router:', router);
     }
-    Logger.Info('[LOADER] ============ LoadRouter END ============');
   }
 }
 

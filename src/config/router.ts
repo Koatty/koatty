@@ -60,29 +60,65 @@ export default {
    * all protocol specific parameters are placed in this field:
    * - WebSocket: { maxFrameSize, heartbeatInterval, maxConnections, ... }
    * - gRPC: { protoFile, poolSize, batchSize, streamConfig, ... }
-   * - GraphQL: { schemaFile, playground, introspection, ... }
-   * - HTTP/HTTPS: reserved extension fields
+   * - GraphQL: { schemaFile, playground, introspection, keyFile, crtFile, ssl, http2, ... }
+   * - HTTP/HTTPS/HTTP2: reserved extension fields
+   * 
+   * **Important: GraphQL Protocol and Transport**
+   * GraphQL is an application-layer protocol that runs over HTTP/HTTPS/HTTP2.
+   * When protocol is set to 'graphql', koatty_serve will automatically:
+   * - Use HTTP as transport by default
+   * - Use HTTP/2 when SSL certificates (keyFile/crtFile) are configured
+   * 
+   * HTTP/2 benefits for GraphQL:
+   * - Multiplexing: Handle multiple queries over single connection
+   * - Header compression: Reduce bandwidth for large queries
+   * - Server push: Prefetch related resources
+   * - HTTP/1.1 fallback: Automatic downgrade for compatibility
+   * 
+   * To enable HTTP/2 for GraphQL, add SSL certificate configuration in ext.graphql:
+   * 
+   * For multi-protocol support, use protocol name as key:
+   * ext: {
+   *   http: {},
+   *   grpc: { protoFile: "./proto/service.proto" },
+   *   graphql: { 
+   *     schemaFile: "./schema.graphql",
+   *     keyFile: "./ssl/server.key",  // Enable HTTPS for GraphQL
+   *     crtFile: "./ssl/server.crt"
+   *   },
+   *   ws: { maxFrameSize: 1024 * 1024 }
+   * }
    * 
    * @example
    * ```typescript
-   * // WebSocket config
-   * ext: {
-   *   maxFrameSize: 1024 * 1024,
-   *   heartbeatInterval: 15000,
-   *   maxConnections: 1000
-   * }
-   * 
-   * // gRPC config
+   * // Single protocol config
    * ext: {
    *   protoFile: "./proto/service.proto",
    *   poolSize: 10,
    *   streamConfig: { maxConcurrentStreams: 50 }
    * }
    * 
-   * // GraphQL config
+   * // Multi-protocol config (recommended for multi-protocol servers)
    * ext: {
-   *   schemaFile: "./schema/schema.graphql",
-   *   playground: true
+   *   http: {},
+   *   grpc: {
+   *     protoFile: "./proto/service.proto",
+   *     poolSize: 10,
+   *     streamConfig: { maxConcurrentStreams: 50 }
+   *   },
+   *   graphql: {
+   *     schemaFile: "./resource/graphql/schema.graphql",
+   *     // Optional: Enable HTTP/2 with SSL for GraphQL
+   *     // keyFile: "./ssl/server.key",
+   *     // crtFile: "./ssl/server.crt",
+   *     // ssl: { mode: 'auto', allowHTTP1: true },
+   *     // http2: { maxConcurrentStreams: 100 }
+   *   },
+   *   ws: {
+   *     maxFrameSize: 1024 * 1024,
+   *     heartbeatInterval: 15000,
+   *     maxConnections: 1000
+   *   }
    * }
    * ```
    */
