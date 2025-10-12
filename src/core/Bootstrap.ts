@@ -8,7 +8,7 @@
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 import { IOC, TAGGED_CLS } from "koatty_container";
-import { AppEvent, EventHookFunc, Koatty, KoattyApplication, KoattyServer, asyncEvent } from 'koatty_core';
+import { AppEvent, EventHookFunc, Koatty, KoattyApplication, asyncEvent } from 'koatty_core';
 import { Helper } from "koatty_lib";
 import { checkRuntime, checkUTRuntime, KOATTY_VERSION } from "../util/Helper";
 import { Logger } from "../util/Logger";
@@ -221,24 +221,10 @@ const executeBootstrap = async function (target: any, bootFunc: Function,
  * @internal
  */
 const listenCallback = (app: KoattyApplication) => {
-  let servers: KoattyServer[] = [];
-  if (!Array.isArray(app.server)) {
-    servers = [app.server];
-  } else {
-    servers = app.server;
-  }
   Logger.Log('Koatty', '', '====================================');
   Logger.Log("Koatty", "", `Nodejs Version: ${process.version}`);
   Logger.Log("Koatty", "", `Koatty Version: v${KOATTY_VERSION}`);
   Logger.Log("Koatty", "", `App Environment: ${app.env}`);
-  servers.forEach(s => {
-    Logger.Log('Koatty', '', `Server: ${(s.options.protocol).toUpperCase()} running at ${s.options.protocol === "http2" ?
-      "https" : s.options.protocol}://${s.options.hostname || '127.0.0.1'}:${s.options.port}/`);
-  });
-
-  Logger.Log("Koatty", "", "====================================");
-
   if (app.appDebug) Logger.Warn(`Running in debug mode.`);
-  // Set Logger
-  Loader.SetLogger(app);
+  Logger.Log("Koatty", "", "====================================");
 };
