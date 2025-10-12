@@ -69,18 +69,21 @@ When using multiple protocols, configure protocol-specific extensions in `config
 export default {
   ext: {
     // HTTP protocol config (optional)
-    ...,
+    http: {},
     
-    // gRPC protocol config (optional)
-    protoFile: "./resource/proto/Hello.proto",
-    poolSize: 10,
-    streamConfig: { messageCount: 50 }
+    // gRPC protocol config
+    grpc: {
+      protoFile: "./resource/proto/Hello.proto",
+      poolSize: 10,
+      streamConfig: { maxConcurrentStreams: 50 }
+    },
     
-    
-    // WebSocket protocol config (optional)
-    maxFrameSize: 1024 * 1024,
-    heartbeatInterval: 15000,
-    maxConnections: 1000
+    // WebSocket protocol config
+    ws: {
+      maxFrameSize: 1024 * 1024,
+      heartbeatInterval: 15000,
+      maxConnections: 1000
+    }
   }
 }
 ```
@@ -105,43 +108,21 @@ export default {
   - **Server Push**: Prefetch related resources
   - **HTTP/1.1 Fallback**: Automatic downgrade for compatibility
   
-  To enable HTTP/2 for GraphQL, configure in `config/config.ts`:
+  To enable HTTP/2 for GraphQL, add SSL certificate configuration in `config/router.ts`:
   ```typescript
-  // config/config.ts
-  export default {
-    server: {
-      protocol: "graphql",
-      ssl: {
-        mode: 'auto',
-        key: './ssl/server.key',
-        cert: './ssl/server.crt'
-      },
-      ext: {
-        maxConcurrentStreams: 100  // Optional: HTTP/2 config
-      }
-    }
-  }
-  ```
-  
-  And configure GraphQL schema in `config/router.ts`:
-  ```typescript
-  // config/router.ts
-  export default {
-    ext: {
-      schemaFile: "./resource/graphql/schema.graphql"
+  ext: {
+    graphql: {
+      schemaFile: "./resource/graphql/schema.graphql",
+      keyFile: "./ssl/server.key",    // Enable HTTP/2 with SSL
+      crtFile: "./ssl/server.crt",
+      ssl: { mode: 'auto', allowHTTP1: true },     // Optional: SSL config
+      http2: { maxConcurrentStreams: 100 }         // Optional: HTTP/2 config
     }
   }
   ```
 
 
-### 💉 Dependency Injection (IOC Container v1.17.0)
-
-**Enhanced Features:**
--✅ **Intelligent Metadata Cache** - LRU caching mechanism, significantly improves performance
--✅ **Metadata Preloading** - Preload at startup, optimize component registration
--✅ **Version Conflict Detection** - Automatically detect and resolve dependency version conflicts
--✅ **Circular Dependency Detection** - Circular dependency detection and resolution suggestions
-
+### 💉 Dependency Injection
 ```typescript
 @Service()
 export class UserService {
@@ -166,15 +147,6 @@ export class IndexController {
         ...
     }
 }
-```
-
-**Performance Improvements:**
-```typescript
-// In Loader.ts - Metadata is now preloaded for optimal performance
-IOC.preloadMetadata(); // Preload all metadata to populate cache
-
-// Intelligent caching reduces reflect operations by 70%+
-// Cache hits: ~95% in typical applications
 ```
 
 ### 🌐 Multi-Protocol Controllers

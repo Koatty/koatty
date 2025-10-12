@@ -13,16 +13,16 @@ importers:
         version: 2.16.2
       koatty_config:
         specifier: ~1.2.2
-        version: 1.2.2(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_loader@1.3.0(koatty_lib@1.4.3))(koatty_trace@1.16.0)(tslib@2.8.1)
+        version: 1.2.2(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_loader@1.3.0(koatty_lib@1.4.3))(koatty_trace@1.16.0)(tslib@2.8.1)
       koatty_container:
-        specifier: ~1.16.0
-        version: 1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))
+        specifier: ~1.17.0
+        version: 1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
       koatty_core:
-        specifier: ~1.18.0
-        version: 1.18.0(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_trace@1.16.0)
+        specifier: ~1.19.0-3
+        version: 1.19.0-3(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_trace@1.16.0)
       koatty_exception:
         specifier: ~1.8.0
-        version: 1.8.0(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.18.0)(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))
+        version: 1.8.0(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.19.0-3)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
       koatty_lib:
         specifier: ~1.4.3
         version: 1.4.3
@@ -30,20 +30,20 @@ importers:
         specifier: ~1.3.0
         version: 1.3.0(koatty_lib@1.4.3)
       koatty_logger:
-        specifier: ~2.3.0
-        version: 2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)
+        specifier: ~2.5.0
+        version: 2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)
       koatty_router:
-        specifier: ~1.19.0
-        version: 1.19.0(graphql@16.10.0)(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.18.0)(koatty_exception@1.8.0)(koatty_graphql@1.1.0(koatty_lib@1.4.3))(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.3))(koatty_validation@1.3.6(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))
+        specifier: 1.20.0-1
+        version: 1.20.0-1(graphql@16.10.0)(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.19.0-3)(koatty_exception@1.8.0)(koatty_graphql@1.1.0(koatty_lib@1.4.3))(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.3))(koatty_validation@1.3.6(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))
       koatty_serve:
-        specifier: ~2.8.0
-        version: 2.8.0(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.18.0)(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.3))(koatty_validation@1.3.6(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))
+        specifier: ~2.9.0-4
+        version: 2.9.0-4(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.19.0-3)(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.3))(koatty_validation@1.3.6(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))
       koatty_trace:
         specifier: ~1.16.0
-        version: 1.16.0(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.18.0)(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))
+        version: 1.16.0(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.19.0-3)(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
       ts-morph:
-        specifier: ^26.0.0
-        version: 26.0.0
+        specifier: ^27.0.0
+        version: 27.0.0
     devDependencies:
       '@commitlint/cli':
         specifier: ^19.x.x
@@ -125,7 +125,7 @@ importers:
         version: 3.1.7
       koatty_validation:
         specifier: ~1.x.x
-        version: 1.3.6(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))
+        version: 1.3.6(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
       reflect-metadata:
         specifier: ^0.x.x
         version: 0.2.2
@@ -586,6 +586,64 @@ packages:
   '@koa/router@14.0.0':
     resolution: {integrity: sha512-LBSu5K0qAaaQcXX/0WIB9PGDevyCxxpnc1uq13vV/CgObaVxuis5hKl3Eboq/8gcb6ebnkAStW9NB/Em2eYyFA==}
     engines: {node: '>= 20'}
+<<<<<<< HEAD
+=======
+
+  '@matrixai/async-cancellable@2.0.1':
+    resolution: {integrity: sha512-4oZC7RMehzZCfyVLk33fOZpW1Nz4WFxuHzznrjFDBre6FmGb63jc2uWjwn+BKplqyby1J/sdJbjO0iqNcweWHg==}
+
+  '@matrixai/async-init@2.1.2':
+    resolution: {integrity: sha512-i8Hj9Q/FGM725/LpsUyXk2APHn6y7yV9VmPoayAMkzM54+7p9ylmyxIwpYzw1A2zslrgUUvszg++uSM4a+5REw==}
+
+  '@matrixai/async-locks@5.0.2':
+    resolution: {integrity: sha512-YX3LUt4okyXPnDpx78PgPQybn8duh/FvWKx0t3UTaJW/0HL0/ZOQEEOsX1qefV1fQps1nKUHfjK1VeqZciCvXQ==}
+
+  '@matrixai/contexts@2.0.2':
+    resolution: {integrity: sha512-nI29nv2UP43s+hO+N8SDNxlDHHfj0Evypg5IxZ/Y04o6/InDhCQmZErxMu4ZAOTtt21yuI4zssPRcBQdhtQygA==}
+
+  '@matrixai/errors@2.1.3':
+    resolution: {integrity: sha512-uPH09OHLykjCdX17Piyc1P0kw3pkJC8l2ydr6LzcWUPmP8i38oO9oq2AqX21UeyeBhGvDcBzQk890GUMb6iOIA==}
+
+  '@matrixai/events@4.0.1':
+    resolution: {integrity: sha512-75hH7ZTmhM/VXeICXCPiVr/ZxQSoBwXh2HOI3AhD8AGYDDsEJsm4tnDSr/6vT3vS0ryZb3kb9mpAmCeibdrF3w==}
+
+  '@matrixai/logger@4.0.3':
+    resolution: {integrity: sha512-cu7e82iwN32H+K8HxsrvrWEYSEj7+RP/iVFhJ4RuacC8/BSOLFOYxry3EchVjrx4FP5G7QP1HnKYXAGpZN/46w==}
+
+  '@matrixai/quic-darwin-arm64@2.0.9':
+    resolution: {integrity: sha512-PLJvRXmeTJ2OLPnnDP8GBbXjGns2ltouZOcZqJB60DTIR+ijH6LAflvCw+0JT6a6jByD3gjRqSUIGsPbK7OMWg==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@matrixai/quic-darwin-universal@2.0.9':
+    resolution: {integrity: sha512-WjhxEoHIrIVpxBrIJH1Iy9jXDJygniXZxqGKTJd5+VrBttPn7ab9Ywe2SEly6DTH+rk8UlhTQpSgqz1Z+v5eww==}
+    cpu: [x64, arm64]
+    os: [darwin]
+
+  '@matrixai/quic-darwin-x64@2.0.9':
+    resolution: {integrity: sha512-J/RAWtbz7UMcaUTsgbbvBeXSwfZpq+DMkhfXhsqECgUwBAAsDW5UyZlemD/5mgYhYyFiwcaybOkttj11bKqyOg==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@matrixai/quic-linux-x64@2.0.9':
+    resolution: {integrity: sha512-2m2mBp2c+qdlh3mBbHT7iHqLGPksFJGxxKWcJRJXiHUnyeh9M5gMXia2bWc7VXty0n6eGZak4txD8CPaeINDRQ==}
+    cpu: [x64]
+    os: [linux]
+
+  '@matrixai/quic-win32-x64@2.0.9':
+    resolution: {integrity: sha512-VNdEh74Db/pX2BByuYaZ/3haGCejrAfDmVe+7OD/FKlHyIJkicKWjhNaeTDK2Nh2laaRF54MDZV+1FqO6TGePg==}
+    cpu: [x64]
+    os: [win32]
+
+  '@matrixai/quic@2.0.9':
+    resolution: {integrity: sha512-3Ld/RTZsqOVTggOYalt0U9yCmoseY9IfzUM+QOSU5+nxCs23ds4ol7dmbXon9NcGXsuePs6UkVFsNwwL7x9ZlQ==}
+
+  '@matrixai/resources@2.0.1':
+    resolution: {integrity: sha512-qP7wDz1HnQY7wV4NxybAE+A+488D7bGkkdgk2TIRaw8/fTWENi9Y/AFvOJrdKt3q5rDybB4OeTJIkN5qULE35A==}
+
+  '@matrixai/timer@2.1.1':
+    resolution: {integrity: sha512-8N4t3eISASJttKIuQKitVfCNxfaUp1Tritg9/92biGDxVwoP+Err8FVrjG30yWz56K/H+T9xUcZ58AH/mk15Sw==}
+>>>>>>> cf5018d (feat: implement multi-protocol server support with backward compatibility and enhanced GraphQL/HTTP2 integration)
 
   '@microsoft/api-documenter@7.26.17':
     resolution: {integrity: sha512-LOS9U6EJVpejN0vNXFBPdbRW9D2bPJI8FYfLGSaEeiqPfMBlH5QYLKt+OaJomx72uj9Ei6/W49mftK/c+UGPjg==}
@@ -1307,8 +1365,11 @@ packages:
   '@sinonjs/fake-timers@10.3.0':
     resolution: {integrity: sha512-V4BG07kuYSUkTCSBHG8G8TNhM+F19jXFWnQtzj+we8DrkpSBCee9Z3Ms8yiGer/dlmhe35/Xdgyo3/0rQKg7YA==}
 
-  '@ts-morph/common@0.27.0':
-    resolution: {integrity: sha512-Wf29UqxWDpc+i61k3oIOzcUfQt79PIT9y/MWfAGlrkjg6lBC1hwDECLXPVJAhWjiGbfBCxZd65F/LIZF3+jeJQ==}
+  '@so-ric/colorspace@1.1.6':
+    resolution: {integrity: sha512-/KiKkpHNOBgkFJwu9sh48LkHSMYGyuTcSFK/qMBdnOAlrRJzRSXAOFB5qwzaVQuDl8wAvHVMkaASQDReTahxuw==}
+
+  '@ts-morph/common@0.28.0':
+    resolution: {integrity: sha512-4w6X/oFmvXcwux6y6ExfM/xSqMHw20cYwFJH+BlYrtGa6nwY9qGq8GXnUs1sVYeF2o/KT3S8hAH6sKBI3VOkBg==}
 
   '@tsconfig/node10@1.0.11':
     resolution: {integrity: sha512-DcRjDCujK/kCk/cUe8Xz8ZSpm8mS3mNNpta+jGCA6USEDfktlNvm1+IuZ9eTcDbNk41BHwpHHeW+N1lKCz4zOw==}
@@ -1429,9 +1490,12 @@ packages:
 
   '@types/node@22.18.8':
     resolution: {integrity: sha512-pAZSHMiagDR7cARo/cch1f3rXy0AEXwsVsVH09FcyeJVAzCnGgmYis7P3JidtTUjyadhTeSo8TgRPswstghDaw==}
+<<<<<<< HEAD
 
   '@types/node@22.16.5':
     resolution: {integrity: sha512-bJFoMATwIGaxxx8VJPeM8TonI8t579oRvgAuT8zFugJsJZgzqv0Fu8Mhp68iecjzG7cnN3mO2dJQ5uUM2EFrgQ==}
+=======
+>>>>>>> cf5018d (feat: implement multi-protocol server support with backward compatibility and enhanced GraphQL/HTTP2 integration)
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -2392,6 +2456,15 @@ packages:
       picomatch:
         optional: true
 
+  fdir@6.5.0:
+    resolution: {integrity: sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      picomatch: ^3 || ^4
+    peerDependenciesMeta:
+      picomatch:
+        optional: true
+
   fecha@4.2.3:
     resolution: {integrity: sha512-OP2IUU6HeYKJi3i0z4A19kHMQoLVs4Hc+DPqqxI2h/DPZHTm/vjsfC6P0b4jCMy14XizLBqvndQ+UilD7707Jw==}
 
@@ -2470,7 +2543,7 @@ packages:
     resolution: {integrity: sha512-alTFZZQDKMporBH77856pXgzhEzaUVmLCDk+egLgIgHst3Tpndzz8MnKe+GzRJRfvVdn69HhpW7cmXzvtLvJAw==}
 
   fresh@0.5.2:
-    resolution: {integrity: sha1-PYyt2Q2XZWn6g1qx+OSyOhBWBac=}
+    resolution: {integrity: sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q==}
     engines: {node: '>= 0.6'}
 
   fs-extra@10.1.0:
@@ -3082,8 +3155,8 @@ packages:
   koa-is-json@1.0.0:
     resolution: {integrity: sha512-+97CtHAlWDx0ndt0J8y3P12EWLwTLMXIfMnYDev3wOTwH/RpBGMlfn4bDXlMEg1u73K6XRE9BbUp+5ZAYoRYWw==}
 
-  koa@2.16.1:
-    resolution: {integrity: sha512-umfX9d3iuSxTQP4pnzLOz0HKnPg0FaUUIKcye2lOiz3KPu1Y3M3xlz76dISdFPQs37P9eJz1wUpcTS6KDPn9fA==}
+  koa@2.16.2:
+    resolution: {integrity: sha512-+CCssgnrWKx9aI3OeZwroa/ckG4JICxvIFnSiOUyl2Uv+UTI+xIw0FfFrWS7cQFpoePpr9o8csss7KzsTzNL8Q==}
     engines: {node: ^4.8.4 || ^6.10.1 || ^7.10.1 || >= 8.1.4}
 
   koatty_config@1.2.2:
@@ -3094,8 +3167,8 @@ packages:
       koatty_lib: ^1.x.x
       koatty_loader: ^1.x.x
 
-  koatty_container@1.16.0:
-    resolution: {integrity: sha512-8INo9o6wkk1qEXJ+Q9Kdy3V6oQ5+BsgjZFxqZeNll/AaotwpF7PClcdQQPVYhocpo9Utip/EaNeLSmK/8km1oQ==}
+  koatty_container@1.17.0:
+    resolution: {integrity: sha512-G34sml+L0mnTm2jJYpABbrVTLpwe7wJkAK4DB6KFRN8EPTjk9PMewflGhxD+RIkv4iibOymOtp3/3PMmthuyPw==}
     engines: {node: '>10.0.0'}
     peerDependencies:
       koatty_lib: ^1.x.x
@@ -3103,6 +3176,16 @@ packages:
 
   koatty_core@1.18.0:
     resolution: {integrity: sha512-JYxdh9YAltRiOl+mux2L4yZPehRvyLxeRhHwpowgIWOVdsLUs1N33wog857x6tz6Xobt/IGToW2TO9hOAwX3cw==}
+    engines: {node: '>10.0.0'}
+    peerDependencies:
+      koatty_container: ^1.x.x
+      koatty_exception: ^1.x.x
+      koatty_lib: ^1.x.x
+      koatty_logger: ^2.x.x
+      koatty_trace: ^1.x.x
+
+  koatty_core@1.19.0-3:
+    resolution: {integrity: sha512-tlR+FfZJ9FJCmzPZCVNtWU6ffqTsU/1/lTmqZU2lIJ9fUHdzfTuuWYh3mFB+FG2ZWel2xr6Er66Qgo8+uWKHhw==}
     engines: {node: '>10.0.0'}
     peerDependencies:
       koatty_container: ^1.x.x
@@ -3136,8 +3219,8 @@ packages:
     peerDependencies:
       koatty_lib: ^1.x.x
 
-  koatty_logger@2.3.0:
-    resolution: {integrity: sha512-uay/0PWpyFV4ym9SJoY5ulLH1o5Ml4WfgqXBJxhgobQF2y7uzBU2XEMFtz9p3KMmMSAbW7RrZl4rN23weawGwQ==}
+  koatty_logger@2.5.0:
+    resolution: {integrity: sha512-KUbus99WNsU+5OTjW6dl4B3mtLeuluu5yq1hcfg+5eoPrK54vVal250ayuGFulRYVWSTLU36MqrDqAQ8rKO8DQ==}
     engines: {node: '>10.0.0'}
     peerDependencies:
       koatty_lib: ^1.x.x
@@ -3149,8 +3232,8 @@ packages:
     peerDependencies:
       koatty_lib: ^1.x.x
 
-  koatty_router@1.19.0:
-    resolution: {integrity: sha512-mpvqDbAgfK5LWo4Z4Js01fZiUjzb4ZrsninMY5LHy6lJdOufMtk78NoJXy4mDtkDdXLoC448EQ64YjqapeQb3A==}
+  koatty_router@1.20.0-1:
+    resolution: {integrity: sha512-nemqv1buz8ktamtC4eRjXs8Jy5HvrXybj8NGjb5sWQHIsMdgcHAouFCrqO3rrDUAc+jx6CfT3RnkymB4IycKcg==}
     engines: {node: '>10.0.0'}
     peerDependencies:
       koatty_container: ^1.x.x
@@ -3162,8 +3245,8 @@ packages:
       koatty_proto: ^1.x.x
       koatty_validation: ^1.x.x
 
-  koatty_serve@2.8.0:
-    resolution: {integrity: sha512-hTSCh99bheu5XUl4AMalF8V/vEuwnsqlT7xvFvdRq8Fq+6sHEifSU6SFvQ1GL1ERa7PwppBGZEmgDEgEBT8E6A==}
+  koatty_serve@2.9.0-4:
+    resolution: {integrity: sha512-wPZOmN4yapW2swikKQnhJs5KtfnocdGKcs+gNuwoDaO9DsxYiDPUgvkrRq4XiSOFfFpYxM1c0AXkpKMj/E2GHw==}
     engines: {node: '>10.0.0'}
     peerDependencies:
       koatty_container: ^1.x.x
@@ -3276,11 +3359,18 @@ packages:
   long@5.3.1:
     resolution: {integrity: sha512-ka87Jz3gcx/I7Hal94xaN2tZEOPoUOEVftkQqZx2EeQRN7LGdfLlI3FvZ+7WDplm+vK2Urx9ULrvSowtdCieng==}
 
+  long@5.3.2:
+    resolution: {integrity: sha512-mNAgZ1GmyNhD7AuqnTG3/VQ26o760+ZYBPKjPvugO8+nLbYfX6TVpJPseBvopbdY+qpZ/lKUnmEc1LeZYS3QAA==}
+
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
 
   lru-cache@11.1.0:
     resolution: {integrity: sha512-QIXZUBJUx+2zHUdQujWejBkcD9+cs94tLn0+YL8UrCh+D5sCXZ4c7LaEH48pNwRY3MLDgqUFyhlCyjJPf1WP0A==}
+    engines: {node: 20 || >=22}
+
+  lru-cache@11.2.2:
+    resolution: {integrity: sha512-F9ODfyqML2coTIsQpSkRHnLSZMtkU8Q+mSfcaIyKwy58u+8k5nvAYeiNhsyMARvzNcXJ9QfWVrcPsC9e9rAxtg==}
     engines: {node: 20 || >=22}
 
   lru-cache@5.1.1:
@@ -3460,8 +3550,8 @@ packages:
     resolution: {integrity: sha512-S48WzZW777zhNIrn7gxOlISNAqi9ZC/uQFnRdbeIHhZhCA6UqpkOT8T1G7BvfdgP4Er8gF4sUbaS0i7QvIfCWw==}
     engines: {node: '>=8'}
 
-  object-hash@2.2.0:
-    resolution: {integrity: sha512-gScRMn0bS5fH+IuwyIFgnh9zBdo4DV+6GhygmWM9HyNJSgS0hScp1f5vjtm7oIIOiT9trXrShAkLFSc2IqKNgw==}
+  object-hash@3.0.0:
+    resolution: {integrity: sha512-RSn9F68PjH9HqtltsSnqYC1XXoWe9Bju5+213R98cNGttag9q9yAOTzdbsqvIa7aNm5WffBZFpWYr2aWrklWAw==}
     engines: {node: '>= 6'}
 
   object-inspect@1.13.4:
@@ -3483,7 +3573,7 @@ packages:
     engines: {node: '>=6'}
 
   only@0.0.2:
-    resolution: {integrity: sha1-Kv3oTQPlC5qO3EROMGEKcCle37Q=}
+    resolution: {integrity: sha512-Fvw+Jemq5fjjyWz6CpKx6w9s7xxqo3+JCyM0WXWeCSOboZ8ABkyvP8ID4CZuChA/wxSx+XSJmdOm8rGVyJ1hdQ==}
 
   open@8.4.2:
     resolution: {integrity: sha512-7x81NCL719oNbsq/3mh+hVrAWmFuEYUqrq/Iw3kUzH8ReypT9QQ0BLoJS7/G9k6N81XjW4qHWtjWwe/9eLy1EQ==}
@@ -3686,8 +3776,8 @@ packages:
     resolution: {integrity: sha512-mRUWCc3KUU4w1jU8sGxICXH/gNS94DvI1gxqDvBzhj1JpcsimQkYiOJfwsPUykUI5ZaspFbSgmBLER8IrQ3tqw==}
     engines: {node: '>=12.0.0'}
 
-  protobufjs@7.5.3:
-    resolution: {integrity: sha512-sildjKwVqOI2kmFDiXQ6aEB0fjYTafpEvIBs8tOR8qI4spuL9OPROLVu2qZqi/xgCfsHIwVqlaF8JBjWFHnKbw==}
+  protobufjs@7.5.4:
+    resolution: {integrity: sha512-CvexbZtbov6jW2eXAvLukXjXUW1TzFaivC46BpWc/3BpcCysb5Vffu+B3XHMm8lVEuy2Mm4XGex8hBSg1yapPg==}
     engines: {node: '>=12.0.0'}
 
   punycode@2.3.1:
@@ -4131,6 +4221,10 @@ packages:
     peerDependencies:
       typescript: '>=4.8.4'
 
+  ts-custom-error@3.2.2:
+    resolution: {integrity: sha512-u0YCNf2lf6T/vHm+POKZK1yFKWpSpJitcUN3HxqyEcFuNnHIDbyuIQC7QDy/PsBX3giFyk9rt6BFqBAh2lsDZQ==}
+    engines: {node: '>=14.0.0'}
+
   ts-jest@29.2.6:
     resolution: {integrity: sha512-yTNZVZqc8lSixm+QGVFcPe6+yj7+TWZwIesuOWvfcn4B9bz5x4NDzVCQQjOs7Hfouu36aEqfEbo9Qpo+gq8dDg==}
     engines: {node: ^14.15.0 || ^16.10.0 || ^18.0.0 || >=20.0.0}
@@ -4155,8 +4249,8 @@ packages:
       esbuild:
         optional: true
 
-  ts-morph@26.0.0:
-    resolution: {integrity: sha512-ztMO++owQnz8c/gIENcM9XfCEzgoGphTv+nKpYNM1bgsdOVC/jRZuEBf6N+mLLDNg68Kl+GgUZfOySaRiG1/Ug==}
+  ts-morph@27.0.0:
+    resolution: {integrity: sha512-xcqelpTR5PCuZMs54qp9DE3t7tPgA2v/P1/qdW4ke5b3Y5liTGTYj6a/twT35EQW/H5okRqp1UOqwNlgg0K0eQ==}
 
   ts-node@10.9.2:
     resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
@@ -4231,6 +4325,9 @@ packages:
   undici-types@6.20.0:
     resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
 
+  undici-types@6.21.0:
+    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
+
   unicorn-magic@0.1.0:
     resolution: {integrity: sha512-lRfVq8fE8gz6QMBuDM6a+LO3IAzTi05H6gCVaUpir2E1Rwpo4ZUog45KpNXKC/Mn3Yb9UDuHumeFTo9iV/D9FQ==}
     engines: {node: '>=18'}
@@ -4295,8 +4392,8 @@ packages:
     engines: {node: '>= 8'}
     hasBin: true
 
-  winston-daily-rotate-file@4.7.1:
-    resolution: {integrity: sha512-7LGPiYGBPNyGHLn9z33i96zx/bd71pjBn9tqQzO3I4Tayv94WPmBNwKC7CO1wPHdP9uvu+Md/1nr6VSH9h0iaA==}
+  winston-daily-rotate-file@5.0.0:
+    resolution: {integrity: sha512-JDjiXXkM5qvwY06733vf09I2wnMXpZEhxEVOSPenZMii+g7pcDcTBt2MRugnoi8BwVSuCT2jfRXBUy+n1Zz/Yw==}
     engines: {node: '>=8'}
     peerDependencies:
       winston: ^3
@@ -4327,8 +4424,8 @@ packages:
     resolution: {integrity: sha512-7KxauUdBmSdWnmpaGFg+ppNjKF8uNLry8LyzjauQDOVONfFLNKrKvQOxZ/VuTIcS/gge/YNahf5RIIQWTSarlg==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
 
-  ws@8.18.2:
-    resolution: {integrity: sha512-DMricUmwGZUVr++AEAe2uiVM7UoO9MAVZMDu05UQOaUII0lp+zOzLLU4Xqh/JvTqklB1T4uELaaPBKyjE1r4fQ==}
+  ws@8.18.3:
+    resolution: {integrity: sha512-PEIGCY5tSlUt50cqyMXfCzX+oOPqN0vuGqWzbcJ2xvnkzkq46oOpz7dQaTDBdfICb4N14+GARUDw2XV2N4tvzg==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       bufferutil: ^4.0.1
@@ -4754,6 +4851,20 @@ snapshots:
       protobufjs: 7.4.0
       yargs: 17.7.2
 
+  '@grpc/proto-loader@0.7.15':
+    dependencies:
+      lodash.camelcase: 4.3.0
+      long: 5.3.2
+      protobufjs: 7.5.4
+      yargs: 17.7.2
+
+  '@grpc/proto-loader@0.8.0':
+    dependencies:
+      lodash.camelcase: 4.3.0
+      long: 5.3.2
+      protobufjs: 7.5.4
+      yargs: 17.7.2
+
   '@humanwhocodes/config-array@0.13.0':
     dependencies:
       '@humanwhocodes/object-schema': 2.0.3
@@ -4979,6 +5090,81 @@ snapshots:
       path-to-regexp: 8.3.0
     transitivePeerDependencies:
       - supports-color
+<<<<<<< HEAD
+=======
+
+  '@matrixai/async-cancellable@2.0.1': {}
+
+  '@matrixai/async-init@2.1.2':
+    dependencies:
+      '@matrixai/async-locks': 5.0.2
+      '@matrixai/errors': 2.1.3
+      '@matrixai/events': 4.0.1
+
+  '@matrixai/async-locks@5.0.2':
+    dependencies:
+      '@matrixai/async-cancellable': 2.0.1
+      '@matrixai/errors': 2.1.3
+      '@matrixai/resources': 2.0.1
+      '@matrixai/timer': 2.1.1
+
+  '@matrixai/contexts@2.0.2':
+    dependencies:
+      '@matrixai/async-cancellable': 2.0.1
+      '@matrixai/async-locks': 5.0.2
+      '@matrixai/errors': 2.1.3
+      '@matrixai/resources': 2.0.1
+      '@matrixai/timer': 2.1.1
+
+  '@matrixai/errors@2.1.3':
+    dependencies:
+      ts-custom-error: 3.2.2
+
+  '@matrixai/events@4.0.1': {}
+
+  '@matrixai/logger@4.0.3': {}
+
+  '@matrixai/quic-darwin-arm64@2.0.9':
+    optional: true
+
+  '@matrixai/quic-darwin-universal@2.0.9':
+    optional: true
+
+  '@matrixai/quic-darwin-x64@2.0.9':
+    optional: true
+
+  '@matrixai/quic-linux-x64@2.0.9':
+    optional: true
+
+  '@matrixai/quic-win32-x64@2.0.9':
+    optional: true
+
+  '@matrixai/quic@2.0.9':
+    dependencies:
+      '@matrixai/async-cancellable': 2.0.1
+      '@matrixai/async-init': 2.1.2
+      '@matrixai/async-locks': 5.0.2
+      '@matrixai/contexts': 2.0.2
+      '@matrixai/errors': 2.1.3
+      '@matrixai/events': 4.0.1
+      '@matrixai/logger': 4.0.3
+      '@matrixai/resources': 2.0.1
+      '@matrixai/timer': 2.1.1
+      ip-num: 1.5.2
+    optionalDependencies:
+      '@matrixai/quic-darwin-arm64': 2.0.9
+      '@matrixai/quic-darwin-universal': 2.0.9
+      '@matrixai/quic-darwin-x64': 2.0.9
+      '@matrixai/quic-linux-x64': 2.0.9
+      '@matrixai/quic-win32-x64': 2.0.9
+
+  '@matrixai/resources@2.0.1': {}
+
+  '@matrixai/timer@2.1.1':
+    dependencies:
+      '@matrixai/async-cancellable': 2.0.1
+      '@matrixai/errors': 2.1.3
+>>>>>>> cf5018d (feat: implement multi-protocol server support with backward compatibility and enhanced GraphQL/HTTP2 integration)
 
   '@microsoft/api-documenter@7.26.17(@types/node@22.13.10)':
     dependencies:
@@ -5915,9 +6101,13 @@ snapshots:
     dependencies:
       '@sinonjs/commons': 3.0.1
 
-  '@ts-morph/common@0.27.0':
+  '@so-ric/colorspace@1.1.6':
     dependencies:
-      fast-glob: 3.3.3
+      color: 5.0.2
+      text-hex: 1.0.0
+
+  '@ts-morph/common@0.28.0':
+    dependencies:
       minimatch: 10.0.1
       path-browserify: 1.0.1
       tinyglobby: 0.2.15
@@ -6067,7 +6257,7 @@ snapshots:
     dependencies:
       undici-types: 6.20.0
 
-  '@types/node@22.16.5':
+  '@types/node@22.18.8':
     dependencies:
       undici-types: 6.21.0
 
@@ -8022,7 +8212,7 @@ snapshots:
 
   koa-is-json@1.0.0: {}
 
-  koa@2.16.1:
+  koa@2.16.2:
     dependencies:
       accepts: 1.3.8
       content-disposition: 0.5.4
@@ -8043,44 +8233,54 @@ snapshots:
       type-is: 2.0.1
       vary: 1.1.2
 
-  koatty_config@1.2.2(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_loader@1.3.0(koatty_lib@1.4.3))(koatty_trace@1.16.0)(tslib@2.8.1):
+  koatty_config@1.2.2(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_loader@1.3.0(koatty_lib@1.4.3))(koatty_trace@1.16.0)(tslib@2.8.1):
     dependencies:
-      koatty_container: 1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))
-      koatty_core: 1.18.0(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_trace@1.16.0)
+      koatty_container: 1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
+      koatty_core: 1.18.0(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_trace@1.16.0)
       koatty_lib: 1.4.3
       koatty_loader: 1.3.0(koatty_lib@1.4.3)
-      koatty_logger: 2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)
+      koatty_logger: 2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)
       run-con: 1.3.2
     transitivePeerDependencies:
       - koatty_exception
       - koatty_trace
       - tslib
 
-  koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)):
+  koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)):
     dependencies:
       koatty_lib: 1.4.3
-      koatty_logger: 2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)
-      lru-cache: 11.1.0
+      koatty_logger: 2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)
+      lru-cache: 11.2.2
       tslib: 2.8.1
 
-  koatty_core@1.18.0(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_trace@1.16.0):
+  koatty_core@1.18.0(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_trace@1.16.0):
     dependencies:
       koa-compose: 4.1.0
-      koatty_container: 1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))
-      koatty_exception: 1.8.0(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.18.0)(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))
+      koatty_container: 1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
+      koatty_exception: 1.8.0(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.19.0-3)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
       koatty_lib: 1.4.3
-      koatty_logger: 2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)
-      koatty_trace: 1.16.0(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.18.0)(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))
+      koatty_logger: 2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)
+      koatty_trace: 1.16.0(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.19.0-3)(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
       on-finished: 2.4.1
 
-  koatty_exception@1.8.0(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.18.0)(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)):
+  koatty_core@1.19.0-3(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_trace@1.16.0):
+    dependencies:
+      koa-compose: 4.1.0
+      koatty_container: 1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
+      koatty_exception: 1.8.0(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.19.0-3)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
+      koatty_lib: 1.4.3
+      koatty_logger: 2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)
+      koatty_trace: 1.16.0(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.19.0-3)(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
+      on-finished: 2.4.1
+
+  koatty_exception@1.8.0(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.19.0-3)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)):
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/semantic-conventions': 1.34.0
-      koatty_container: 1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))
-      koatty_core: 1.18.0(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_trace@1.16.0)
+      koatty_container: 1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
+      koatty_core: 1.19.0-3(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_trace@1.16.0)
       koatty_lib: 1.4.3
-      koatty_logger: 2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)
+      koatty_logger: 2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)
 
   koatty_graphql@1.1.0(koatty_lib@1.4.3):
     dependencies:
@@ -8100,21 +8300,21 @@ snapshots:
       globby: 11.1.0
       koatty_lib: 1.4.3
 
-  koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1):
+  koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1):
     dependencies:
       koatty_lib: 1.4.3
       tslib: 2.8.1
-      winston: 3.17.0
-      winston-daily-rotate-file: 4.7.1(winston@3.17.0)
+      winston: 3.18.3
+      winston-daily-rotate-file: 5.0.0(winston@3.18.3)
 
   koatty_proto@1.2.0(koatty_lib@1.4.3):
     dependencies:
-      '@grpc/grpc-js': 1.13.4
-      '@grpc/proto-loader': 0.7.13
+      '@grpc/grpc-js': 1.14.0
+      '@grpc/proto-loader': 0.7.15
       koatty_lib: 1.4.3
-      protobufjs: 7.4.0
+      protobufjs: 7.5.4
 
-  koatty_router@1.19.0(graphql@16.10.0)(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.18.0)(koatty_exception@1.8.0)(koatty_graphql@1.1.0(koatty_lib@1.4.3))(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.3))(koatty_validation@1.3.6(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))):
+  koatty_router@1.20.0-1(graphql@16.10.0)(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.19.0-3)(koatty_exception@1.8.0)(koatty_graphql@1.1.0(koatty_lib@1.4.3))(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.3))(koatty_validation@1.3.6(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))):
     dependencies:
       '@koa/router': 14.0.0
       fast-querystring: 1.1.2
@@ -8123,14 +8323,14 @@ snapshots:
       inflation: 2.1.0
       koa-compose: 4.1.0
       koa-graphql: 0.12.0(graphql@16.10.0)
-      koatty_container: 1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))
-      koatty_core: 1.18.0(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_trace@1.16.0)
-      koatty_exception: 1.8.0(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.18.0)(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))
+      koatty_container: 1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
+      koatty_core: 1.19.0-3(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_trace@1.16.0)
+      koatty_exception: 1.8.0(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.19.0-3)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
       koatty_graphql: 1.1.0(koatty_lib@1.4.3)
       koatty_lib: 1.4.3
-      koatty_logger: 2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)
+      koatty_logger: 2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)
       koatty_proto: 1.2.0(koatty_lib@1.4.3)
-      koatty_validation: 1.3.6(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))
+      koatty_validation: 1.3.6(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
       lru-cache: 11.1.0
       on-finished: 2.4.1
       raw-body: 3.0.1
@@ -8138,22 +8338,23 @@ snapshots:
       - graphql
       - supports-color
 
-  koatty_serve@2.8.0(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.18.0)(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.3))(koatty_validation@1.3.6(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))):
+  koatty_serve@2.9.0-4(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.19.0-3)(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_proto@1.2.0(koatty_lib@1.4.3))(koatty_validation@1.3.6(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))):
     dependencies:
-      '@grpc/grpc-js': 1.13.4
-      koatty_container: 1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))
-      koatty_core: 1.18.0(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_trace@1.16.0)
-      koatty_exception: 1.8.0(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.18.0)(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))
+      '@grpc/grpc-js': 1.14.0
+      '@matrixai/quic': 2.0.9
+      koatty_container: 1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
+      koatty_core: 1.19.0-3(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_trace@1.16.0)
+      koatty_exception: 1.8.0(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.19.0-3)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
       koatty_lib: 1.4.3
-      koatty_logger: 2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)
+      koatty_logger: 2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)
       koatty_proto: 1.2.0(koatty_lib@1.4.3)
-      koatty_validation: 1.3.6(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))
-      ws: 8.18.2
+      koatty_validation: 1.3.6(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
+      ws: 8.18.3
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
 
-  koatty_trace@1.16.0(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.18.0)(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)):
+  koatty_trace@1.16.0(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.19.0-3)(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)):
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/auto-instrumentations-node': 0.57.1(@opentelemetry/api@1.9.0)(@opentelemetry/core@2.0.0(@opentelemetry/api@1.9.0))
@@ -8171,21 +8372,21 @@ snapshots:
       '@opentelemetry/semantic-conventions': 1.34.0
       brotli-wasm: 1.3.1
       koa-compress: 5.1.1
-      koatty_container: 1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))
-      koatty_core: 1.18.0(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_trace@1.16.0)
-      koatty_exception: 1.8.0(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.18.0)(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))
+      koatty_container: 1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
+      koatty_core: 1.19.0-3(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_exception@1.8.0)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))(koatty_trace@1.16.0)
+      koatty_exception: 1.8.0(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_core@1.19.0-3)(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
       koatty_lib: 1.4.3
-      koatty_logger: 2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)
+      koatty_logger: 2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)
     transitivePeerDependencies:
       - encoding
       - supports-color
 
-  koatty_validation@1.3.6(koatty_container@1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)):
+  koatty_validation@1.3.6(koatty_container@1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)))(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)):
     dependencies:
       class-validator: 0.14.1
-      koatty_container: 1.16.0(koatty_lib@1.4.3)(koatty_logger@2.3.0(koatty_lib@1.4.3)(tslib@2.8.1))
+      koatty_container: 1.17.0(koatty_lib@1.4.3)(koatty_logger@2.5.0(koatty_lib@1.4.3)(tslib@2.8.1))
       koatty_lib: 1.4.3
-      koatty_logger: 2.3.0(koatty_lib@1.4.3)(tslib@2.8.1)
+      koatty_logger: 2.5.0(koatty_lib@1.4.3)(tslib@2.8.1)
 
   kuler@2.0.0: {}
 
@@ -8264,9 +8465,13 @@ snapshots:
 
   long@5.3.1: {}
 
+  long@5.3.2: {}
+
   lru-cache@10.4.3: {}
 
   lru-cache@11.1.0: {}
+
+  lru-cache@11.2.2: {}
 
   lru-cache@5.1.1:
     dependencies:
@@ -8425,7 +8630,7 @@ snapshots:
     dependencies:
       path-key: 3.1.1
 
-  object-hash@2.2.0: {}
+  object-hash@3.0.0: {}
 
   object-inspect@1.13.4: {}
 
@@ -8630,7 +8835,7 @@ snapshots:
       '@types/node': 22.13.10
       long: 5.3.1
 
-  protobufjs@7.5.3:
+  protobufjs@7.5.4:
     dependencies:
       '@protobufjs/aspromise': 1.1.2
       '@protobufjs/base64': 1.1.2
@@ -8642,7 +8847,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 22.16.5
+      '@types/node': 22.18.8
       long: 5.3.2
 
   punycode@2.3.1: {}
@@ -9105,6 +9310,8 @@ snapshots:
     dependencies:
       typescript: 5.8.2
 
+  ts-custom-error@3.2.2: {}
+
   ts-jest@29.2.6(@babel/core@7.26.10)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.10))(jest@29.7.0(@types/node@22.13.10)(ts-node@10.9.2(@types/node@22.13.10)(typescript@5.8.2)))(typescript@5.8.2):
     dependencies:
       bs-logger: 0.2.6
@@ -9124,9 +9331,9 @@ snapshots:
       '@jest/types': 29.6.3
       babel-jest: 29.7.0(@babel/core@7.26.10)
 
-  ts-morph@26.0.0:
+  ts-morph@27.0.0:
     dependencies:
-      '@ts-morph/common': 0.27.0
+      '@ts-morph/common': 0.28.0
       code-block-writer: 13.0.3
 
   ts-node@10.9.2(@types/node@22.13.10)(typescript@5.8.2):
@@ -9184,6 +9391,8 @@ snapshots:
 
   undici-types@6.20.0: {}
 
+  undici-types@6.21.0: {}
+
   unicorn-magic@0.1.0: {}
 
   universalify@2.0.1: {}
@@ -9238,10 +9447,10 @@ snapshots:
     dependencies:
       isexe: 2.0.0
 
-  winston-daily-rotate-file@4.7.1(winston@3.17.0):
+  winston-daily-rotate-file@5.0.0(winston@3.18.3):
     dependencies:
       file-stream-rotator: 0.6.1
-      object-hash: 2.2.0
+      object-hash: 3.0.0
       triple-beam: 1.4.1
       winston: 3.18.3
       winston-transport: 4.9.0
@@ -9283,7 +9492,7 @@ snapshots:
       imurmurhash: 0.1.4
       signal-exit: 3.0.7
 
-  ws@8.18.2: {}
+  ws@8.18.3: {}
 
   xtend@4.0.2: {}
 
