@@ -23,8 +23,7 @@ export class SayHelloRequestDto {
   // memo: string;
 
   @IsDefined()
-  @IsNotEmpty()
-  id: string;
+  id: number;
 
   @IsDefined()
   name: string;
