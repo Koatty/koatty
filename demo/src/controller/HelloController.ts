@@ -41,7 +41,8 @@ export class HelloController {
    * @param {SayHelloRequestDto} data
    * @returns
    */
-  // @Validated()  // gRPC 方法不需要 @PostMapping 装饰器
+  @PostMapping('/SayHello')
+  @Validated()
   SayHello(@RequestBody() params: SayHelloRequestDto): SayHelloReplyDto {
     const res = new SayHelloReplyDto();
     res.message = `Hello, ${params.name}! Your ID is ${params.id}`;
