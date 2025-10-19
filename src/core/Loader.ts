@@ -11,11 +11,10 @@
 import { LoadConfigs as loadConf } from "koatty_config";
 import { IOC, TAGGED_CLS } from "koatty_container";
 import {
-  AppEvent, AppEventArr, EventHookFunc, IMiddleware, implementsAspectInterface,
-  implementsControllerInterface, implementsMiddlewareInterface,
-  implementsPluginInterface, implementsServiceInterface, IPlugin,
-  KoattyApplication,
-  KoattyServer
+  AppEvent, AppEventArr, EventHookFunc, IMiddleware, IMiddlewareOptions, protocolMiddleware,
+  implementsAspectInterface, implementsControllerInterface,
+  implementsMiddlewareInterface, implementsPluginInterface,
+  implementsServiceInterface, IPlugin, KoattyApplication, KoattyServer, MIDDLEWARE_OPTIONS
 } from 'koatty_core';
 import { Helper } from "koatty_lib";
 import { Load } from "koatty_loader";
@@ -407,30 +406,6 @@ export class Loader {
   }
 
   /**
-   * Map GraphQL protocol to underlying HTTP/HTTP2 transport.
-   * GraphQL is an application-layer protocol that runs over HTTP/HTTP2.
-   * 
-   * @static
-   * @private
-   * @param {string} proto - The protocol name
-   * @param {any} opts - Server options containing SSL configuration
-   * @returns {string} The transport protocol (http, http2, or original protocol)
-   */
-  private static MapProtocolToTransport(proto: string, opts: any): string {
-    if (proto === 'graphql') {
-      // Check if SSL/TLS is configured for GraphQL
-      // If ext.graphql has keyFile/crtFile or global ext has SSL config, use http2
-      const graphqlExt = opts.ext?.graphql || {};
-      const globalExt = opts.ext || {};
-      if (graphqlExt.keyFile || graphqlExt.crtFile || globalExt.keyFile || globalExt.crtFile) {
-        return 'http2';
-      }
-      return 'http';
-    }
-    return proto;
-  }
-
-  /**
    * Create and configure servers for all protocols.
    * Supports both single protocol and multi-protocol configurations.
    * 
@@ -463,15 +438,7 @@ export class Loader {
       for (let i = 0; i < protocols.length; i++) {
         const proto = protocols[i];
         const protoServerOpts = { ...serveOpts, protocol: proto, port: ports[i] };
-        
-        // Map GraphQL to HTTP/HTTP2 transport
-        // GraphQL uses HTTP/HTTP2 as transport layer
-        const transportProtocol = Loader.MapProtocolToTransport(proto, protoServerOpts);
-        if (proto === 'graphql') {
-          Logger.Debug(`GraphQL protocol mapped to ${transportProtocol.toUpperCase()} transport`);
-          protoServerOpts.protocol = transportProtocol;
-        }
-        
+
         // Create server with transport protocol
         servers.push(NewServe(app, protoServerOpts));
       }
@@ -481,12 +448,6 @@ export class Loader {
       // Single protocol: create single server instance (backward compatibility)
       const singleProto = protocols[0];
       const singleServerOpts = { protocol: singleProto, ...serveOpts };
-      const transportProtocol = Loader.MapProtocolToTransport(singleProto, singleServerOpts);
-      
-      if (singleProto === 'graphql') {
-        Logger.Debug(`GraphQL protocol mapped to ${transportProtocol.toUpperCase()} transport`);
-        singleServerOpts.protocol = transportProtocol;
-      }
       
       // Create server with transport protocol
       return NewServe(app, singleServerOpts);
@@ -619,6 +580,43 @@ export class Loader {
         } catch {
           // If metadata not found, use empty object
           decoratorOptions = {};
+        }
+      }
+      
+      // Merge decorator options with config options (config has higher priority)
+      const mergedOptions: IMiddlewareOptions = { ...decoratorOptions, ...middlewareOpt };
+      
+      // Check if middleware is disabled
+      if (mergedOptions.enabled === false) {
+        Logger.Warn(`The middleware ${key} has been loaded but is disabled.`);
+        continue;
+      }
+      
+      // Execute middleware handler
+      const result = await handle.run(mergedOptions, this.app);
+      if (Helper.isFunction(result)) {
+        let middleware = result;
+        
+        // Wrap with protocol filter if protocol option is specified
+        if (mergedOptions.protocol) {
+          const protocols = Helper.isArray(mergedOptions.protocol) 
+            ? mergedOptions.protocol 
+            : [mergedOptions.protocol];
+          
+          Logger.Log(
+            'Koatty', 
+            '', 
+            `Middleware ${key} limited to protocols: ${protocols.join(', ')}`
+          );
+          
+          middleware = protocolMiddleware(protocols, result);
+        }
+        
+        // Mount middleware
+        if (middleware.length < 3) {
+          this.app.use(middleware);
+        } else {
+          this.app.useExp(middleware);
         }
       }
     }
