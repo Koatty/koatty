@@ -69,21 +69,18 @@ When using multiple protocols, configure protocol-specific extensions in `config
 export default {
   ext: {
     // HTTP protocol config (optional)
-    http: {},
+    ...,
     
-    // gRPC protocol config
-    grpc: {
-      protoFile: "./resource/proto/Hello.proto",
-      poolSize: 10,
-      streamConfig: { maxConcurrentStreams: 50 }
-    },
+    // gRPC protocol config (optional)
+    protoFile: "./resource/proto/Hello.proto",
+    poolSize: 10,
+    streamConfig: { messageCount: 50 }
     
-    // WebSocket protocol config
-    ws: {
-      maxFrameSize: 1024 * 1024,
-      heartbeatInterval: 15000,
-      maxConnections: 1000
-    }
+    
+    // WebSocket protocol config (optional)
+    maxFrameSize: 1024 * 1024,
+    heartbeatInterval: 15000,
+    maxConnections: 1000
   }
 }
 ```
@@ -108,15 +105,30 @@ export default {
   - **Server Push**: Prefetch related resources
   - **HTTP/1.1 Fallback**: Automatic downgrade for compatibility
   
-  To enable HTTP/2 for GraphQL, add SSL certificate configuration in `config/router.ts`:
+  To enable HTTP/2 for GraphQL, configure in `config/config.ts`:
   ```typescript
-  ext: {
-    graphql: {
-      schemaFile: "./resource/graphql/schema.graphql",
-      keyFile: "./ssl/server.key",    // Enable HTTP/2 with SSL
-      crtFile: "./ssl/server.crt",
-      ssl: { mode: 'auto', allowHTTP1: true },     // Optional: SSL config
-      http2: { maxConcurrentStreams: 100 }         // Optional: HTTP/2 config
+  // config/config.ts
+  export default {
+    server: {
+      protocol: "graphql",
+      ssl: {
+        mode: 'auto',
+        key: './ssl/server.key',
+        cert: './ssl/server.crt'
+      },
+      ext: {
+        maxConcurrentStreams: 100  // Optional: HTTP/2 config
+      }
+    }
+  }
+  ```
+  
+  And configure GraphQL schema in `config/router.ts`:
+  ```typescript
+  // config/router.ts
+  export default {
+    ext: {
+      schemaFile: "./resource/graphql/schema.graphql"
     }
   }
   ```
@@ -125,10 +137,10 @@ export default {
 ### 💉 Dependency Injection (IOC Container v1.17.0)
 
 **Enhanced Features:**
-- ✅ **Intelligent Metadata Cache** - LRU 缓存机制，显著提升性能
-- ✅ **Metadata Preloading** - 启动时预加载，优化组件注册
-- ✅ **Version Conflict Detection** - 自动检测和解决依赖版本冲突
-- ✅ **Circular Dependency Detection** - 循环依赖检测和解决建议
+-✅ **Intelligent Metadata Cache** - LRU caching mechanism, significantly improves performance
+-✅ **Metadata Preloading** - Preload at startup, optimize component registration
+-✅ **Version Conflict Detection** - Automatically detect and resolve dependency version conflicts
+-✅ **Circular Dependency Detection** - Circular dependency detection and resolution suggestions
 
 ```typescript
 @Service()
