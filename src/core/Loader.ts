@@ -669,9 +669,9 @@ export class Loader {
       for (const proto in routers) {
         Logger.Info(`[LOADER] Checking protocol: ${proto}, has LoadRouter:`, Helper.isFunction(routers[proto]?.LoadRouter));
         if (routers[proto] && Helper.isFunction(routers[proto].LoadRouter)) {
-          Logger.Info(`[LOADER] 📝 Loading routes for protocol: ${proto}`);
+          Logger.Info(`[LOADER] Loading routes for protocol: ${proto}`);
           await routers[proto].LoadRouter(this.app, ctls);
-          Logger.Info(`[LOADER] ✅ Completed loading routes for protocol: ${proto}`);
+          Logger.Info(`[LOADER] Completed loading routes for protocol: ${proto}`);
         }
       }
     } else if (Helper.isFunction((router as any).LoadRouter)) {
