@@ -207,7 +207,7 @@ const executeBootstrap = async function (target: any, bootFunc: Function,
     return app;
   } catch (err) {
     Logger.Error(err);
-    process.exit();
+    process.exit(1);
   }
 };
 
