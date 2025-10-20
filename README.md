@@ -18,17 +18,21 @@ Koa2 + TypeScript + IOC = Koatty. **Koatty** is a progressive Node.js framework 
 
 ### ✨ New Features
 
-- ✅ **Multi-Protocol Architecture** - Run HTTP, HTTPS, HTTP/2, HTTP/3, gRPC, WebSocket, and GraphQL simultaneously
-- ✅ **Intelligent Metadata Cache** - LRU caching with preloading for 70%+ performance boost
-- ✅ **Protocol-Specific Middleware** - Bind middleware to specific protocols with `@Middleware({ protocol: [...] })`
-- ✅ **Graceful Shutdown** - Enhanced connection pool management and cleanup handlers
-- ✅ **Enhanced gRPC Support** - Timeout detection, duplicate call protection, streaming improvements
-- ✅ **Application Lifecycle Hooks** - Custom decorators with `BindEventHook` API for boot/ready/stop events
-- ✅ **Version Conflict Detection** - Automatic detection and resolution of dependency conflicts
-- ✅ **GraphQL over HTTP/2** - Automatic HTTP/2 upgrade with SSL for multiplexing and compression
+- ✅ **Multi-Protocol Architecture** - Run HTTP, HTTPS, HTTP/2,  HTTP/3, gRPC, WebSocket, and GraphQL simultaneously
+- ✅ **Stable Multi-Protocol Support** - Full support for multiple routers with proper payload handling (v1.20.0-4+)
+- ✅ **GraphQL over HTTP/2** - Automatic HTTP/2 upgrade for GraphQL with SSL (multiplexing, header compression)
+- ✅ **Modular Server Creation** - Independent `CreateServers()` and `CreateRouters()` functions for flexibility
+- ✅ **Protocol-Specific Configuration** - Fine-grained control for each protocol (SSL, HTTP/2 settings, etc.)
+- ✅ **Graceful Shutdown** - Enhanced connection pool management with proper cleanup
+- ✅ **Connection Pool Monitoring** - Real-time metrics and health checks for all protocols
+- ✅ **Environment-Based Config** - Support for command-line arguments and environment variables
 - ✅ **Global Exception Handling** - `@ExceptionHandler()` decorator for centralized error management
 - ✅ **OpenTelemetry Tracing** - Full-stack observability with distributed tracing
-- 💪 **Swagger/OpenAPI 3.0** - Automatic API documentation generation
+- ✅ **Hot Configuration Reload** - Runtime configuration updates without restart (where supported)
+- ✅ **Custom App Events** - Bind decorators to application lifecycle events
+- ✅ **Route-Level Middleware** - Bind middleware to specific controllers and methods
+- ✅ **gRPC Streaming** - Full support for bidirectional, client, and server streaming
+- ✅ **Swagger/OpenAPI 3.0** - Automatic API documentation generation
 
 ## Core Features ✨
 
