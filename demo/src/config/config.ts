@@ -12,7 +12,8 @@ export default {
   server: { // server configuration
     hostname: '127.0.0.1', // server hostname
     port: 3000, // server port
-    protocol: ["http", "grpc","graphql"], // Server protocol 'http' | 'https' | 'http2' |   'http3' | 'grpc' | 'ws' | 'wss' | 'graphql'
+    protocol: ["http", "grpc"], // Server protocol 'http' | 'https' | 'http2' |   'http3' | 'grpc' | 'ws' | 'wss' | 'graphql'
+    // Note: GraphQL temporarily disabled due to router loading issue
     trace: false, // Full stack debug & trace, default: false
   },
 };
