@@ -26,7 +26,8 @@ export const ENGINES_VERSION = engines.node.slice(1) || '12.0.0';
  * @returns
  */
 export function requireDefault(p: string) {
-  /* eslint-disable global-require */
+  // Dynamic require is necessary for runtime module loading
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const ex = require(p);
   return (ex && (typeof ex === "object") && "default" in ex) ? ex.default : ex;
 }

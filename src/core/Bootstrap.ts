@@ -30,7 +30,7 @@ import { Loader } from "./Loader";
  * }
  * ```
  */
-export function Bootstrap(bootFunc?: Function): ClassDecorator {
+export function Bootstrap(bootFunc?: (...args: any[]) => any): ClassDecorator {
   return function (target: any) {
     if (!(target.prototype instanceof Koatty)) {
       throw new Error(`class does not inherit from Koatty`);
@@ -51,7 +51,7 @@ export function Bootstrap(bootFunc?: Function): ClassDecorator {
  * app = await ExecBootStrap()(App);
  * ```
  */
-export function ExecBootStrap(bootFunc?: Function) {
+export function ExecBootStrap(bootFunc?: (...args: any[]) => any) {
   return async (target: any) => {
     if (!(target.prototype instanceof Koatty)) {
       throw new Error(`class ${target.name} does not inherit from Koatty`);
@@ -149,7 +149,7 @@ export function BindEventHook(eventName: AppEvent, eventFunc: EventHookFunc, tar
  * 7. Triggers application events
  * 8. Starts server (except in test environment)
  */
-const executeBootstrap = async function (target: any, bootFunc: Function,
+const executeBootstrap = async function (target: any, bootFunc?: (...args: any[]) => any,
   isInitiative = false): Promise<KoattyApplication> {
   // checked runtime
   checkRuntime();
