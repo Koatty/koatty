@@ -16,18 +16,23 @@ Koa2 + TypeScript + IOC = Koatty. **Koatty** is a progressive Node.js framework 
 - 📦 **Modern Tooling**: CLI scaffolding, testing utilities, and production-ready configurations
 - 🌐 **Protocol Agnostic**: Write once, deploy as HTTP/gRPC/WebSocket services
 
-## New Features ✨
+### ✨ New Features
 
-- HTTP, HTTPS, HTTP2, gRPC, and WebSocket server support ✔️
-- Environment-based configuration loading, command-line argument parsing (process.argv), and environment variable parsing (process.env) ✔️
-- `@ExceptionHandler()` for global exception handling ✔️
-- Graceful shutdown and pre-exit events ✔️
-- Custom decorators bound to app events ✔️
-- GraphQL integration ✔️
-- Full-stack tracing through OpenTelemetry ✔️
-- Middleware binding to controllers and method routes ✔️
-- gRPC streaming support ✔️
-- Swagger OpenAPI 3.0 support 💪
+- ✅ **Multi-Protocol Architecture** - Run HTTP, HTTPS, HTTP/2,  HTTP/3, gRPC, WebSocket, and GraphQL simultaneously
+- ✅ **Stable Multi-Protocol Support** - Full support for multiple routers with proper payload handling (v1.20.0-4+)
+- ✅ **GraphQL over HTTP/2** - Automatic HTTP/2 upgrade for GraphQL with SSL (multiplexing, header compression)
+- ✅ **Modular Server Creation** - Independent `CreateServers()` and `CreateRouters()` functions for flexibility
+- ✅ **Protocol-Specific Configuration** - Fine-grained control for each protocol (SSL, HTTP/2 settings, etc.)
+- ✅ **Graceful Shutdown** - Enhanced connection pool management with proper cleanup
+- ✅ **Connection Pool Monitoring** - Real-time metrics and health checks for all protocols
+- ✅ **Environment-Based Config** - Support for command-line arguments and environment variables
+- ✅ **Global Exception Handling** - `@ExceptionHandler()` decorator for centralized error management
+- ✅ **OpenTelemetry Tracing** - Full-stack observability with distributed tracing
+- ✅ **Hot Configuration Reload** - Runtime configuration updates without restart (where supported)
+- ✅ **Custom App Events** - Bind decorators to application lifecycle events
+- ✅ **Route-Level Middleware** - Bind middleware to specific controllers and methods
+- ✅ **gRPC Streaming** - Full support for bidirectional, client, and server streaming
+- ✅ **Swagger/OpenAPI 3.0** - Automatic API documentation generation
 
 ## Core Features ✨
 
