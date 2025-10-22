@@ -28,7 +28,7 @@ Koa2 + TypeScript + IOC = Koatty. **Koatty** is a progressive Node.js framework 
 - ✅ **GraphQL over HTTP/2** - Automatic HTTP/2 upgrade with SSL for multiplexing and compression
 - ✅ **Global Exception Handling** - `@ExceptionHandler()` decorator for centralized error management
 - ✅ **OpenTelemetry Tracing** - Full-stack observability with distributed tracing
-- ✅ **Swagger/OpenAPI 3.0** - Automatic API documentation generation
+- 💪 **Swagger/OpenAPI 3.0** - Automatic API documentation generation
 
 ## Core Features ✨
 
