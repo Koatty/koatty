@@ -1,0 +1,2 @@
+pnpm version: 10.17.0
+✅ pnpm >= 8.0.0
