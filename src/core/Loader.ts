@@ -442,6 +442,18 @@ export class Loader {
    * @throws {Error} When middleware loading fails
    */
   protected async LoadMiddlewares() {
+    // Load Trace middleware as the first middleware
+    try {
+      const { Trace } = await import("koatty_trace");
+      const traceOptions = this.app.config('trace') ?? {};
+      const tracer = Trace(traceOptions, this.app);
+      Helper.define(this.app, "tracer", tracer);
+      this.app.use(tracer);
+      Logger.Debug(`Load trace middleware`);
+    } catch (error: any) {
+      Logger.Warn(`Trace middleware not found or failed to load: ${error.message}`);
+    }
+
     let middlewareConf = this.app.config(undefined, "middleware");
     if (Helper.isEmpty(middlewareConf)) {
       middlewareConf = { config: {}, list: []};

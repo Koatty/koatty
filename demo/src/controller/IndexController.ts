@@ -20,7 +20,7 @@ import {
   RequestBody
 } from '../../../src/index';
 import { App } from '../App';
-import { Conf } from '../dto/Conf';
+import { Conf } from '../dto/conf';
 import { UserDto } from '../dto/UserDto';
 import { TestService } from '../service/TestService';
 

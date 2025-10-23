@@ -41,12 +41,14 @@ export class HelloController {
    * @param {SayHelloRequestDto} data
    * @returns
    */
-  @PostMapping('/SayHello')
+  @PostMapping('/SayHello') // Consistent with proto.service.method name
   @Validated()
-  SayHello(@RequestBody() params: SayHelloRequestDto): SayHelloReplyDto {
+  SayHello(@RequestBody() params: SayHelloRequestDto): Promise<SayHelloReplyDto> {
     const res = new SayHelloReplyDto();
-    res.message = `Hello, ${params.name}! Your ID is ${params.id}`;
-    return res;
+    res.message = params.name;
+    throw new Error("xxxx");
+
+    return Promise.resolve(res);
   }
 
 }
