@@ -11,9 +11,11 @@
 import type { KoattyContext } from "koatty_core";
 import { DefaultLogger as Logger } from "koatty_logger";
 import type { extensionOptions } from "../trace/itrace";
+// @ts-ignore
 import compress from 'koa-compress';
 import { Readable } from 'stream';
 import zlib from 'node:zlib';
+// @ts-ignore
 import type { CompressOptions } from 'koa-compress';
 
 // StatusEmpty
@@ -59,7 +61,7 @@ export function compressMiddleware(ctx: KoattyContext): ReturnType<typeof compre
     return compress(options);
   }
 
-  return (ctx, next) => next(); // 不压缩时返回空中间件
+  return (ctx: any, next: any) => next(); // 不压缩时返回空中间件
 
 }
 
