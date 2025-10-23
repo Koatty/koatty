@@ -194,7 +194,7 @@ export function Trace(options: TraceOptions, app: Koatty) {
     Helper.define(ctx, 'startTime', Date.now());
 
     // Handle server shutdown case
-    if (app?.server?.status === 503) {
+    if ((app.server as any)?.status === 503) {
       ctx.status = 503;
       ctx.set('Connection', 'close');
       ctx.body = 'Server is in the process of shutting down';

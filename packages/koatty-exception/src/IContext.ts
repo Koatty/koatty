@@ -18,12 +18,12 @@ import { WebSocket } from "ws";
 export interface IExceptionContext {
   status: number;
   protocol: string;
-  requestId: string;
+  requestId?: string;
   originalPath?: string;
   url: string;
   method: string;
   get(field: string): string;
-  startTime: number;
+  startTime?: number;
   res: ServerResponse;
   rpc?: {
     call?: any;
