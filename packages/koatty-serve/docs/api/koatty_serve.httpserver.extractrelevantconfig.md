@@ -10,7 +10,7 @@
 protected extractRelevantConfig(config: HttpServerOptions): {
         hostname: string;
         port: number;
-        protocol: import("../config/config").KoattyProtocol;
+        protocol: string;
         connectionPool: {
             maxConnections: number;
             keepAliveTimeout: number;
@@ -22,11 +22,39 @@ protected extractRelevantConfig(config: HttpServerOptions): {
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  config | HttpServerOptions |  |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+config
+
+
+</td><td>
+
+HttpServerOptions
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
-{ hostname: string; port: number; protocol: import("../config/config").[KoattyProtocol](./koatty_serve.koattyprotocol.md)<!-- -->; connectionPool: { maxConnections: number; keepAliveTimeout: number; headersTimeout: number; requestTimeout: number; }; }
+{ hostname: string; port: number; protocol: string; connectionPool: { maxConnections: number; keepAliveTimeout: number; headersTimeout: number; requestTimeout: number; }; }
 

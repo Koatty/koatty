@@ -12,10 +12,51 @@ protected applyConfigChanges(changedKeys: (keyof GrpcServerOptions)[], newConfig
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  changedKeys | (keyof GrpcServerOptions)\[\] |  |
-|  newConfig | Partial&lt;GrpcServerOptions&gt; |  |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+changedKeys
+
+
+</td><td>
+
+(keyof GrpcServerOptions)\[\]
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+newConfig
+
+
+</td><td>
+
+Partial&lt;GrpcServerOptions&gt;
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

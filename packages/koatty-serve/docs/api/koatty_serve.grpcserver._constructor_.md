@@ -14,8 +14,49 @@ constructor(app: KoattyApplication, options: GrpcServerOptions);
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  app | KoattyApplication |  |
-|  options | GrpcServerOptions |  |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+app
+
+
+</td><td>
+
+KoattyApplication
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+options
+
+
+</td><td>
+
+GrpcServerOptions
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

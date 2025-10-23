@@ -14,8 +14,49 @@ constructor(app: KoattyApplication, options: Http2ServerOptions);
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  app | KoattyApplication |  |
-|  options | Http2ServerOptions |  |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+app
+
+
+</td><td>
+
+KoattyApplication
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+options
+
+
+</td><td>
+
+Http2ServerOptions
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

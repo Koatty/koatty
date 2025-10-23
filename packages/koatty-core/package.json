@@ -76,6 +76,7 @@
   "dependencies": {
     "koa-compose": "^4.1.0",
     "koatty_container": "^1.x.x",
+    "koatty_exception": "workspace:*",
     "koatty_lib": "^1.x.x",
     "koatty_logger": "^2.x.x",
     "on-finished": "^2.4.1"

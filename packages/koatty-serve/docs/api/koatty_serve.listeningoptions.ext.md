@@ -7,5 +7,9 @@
 **Signature:**
 
 ```typescript
-ext?: Record<string, any>;
+ext?: {
+        protoFile?: string;
+        schemaFile?: string;
+        [key: string]: any;
+    };
 ```

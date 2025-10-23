@@ -19,7 +19,7 @@ getHttpConnectionStats(): {
         averageRequestsPerConnection: number;
         utilizationRatio: number;
         protocol: string;
-        poolConfig: ConnectionPoolConfig;
+        poolConfig: import("../config/pool").ConnectionPoolConfig;
         health: import("../pools/pool").ConnectionPoolHealth;
         performance: {
             throughput: number;
@@ -31,9 +31,7 @@ getHttpConnectionStats(): {
             memoryUsage: number;
             cpuUsage: number;
         };
-        uptime: number; /**
-         * 创建HTTP服务器实例
-         */
+        uptime: number;
         activeConnections: number;
         totalConnections: number;
         connectionsPerSecond: number;
@@ -43,5 +41,5 @@ getHttpConnectionStats(): {
 ```
 **Returns:**
 
-{ availableConnections: number; totalRequests: number; totalBytesSent: number; totalBytesReceived: number; httpsConnections: number; httpConnections: number; averageRequestsPerConnection: number; utilizationRatio: number; protocol: string; poolConfig: ConnectionPoolConfig; health: import("../pools/pool").ConnectionPoolHealth; performance: { throughput: number; latency: { p50: number; p95: number; p99: number; }; memoryUsage: number; cpuUsage: number; }; uptime: number; /\*\* \* 创建HTTP服务器实例 \*/ activeConnections: number; totalConnections: number; connectionsPerSecond: number; averageLatency: number; errorRate: number; }
+{ availableConnections: number; totalRequests: number; totalBytesSent: number; totalBytesReceived: number; httpsConnections: number; httpConnections: number; averageRequestsPerConnection: number; utilizationRatio: number; protocol: string; poolConfig: import("../config/pool").ConnectionPoolConfig; health: import("../pools/pool").ConnectionPoolHealth; performance: { throughput: number; latency: { p50: number; p95: number; p99: number; }; memoryUsage: number; cpuUsage: number; }; uptime: number; activeConnections: number; totalConnections: number; connectionsPerSecond: number; averageLatency: number; errorRate: number; }
 

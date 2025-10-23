@@ -10,7 +10,7 @@
 protected extractRelevantConfig(config: GrpcServerOptions): {
         hostname: string;
         port: number;
-        protocol: import("../config/config").KoattyProtocol;
+        protocol: string;
         sslEnabled: boolean;
         connectionPool: {
             maxConnections: number;
@@ -22,11 +22,39 @@ protected extractRelevantConfig(config: GrpcServerOptions): {
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  config | GrpcServerOptions |  |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+config
+
+
+</td><td>
+
+GrpcServerOptions
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
-{ hostname: string; port: number; protocol: import("../config/config").[KoattyProtocol](./koatty_serve.koattyprotocol.md)<!-- -->; sslEnabled: boolean; connectionPool: { maxConnections: number; keepAliveTime: number; keepAliveTimeout: number; }; }
+{ hostname: string; port: number; protocol: string; sslEnabled: boolean; connectionPool: { maxConnections: number; keepAliveTime: number; keepAliveTimeout: number; }; }
 

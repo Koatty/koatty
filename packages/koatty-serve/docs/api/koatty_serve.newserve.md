@@ -15,10 +15,53 @@ export declare function NewServe(app: KoattyApplication, opt?: ListeningOptions)
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  app | KoattyApplication |  |
-|  opt | [ListeningOptions](./koatty_serve.listeningoptions.md) | _(Optional)_ |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+app
+
+
+</td><td>
+
+KoattyApplication
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+opt
+
+
+</td><td>
+
+[ListeningOptions](./koatty_serve.listeningoptions.md)
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

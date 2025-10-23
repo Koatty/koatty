@@ -12,11 +12,65 @@ protected onRuntimeConfigChange(analysis: ConfigChangeAnalysis, newConfig: Parti
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  analysis | ConfigChangeAnalysis |  |
-|  newConfig | Partial&lt;HttpServerOptions&gt; |  |
-|  traceId | string |  |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+analysis
+
+
+</td><td>
+
+ConfigChangeAnalysis
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+newConfig
+
+
+</td><td>
+
+Partial&lt;HttpServerOptions&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+traceId
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

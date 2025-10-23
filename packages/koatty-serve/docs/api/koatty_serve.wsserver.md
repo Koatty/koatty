@@ -15,38 +15,394 @@ export declare class WsServer extends BaseServer<WebSocketServerOptions>
 
 ## Constructors
 
-|  Constructor | Modifiers | Description |
-|  --- | --- | --- |
-|  [(constructor)(app, options)](./koatty_serve.wsserver._constructor_.md) |  | Constructs a new instance of the <code>WsServer</code> class |
+<table><thead><tr><th>
+
+Constructor
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[(constructor)(app, options)](./koatty_serve.wsserver._constructor_.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Constructs a new instance of the `WsServer` class
+
+
+</td></tr>
+</tbody></table>
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [connectionPool](./koatty_serve.wsserver.connectionpool.md) | <code>protected</code> | WebSocketConnectionPoolManager |  |
-|  [httpServer](./koatty_serve.wsserver.httpserver.md) | <code>readonly</code> | HttpServer \| HttpsServer |  |
-|  [server](./koatty_serve.wsserver.server.md) | <code>readonly</code> | WS.WebSocketServer |  |
-|  [socket](./koatty_serve.wsserver.socket.md) |  | any |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[connectionPool](./koatty_serve.wsserver.connectionpool.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+WebSocketConnectionPoolManager
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[httpServer](./koatty_serve.wsserver.httpserver.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+HttpServer \| HttpsServer
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[server](./koatty_serve.wsserver.server.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+WS.WebSocketServer
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[socket](./koatty_serve.wsserver.socket.md)
+
+
+</td><td>
+
+
+</td><td>
+
+any
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 ## Methods
 
-|  Method | Modifiers | Description |
-|  --- | --- | --- |
-|  [analyzeConfigChanges(changedKeys, oldConfig, newConfig)](./koatty_serve.wsserver.analyzeconfigchanges.md) | <code>protected</code> |  |
-|  [configureServerOptions()](./koatty_serve.wsserver.configureserveroptions.md) | <code>protected</code> | 配置WebSocket服务器选项 |
-|  [createProtocolServer()](./koatty_serve.wsserver.createprotocolserver.md) | <code>protected</code> | 创建WebSocket服务器实例 |
-|  [destroy()](./koatty_serve.wsserver.destroy.md) |  | 销毁服务器 |
-|  [extractRelevantConfig(config)](./koatty_serve.wsserver.extractrelevantconfig.md) | <code>protected</code> |  |
-|  [forceCloseRemainingConnections(traceId)](./koatty_serve.wsserver.forcecloseremainingconnections.md) | <code>protected</code> |  |
-|  [forceShutdown(traceId)](./koatty_serve.wsserver.forceshutdown.md) | <code>protected</code> |  |
-|  [getConnectionsStatus()](./koatty_serve.wsserver.getconnectionsstatus.md) |  | 获取当前连接状态 |
-|  [getNativeServer()](./koatty_serve.wsserver.getnativeserver.md) |  |  |
-|  [getStatus()](./koatty_serve.wsserver.getstatus.md) |  |  |
-|  [getWebSocketConnectionStats()](./koatty_serve.wsserver.getwebsocketconnectionstats.md) |  | 获取WebSocket连接统计信息 |
-|  [initializeConnectionPool()](./koatty_serve.wsserver.initializeconnectionpool.md) | <code>protected</code> | 初始化WebSocket连接池 |
-|  [onRuntimeConfigChange(analysis, newConfig, traceId)](./koatty_serve.wsserver.onruntimeconfigchange.md) | <code>protected</code> |  |
-|  [performProtocolSpecificInitialization()](./koatty_serve.wsserver.performprotocolspecificinitialization.md) | <code>protected</code> | WebSocket特定的额外初始化 |
-|  [Start()](./koatty_serve.wsserver.start.md) |  |  |
-|  [stopAcceptingNewConnections(traceId)](./koatty_serve.wsserver.stopacceptingnewconnections.md) | <code>protected</code> |  |
-|  [waitForConnectionCompletion(timeout, traceId)](./koatty_serve.wsserver.waitforconnectioncompletion.md) | <code>protected</code> |  |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[analyzeConfigChanges(changedKeys, oldConfig, newConfig)](./koatty_serve.wsserver.analyzeconfigchanges.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[configureServerOptions()](./koatty_serve.wsserver.configureserveroptions.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+配置WebSocket服务器选项
+
+
+</td></tr>
+<tr><td>
+
+[createProtocolServer()](./koatty_serve.wsserver.createprotocolserver.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+创建WebSocket服务器实例
+
+
+</td></tr>
+<tr><td>
+
+[destroy()](./koatty_serve.wsserver.destroy.md)
+
+
+</td><td>
+
+
+</td><td>
+
+销毁服务器
+
+
+</td></tr>
+<tr><td>
+
+[extractRelevantConfig(config)](./koatty_serve.wsserver.extractrelevantconfig.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[forceCloseRemainingConnections(traceId)](./koatty_serve.wsserver.forcecloseremainingconnections.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[forceShutdown(traceId)](./koatty_serve.wsserver.forceshutdown.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[getConnectionsStatus()](./koatty_serve.wsserver.getconnectionsstatus.md)
+
+
+</td><td>
+
+
+</td><td>
+
+获取当前连接状态
+
+
+</td></tr>
+<tr><td>
+
+[getNativeServer()](./koatty_serve.wsserver.getnativeserver.md)
+
+
+</td><td>
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[getStatus()](./koatty_serve.wsserver.getstatus.md)
+
+
+</td><td>
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[getWebSocketConnectionStats()](./koatty_serve.wsserver.getwebsocketconnectionstats.md)
+
+
+</td><td>
+
+
+</td><td>
+
+获取WebSocket连接统计信息
+
+
+</td></tr>
+<tr><td>
+
+[initializeConnectionPool()](./koatty_serve.wsserver.initializeconnectionpool.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+初始化WebSocket连接池
+
+
+</td></tr>
+<tr><td>
+
+[onRuntimeConfigChange(analysis, newConfig, traceId)](./koatty_serve.wsserver.onruntimeconfigchange.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[performProtocolSpecificInitialization()](./koatty_serve.wsserver.performprotocolspecificinitialization.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+WebSocket特定的额外初始化
+
+
+</td></tr>
+<tr><td>
+
+[Start(listenCallback)](./koatty_serve.wsserver.start.md)
+
+
+</td><td>
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[stopAcceptingNewConnections(traceId)](./koatty_serve.wsserver.stopacceptingnewconnections.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[waitForConnectionCompletion(timeout, traceId)](./koatty_serve.wsserver.waitforconnectioncompletion.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

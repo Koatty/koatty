@@ -12,11 +12,65 @@ protected analyzeConfigChanges(changedKeys: (keyof WebSocketServerOptions)[], ol
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  changedKeys | (keyof WebSocketServerOptions)\[\] |  |
-|  oldConfig | WebSocketServerOptions |  |
-|  newConfig | WebSocketServerOptions |  |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+changedKeys
+
+
+</td><td>
+
+(keyof WebSocketServerOptions)\[\]
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+oldConfig
+
+
+</td><td>
+
+WebSocketServerOptions
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+newConfig
+
+
+</td><td>
+
+WebSocketServerOptions
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -15,34 +15,344 @@ export declare class HttpServer extends BaseServer<HttpServerOptions>
 
 ## Constructors
 
-|  Constructor | Modifiers | Description |
-|  --- | --- | --- |
-|  [(constructor)(app, options)](./koatty_serve.httpserver._constructor_.md) |  | Constructs a new instance of the <code>HttpServer</code> class |
+<table><thead><tr><th>
+
+Constructor
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[(constructor)(app, options)](./koatty_serve.httpserver._constructor_.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Constructs a new instance of the `HttpServer` class
+
+
+</td></tr>
+</tbody></table>
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [connectionPool](./koatty_serve.httpserver.connectionpool.md) | <code>protected</code> | HttpConnectionPoolManager |  |
-|  [server](./koatty_serve.httpserver.server.md) | <code>readonly</code> | Server |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[connectionPool](./koatty_serve.httpserver.connectionpool.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+HttpConnectionPoolManager
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[server](./koatty_serve.httpserver.server.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+Server
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 ## Methods
 
-|  Method | Modifiers | Description |
-|  --- | --- | --- |
-|  [analyzeConfigChanges(changedKeys, oldConfig, newConfig)](./koatty_serve.httpserver.analyzeconfigchanges.md) | <code>protected</code> |  |
-|  [configureServerOptions()](./koatty_serve.httpserver.configureserveroptions.md) | <code>protected</code> | 配置HTTP服务器选项 |
-|  [createProtocolServer()](./koatty_serve.httpserver.createprotocolserver.md) | <code>protected</code> | 创建HTTP服务器实例 |
-|  [extractRelevantConfig(config)](./koatty_serve.httpserver.extractrelevantconfig.md) | <code>protected</code> |  |
-|  [forceCloseRemainingConnections(traceId)](./koatty_serve.httpserver.forcecloseremainingconnections.md) | <code>protected</code> |  |
-|  [forceShutdown(traceId)](./koatty_serve.httpserver.forceshutdown.md) | <code>protected</code> |  |
-|  [getHttpConnectionStats()](./koatty_serve.httpserver.gethttpconnectionstats.md) |  | 获取HTTP连接统计信息 |
-|  [getNativeServer()](./koatty_serve.httpserver.getnativeserver.md) |  |  |
-|  [getStatus()](./koatty_serve.httpserver.getstatus.md) |  |  |
-|  [initializeConnectionPool()](./koatty_serve.httpserver.initializeconnectionpool.md) | <code>protected</code> | 初始化HTTP连接池 |
-|  [onRuntimeConfigChange(analysis, newConfig, traceId)](./koatty_serve.httpserver.onruntimeconfigchange.md) | <code>protected</code> |  |
-|  [performProtocolSpecificInitialization()](./koatty_serve.httpserver.performprotocolspecificinitialization.md) | <code>protected</code> | HTTP特定的额外初始化 |
-|  [Start(listenCallback)](./koatty_serve.httpserver.start.md) |  |  |
-|  [stopAcceptingNewConnections(traceId)](./koatty_serve.httpserver.stopacceptingnewconnections.md) | <code>protected</code> |  |
-|  [waitForConnectionCompletion(timeout, traceId)](./koatty_serve.httpserver.waitforconnectioncompletion.md) | <code>protected</code> |  |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[analyzeConfigChanges(changedKeys, oldConfig, newConfig)](./koatty_serve.httpserver.analyzeconfigchanges.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[configureServerOptions()](./koatty_serve.httpserver.configureserveroptions.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+配置HTTP服务器选项
+
+
+</td></tr>
+<tr><td>
+
+[createProtocolServer()](./koatty_serve.httpserver.createprotocolserver.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+创建HTTP服务器实例
+
+
+</td></tr>
+<tr><td>
+
+[destroy()](./koatty_serve.httpserver.destroy.md)
+
+
+</td><td>
+
+
+</td><td>
+
+销毁服务器
+
+
+</td></tr>
+<tr><td>
+
+[extractRelevantConfig(config)](./koatty_serve.httpserver.extractrelevantconfig.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[forceCloseRemainingConnections(traceId)](./koatty_serve.httpserver.forcecloseremainingconnections.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[forceShutdown(traceId)](./koatty_serve.httpserver.forceshutdown.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[getHttpConnectionStats()](./koatty_serve.httpserver.gethttpconnectionstats.md)
+
+
+</td><td>
+
+
+</td><td>
+
+获取HTTP连接统计信息
+
+
+</td></tr>
+<tr><td>
+
+[getNativeServer()](./koatty_serve.httpserver.getnativeserver.md)
+
+
+</td><td>
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[getStatus()](./koatty_serve.httpserver.getstatus.md)
+
+
+</td><td>
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[initializeConnectionPool()](./koatty_serve.httpserver.initializeconnectionpool.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+初始化HTTP连接池
+
+
+</td></tr>
+<tr><td>
+
+[onRuntimeConfigChange(analysis, newConfig, traceId)](./koatty_serve.httpserver.onruntimeconfigchange.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[performProtocolSpecificInitialization()](./koatty_serve.httpserver.performprotocolspecificinitialization.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+HTTP特定的额外初始化
+
+
+</td></tr>
+<tr><td>
+
+[Start(listenCallback)](./koatty_serve.httpserver.start.md)
+
+
+</td><td>
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[stopAcceptingNewConnections(traceId)](./koatty_serve.httpserver.stopacceptingnewconnections.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[waitForConnectionCompletion(timeout, traceId)](./koatty_serve.httpserver.waitforconnectioncompletion.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

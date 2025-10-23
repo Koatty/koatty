@@ -7,16 +7,70 @@
 **Signature:**
 
 ```typescript
-protected analyzeConfigChanges(changedKeys: (keyof ListeningOptions)[], oldConfig: GrpcServerOptions, newConfig: GrpcServerOptions): ConfigChangeAnalysis;
+protected analyzeConfigChanges(changedKeys: (keyof GrpcServerOptions)[], oldConfig: GrpcServerOptions, newConfig: GrpcServerOptions): ConfigChangeAnalysis;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  changedKeys | (keyof [ListeningOptions](./koatty_serve.listeningoptions.md)<!-- -->)\[\] |  |
-|  oldConfig | GrpcServerOptions |  |
-|  newConfig | GrpcServerOptions |  |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+changedKeys
+
+
+</td><td>
+
+(keyof GrpcServerOptions)\[\]
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+oldConfig
+
+
+</td><td>
+
+GrpcServerOptions
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+newConfig
+
+
+</td><td>
+
+GrpcServerOptions
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

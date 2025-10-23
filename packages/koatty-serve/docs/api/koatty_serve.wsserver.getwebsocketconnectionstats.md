@@ -10,31 +10,11 @@
 
 ```typescript
 getWebSocketConnectionStats(): {
-        availableConnections: number;
-        healthyConnections: number;
-        utilizationRatio: number;
-        protocol: string;
-        poolConfig: ConnectionPoolConfig;
-        health: import("../pools/pool").ConnectionPoolHealth;
-        performance: {
-            throughput: number;
-            latency: {
-                p50: number;
-                p95: number;
-                p99: number;
-            };
-            memoryUsage: number;
-            cpuUsage: number;
-        };
-        uptime: number;
-        activeConnections: number;
-        totalConnections: number;
-        connectionsPerSecond: number;
-        averageLatency: number;
-        errorRate: number;
+        current: number;
+        max: number;
     };
 ```
 **Returns:**
 
-{ availableConnections: number; healthyConnections: number; utilizationRatio: number; protocol: string; poolConfig: ConnectionPoolConfig; health: import("../pools/pool").ConnectionPoolHealth; performance: { throughput: number; latency: { p50: number; p95: number; p99: number; }; memoryUsage: number; cpuUsage: number; }; uptime: number; activeConnections: number; totalConnections: number; connectionsPerSecond: number; averageLatency: number; errorRate: number; }
+{ current: number; max: number; }
 

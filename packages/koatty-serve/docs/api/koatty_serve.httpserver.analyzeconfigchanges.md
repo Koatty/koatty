@@ -12,11 +12,65 @@ protected analyzeConfigChanges(changedKeys: (keyof HttpServerOptions)[], oldConf
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  changedKeys | (keyof HttpServerOptions)\[\] |  |
-|  oldConfig | HttpServerOptions |  |
-|  newConfig | HttpServerOptions |  |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+changedKeys
+
+
+</td><td>
+
+(keyof HttpServerOptions)\[\]
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+oldConfig
+
+
+</td><td>
+
+HttpServerOptions
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+newConfig
+
+
+</td><td>
+
+HttpServerOptions
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

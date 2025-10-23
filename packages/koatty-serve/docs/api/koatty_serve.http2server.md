@@ -15,36 +15,374 @@ export declare class Http2Server extends BaseServer<Http2ServerOptions>
 
 ## Constructors
 
-|  Constructor | Modifiers | Description |
-|  --- | --- | --- |
-|  [(constructor)(app, options)](./koatty_serve.http2server._constructor_.md) |  | Constructs a new instance of the <code>Http2Server</code> class |
+<table><thead><tr><th>
+
+Constructor
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[(constructor)(app, options)](./koatty_serve.http2server._constructor_.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Constructs a new instance of the `Http2Server` class
+
+
+</td></tr>
+</tbody></table>
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [connectionPool](./koatty_serve.http2server.connectionpool.md) | <code>protected</code> | Http2ConnectionPoolManager |  |
-|  [server](./koatty_serve.http2server.server.md) | <code>readonly</code> | Http2SecureServer |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[connectionPool](./koatty_serve.http2server.connectionpool.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+Http2ConnectionPoolManager
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[server](./koatty_serve.http2server.server.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+Http2SecureServer
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 ## Methods
 
-|  Method | Modifiers | Description |
-|  --- | --- | --- |
-|  [analyzeConfigChanges(changedKeys, oldConfig, newConfig)](./koatty_serve.http2server.analyzeconfigchanges.md) | <code>protected</code> |  |
-|  [configureServerOptions()](./koatty_serve.http2server.configureserveroptions.md) | <code>protected</code> | 配置HTTP/2服务器选项 |
-|  [createProtocolServer()](./koatty_serve.http2server.createprotocolserver.md) | <code>protected</code> | 创建HTTP/2服务器实例 |
-|  [destroy()](./koatty_serve.http2server.destroy.md) |  | 销毁服务器 |
-|  [extractRelevantConfig(config)](./koatty_serve.http2server.extractrelevantconfig.md) | <code>protected</code> |  |
-|  [forceCloseRemainingConnections(traceId)](./koatty_serve.http2server.forcecloseremainingconnections.md) | <code>protected</code> |  |
-|  [forceShutdown(traceId)](./koatty_serve.http2server.forceshutdown.md) | <code>protected</code> |  |
-|  [getConnectionsStatus()](./koatty_serve.http2server.getconnectionsstatus.md) |  | 获取当前连接状态 |
-|  [getHttp2Stats()](./koatty_serve.http2server.gethttp2stats.md) |  | 获取HTTP/2统计信息 |
-|  [getNativeServer()](./koatty_serve.http2server.getnativeserver.md) |  |  |
-|  [getStatus()](./koatty_serve.http2server.getstatus.md) |  |  |
-|  [initializeConnectionPool()](./koatty_serve.http2server.initializeconnectionpool.md) | <code>protected</code> | 初始化HTTP/2连接池 |
-|  [onRuntimeConfigChange(analysis, newConfig, traceId)](./koatty_serve.http2server.onruntimeconfigchange.md) | <code>protected</code> |  |
-|  [performProtocolSpecificInitialization()](./koatty_serve.http2server.performprotocolspecificinitialization.md) | <code>protected</code> | HTTP/2特定的额外初始化 |
-|  [Start(listenCallback)](./koatty_serve.http2server.start.md) |  |  |
-|  [stopAcceptingNewConnections(traceId)](./koatty_serve.http2server.stopacceptingnewconnections.md) | <code>protected</code> |  |
-|  [waitForConnectionCompletion(timeout, traceId)](./koatty_serve.http2server.waitforconnectioncompletion.md) | <code>protected</code> |  |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[analyzeConfigChanges(changedKeys, oldConfig, newConfig)](./koatty_serve.http2server.analyzeconfigchanges.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[configureServerOptions()](./koatty_serve.http2server.configureserveroptions.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+配置HTTP/2服务器选项
+
+
+</td></tr>
+<tr><td>
+
+[createProtocolServer()](./koatty_serve.http2server.createprotocolserver.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+创建HTTP/2服务器实例
+
+
+</td></tr>
+<tr><td>
+
+[destroy()](./koatty_serve.http2server.destroy.md)
+
+
+</td><td>
+
+
+</td><td>
+
+销毁服务器
+
+
+</td></tr>
+<tr><td>
+
+[extractRelevantConfig(config)](./koatty_serve.http2server.extractrelevantconfig.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[forceCloseRemainingConnections(traceId)](./koatty_serve.http2server.forcecloseremainingconnections.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[forceShutdown(traceId)](./koatty_serve.http2server.forceshutdown.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[getConnectionsStatus()](./koatty_serve.http2server.getconnectionsstatus.md)
+
+
+</td><td>
+
+
+</td><td>
+
+获取当前连接状态
+
+
+</td></tr>
+<tr><td>
+
+[getHttp2Stats()](./koatty_serve.http2server.gethttp2stats.md)
+
+
+</td><td>
+
+
+</td><td>
+
+获取HTTP/2统计信息
+
+
+</td></tr>
+<tr><td>
+
+[getNativeServer()](./koatty_serve.http2server.getnativeserver.md)
+
+
+</td><td>
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[getStatus()](./koatty_serve.http2server.getstatus.md)
+
+
+</td><td>
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[initializeConnectionPool()](./koatty_serve.http2server.initializeconnectionpool.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+初始化HTTP/2连接池
+
+
+</td></tr>
+<tr><td>
+
+[onRuntimeConfigChange(analysis, newConfig, traceId)](./koatty_serve.http2server.onruntimeconfigchange.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[performProtocolSpecificInitialization()](./koatty_serve.http2server.performprotocolspecificinitialization.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+HTTP/2特定的额外初始化
+
+
+</td></tr>
+<tr><td>
+
+[Start(listenCallback)](./koatty_serve.http2server.start.md)
+
+
+</td><td>
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[stopAcceptingNewConnections(traceId)](./koatty_serve.http2server.stopacceptingnewconnections.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[stopMonitoringAndCleanup(traceId)](./koatty_serve.http2server.stopmonitoringandcleanup.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+重写停止监控和清理方法以处理HTTP/2特定的监控间隔
+
+
+</td></tr>
+<tr><td>
+
+[waitForConnectionCompletion(timeout, traceId)](./koatty_serve.http2server.waitforconnectioncompletion.md)
+
+
+</td><td>
+
+`protected`
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
