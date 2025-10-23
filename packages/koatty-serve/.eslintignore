@@ -1,0 +1,13 @@
+node_modules
+.eslintrc.js
+**/package-lock.json
+**/yarn.lock
+**/*.config.js
+dist
+temp
+scripts
+coverage
+test
+demo
+jest_html_reporters.html
+jest-html-reporters-attach

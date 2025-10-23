@@ -1,0 +1,69 @@
+name: Sync from Independent Repos
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: '要同步的包名 (例如: koatty_config)'
+        required: true
+        type: choice
+        options:
+          - koatty_config
+          - koatty_exception
+          - koatty_trace
+          - koatty_core
+          - koatty_router
+          - koatty_serve
+          - koatty
+
+jobs:
+  sync-back:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.SYNC_TOKEN }}
+      
+      - name: Setup Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+      
+      - name: Map package name to directory
+        id: map
+        run: |
+          case "${{ github.event.inputs.package }}" in
+            koatty_config)   echo "dir=koatty-config" >> $GITHUB_OUTPUT ;;
+            koatty_exception) echo "dir=koatty-exception" >> $GITHUB_OUTPUT ;;
+            koatty_trace)    echo "dir=koatty-trace" >> $GITHUB_OUTPUT ;;
+            koatty_core)     echo "dir=koatty-core" >> $GITHUB_OUTPUT ;;
+            koatty_router)   echo "dir=koatty-router" >> $GITHUB_OUTPUT ;;
+            koatty_serve)    echo "dir=koatty-serve" >> $GITHUB_OUTPUT ;;
+            koatty)          echo "dir=koatty" >> $GITHUB_OUTPUT ;;
+          esac
+      
+      - name: Sync from ${{ github.event.inputs.package }}
+        run: |
+          PKG_DIR="${{ steps.map.outputs.dir }}"
+          PKG_REPO="${{ github.event.inputs.package }}"
+          
+          # 添加独立仓库为 remote
+          git remote add source https://github.com/koatty/$PKG_REPO.git
+          git fetch source
+          
+          # 使用 subtree pull 同步
+          git subtree pull --prefix=packages/$PKG_DIR source main --squash
+          
+          # 推送到 monorepo
+          git push origin main
+          
+          # 清理
+          git remote remove source
+      
+      - name: Notify on completion
+        run: |
+          echo "同步完成: ${{ github.event.inputs.package }} -> packages/${{ steps.map.outputs.dir }}"
+

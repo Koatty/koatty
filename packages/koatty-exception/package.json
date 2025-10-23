@@ -1,0 +1,109 @@
+{
+  "name": "koatty_exception",
+  "version": "1.8.1-0",
+  "description": "Exception handler for koatty.",
+  "scripts": {
+    "build": "npm run build:js && npm run build:dts && npm run build:doc && npm run build:cp",
+    "build:cp": "node scripts/postBuild && npx -y copyfiles package.json LICENSE README.md dist/",
+    "build:js": "npx -y rollup --bundleConfigAsCjs -c .rollup.config.js",
+    "build:doc": "npx -y api-documenter markdown --input temp --output docs/api",
+    "build:dts": "npx -y tsc && npx -y api-extractor run --local --verbose",
+    "eslint": "eslint --ext .ts,.js ./",
+    "lock": "npx -y del-cli --force node_modules && npm i --package-lock-only && npx -y pnpm i",
+    "prepublishOnly": "echo 'Skipping prepublishOnly in monorepo'",
+    "prerelease": "npm run lock && npm test && npm run build",
+    "release": "standard-version",
+    "release:pre": "npm run release -- --prerelease",
+    "release:major": "npm run release -- --release-as major",
+    "release:minor": "npm run release -- --release-as minor",
+    "test": "npm run eslint && jest --passWithNoTests",
+    "test:cov": "jest --collectCoverage --detectOpenHandles",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s"
+  },
+  "main": "./dist/index.js",
+  "exports": {
+    "require": "./dist/index.js",
+    "import": "./dist/index.mjs",
+    "types": "./dist/index.d.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koatty/koatty_exception.git"
+  },
+  "keywords": [
+    "web",
+    "typescript",
+    "framework",
+    "mvc",
+    "koa2",
+    "restful",
+    "agile",
+    "koatty_exception",
+    "thinkkoa"
+  ],
+  "engines": {
+    "node": ">10.0.0"
+  },
+  "author": {
+    "name": "richenlin",
+    "email": "richenlin@gmail.com"
+  },
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/koatty/koatty_exception/issues"
+  },
+  "homepage": "https://github.com/koatty/koatty_exception",
+  "maintainers": [
+    {
+      "name": "richenlin",
+      "email": "richenlin@gmail.com"
+    }
+  ],
+  "devDependencies": {
+    "@commitlint/cli": "^19.x.x",
+    "@commitlint/config-conventional": "^19.x.x",
+    "@grpc/grpc-js": "^1.x.x",
+    "@microsoft/api-documenter": "^7.x.x",
+    "@microsoft/api-extractor": "^7.x.x",
+    "@rollup/plugin-commonjs": "^28.x.x",
+    "@rollup/plugin-json": "^6.x.x",
+    "@rollup/plugin-node-resolve": "^16.x.x",
+    "@types/jest": "^29.x.x",
+    "@types/koa": "^2.x.x",
+    "@types/lodash": "^4.x.x",
+    "@types/node": "^22.x.x",
+    "@types/ws": "^8.x.x",
+    "@typescript-eslint/eslint-plugin": "^8.x.x",
+    "@typescript-eslint/parser": "^8.x.x",
+    "conventional-changelog-cli": "^5.x.x",
+    "dts-bundle": "^0.7.3",
+    "eslint": "^8.x.x",
+    "eslint-plugin-jest": "^28.x.x",
+    "husky": "^4.x.x",
+    "jest": "^29.x.x",
+    "jest-html-reporters": "^3.x.x",
+    "reflect-metadata": "^0.x.x",
+    "rollup": "^4.x.x",
+    "rollup-plugin-delete": "^2.1.0",
+    "rollup-plugin-typescript2": "^0.x.x",
+    "standard-version": "^9.x.x",
+    "ts-jest": "^29.x.x",
+    "ts-node": "^10.x.x",
+    "tslib": "^2.x.x",
+    "typescript": "^5.x.x"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/semantic-conventions": "^1.37.0",
+    "koatty_container": "^1.x.x",
+    "koatty_core": "^1.x.x",
+    "koatty_lib": "^1.x.x",
+    "koatty_logger": "^2.x.x"
+  },
+  "peerDependencies": {
+    "koatty_container": "^1.x.x",
+    "koatty_core": "workspace:*",
+    "koatty_lib": "^1.x.x",
+    "koatty_logger": "^2.x.x"
+  }
+}

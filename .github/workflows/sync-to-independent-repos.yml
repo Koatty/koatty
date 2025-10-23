@@ -1,0 +1,59 @@
+name: Sync to Independent Repos
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'packages/**'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package:
+          - { dir: 'koatty-config', repo: 'koatty_config' }
+          - { dir: 'koatty-exception', repo: 'koatty_exception' }
+          - { dir: 'koatty-trace', repo: 'koatty_trace' }
+          - { dir: 'koatty-core', repo: 'koatty_core' }
+          - { dir: 'koatty-router', repo: 'koatty_router' }
+          - { dir: 'koatty-serve', repo: 'koatty_serve' }
+          - { dir: 'koatty', repo: 'koatty' }
+    
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.SYNC_TOKEN }}
+      
+      - name: Setup Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+      
+      - name: Sync ${{ matrix.package.dir }} to ${{ matrix.package.repo }}
+        run: |
+          BRANCH="sync-${{ matrix.package.repo }}-$(date +%s)"
+          
+          # 创建 subtree split
+          git subtree split --prefix=packages/${{ matrix.package.dir }} -b "$BRANCH"
+          
+          # 添加远程仓库
+          git remote add target https://x-access-token:${{ secrets.SYNC_TOKEN }}@github.com/koatty/${{ matrix.package.repo }}.git || true
+          
+          # 推送到独立仓库
+          git push target "$BRANCH":main --force
+          
+          # 清理
+          git branch -D "$BRANCH"
+          git remote remove target
+      
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "同步失败: ${{ matrix.package.dir }} -> ${{ matrix.package.repo }}"
+
