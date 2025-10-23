@@ -1,0 +1,11 @@
+.idea
+.DS_Store
+node_modules
+coverage
+dist
+temp
+logs
+npm-debug.log
+yarn-error.log
+jest_html_reporters.html
+jest-html-reporters-attach
