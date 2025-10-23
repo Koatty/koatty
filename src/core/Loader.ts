@@ -20,6 +20,7 @@ import { Helper } from "koatty_lib";
 import { Load } from "koatty_loader";
 import { NewRouter } from "koatty_router";
 import { NewServe } from "koatty_serve";
+import { Trace } from "koatty_trace";
 import * as path from "path";
 import { checkClass } from "../util/Helper";
 import { Logger, LogLevelType, SetLogger } from "../util/Logger";
@@ -444,14 +445,13 @@ export class Loader {
   protected async LoadMiddlewares() {
     // Load Trace middleware as the first middleware
     try {
-      const { Trace } = await import("koatty_trace");
       const traceOptions = this.app.config('trace') ?? {};
       const tracer = Trace(traceOptions, this.app);
       Helper.define(this.app, "tracer", tracer);
       this.app.use(tracer);
       Logger.Debug(`Load trace middleware`);
     } catch (error: any) {
-      Logger.Warn(`Trace middleware not found or failed to load: ${error.message}`);
+      Logger.Warn(`Trace middleware failed to load: ${error.message}`);
     }
 
     let middlewareConf = this.app.config(undefined, "middleware");
