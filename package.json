@@ -16,7 +16,12 @@
     "clean": "turbo run clean && rm -rf node_modules .turbo",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "pnpm build && changeset publish"
+    "release": "pnpm build && changeset publish",
+    "pkg:release": "bash scripts/release.sh",
+    "pkg:release:minor": "bash scripts/release.sh",
+    "pkg:release:major": "bash scripts/release.sh",
+    "pkg:release:pre": "bash scripts/release.sh",
+    "pkg:sync": "bash scripts/sync-standalone.sh"
   },
   "keywords": [
     "koatty",

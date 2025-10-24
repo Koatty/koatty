@@ -5,10 +5,12 @@
 ## 📋 目录
 
 1. [工具链说明](#工具链说明)
-2. [发布单个库的完整流程](#发布单个库的完整流程)
-3. [同步到独立仓库](#同步到独立仓库)
-4. [常见操作](#常见操作)
-5. [故障排除](#故障排除)
+2. [快速开始](#快速开始)
+3. [发布流程（推荐）](#发布流程推荐)
+4. [发布流程详解](#发布流程详解)
+5. [同步到独立仓库](#同步到独立仓库)
+6. [常见操作](#常见操作)
+7. [故障排除](#故障排除)
 
 ---
 
@@ -17,271 +19,316 @@
 当前项目使用的工具：
 
 - **pnpm workspace**: 管理 monorepo 的包依赖
-- **Changesets**: 管理版本和变更日志
+- **standard-version**: 各包独立的版本管理工具（遵循语义化版本规范）
+- **Changesets**: monorepo 整体的版本管理（可选）
 - **Turbo**: 构建系统（缓存和并行构建）
 - **npm**: 发布到 npm registry
+- **Git subtree**: 同步到独立仓库
 
 ---
 
-## 发布单个库的完整流程
+## 快速开始
 
-### 方式一：使用 Changesets（推荐）
+### 支持的包
 
-这是最标准的 monorepo 发布流程。
+当前 monorepo 包含以下可发布的包：
 
-#### 步骤 1: 创建 Changeset
+- `koatty` - Koatty 核心框架
+- `koatty-router` - 路由组件
+- `koatty-core` - 核心工具库
+- `koatty-container` - 容器组件
+- `koatty-validation` - 验证组件
+- `koatty-config` - 配置组件
+- `koatty-exception` - 异常处理组件
+- `koatty-serve` - 服务组件
+- `koatty-trace` - 链路追踪组件
 
-当你完成了代码变更（如刚完成的 koatty-router v2.0.0），创建一个 changeset：
+### 一键发布命令
 
 ```bash
-# 在项目根目录执行
+# 发布补丁版本（1.0.0 -> 1.0.1）
+./scripts/release.sh <package-name>
+
+# 发布次版本（1.0.0 -> 1.1.0）
+./scripts/release.sh <package-name> minor
+
+# 发布主版本（1.0.0 -> 2.0.0）
+./scripts/release.sh <package-name> major
+
+# 发布预发布版本（1.0.0 -> 1.0.1-0）
+./scripts/release.sh <package-name> prerelease
+
+# 发布并自动同步到独立仓库
+./scripts/release.sh <package-name> minor --sync
+
+# 模拟发布（不实际执行）
+./scripts/release.sh <package-name> --dry-run
+
+# 仅更新版本，不发布到 npm
+./scripts/release.sh <package-name> --no-npm
+```
+
+### 示例
+
+```bash
+# 发布 koatty-router 的补丁版本
+./scripts/release.sh koatty-router
+
+# 发布 koatty-core 的次版本并自动同步
+./scripts/release.sh koatty-core minor --sync
+
+# 模拟发布 koatty 的主版本
+./scripts/release.sh koatty major --dry-run
+```
+
+---
+
+## 发布流程（推荐）
+
+### 使用统一发布脚本
+
+这是最推荐的发布方式，脚本会自动处理所有步骤：
+
+```bash
+./scripts/release.sh <package-name> [release-type] [options]
+```
+
+#### 发布类型
+
+- `patch` - 补丁版本（默认）：bug 修复
+- `minor` - 次版本：新功能，向后兼容
+- `major` - 主版本：破坏性变更
+- `prerelease` - 预发布版本：测试版本
+
+#### 选项
+
+- `--dry-run` - 模拟运行，不实际发布
+- `--sync` - 发布后自动同步到独立仓库
+- `--no-npm` - 跳过 npm 发布，仅更新版本
+
+#### 发布脚本会自动执行以下步骤：
+
+1. ✅ 运行测试
+2. 🔨 构建项目
+3. 📝 使用 `standard-version` 更新版本和 CHANGELOG
+4. 📦 发布到 npm（除非使用 `--no-npm`）
+5. 🏷️ 创建 Git tag 并推送到远程
+6. 🔄 同步到独立仓库（如果使用 `--sync`）
+
+### 完整发布示例
+
+```bash
+# 1. 确保代码已提交
+git status
+
+# 2. 发布 koatty-router 的新版本（自动同步）
+./scripts/release.sh koatty-router minor --sync
+
+# 脚本会提示：
+# - 当前版本
+# - 将要发布的新版本
+# - 是否继续发布
+# - npm 登录状态
+
+# 3. 发布完成后，创建 GitHub Release
+# https://github.com/koatty/koatty-monorepo/releases/new
+```
+
+---
+
+## 发布流程详解
+
+### 方式一：使用 release.sh 脚本（推荐）
+
+#### 步骤 1: 准备工作
+
+```bash
+# 确保在 master 分支
+git checkout master
+git pull origin master
+
+# 确保所有代码已提交
+git status
+
+# 登录 npm（首次发布需要）
+npm login
+npm whoami
+```
+
+#### 步骤 2: 执行发布
+
+```bash
+# 进入项目根目录
+cd /path/to/koatty-monorepo
+
+# 执行发布脚本
+./scripts/release.sh koatty-router minor --sync
+```
+
+发布脚本的执行过程：
+
+```
+========================================
+Koatty 包发布流程
+========================================
+
+包名:       koatty_router
+当前版本:   1.9.5
+发布类型:   minor
+包目录:     packages/koatty-router
+自动同步:   启用
+
+✓ npm 用户: your-username
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+步骤 1/6: 运行测试
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ 测试通过
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+步骤 2/6: 构建项目
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ 构建成功
+✓ 构建产物验证通过
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+步骤 3/6: 更新版本 (standard-version)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+运行: standard-version --release-as minor
+
+✓ 版本更新成功
+版本变更: 1.9.5 → 1.10.0
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+步骤 4/6: 发布到 npm
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+确认发布 koatty_router@1.10.0 到 npm? (y/n)
+✓ 发布到 npm 成功
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+步骤 5/6: 推送到 Git 远程仓库
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ 推送成功
+✓ 创建 tag: koatty-router@1.10.0
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+步骤 6/6: 同步到独立仓库
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ 同步到独立仓库成功
+
+========================================
+✓ 发布完成!
+========================================
+```
+
+#### 步骤 3: 创建 GitHub Release
+
+发布完成后，访问以下链接创建 Release：
+
+```
+Monorepo Release:
+https://github.com/koatty/koatty-monorepo/releases/new?tag=koatty-router@1.10.0
+
+独立仓库 Release:
+https://github.com/koatty/koatty_router/releases/new
+```
+
+---
+
+### 方式二：使用包内的 npm scripts
+
+每个包都包含 `standard-version` 脚本，可以手动执行：
+
+```bash
+# 进入包目录
+cd packages/koatty-router
+
+# 发布补丁版本
+npm run release
+
+# 发布次版本
+npm run release:minor
+
+# 发布主版本
+npm run release:major
+
+# 发布预发布版本
+npm run release:pre
+
+# 手动发布到 npm
+npm publish
+
+# 回到根目录，推送代码和标签
+cd ../..
+git push --follow-tags origin master
+```
+
+**注意**: 这种方式需要手动创建 tag 并同步到独立仓库。
+
+---
+
+### 方式三：使用 Changesets（monorepo 全局）
+
+Changesets 适用于批量发布多个包：
+
+```bash
+# 1. 创建 changeset
 pnpm changeset
-```
 
-这会启动交互式命令行：
-
-```
-🦋  Which packages would you like to include?
-› ◯ koatty_core
-  ◯ koatty_container
-  ◉ koatty_router    # 选择你要发布的包
-  ◯ koatty_validation
-
-🦋  Which packages should have a major bump?
-  ◉ koatty_router    # 选择版本类型
-
-🦋  Which packages should have a minor bump?
-  ◯ koatty_router
-
-🦋  Which packages should have a patch bump?
-  ◯ koatty_router
-
-🦋  Please enter a summary for this change
-Major release with performance improvements and breaking changes
-```
-
-这会在 `.changeset/` 目录创建一个文件，例如：
-
-```markdown
----
-"koatty_router": major
----
-
-Major release v2.0.0:
-- Removed deprecated validatorFuncs
-- Removed performance statistics with concurrency issues
-- Enhanced memory optimization
-- All validators must be pre-compiled
-- 100% backward compatible API
-```
-
-#### 步骤 2: 提交 Changeset
-
-```bash
-git add .changeset/
-git commit -m "chore: add changeset for koatty-router v2.0.0"
-git push origin master
-```
-
-#### 步骤 3: 更新版本
-
-```bash
-# 应用所有 changesets，更新版本号和 CHANGELOG
+# 2. 应用版本变更
 pnpm changeset version
-```
 
-这会：
-- 更新 `packages/koatty-router/package.json` 的版本号
-- 自动更新 `packages/koatty-router/CHANGELOG.md`
-- 删除已应用的 changeset 文件
-- 更新依赖此包的其他包
-
-#### 步骤 4: 提交版本变更
-
-```bash
+# 3. 提交变更
 git add .
-git commit -m "chore: release koatty-router v2.0.0"
+git commit -m "chore: version packages"
 git push origin master
-```
 
-#### 步骤 5: 构建和发布
-
-```bash
-# 方式 A: 发布所有有变更的包
+# 4. 发布所有有变更的包
 pnpm release
-
-# 方式 B: 只发布单个包
-cd packages/koatty-router
-npm run build
-npm publish
-
-# 发布后打 tag
-git tag koatty-router@2.0.0
-git push origin koatty-router@2.0.0
 ```
-
----
-
-### 方式二：手动发布单个包（快速方式）
-
-如果你只想快速发布一个包，不想走完整的 changeset 流程：
-
-```bash
-# 1. 进入包目录
-cd packages/koatty-router
-
-# 2. 手动更新版本号（已经是 2.0.0，跳过此步）
-# npm version 2.0.0
-
-# 3. 构建
-npm run build
-
-# 4. 测试（确保所有测试通过）
-npm test
-
-# 5. 发布到 npm
-npm publish
-
-# 6. 打 tag 并推送
-git tag koatty-router@2.0.0
-git push origin koatty-router@2.0.0
-git push origin master
-```
-
-**注意**: 这种方式需要手动维护 CHANGELOG.md
 
 ---
 
 ## 同步到独立仓库
 
-### 方式一：使用 Git Subtree（推荐）
+### 自动同步（推荐）
 
-这是最干净的方式，保留完整的提交历史。
-
-#### 初次设置
+在发布时使用 `--sync` 选项：
 
 ```bash
-# 在 monorepo 根目录
-
-# 1. 添加独立仓库作为 remote
-git remote add koatty-router-standalone git@github.com:koatty/koatty_router.git
-
-# 2. 第一次推送（使用 subtree split）
-git subtree push --prefix=packages/koatty-router koatty-router-standalone master
-
-# 如果遇到冲突或想强制推送
-git subtree split --prefix=packages/koatty-router -b koatty-router-temp
-git push koatty-router-standalone koatty-router-temp:master --force
-git branch -D koatty-router-temp
+./scripts/release.sh koatty-router minor --sync
 ```
 
-#### 日常同步
-
-每次在 monorepo 中更新 koatty-router 后：
+### 手动同步
 
 ```bash
-# 推送最新变更到独立仓库
-git subtree push --prefix=packages/koatty-router koatty-router-standalone master
+# 使用同步脚本
+./scripts/sync-standalone.sh koatty-router
 
-# 同步 tags
-git push koatty-router-standalone --tags
-```
-
----
-
-### 方式二：使用自动化脚本
-
-创建一个同步脚本 `scripts/sync-standalone.sh`：
-
-```bash
-#!/bin/bash
-
-PACKAGE_NAME=$1
-STANDALONE_REMOTE=$2
-
-if [ -z "$PACKAGE_NAME" ] || [ -z "$STANDALONE_REMOTE" ]; then
-  echo "Usage: ./scripts/sync-standalone.sh <package-name> <remote-url>"
-  echo "Example: ./scripts/sync-standalone.sh koatty-router git@github.com:koatty/koatty_router.git"
-  exit 1
-fi
-
-PACKAGE_DIR="packages/$PACKAGE_NAME"
-
-if [ ! -d "$PACKAGE_DIR" ]; then
-  echo "Error: Package directory $PACKAGE_DIR does not exist"
-  exit 1
-fi
-
-echo "Syncing $PACKAGE_NAME to standalone repository..."
-
-# 添加 remote（如果不存在）
-if ! git remote | grep -q "$PACKAGE_NAME-standalone"; then
-  git remote add "$PACKAGE_NAME-standalone" "$STANDALONE_REMOTE"
-fi
-
-# 使用 subtree 推送
-git subtree push --prefix="$PACKAGE_DIR" "$PACKAGE_NAME-standalone" master
-
-# 同步 tags
-echo "Syncing tags..."
-git push "$PACKAGE_NAME-standalone" --tags
-
-echo "✅ Successfully synced $PACKAGE_NAME to standalone repository"
-```
-
-使用方式：
-
-```bash
-chmod +x scripts/sync-standalone.sh
+# 或指定自定义仓库 URL
 ./scripts/sync-standalone.sh koatty-router git@github.com:koatty/koatty_router.git
 ```
 
----
+### 同步脚本说明
 
-### 方式三：使用 GitHub Actions 自动同步
+`sync-standalone.sh` 脚本会：
 
-创建 `.github/workflows/sync-standalone.yml`：
+1. 添加或更新独立仓库的 remote
+2. 使用 `git subtree` 推送代码到独立仓库
+3. 同步相关的 tags
+4. 处理可能的冲突
 
-```yaml
-name: Sync to Standalone Repositories
+支持的独立仓库：
 
-on:
-  push:
-    tags:
-      - 'koatty-router@*'
-      - 'koatty-*@*'
-
-jobs:
-  sync:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Extract package info
-        id: package
-        run: |
-          TAG=${GITHUB_REF#refs/tags/}
-          PACKAGE_NAME=$(echo $TAG | cut -d@ -f1)
-          VERSION=$(echo $TAG | cut -d@ -f2)
-          echo "package=$PACKAGE_NAME" >> $GITHUB_OUTPUT
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Sync koatty-router
-        if: steps.package.outputs.package == 'koatty-router'
-        env:
-          SSH_KEY: ${{ secrets.STANDALONE_DEPLOY_KEY }}
-        run: |
-          eval `ssh-agent -s`
-          ssh-add - <<< "${SSH_KEY}"
-          git remote add standalone git@github.com:koatty/koatty_router.git
-          git subtree push --prefix=packages/koatty-router standalone master
-          git push standalone --tags
-
-      # 为其他包添加类似的步骤
-```
+- `koatty` → `https://github.com/koatty/koatty.git`
+- `koatty-router` → `https://github.com/koatty/koatty_router.git`
+- `koatty-core` → `https://github.com/koatty/koatty_core.git`
+- `koatty-container` → `https://github.com/koatty/koatty_container.git`
+- `koatty-validation` → `https://github.com/koatty/koatty_validation.git`
+- `koatty-config` → `https://github.com/koatty/koatty_config.git`
+- `koatty-exception` → `https://github.com/koatty/koatty_exception.git`
+- `koatty-serve` → `https://github.com/koatty/koatty_serve.git`
+- `koatty-trace` → `https://github.com/koatty/koatty_trace.git`
 
 ---
 
@@ -303,88 +350,108 @@ cd packages/koatty-router && npm run build
 pnpm turbo run test --filter=koatty_router
 ```
 
-### 查看哪些包需要发布
+### 模拟发布流程
 
 ```bash
-pnpm changeset status
+# 查看发布会做什么，但不实际执行
+./scripts/release.sh koatty-router minor --dry-run
+```
+
+### 仅更新版本，不发布
+
+```bash
+# 适用于在发布前手动检查
+./scripts/release.sh koatty-router --no-npm
 ```
 
 ### 发布预发布版本
 
 ```bash
-# 1. 创建预发布版本
+# 发布 beta 版本
+./scripts/release.sh koatty-router prerelease
+
+# 手动指定 npm tag
 cd packages/koatty-router
-npm version 2.0.0-beta.1
-
-# 2. 发布到 npm（带 tag）
 npm publish --tag beta
-
-# 3. 用户安装预发布版本
-npm install koatty_router@beta
 ```
 
-### 批量更新多个包
+### 查看包在 npm 上的信息
 
 ```bash
-# 创建 changeset 选择多个包
-pnpm changeset
+# 查看最新版本
+npm view koatty_router version
 
-# 应用所有变更
-pnpm changeset version
+# 查看所有版本
+npm view koatty_router versions
 
-# 发布所有有变更的包
-pnpm release
+# 查看完整信息
+npm view koatty_router
+```
+
+### 批量操作
+
+```bash
+# 构建所有包
+pnpm build
+
+# 测试所有包
+pnpm test
+
+# Lint 所有包
+pnpm lint
 ```
 
 ---
 
-## 完整的 koatty-router v2.0.0 发布流程示例
+## 完整发布示例
 
-基于你刚完成的工作，以下是完整流程：
+### 示例 1: 发布 koatty-router 的 bug 修复版本
 
 ```bash
-# 1. 确保在 master 分支且代码已提交
-git status
-git checkout master
-git pull origin master
-
-# 2. 创建 changeset
-pnpm changeset
-# 选择 koatty_router
-# 选择 major（因为有 breaking changes）
-# 输入变更摘要
-
-# 3. 提交 changeset
+# 1. 修复 bug，提交代码
 git add .
-git commit -m "chore: add changeset for koatty-router v2.0.0"
+git commit -m "fix(koatty-router): fix routing issue"
 git push origin master
 
-# 4. 应用版本变更
-pnpm changeset version
+# 2. 发布 patch 版本
+./scripts/release.sh koatty-router
+
+# 3. 手动同步到独立仓库（或使用 --sync）
+./scripts/sync-standalone.sh koatty-router
+
+# 4. 创建 GitHub Release
+# 访问发布完成后提示的 URL
+```
+
+### 示例 2: 发布 koatty-core 的新功能
+
+```bash
+# 1. 开发新功能，提交代码
 git add .
-git commit -m "chore: release koatty-router v2.0.0"
+git commit -m "feat(koatty-core): add new helper functions"
 git push origin master
 
-# 5. 构建和发布
-cd packages/koatty-router
-npm run build
-npm test
-npm publish
+# 2. 发布 minor 版本并自动同步
+./scripts/release.sh koatty-core minor --sync
 
-# 6. 打标签
-git tag koatty-router@2.0.0
-git push origin koatty-router@2.0.0
+# 3. 创建 GitHub Release
+```
 
-# 7. 同步到独立仓库
-cd ../..  # 回到根目录
-git subtree push --prefix=packages/koatty-router koatty-router-standalone master
-git push koatty-router-standalone koatty-router@2.0.0
+### 示例 3: 发布 koatty 的主版本（破坏性变更）
 
-# 8. 在 GitHub 创建 Release
-# 访问 https://github.com/koatty/koatty_router/releases/new
-# 选择 tag: koatty-router@2.0.0
-# 标题: v2.0.0
-# 描述: 复制 CHANGELOG.md 中的相关内容
+```bash
+# 1. 完成重大更新，提交代码
+git add .
+git commit -m "feat(koatty)!: upgrade to Koa v3"
+git push origin master
+
+# 2. 模拟发布，检查输出
+./scripts/release.sh koatty major --dry-run
+
+# 3. 确认无误后，执行发布
+./scripts/release.sh koatty major --sync
+
+# 4. 创建 GitHub Release，标注 Breaking Changes
 ```
 
 ---
@@ -404,7 +471,7 @@ npm whoami
 npm access list packages
 
 # 4. 如果是 scoped package (@koatty/router)，设置为 public
-npm access public koatty_router
+npm access public @koatty/router
 ```
 
 ### 配置 .npmrc（可选）
@@ -424,23 +491,38 @@ access=public
 
 ## 故障排除
 
-### 问题1: git subtree push 太慢或失败
+### 问题1: standard-version 未安装
 
-**解决方案**: 使用 split 然后 push
+**错误信息**:
+```
+错误: 未安装 standard-version
+```
 
+**解决方案**:
 ```bash
-git subtree split --prefix=packages/koatty-router -b temp-branch
-git push koatty-router-standalone temp-branch:master --force
-git branch -D temp-branch
+# 全局安装
+npm install -g standard-version
+
+# 或在包目录安装
+cd packages/koatty-router
+npm install standard-version --save-dev
 ```
 
 ### 问题2: npm publish 权限错误
 
+**错误信息**:
+```
+npm ERR! code E403
+npm ERR! 403 Forbidden - PUT https://registry.npmjs.org/koatty_router
+```
+
+**解决方案**:
 ```bash
 # 检查登录状态
 npm whoami
 
 # 重新登录
+npm logout
 npm login
 
 # 检查包所有者
@@ -450,44 +532,137 @@ npm owner ls koatty_router
 npm owner add <username> koatty_router
 ```
 
-### 问题3: 版本冲突
+### 问题3: git subtree push 失败
+
+**错误信息**:
+```
+error: failed to push some refs
+```
+
+**解决方案**:
+
+脚本会自动使用 fallback 方案，但你也可以手动执行：
 
 ```bash
-# 查看当前版本
+# 方式 1: 使用 split + force push
+git subtree split --prefix=packages/koatty-router -b temp-branch
+git push koatty-router-standalone temp-branch:master --force
+git branch -D temp-branch
+
+# 方式 2: 重新添加 remote
+git remote remove koatty-router-standalone
+git remote add koatty-router-standalone git@github.com:koatty/koatty_router.git
+./scripts/sync-standalone.sh koatty-router
+```
+
+### 问题4: 版本号冲突
+
+**错误信息**:
+```
+npm ERR! You cannot publish over the previously published versions
+```
+
+**解决方案**:
+```bash
+# 查看 npm 上的版本
 npm view koatty_router version
 
-# 如果版本已存在，需要递增版本号
-npm version patch  # 2.0.0 -> 2.0.1
-npm version minor  # 2.0.0 -> 2.1.0
-npm version major  # 2.0.0 -> 3.0.0
-```
-
-### 问题4: Changeset 冲突
-
-```bash
-# 查看待处理的 changesets
-pnpm changeset status
-
-# 清理并重新创建
-rm -rf .changeset/*.md  # 不要删除 config.json 和 README.md
-pnpm changeset
-```
-
-### 问题5: 构建失败
-
-```bash
-# 清理并重新构建
+# 查看本地版本
 cd packages/koatty-router
-rm -rf dist node_modules
-pnpm install
-pnpm run build
+node -p "require('./package.json').version"
+
+# 如果本地版本号 <= npm 版本号，需要手动升级
+# 然后重新发布
+./scripts/release.sh koatty-router minor
+```
+
+### 问题5: workspace:* 依赖未被替换
+
+**错误信息**:
+```
+✗ 错误: dist/package.json 仍包含 workspace:* 依赖
+```
+
+**解决方案**:
+
+检查包的构建脚本是否包含 `build:fix` 步骤：
+
+```json
+{
+  "scripts": {
+    "build": "npm run build:js && npm run build:dts && npm run build:cp && npm run build:fix",
+    "build:fix": "node scripts/fixWorkspaceDeps"
+  }
+}
+```
+
+如果缺少，需要添加 `scripts/fixWorkspaceDeps.js` 脚本。
+
+### 问题6: 测试失败
+
+**错误信息**:
+```
+✗ 测试失败
+```
+
+**解决方案**:
+```bash
+# 查看详细测试输出
+cd packages/koatty-router
+npm test
+
+# 清理并重新安装依赖
+rm -rf node_modules
+npm install
+
+# 重新测试
+npm test
+```
+
+### 问题7: 构建失败
+
+**解决方案**:
+```bash
+cd packages/koatty-router
+
+# 清理构建产物
+rm -rf dist
+
+# 重新构建
+npm run build
+
+# 如果仍然失败，检查 TypeScript 配置
+npx tsc --noEmit
 ```
 
 ---
 
 ## 高级配置
 
-### 配置 Changesets 自动化
+### 自定义 standard-version 配置
+
+在包目录创建 `.versionrc.js`：
+
+```javascript
+module.exports = {
+  types: [
+    { type: 'feat', section: '✨ Features' },
+    { type: 'fix', section: '🐛 Bug Fixes' },
+    { type: 'perf', section: '⚡ Performance' },
+    { type: 'refactor', section: '♻️ Refactor' },
+    { type: 'docs', section: '📝 Documentation' },
+    { type: 'style', hidden: true },
+    { type: 'chore', hidden: true },
+    { type: 'test', hidden: true }
+  ],
+  releaseCommitMessageFormat: 'chore(release): {{currentTag}}',
+  scripts: {
+    postchangelog: 'node scripts/updateDocs.js'
+  }
+};
+```
+
+### 配置 Changesets
 
 编辑 `.changeset/config.json`：
 
@@ -495,31 +670,84 @@ pnpm run build
 {
   "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
   "changelog": "@changesets/cli/changelog",
-  "commit": true,              // 自动提交
+  "commit": false,
   "fixed": [],
   "linked": [],
   "access": "public",
   "baseBranch": "master",
   "updateInternalDependencies": "patch",
-  "ignore": [],
-  "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
-    "onlyUpdatePeerDependentsWhenOutOfRange": true
-  }
+  "ignore": []
 }
 ```
 
-### 配置发布脚本
+### 配置根目录快捷命令
 
 在根目录 `package.json` 添加：
 
 ```json
 {
   "scripts": {
-    "release:router": "pnpm --filter koatty_router build && pnpm --filter koatty_router publish",
-    "sync:router": "./scripts/sync-standalone.sh koatty-router git@github.com:koatty/koatty_router.git"
+    "pkg:release": "bash scripts/release.sh",
+    "pkg:release:minor": "bash scripts/release.sh",
+    "pkg:release:major": "bash scripts/release.sh",
+    "pkg:release:pre": "bash scripts/release.sh",
+    "pkg:sync": "bash scripts/sync-standalone.sh"
   }
 }
 ```
+
+使用方式：
+
+```bash
+# 注意：这些命令需要传递包名参数
+pnpm pkg:release koatty-router minor --sync
+```
+
+---
+
+## 最佳实践
+
+### 1. 版本规范
+
+遵循语义化版本规范（Semantic Versioning）：
+
+- **Major** (主版本): 破坏性变更
+- **Minor** (次版本): 新功能，向后兼容
+- **Patch** (补丁版本): bug 修复，向后兼容
+- **Prerelease** (预发布): 测试版本
+
+### 2. Commit 规范
+
+使用 Conventional Commits 规范：
+
+```
+feat: 新功能
+fix: bug 修复
+docs: 文档更新
+style: 代码格式（不影响功能）
+refactor: 重构
+perf: 性能优化
+test: 测试
+chore: 构建/工具链
+```
+
+### 3. 发布前检查清单
+
+- [ ] 所有测试通过
+- [ ] 代码已经过 code review
+- [ ] CHANGELOG 更新准确
+- [ ] 文档已更新
+- [ ] 无 workspace:* 依赖残留
+- [ ] 已登录 npm
+- [ ] 版本号符合语义化规范
+
+### 4. 发布后检查清单
+
+- [ ] npm 上可以安装新版本
+- [ ] 独立仓库已同步
+- [ ] GitHub Release 已创建
+- [ ] 文档网站已更新
+- [ ] 通知用户升级
 
 ---
 
@@ -527,33 +755,50 @@ pnpm run build
 
 ### 推荐工作流程
 
-1. **日常开发**: 在 monorepo 中开发
-2. **版本管理**: 使用 Changesets 管理版本
-3. **发布包**: 使用 `npm publish` 发布到 npm
-4. **同步仓库**: 使用 `git subtree` 同步到独立仓库
-5. **自动化**: 使用 GitHub Actions 自动化发布流程
+1. **开发**: 在 monorepo 中开发功能或修复 bug
+2. **测试**: 运行测试确保代码质量
+3. **提交**: 使用规范的 commit message
+4. **发布**: 使用 `./scripts/release.sh` 统一发布
+5. **同步**: 自动或手动同步到独立仓库
+6. **Release**: 在 GitHub 创建 Release 记录
 
 ### 快速参考
 
 ```bash
-# 创建变更
-pnpm changeset
+# 发布补丁版本
+./scripts/release.sh <package> patch
 
-# 应用版本
-pnpm changeset version
+# 发布次版本
+./scripts/release.sh <package> minor
 
-# 发布单个包
-cd packages/<package> && npm publish
+# 发布主版本
+./scripts/release.sh <package> major
 
-# 同步到独立仓库
-git subtree push --prefix=packages/<package> <remote> master
+# 发布预发布版本
+./scripts/release.sh <package> prerelease
+
+# 发布并自动同步
+./scripts/release.sh <package> minor --sync
+
+# 模拟发布
+./scripts/release.sh <package> --dry-run
+
+# 手动同步到独立仓库
+./scripts/sync-standalone.sh <package>
 ```
 
 ---
 
-**需要帮助?** 
+## 相关资源
 
-- Changesets 文档: https://github.com/changesets/changesets
-- pnpm workspace: https://pnpm.io/workspaces
-- Git subtree: https://git-scm.com/docs/git-subtree
+- **Koatty Monorepo**: https://github.com/koatty/koatty-monorepo
+- **standard-version**: https://github.com/conventional-changelog/standard-version
+- **Semantic Versioning**: https://semver.org/
+- **Conventional Commits**: https://www.conventionalcommits.org/
+- **pnpm Workspace**: https://pnpm.io/workspaces
+- **Git Subtree**: https://git-scm.com/docs/git-subtree
+- **Changesets**: https://github.com/changesets/changesets
 
+---
+
+**需要帮助?** 请在 [GitHub Issues](https://github.com/koatty/koatty-monorepo/issues) 提出问题。

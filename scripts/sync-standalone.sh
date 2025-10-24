@@ -17,10 +17,15 @@ NC='\033[0m' # No Color
 # SSH: git@github.com:koatty/koatty_router.git (需要配置 SSH 密钥)
 # HTTPS: https://github.com/koatty/koatty_router.git (需要输入凭据)
 declare -A PACKAGE_REPOS=(
+    ["koatty"]="https://github.com/koatty/koatty.git"
     ["koatty-router"]="https://github.com/koatty/koatty_router.git"
     ["koatty-core"]="https://github.com/koatty/koatty_core.git"
     ["koatty-container"]="https://github.com/koatty/koatty_container.git"
     ["koatty-validation"]="https://github.com/koatty/koatty_validation.git"
+    ["koatty-config"]="https://github.com/koatty/koatty_config.git"
+    ["koatty-exception"]="https://github.com/koatty/koatty_exception.git"
+    ["koatty-serve"]="https://github.com/koatty/koatty_serve.git"
+    ["koatty-trace"]="https://github.com/koatty/koatty_trace.git"
 )
 
 # 帮助信息
