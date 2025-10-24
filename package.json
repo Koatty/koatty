@@ -1,6 +1,6 @@
 {
   "name": "koatty",
-  "version": "3.13.3",
+  "version": "3.14.0-beta.1",
   "description": "Koa2 + Typescript = koatty. Use Typescript's decorator implement auto injection.",
   "scripts": {
     "build": "npm run build:js && npm run build:dts && npm run build:doc && npm run build:cp && npm run build:fix",
@@ -34,7 +34,7 @@
     "url": "git+https://github.com/thinkkoa/koatty.git"
   },
   "engines": {
-    "node": ">12.0.0"
+    "node": ">=18.0.0"
   },
   "author": {
     "name": "richenlin",
@@ -91,7 +91,7 @@
     "typescript": "^5.x.x"
   },
   "dependencies": {
-    "koa": "~2.16.2",
+    "koa": "^3.0.0",
     "koatty_config": "workspace:*",
     "koatty_container": "~1.17.0",
     "koatty_core": "workspace:*",
