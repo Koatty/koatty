@@ -73,11 +73,24 @@ pnpm test
 pnpm lint
 ```
 
+### 运行示例
+
+```bash
+# 运行基础应用示例
+cd examples/basic-app
+pnpm dev
+
+# 或使用VS Code调试 (推荐)
+# 按F5，选择 "Koatty Basic App"
+```
+
+查看更多示例: [examples/README.md](examples/README.md)
+
 ## 项目结构
 
 ```
 koatty-monorepo/
-├── packages/               # 所有包
+├── packages/               # 核心包
 │   ├── koatty/            # 主框架
 │   ├── koatty-core/       # 核心
 │   ├── koatty-router/     # 路由
@@ -85,9 +98,16 @@ koatty-monorepo/
 │   ├── koatty-exception/  # 异常
 │   ├── koatty-trace/      # 追踪
 │   └── koatty-config/     # 配置
+├── examples/              # 示例应用 ⭐
+│   ├── basic-app/         # 基础应用示例
+│   ├── README.md          # 示例说明
+│   └── .gitignore
 ├── scripts/               # 工具脚本
 │   ├── sync-to-repos.sh
-│   └── check-sync-status.sh
+│   ├── check-sync-status.sh
+│   └── release.sh
+├── .vscode/               # VS Code配置 ⭐
+│   └── launch.json        # 调试配置
 ├── .changeset/            # 版本管理
 ├── .github/workflows/     # CI/CD
 ├── package.json
