@@ -13,11 +13,14 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # 包名映射（monorepo中的目录名 -> 独立仓库URL）
+# 提示: 可以使用 SSH 或 HTTPS
+# SSH: git@github.com:koatty/koatty_router.git (需要配置 SSH 密钥)
+# HTTPS: https://github.com/koatty/koatty_router.git (需要输入凭据)
 declare -A PACKAGE_REPOS=(
-    ["koatty-router"]="git@github.com:koatty/koatty_router.git"
-    ["koatty-core"]="git@github.com:koatty/koatty_core.git"
-    ["koatty-container"]="git@github.com:koatty/koatty_container.git"
-    ["koatty-validation"]="git@github.com:koatty/koatty_validation.git"
+    ["koatty-router"]="https://github.com/koatty/koatty_router.git"
+    ["koatty-core"]="https://github.com/koatty/koatty_core.git"
+    ["koatty-container"]="https://github.com/koatty/koatty_container.git"
+    ["koatty-validation"]="https://github.com/koatty/koatty_validation.git"
 )
 
 # 帮助信息
