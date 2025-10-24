@@ -249,19 +249,22 @@ echo -e "${BLUE}步骤 3/6: 更新版本 (standard-version)${NC}"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
 # 构建 standard-version 参数
-SV_ARGS=""
+# 在monorepo中，每个包使用独立的tag格式: packagename@version
+TAG_PREFIX="${PACKAGE_NAME}@"
+SV_ARGS="--tag-prefix \"$TAG_PREFIX\""
+
 case $RELEASE_TYPE in
     prerelease)
-        SV_ARGS="--prerelease"
+        SV_ARGS="$SV_ARGS --prerelease"
         ;;
     major)
-        SV_ARGS="--release-as major"
+        SV_ARGS="$SV_ARGS --release-as major"
         ;;
     minor)
-        SV_ARGS="--release-as minor"
+        SV_ARGS="$SV_ARGS --release-as minor"
         ;;
     patch)
-        SV_ARGS="--release-as patch"
+        SV_ARGS="$SV_ARGS --release-as patch"
         ;;
 esac
 
@@ -270,9 +273,11 @@ if [ "$DRY_RUN" = true ]; then
 fi
 
 echo "运行: standard-version $SV_ARGS"
+echo "Tag格式: ${TAG_PREFIX}{version}"
 echo ""
 
-if standard-version $SV_ARGS; then
+# 使用eval来正确处理带引号的参数
+if eval "standard-version $SV_ARGS"; then
     echo -e "${GREEN}✓${NC} 版本更新成功"
 else
     echo -e "${RED}✗${NC} 版本更新失败"
