@@ -141,9 +141,20 @@ fi
 # 进入包目录
 cd "$PACKAGE_DIR"
 
+# 验证当前目录
+CURRENT_DIR=$(pwd)
+echo -e "${CYAN}当前目录:${NC}   $CURRENT_DIR"
+
 # 读取当前版本信息
 PACKAGE_JSON_NAME=$(node -p "require('./package.json').name")
 CURRENT_VERSION=$(node -p "require('./package.json').version")
+
+# 验证包名匹配
+EXPECTED_PKG_NAME=$(echo "$PACKAGE_NAME" | sed 's/-/_/g')
+if [[ "$PACKAGE_JSON_NAME" != "koatty_"* ]] && [[ "$PACKAGE_JSON_NAME" != "koatty" ]]; then
+    echo -e "${RED}错误: package.json 中的包名格式不正确: $PACKAGE_JSON_NAME${NC}"
+    exit 1
+fi
 
 echo -e "${BLUE}========================================${NC}"
 echo -e "${BLUE}Koatty 包发布流程${NC}"
