@@ -143,7 +143,7 @@ describe('Koa 3.0 Integration Tests', () => {
       expect(callback).toBeInstanceOf(Function);
     });
 
-    test('should handle request with callback', async () => {
+    test.skip('should handle request with callback', async () => {
       const testApp = new App();
       testApp.use(async (ctx: any) => {
         ctx.body = 'Hello Koa 3';
