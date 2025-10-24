@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.0.0 (2025-10-24)
+
+
+### Features
+
+* improve type safety in compress middleware ([61beb1d](https://github.com/koatty/koatty_core/commit/61beb1d206bebfd5f6fec9a2d1297f420be217a2))
+* **koatty_core:** upgrade to Koa 3.0 ([fe246ad](https://github.com/koatty/koatty_core/commit/fe246ad773521b6117d212378b07faa30abd17e0))
+* **koatty_router:** migrate from koa-graphql to graphql-http ([847821a](https://github.com/koatty/koatty_core/commit/847821ac80109c6f4fd953e0701ad695e4fb771f))
+* make exception context fields optional and improve trace handling ([e0ec4db](https://github.com/koatty/koatty_core/commit/e0ec4db1ba7299b1d22018558f61288cb2564dc6))
+* **release:** add release guide and automation script ([c5f01b1](https://github.com/koatty/koatty_core/commit/c5f01b17765a9b1eeb07c448b27be5ade9278569))
+* update sync script to use HTTPS instead of SSH for package repos ([91c9fd7](https://github.com/koatty/koatty_core/commit/91c9fd74f080685cb2e8fab66e4765cbf86be57c))
+* upgrade to Koa 3.0 (WIP) ([d14114c](https://github.com/koatty/koatty_core/commit/d14114c63d0f62fcd3a64296cbb6648ec1ee1e83))
+
+
+### Bug Fixes
+
+* **koatty_core:** attempt to fix test timeouts ([fb197ea](https://github.com/koatty/koatty_core/commit/fb197eab7d193616ed4255753c22df0b400c1bc6))
+* resolve workspace dependencies in build process ([d8a2661](https://github.com/koatty/koatty_core/commit/d8a266123fee1dea8ea7be6a39401bf0c052688b))
+* 解决依赖问题以支持Koa 3.0升级 ([30cf0b5](https://github.com/koatty/koatty_core/commit/30cf0b53ed032c7de5ea24b4c2ed965e8d4948df))
+
 ### [1.17.1](https://github.com/koatty/koatty_core/compare/v1.17.0...v1.17.1) (2025-06-08)
 
 
