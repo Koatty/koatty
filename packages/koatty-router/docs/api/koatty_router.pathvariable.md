@@ -10,7 +10,7 @@ Get path variable (take value from ctx.params).
 **Signature:**
 
 ```typescript
-export declare function PathVariable(name?: string): ParameterDecorator;
+export declare function PathVariable(name?: string, defaultValue?: any): ParameterDecorator;
 ```
 
 ## Parameters
@@ -44,6 +44,22 @@ string
 </td><td>
 
 _(Optional)_ params name
+
+
+</td></tr>
+<tr><td>
+
+defaultValue
+
+
+</td><td>
+
+any
+
+
+</td><td>
+
+_(Optional)_ Default value if path variable is undefined
 
 
 </td></tr>

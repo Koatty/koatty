@@ -9,7 +9,7 @@
  */
 
 import { KoattyContext } from "koatty_core";
-import { injectParam } from "../utils/inject";
+import { injectParam, ParamSourceType } from "../utils/inject";
 import { bodyParser, queryParser } from "../payload/payload";
 import { PayloadOptions } from "../payload/interface";
 
@@ -18,10 +18,17 @@ import { PayloadOptions } from "../payload/interface";
  *
  * @export
  * @param {string} [name]
+ * @param {any} [defaultValue] - Default value if header is undefined
  * @returns
  */
-export function Header(name?: string): ParameterDecorator {
-  return injectParam((ctx: KoattyContext) => name ? ctx.get(name) : ctx.headers, "Header");
+export function Header(name?: string, defaultValue?: any): ParameterDecorator {
+  return injectParam(
+    (ctx: KoattyContext) => name ? ctx.get(name) : ctx.headers,
+    "Header",
+    ParamSourceType.HEADER,
+    name,
+    defaultValue
+  );
 }
 
 /**
@@ -29,13 +36,20 @@ export function Header(name?: string): ParameterDecorator {
  *
  * @export
  * @param {string} [name] params name
+ * @param {any} [defaultValue] - Default value if path variable is undefined
  * @returns
  */
-export function PathVariable(name?: string): ParameterDecorator {
-  return injectParam((ctx: KoattyContext) => {
-    const pathParams = ctx.params ?? {};
-    return name ? pathParams[name] : pathParams;
-  }, "PathVariable");
+export function PathVariable(name?: string, defaultValue?: any): ParameterDecorator {
+  return injectParam(
+    (ctx: KoattyContext) => {
+      const pathParams = ctx.params ?? {};
+      return name ? pathParams[name] : pathParams;
+    },
+    "PathVariable",
+    ParamSourceType.PATH,
+    name,
+    defaultValue
+  );
 }
 
 /**
@@ -43,13 +57,20 @@ export function PathVariable(name?: string): ParameterDecorator {
  *
  * @export
  * @param {string} [name]
+ * @param {any} [defaultValue] - Default value if query parameter is undefined
  * @returns
  */
-export function Get(name?: string): ParameterDecorator {
-  return injectParam((ctx: KoattyContext) => {
-    const queryParams = ctx.query ?? {};
-    return name ? queryParams[name] : queryParams;
-  }, "Get");
+export function Get(name?: string, defaultValue?: any): ParameterDecorator {
+  return injectParam(
+    (ctx: KoattyContext) => {
+      const queryParams = ctx.query ?? {};
+      return name ? queryParams[name] : queryParams;
+    },
+    "Get",
+    ParamSourceType.QUERY,
+    name,
+    defaultValue
+  );
 }
 
 /**
@@ -57,14 +78,21 @@ export function Get(name?: string): ParameterDecorator {
  *
  * @export
  * @param {string} [name]
+ * @param {any} [defaultValue] - Default value if body parameter is undefined
  * @returns
  */
-export function Post(name?: string): ParameterDecorator {
-  return injectParam(async (ctx: KoattyContext, opt?: PayloadOptions) => {
-    const data = await bodyParser(ctx, opt);
-    const params = data.body ?? data;
-    return name ? params[name] : params;
-  }, "Post");
+export function Post(name?: string, defaultValue?: any): ParameterDecorator {
+  return injectParam(
+    async (ctx: KoattyContext, opt?: PayloadOptions) => {
+      const data = await bodyParser(ctx, opt);
+      const params = data.body ?? data;
+      return name ? params[name] : params;
+    },
+    "Post",
+    ParamSourceType.BODY,
+    name,
+    defaultValue
+  );
 }
 
 /**
@@ -72,14 +100,21 @@ export function Post(name?: string): ParameterDecorator {
  *
  * @export
  * @param {string} [name]
+ * @param {any} [defaultValue] - Default value if file is undefined
  * @returns
  */
-export function File(name?: string): ParameterDecorator {
-  return injectParam(async (ctx: KoattyContext, opt?: PayloadOptions) => {
-    const body = await bodyParser(ctx, opt);
-    const params = body.file ?? {};
-    return name ? params[name] : params;
-  }, "File");
+export function File(name?: string, defaultValue?: any): ParameterDecorator {
+  return injectParam(
+    async (ctx: KoattyContext, opt?: PayloadOptions) => {
+      const body = await bodyParser(ctx, opt);
+      const params = body.file ?? {};
+      return name ? params[name] : params;
+    },
+    "File",
+    ParamSourceType.FILE,
+    name,
+    defaultValue
+  );
 }
 
 
@@ -90,7 +125,11 @@ export function File(name?: string): ParameterDecorator {
  * @returns ex: {body: {...}, file: {...}}
  */
 export function RequestBody(): ParameterDecorator {
-  return injectParam((ctx: KoattyContext, opt?: PayloadOptions) => bodyParser(ctx, opt), "RequestBody");
+  return injectParam(
+    (ctx: KoattyContext, opt?: PayloadOptions) => bodyParser(ctx, opt),
+    "RequestBody",
+    ParamSourceType.BODY
+  );
 }
 
 /**
@@ -108,7 +147,11 @@ export const Body = RequestBody;
  * @returns {ParameterDecorator}
  */
 export function RequestParam(): ParameterDecorator {
-  return injectParam((ctx: KoattyContext, opt?: PayloadOptions) => queryParser(ctx, opt), "RequestParam");
+  return injectParam(
+    (ctx: KoattyContext, opt?: PayloadOptions) => queryParser(ctx, opt),
+    "RequestParam",
+    ParamSourceType.CUSTOM
+  );
 }
 
 /**

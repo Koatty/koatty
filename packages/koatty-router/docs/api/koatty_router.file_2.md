@@ -10,7 +10,7 @@ Get parsed upload file object.
 **Signature:**
 
 ```typescript
-export declare function File(name?: string): ParameterDecorator;
+export declare function File(name?: string, defaultValue?: any): ParameterDecorator;
 ```
 
 ## Parameters
@@ -44,6 +44,22 @@ string
 </td><td>
 
 _(Optional)_
+
+
+</td></tr>
+<tr><td>
+
+defaultValue
+
+
+</td><td>
+
+any
+
+
+</td><td>
+
+_(Optional)_ Default value if file is undefined
 
 
 </td></tr>

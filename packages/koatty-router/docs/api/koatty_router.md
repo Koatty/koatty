@@ -117,7 +117,7 @@ Routes HTTP DELETE requests to the specified path.
 </td></tr>
 <tr><td>
 
-[File\_2(name)](./koatty_router.file_2.md)
+[File\_2(name, defaultValue)](./koatty_router.file_2.md)
 
 
 </td><td>
@@ -129,7 +129,7 @@ Get parsed upload file object.
 </td></tr>
 <tr><td>
 
-[Get(name)](./koatty_router.get.md)
+[Get(name, defaultValue)](./koatty_router.get.md)
 
 
 </td><td>
@@ -163,7 +163,7 @@ Routes HTTP GET requests to the specified path.
 </td></tr>
 <tr><td>
 
-[Header(name)](./koatty_router.header.md)
+[Header(name, defaultValue)](./koatty_router.header.md)
 
 
 </td><td>
@@ -220,7 +220,7 @@ Routes HTTP PATCH requests to the specified path.
 </td></tr>
 <tr><td>
 
-[PathVariable(name)](./koatty_router.pathvariable.md)
+[PathVariable(name, defaultValue)](./koatty_router.pathvariable.md)
 
 
 </td><td>
@@ -232,7 +232,7 @@ Get path variable (take value from ctx.params).
 </td></tr>
 <tr><td>
 
-[Post(name)](./koatty_router.post.md)
+[Post(name, defaultValue)](./koatty_router.post.md)
 
 
 </td><td>

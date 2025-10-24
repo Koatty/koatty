@@ -92,7 +92,10 @@ describe('Parameter Decorators', () => {
       
       expect(injectParam).toHaveBeenCalledWith(
         expect.any(Function),
-        'Header'
+        'Header',
+        'header',
+        'content-type',
+        undefined  // defaultValue
       );
     });
   });
@@ -360,9 +363,9 @@ describe('Parameter Decorators', () => {
       queryDecorator(mockTarget, mockPropertyKey, 2);
 
       expect(injectParam).toHaveBeenCalledTimes(3);
-      expect(injectParam).toHaveBeenNthCalledWith(1, expect.any(Function), 'Header');
-      expect(injectParam).toHaveBeenNthCalledWith(2, expect.any(Function), 'PathVariable');
-      expect(injectParam).toHaveBeenNthCalledWith(3, expect.any(Function), 'Get');
+      expect(injectParam).toHaveBeenNthCalledWith(1, expect.any(Function), 'Header', 'header', 'authorization', undefined);
+      expect(injectParam).toHaveBeenNthCalledWith(2, expect.any(Function), 'PathVariable', 'path', 'id', undefined);
+      expect(injectParam).toHaveBeenNthCalledWith(3, expect.any(Function), 'Get', 'query', 'page', undefined);
     });
 
     it('should handle async and sync decorators together', async () => {

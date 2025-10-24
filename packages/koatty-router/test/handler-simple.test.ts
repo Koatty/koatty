@@ -62,6 +62,32 @@ jest.mock('koatty_logger', () => ({
   }
 }));
 
+
+// Helper function to add sourceType and hasAsyncParams to test metadata
+function addSourceType(params: any[]): any[] {
+  const { ParamSourceType, inferSourceTypeFromFnName } = require('../src/utils/inject');
+  const processedParams = params.map((p: any) => {
+    if (!p.sourceType && p.fn) {
+      p.sourceType = inferSourceTypeFromFnName(p.fn.name || '');
+    } else if (!p.sourceType) {
+      p.sourceType = ParamSourceType.CUSTOM;
+    }
+    return p;
+  });
+  
+  // Add hasAsyncParams flag
+  // Consider CUSTOM as potentially async since it calls custom fn
+  const hasAsyncParams = processedParams.some((p: any) => 
+    p.sourceType === ParamSourceType.BODY || 
+    p.sourceType === ParamSourceType.FILE ||
+    p.sourceType === ParamSourceType.CUSTOM ||  // Custom fn might be async
+    p.isDto
+  );
+  (processedParams as any).hasAsyncParams = hasAsyncParams;
+  
+  return processedParams;
+}
+
 describe('Handler Simple Tests', () => {
   let mockApp: any;
   let mockCtx: any;
@@ -179,7 +205,7 @@ describe('Handler Simple Tests', () => {
     });
 
     it('should handle basic parameters', async () => {
-      const params = [
+      const params = addSourceType([
         {
           fn: jest.fn().mockResolvedValue('param1'),
           name: 'test',
@@ -193,7 +219,7 @@ describe('Handler Simple Tests', () => {
           clazz: undefined,
           options: {}
         }
-      ];
+      ]);
 
       await Handler(mockApp, mockCtx, mockCtl, 'testMethod', params);
       
@@ -202,7 +228,7 @@ describe('Handler Simple Tests', () => {
     });
 
     it('should handle predefined parameter values', async () => {
-      const params = [
+      const params = addSourceType([
         {
           fn: jest.fn(),
           name: 'test',
@@ -216,7 +242,7 @@ describe('Handler Simple Tests', () => {
           clazz: undefined,
           options: {}
         }
-      ];
+      ]);
       const ctlParamsValue = ['predefined'];
 
       await Handler(mockApp, mockCtx, mockCtl, 'testMethod', params, ctlParamsValue);
@@ -229,7 +255,7 @@ describe('Handler Simple Tests', () => {
       const { ClassValidator } = require('koatty_validation');
       const TestDto = class TestDto {};
       
-      const params = [
+      const params = addSourceType([
         {
           fn: jest.fn().mockResolvedValue({ name: 'test' }),
           name: 'dto',
@@ -243,7 +269,7 @@ describe('Handler Simple Tests', () => {
           clazz: TestDto,
           options: {}
         }
-      ];
+      ]);
 
       ClassValidator.valid.mockResolvedValue({ name: 'validated' });
 
@@ -257,7 +283,7 @@ describe('Handler Simple Tests', () => {
       const { plainToClass } = require('koatty_validation');
       const TestDto = class TestDto {};
       
-      const params = [
+      const params = addSourceType([
         {
           fn: jest.fn().mockResolvedValue({ name: 'test' }),
           name: 'dto',
@@ -271,7 +297,7 @@ describe('Handler Simple Tests', () => {
           clazz: TestDto,
           options: {}
         }
-      ];
+      ]);
 
       plainToClass.mockReturnValue({ name: 'plain' });
 
@@ -289,7 +315,7 @@ describe('Handler Simple Tests', () => {
       IOC.getClass.mockReturnValue(TestDto);
       plainToClass.mockReturnValue({});
       
-      const params = [
+      const params = addSourceType([
         {
           fn: jest.fn().mockResolvedValue({}),
           name: 'dto',
@@ -303,7 +329,7 @@ describe('Handler Simple Tests', () => {
           clazz: undefined,
           options: {}
         }
-      ];
+      ]);
 
       await Handler(mockApp, mockCtx, mockCtl, 'testMethod', params);
       
@@ -313,7 +339,7 @@ describe('Handler Simple Tests', () => {
     it('should handle type conversion', async () => {
       const { convertParamsType } = require('koatty_validation');
       
-      const params = [
+      const params = addSourceType([
         {
           fn: jest.fn().mockResolvedValue('123'),
           name: 'param',
@@ -327,7 +353,7 @@ describe('Handler Simple Tests', () => {
           clazz: undefined,
           options: {}
         }
-      ];
+      ]);
 
       convertParamsType.mockReturnValue(123);
 
@@ -340,7 +366,7 @@ describe('Handler Simple Tests', () => {
     it('should handle validation errors', async () => {
       const { ClassValidator } = require('koatty_validation');
       
-      const params = [
+      const params = addSourceType([
         {
           fn: jest.fn().mockResolvedValue({}),
           name: 'dto',
@@ -354,7 +380,7 @@ describe('Handler Simple Tests', () => {
           clazz: class TestDto {},
           options: {}
         }
-      ];
+      ]);
 
       ClassValidator.valid.mockRejectedValue(new Error('Validation failed'));
 
@@ -365,7 +391,7 @@ describe('Handler Simple Tests', () => {
       const { Helper } = require('koatty_lib');
       Helper.isFunction.mockReturnValue(false);
       
-      const params = [
+      const params = addSourceType([
         {
           fn: 'not a function',
           name: 'param',
@@ -379,7 +405,7 @@ describe('Handler Simple Tests', () => {
           clazz: undefined,
           options: {}
         }
-      ];
+      ]);
       const ctlParamsValue = ['fallback'];
 
       await Handler(mockApp, mockCtx, mockCtl, 'testMethod', params, ctlParamsValue);
@@ -392,7 +418,10 @@ describe('Handler Simple Tests', () => {
       Helper.isFunction.mockReturnValue(true);
       
       const validationRule = jest.fn();
-      const params = [
+      // Task 6.2: All validators must be pre-compiled
+      const compiledValidator = jest.fn((value) => validationRule(value));
+      
+      const params = addSourceType([
         {
           fn: jest.fn().mockResolvedValue('test'),
           name: 'param',
@@ -401,20 +430,21 @@ describe('Handler Simple Tests', () => {
           isDto: false,
           validRule: validationRule,
           validOpt: {},
+          compiledValidator: compiledValidator,  // Pre-compiled validator required
           dtoCheck: false,
           dtoRule: undefined,
           clazz: undefined,
           options: {}
         }
-      ];
+      ]);
 
       await Handler(mockApp, mockCtx, mockCtl, 'testMethod', params);
       
-      expect(validationRule).toHaveBeenCalledWith('test');
+      expect(compiledValidator).toHaveBeenCalledWith('test');
     });
 
     it('should handle multiple parameters', async () => {
-      const params = [
+      const params = addSourceType([
         {
           fn: jest.fn().mockResolvedValue('param1'),
           name: 'first',
@@ -441,7 +471,7 @@ describe('Handler Simple Tests', () => {
           clazz: undefined,
           options: {}
         }
-      ];
+      ]);
 
       await Handler(mockApp, mockCtx, mockCtl, 'testMethod', params);
       
@@ -451,7 +481,7 @@ describe('Handler Simple Tests', () => {
     it('should handle validation error without message', async () => {
       const { ClassValidator } = require('koatty_validation');
       
-      const params = [
+      const params = addSourceType([
         {
           fn: jest.fn().mockResolvedValue({}),
           name: 'dto',
@@ -465,7 +495,7 @@ describe('Handler Simple Tests', () => {
           clazz: class TestDto {},
           options: {}
         }
-      ];
+      ]);
 
       const errorWithoutMessage = new Error();
       errorWithoutMessage.message = '';

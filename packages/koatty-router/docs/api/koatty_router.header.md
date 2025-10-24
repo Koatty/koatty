@@ -10,7 +10,7 @@ Get request header.
 **Signature:**
 
 ```typescript
-export declare function Header(name?: string): ParameterDecorator;
+export declare function Header(name?: string, defaultValue?: any): ParameterDecorator;
 ```
 
 ## Parameters
@@ -44,6 +44,22 @@ string
 </td><td>
 
 _(Optional)_
+
+
+</td></tr>
+<tr><td>
+
+defaultValue
+
+
+</td><td>
+
+any
+
+
+</td><td>
+
+_(Optional)_ Default value if header is undefined
 
 
 </td></tr>
