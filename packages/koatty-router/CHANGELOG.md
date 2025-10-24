@@ -1,5 +1,14 @@
 # Changelog
 
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [3.0.0](https://github.com/koatty/koatty_router/compare/v2.0.0...v3.0.0) (2025-10-24)
+
+
+### Features
+
+* add examples directory with basic-app example ([ef49c6f](https://github.com/koatty/koatty_router/commit/ef49c6f932b88ba947fc4c7f448d91b016e3e020))
+
 ## 3.0.0
 
 ### Major Changes
