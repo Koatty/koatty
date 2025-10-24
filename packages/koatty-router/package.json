@@ -3,8 +3,9 @@
   "version": "2.0.0",
   "description": "Koatty routing component, adapt to http1/2, websocket, gRPC.",
   "scripts": {
-    "build": "npm run build:js && npm run build:dts && npm run build:doc && npm run build:cp",
+    "build": "npm run build:js && npm run build:dts && npm run build:doc && npm run build:cp && npm run build:fix",
     "build:cp": "node scripts/postBuild && npx copyfiles package.json LICENSE README.md dist/",
+    "build:fix": "node scripts/fixWorkspaceDeps",
     "build:js": "npx rollup --bundleConfigAsCjs -c .rollup.config.js",
     "build:doc": "npx api-documenter markdown --input temp --output docs/api",
     "build:dts": "npx tsc && npx api-extractor run --local --verbose",

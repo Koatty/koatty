@@ -3,8 +3,9 @@
   "version": "3.13.3",
   "description": "Koa2 + Typescript = koatty. Use Typescript's decorator implement auto injection.",
   "scripts": {
-    "build": "npm run build:js && npm run build:dts && npm run build:doc && npm run build:cp",
+    "build": "npm run build:js && npm run build:dts && npm run build:doc && npm run build:cp && npm run build:fix",
     "build:cp": "node scripts/postBuild && npx copyfiles package.json LICENSE README.md dist/",
+    "build:fix": "node scripts/fixWorkspaceDeps",
     "build:js": "npx rollup --bundleConfigAsCjs -c .rollup.config.js",
     "build:doc": "npx api-documenter markdown --input temp --output docs/api",
     "build:dts": "npx tsc && npx api-extractor run --local --verbose",

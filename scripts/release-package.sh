@@ -111,6 +111,20 @@ if [ ! -d "dist" ]; then
     exit 1
 fi
 
+# 检查 workspace:* 依赖
+echo -e "${BLUE}步骤 2.5/4: 验证 workspace:* 依赖...${NC}"
+if grep -q "workspace:\*" dist/package.json 2>/dev/null; then
+    echo -e "${RED}✗ 错误: dist/package.json 仍包含 workspace:* 依赖${NC}"
+    echo -e "${YELLOW}提示: 请确保 build:fix 步骤在构建脚本中${NC}"
+    echo ""
+    echo "发现的 workspace:* 依赖:"
+    grep "workspace:\*" dist/package.json
+    echo ""
+    exit 1
+fi
+echo -e "${GREEN}✓${NC} 无 workspace:* 依赖"
+echo ""
+
 echo -e "${YELLOW}构建产物:${NC}"
 ls -lh dist/ | grep -v "^total" | awk '{print "  " $9 " (" $5 ")"}'
 echo ""
@@ -131,7 +145,7 @@ else
         exit 1
     fi
     
-    if npm publish; then
+    if npm publish --ignore-scripts; then
         echo -e "${GREEN}✓${NC} 发布成功"
     else
         echo -e "${RED}✗${NC} 发布失败"
@@ -151,18 +165,9 @@ if [ "$DRY_RUN" = false ]; then
     if git tag -l | grep -q "^${TAG_NAME}$"; then
         echo -e "${YELLOW}⚠${NC}  Tag $TAG_NAME 已存在"
     else
-        git tag "$TAG_NAME"
+        # 创建带注释的 tag
+        git tag -a "$TAG_NAME" -m "Release $PACKAGE_JSON_NAME@$PACKAGE_VERSION"
         echo -e "${GREEN}✓${NC} 创建 tag: $TAG_NAME"
-        
-        read -p "是否推送 tag 到远程? (y/n) " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-            if git push origin "$TAG_NAME"; then
-                echo -e "${GREEN}✓${NC} Tag 已推送到远程"
-            else
-                echo -e "${YELLOW}⚠${NC}  Tag 推送失败"
-            fi
-        fi
     fi
 else
     echo -e "${BLUE}步骤 4/4: 创建 git tag...${NC}"
