@@ -87,7 +87,7 @@ fi
 
 # 步骤1: 运行测试
 echo -e "${BLUE}步骤 1/4: 运行测试...${NC}"
-if npm test; then
+if CI=true npm test; then
     echo -e "${GREEN}✓${NC} 测试通过"
 else
     echo -e "${RED}✗${NC} 测试失败"
