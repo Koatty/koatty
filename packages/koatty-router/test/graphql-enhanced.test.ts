@@ -38,8 +38,12 @@ jest.mock('koatty_graphql', () => ({
   buildSchema: jest.fn()
 }));
 
-jest.mock('koa-graphql', () => ({
-  graphqlHTTP: jest.fn()
+jest.mock('graphql-http/lib/use/fetch', () => ({
+  createHandler: jest.fn(() => jest.fn(async () => ({
+    status: 200,
+    headers: new Map([['content-type', 'application/json']]),
+    text: async () => JSON.stringify({ data: { test: 'ok' } })
+  })))
 }));
 
 jest.mock('../src/payload/payload', () => ({
@@ -70,7 +74,7 @@ import { IOC } from 'koatty_container';
 import { Helper } from 'koatty_lib';
 import { DefaultLogger as Logger } from 'koatty_logger';
 import { buildSchema } from 'koatty_graphql';
-import { graphqlHTTP } from 'koa-graphql';
+import { createHandler } from 'graphql-http/lib/use/fetch';
 import { payload } from '../src/payload/payload';
 import { injectParamMetaData, injectRouter } from '../src/utils/inject';
 import { Handler } from '../src/utils/handler';
@@ -155,10 +159,8 @@ describe('GraphQLRouter 增强测试', () => {
     test('应该正确设置GraphQL路由', () => {
       const mockSchema = { type: 'schema' };
       const mockImplementation = { hello: () => 'world' };
-      const mockGraphqlMiddleware = jest.fn();
       
       (Helper.isEmpty as jest.Mock).mockReturnValue(false);
-      (graphqlHTTP as jest.Mock).mockReturnValue(mockGraphqlMiddleware);
 
       const routerImpl = {
         schema: mockSchema,
@@ -168,14 +170,12 @@ describe('GraphQLRouter 增强测试', () => {
       router.SetRouter('/graphql', routerImpl);
 
       expect(Helper.isEmpty).toHaveBeenCalledWith(mockImplementation);
-      expect(graphqlHTTP).toHaveBeenCalledWith(expect.objectContaining({
+      expect(createHandler).toHaveBeenCalledWith(expect.objectContaining({
         schema: mockSchema,
-        rootValue: mockImplementation,
-        graphiql: {
-          headerEditorEnabled: true
-        }
+        rootValue: mockImplementation
       }));
-      expect(router.router.all).toHaveBeenCalledWith('/graphql', mockGraphqlMiddleware);
+      // graphql-http uses middleware function directly, not graphqlHTTP
+      expect(router.router.all).toHaveBeenCalledWith('/graphql', expect.any(Function));
     });
 
     test('应该忽略空的实现', () => {
@@ -189,7 +189,7 @@ describe('GraphQLRouter 增强测试', () => {
       router.SetRouter('/graphql', routerImpl as any);
 
       expect(Helper.isEmpty).toHaveBeenCalled();
-      expect(graphqlHTTP).not.toHaveBeenCalled();
+      expect(createHandler).not.toHaveBeenCalled();
       expect(router.router.all).not.toHaveBeenCalled();
     });
   });
@@ -246,7 +246,7 @@ describe('GraphQLRouter 增强测试', () => {
       (IOC.getInsByClass as jest.Mock).mockReturnValue({});
       (Handler as jest.Mock).mockResolvedValue('result');
       (Helper.isEmpty as jest.Mock).mockReturnValue(false);
-      (graphqlHTTP as jest.Mock).mockReturnValue(jest.fn());
+      (createHandler as jest.Mock).mockReturnValue(jest.fn());
 
       const controllerList = ['TestController'];
 

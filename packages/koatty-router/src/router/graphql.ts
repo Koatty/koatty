@@ -9,7 +9,7 @@
  */
 import KoaRouter from "@koa/router";
 import fs from "fs";
-import { graphqlHTTP } from "koa-graphql";
+import { createHandler } from "graphql-http/lib/use/fetch";
 import { IOC } from "koatty_container";
 import {
   IGraphQLImplementation, Koatty, KoattyContext,
@@ -105,22 +105,129 @@ export class GraphQLRouter implements KoattyRouter {
       Logger.Warn('GraphQL security packages not installed. Install with: npm install graphql-depth-limit graphql-query-complexity');
     }
 
-    this.router.all(
-      name,
-      graphqlHTTP({
-        schema: impl.schema,
-        rootValue: routeHandler,
-        graphiql: this.options.ext?.playground !== false ? {
-          headerEditorEnabled: true,
-        } : false,
-        validationRules: validationRules.length > 0 ? validationRules : undefined,
-        customFormatErrorFn: this.options.ext?.debug ? undefined : (error) => ({
-          message: error.message,
-          // Production mode: don't expose stack trace
-        }),
-      }),
-    );
+    // Create graphql-http handler
+    const handler = createHandler({
+      schema: impl.schema,
+      rootValue: routeHandler,
+      validationRules: validationRules.length > 0 ? validationRules : undefined,
+      formatError: this.options.ext?.debug ? undefined : (error) => {
+        // Return formatted GraphQLError
+        return new Error(error.message);
+      },
+      context: (req: any) => {
+        // Extract Koa context from request
+        return req.koattyContext;
+      },
+    });
+
+    // Koa middleware adapter for graphql-http
+    this.router.all(name, async (ctx: KoattyContext) => {
+      // GraphiQL support: serve interactive UI for GET requests without query
+      if (ctx.method === 'GET' && this.options.ext?.playground !== false && !ctx.query.query) {
+        ctx.type = 'text/html';
+        ctx.body = this.renderGraphiQL(name);
+        return;
+      }
+
+      // Prepare fetch-compatible Request object
+      const url = new URL(ctx.url, `${ctx.protocol}://${ctx.host}`);
+      
+      // Prepare headers
+      const headers: Record<string, string> = {};
+      Object.keys(ctx.headers).forEach(key => {
+        const value = ctx.headers[key];
+        if (typeof value === 'string') {
+          headers[key] = value;
+        } else if (Array.isArray(value)) {
+          headers[key] = value.join(', ');
+        }
+      });
+
+      // Prepare request body
+      let requestBody: string | null = null;
+      if (ctx.method !== 'GET' && ctx.method !== 'HEAD') {
+        const koaRequest = ctx.request as any;
+        if (koaRequest.body) {
+          requestBody = JSON.stringify(koaRequest.body);
+        }
+      }
+
+      const fetchRequest = new Request(url, {
+        method: ctx.method,
+        headers: headers,
+        body: requestBody,
+      });
+
+      // Attach Koa context for custom context handler
+      (fetchRequest as any).koattyContext = ctx;
+
+      try {
+        const response = await handler(fetchRequest);
+
+        // Transfer response to Koa
+        ctx.status = response.status;
+        response.headers.forEach((value, key) => {
+          ctx.set(key, value);
+        });
+
+        const body = await response.text();
+        ctx.body = body;
+      } catch (error: any) {
+        Logger.Error(`GraphQL execution error: ${error.message}`);
+        ctx.status = 500;
+        ctx.body = { errors: [{ message: 'Internal server error' }] };
+      }
+    });
     this.routerMap.set(name, impl);
+  }
+
+  /**
+   * Render GraphiQL interface
+   * 
+   * @private
+   * @param {string} endpoint - GraphQL endpoint URL
+   * @returns {string} HTML content for GraphiQL
+   */
+  private renderGraphiQL(endpoint: string): string {
+    return `<!DOCTYPE html>
+<html>
+<head>
+  <title>GraphiQL</title>
+  <style>
+    body {
+      height: 100%;
+      margin: 0;
+      width: 100%;
+      overflow: hidden;
+    }
+    #graphiql {
+      height: 100vh;
+    }
+  </style>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/graphiql@3/graphiql.min.css" />
+</head>
+<body>
+  <div id="graphiql">Loading...</div>
+  <script
+    src="https://unpkg.com/graphiql@3/graphiql.min.js"
+    type="application/javascript"
+  ></script>
+  <script>
+    const fetcher = GraphiQL.createFetcher({
+      url: '${endpoint}',
+    });
+    const root = ReactDOM.createRoot(document.getElementById('graphiql'));
+    root.render(
+      React.createElement(GraphiQL, {
+        fetcher: fetcher,
+        defaultEditorToolsVisibility: true,
+      })
+    );
+  </script>
+</body>
+</html>`;
   }
 
   /**
