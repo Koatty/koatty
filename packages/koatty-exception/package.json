@@ -1,6 +1,6 @@
 {
   "name": "koatty_exception",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Exception handler for koatty.",
   "scripts": {
     "build": "npm run build:js && npm run build:dts && npm run build:doc && npm run build:cp && npm run build:fix",
@@ -97,13 +97,11 @@
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/semantic-conventions": "^1.37.0",
     "koatty_container": "^1.x.x",
-    "koatty_core": "^1.x.x",
     "koatty_lib": "^1.x.x",
     "koatty_logger": "^2.5.0"
   },
   "peerDependencies": {
     "koatty_container": "^1.x.x",
-    "koatty_core": "workspace:*",
     "koatty_lib": "^1.x.x",
     "koatty_logger": "^2.x.x"
   }
