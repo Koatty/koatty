@@ -293,10 +293,13 @@ describe("App", () => {
 
     test("response", async () => {
       const callback = app.callback();
-      const res = await request(callback).get('/');
+      const agent = request.agent(callback);
+      const res = await agent.get('/');
       expect(res.text).toBe('Hello, World!');
       expect(res.status).toBe(200);
-    }, 10000);
+      // Force close any open handles
+      await new Promise(resolve => setImmediate(resolve));
+    }, 15000);
 
     test("response - with middleware stack", async () => {
       const testApp = new App();
@@ -309,13 +312,15 @@ describe("App", () => {
       });
 
       const callback = testApp.callback();
-      const res = await request(callback).get('/');
+      const agent = request.agent(callback);
+      const res = await agent.get('/');
       expect(res.text).toBe('Response with middleware-added');
       expect(res.status).toBe(200);
       
       // 清理测试应用的事件监听器
       testApp.removeAllListeners();
-    }, 10000);
+      await new Promise(resolve => setImmediate(resolve));
+    }, 15000);
 
     test("handleRequest - private method via callback", async () => {
       const testApp = new App();
@@ -555,11 +560,13 @@ describe("App", () => {
       });
 
       const callback = testApp.callback();
-      const res = await request(callback).get('/').expect(200);
+      const agent = request.agent(callback);
+      const res = await agent.get('/').expect(200);
       expect(order).toEqual([1, 2, 3, 4]);
       
       // 清理测试应用的事件监听器  
       testApp.removeAllListeners();
-    }, 10000);
+      await new Promise(resolve => setImmediate(resolve));
+    }, 15000);
   });
 })

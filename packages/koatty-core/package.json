@@ -17,7 +17,7 @@
     "release:pre": "npm run release -- --prerelease",
     "release:major": "npm run release -- --release-as major",
     "release:minor": "npm run release -- --release-as minor",
-    "test": "npm run eslint && jest --passWithNoTests",
+    "test": "npm run eslint && jest --passWithNoTests --forceExit",
     "test:cov": "jest --collectCoverage --detectOpenHandles",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },

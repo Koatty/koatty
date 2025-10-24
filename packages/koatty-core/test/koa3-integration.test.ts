@@ -5,6 +5,7 @@
  */
 
 import Koa from 'koa';
+import request from 'supertest';
 import { App } from './app';
 import { KoattyContext } from '../src/Context';
 
@@ -142,23 +143,22 @@ describe('Koa 3.0 Integration Tests', () => {
       expect(callback).toBeInstanceOf(Function);
     });
 
-    test('should handle request with callback', (done) => {
-      app.use(async (ctx: any) => {
+    test('should handle request with callback', async () => {
+      const testApp = new App();
+      testApp.use(async (ctx: any) => {
         ctx.body = 'Hello Koa 3';
       });
 
-      const mockReq = { headers: {}, url: '/', method: 'GET' };
-      const mockRes = { 
-        setHeader: jest.fn(),
-        end: jest.fn((data) => {
-          expect(data).toContain('Hello Koa 3');
-          done();
-        })
-      };
+      const callback = testApp.callback();
+      const agent = request.agent(callback);
+      const res = await agent.get('/');
       
-      const callback = app.callback();
-      callback(mockReq as any, mockRes as any);
-    });
+      expect(res.status).toBe(200);
+      expect(res.text).toContain('Hello Koa 3');
+      
+      testApp.removeAllListeners();
+      await new Promise(resolve => setImmediate(resolve));
+    }, 15000);
   });
 
   describe('Error Handling', () => {
