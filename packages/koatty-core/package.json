@@ -1,6 +1,6 @@
 {
   "name": "koatty_core",
-  "version": "1.19.0-6",
+  "version": "1.20.0-beta.1",
   "description": "Koatty framework core",
   "scripts": {
     "build": "npm run build:js && npm run build:dts && npm run build:doc && npm run build:cp && npm run build:fix",
@@ -32,7 +32,7 @@
     "url": "git+https://github.com/koatty/koatty_core.git"
   },
   "engines": {
-    "node": ">10.0.0"
+    "node": ">=18.0.0"
   },
   "author": "richenlin@gmail.com",
   "license": "BSD-3-Clause",
@@ -62,7 +62,7 @@
     "husky": "^4.x.x",
     "jest": "^29.x.x",
     "jest-html-reporters": "^3.x.x",
-    "koa": "^2.x.x",
+    "koa": "^3.0.0",
     "reflect-metadata": "^0.x.x",
     "rollup": "^4.x.x",
     "rollup-plugin-delete": "^2.x.x",
@@ -83,6 +83,7 @@
     "on-finished": "^2.4.1"
   },
   "peerDependencies": {
+    "koa": "^2.16.0 || ^3.0.0",
     "koatty_container": "^1.x.x",
     "koatty_lib": "^1.x.x",
     "koatty_logger": "^2.x.x"
