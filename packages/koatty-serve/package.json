@@ -98,7 +98,7 @@
     "koatty_core": "workspace:*",
     "koatty_exception": "workspace:*",
     "koatty_lib": "^1.x.x",
-    "koatty_logger": "^2.x.x",
+    "koatty_logger": "^2.5.0",
     "koatty_proto": "^1.x.x",
     "koatty_validation": "^1.x.x",
     "ws": "^8.18.3"

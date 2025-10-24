@@ -81,6 +81,7 @@
     "tslib": "^2.x.x",
     "typescript": "^5.x.x"
   },
+  "//": "NOTE: koa-graphql is deprecated. Migration to graphql-http planned for v2.2.0",
   "dependencies": {
     "@koa/router": "^14.0.0",
     "fast-querystring": "^1.1.2",
@@ -93,8 +94,8 @@
     "koatty_core": "workspace:*",
     "koatty_exception": "workspace:*",
     "koatty_graphql": "^1.x.x",
-    "koatty_lib": "^1.x.x",
-    "koatty_logger": "^2.x.x",
+    "koatty_lib": "^1.4.3",
+    "koatty_logger": "^2.5.0",
     "koatty_proto": "^1.x.x",
     "koatty_validation": "^1.6.1",
     "lru-cache": "^11.1.0",
