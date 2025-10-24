@@ -1,6 +1,6 @@
 {
   "name": "koatty_exception",
-  "version": "1.8.1-0",
+  "version": "2.0.0",
   "description": "Exception handler for koatty.",
   "scripts": {
     "build": "npm run build:js && npm run build:dts && npm run build:doc && npm run build:cp && npm run build:fix",
