@@ -18,12 +18,15 @@ import { DefaultLogger as Logger } from "koatty_logger";
 import { Project } from "ts-morph";
 import { MAPPING_KEY, MiddlewareDecoratorConfig } from "../params/mapping";
 import {
+  FunctionValidator,
   PARAM_CHECK_KEY, PARAM_RULE_KEY, PARAM_TYPE_KEY,
-  paramterTypes, ValidOtpions, ValidRules
+  paramterTypes, ValidOtpions, ValidRules,
 } from "koatty_validation";
 import { RouterMiddlewareManager } from "../middleware/manager";
 import { PayloadOptions } from "../payload/interface";
-
+import { convertParamsType, ClassValidator, plainToClass } from "koatty_validation";
+import { bodyParser } from "../payload/payload";
+import { Exception } from "koatty_exception";
 /**
  * Parameter source type enumeration for efficient parameter extraction
  * 
@@ -810,7 +813,6 @@ export function createFastPathHandler(
   scenario: FastPathScenario, 
   params: ParamMetadata[]
 ): FastPathHandler | null {
-  const { convertParamsType, ClassValidator, plainToClass } = require('koatty_validation');
   
   switch (scenario) {
     case FastPathScenario.SINGLE_QUERY_NO_VALIDATION: {
@@ -848,7 +850,6 @@ export function createFastPathHandler(
       
       // 返回异步处理器
       return async (ctx: any) => {
-        const { bodyParser } = require('../payload/payload');
         const body = await bodyParser(ctx, param.options);
         
         let validatedValue;
@@ -905,7 +906,6 @@ export function createFastPathHandler(
  * @internal
  */
 export function compileTypeConverter(type: string): ((value: any) => any) | null {
-  const { convertParamsType } = require('koatty_validation');
   const normalizedType = type.toLowerCase();
   
   // String type doesn't need conversion
@@ -1066,8 +1066,6 @@ export function compileValidator(
   rule: Function | ValidRules | ValidRules[], 
   options?: ValidOtpions
 ): (value: any) => void {
-  const { FunctionValidator, Exception } = require('koatty_validation');
-  const { Helper } = require('koatty_lib');
   
   // If rule is a custom function validator
   if (Helper.isFunction(rule)) {

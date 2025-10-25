@@ -79,7 +79,8 @@ export class GraphQLRouter implements KoattyRouter {
     try {
       // Add depth limit if configured
       if (this.options.ext?.depthLimit) {
-        const depthLimit = require('graphql-depth-limit');
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const { depthLimit } = require('graphql-depth-limit');
         validationRules.push(
           depthLimit(
             this.options.ext.depthLimit,
@@ -91,6 +92,7 @@ export class GraphQLRouter implements KoattyRouter {
 
       // Add complexity limit if configured
       if (this.options.ext?.complexityLimit) {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         const { createComplexityLimitRule } = require('graphql-query-complexity');
         validationRules.push(
           createComplexityLimitRule(this.options.ext.complexityLimit, {
