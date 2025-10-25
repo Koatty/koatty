@@ -24,50 +24,126 @@ export enum ProtocolType {
 /**
  * Path normalization cache for performance optimization
  */
+/**
+ * 缓存条目接口
+ */
+interface CacheEntry {
+  value: string;
+  lastAccess: number;
+}
+
+/**
+ * 高性能 LRU 缓存 - 使用延迟重组策略
+ * - 使用访问时间戳代替物理移动
+ * - 定期批量重组，避免频繁的 delete + set 操作
+ * - 适合高频读取场景
+ */
 class PathNormalizationCache {
-  private cache = new Map<string, string>();
+  private cache = new Map<string, CacheEntry>();
   private readonly maxSize: number;
   private totalHits = 0;
   private totalAccesses = 0;
+  private accessCount = 0;
+  private readonly REORG_THRESHOLD = 1000; // 每 1000 次访问重组一次
 
   constructor(maxSize = 10000) {
     this.maxSize = maxSize;
   }
 
+  /**
+   * 获取缓存值
+   * - 使用时间戳更新访问记录
+   * - 达到阈值时批量重组
+   */
   get(path: string): string | undefined {
     this.totalAccesses++;
-    const normalized = this.cache.get(path);
-    if (normalized) {
+    this.accessCount++;
+    
+    const entry = this.cache.get(path);
+    if (entry) {
       this.totalHits++;
-      // Move to end for simple LRU (Map maintains insertion order)
-      this.cache.delete(path);
-      this.cache.set(path, normalized);
+      
+      // ✅ 只更新时间戳，不移动位置
+      entry.lastAccess = this.accessCount;
+      
+      // ✅ 定期重组而不是每次都重组
+      if (this.accessCount >= this.REORG_THRESHOLD) {
+        this.reorganize();
+      }
+      
+      return entry.value;
     }
-    return normalized;
+    return undefined;
   }
 
+  /**
+   * 设置缓存值
+   */
   set(path: string, normalized: string): void {
-    if (this.cache.has(path)) {
-      // Update existing entry
-      this.cache.delete(path);
-      this.cache.set(path, normalized);
+    const existing = this.cache.get(path);
+    
+    if (existing) {
+      // ✅ 直接更新，不删除
+      existing.value = normalized;
+      existing.lastAccess = this.accessCount;
       return;
     }
 
+    // 检查容量
     if (this.cache.size >= this.maxSize) {
-      // Remove oldest entry (first in Map)
-      const firstKey = this.cache.keys().next().value;
-      if (firstKey) {
-        this.cache.delete(firstKey);
+      this.evictLRU();
+    }
+    
+    // 添加新条目
+    this.cache.set(path, { 
+      value: normalized, 
+      lastAccess: this.accessCount 
+    });
+  }
+
+  /**
+   * 驱逐最少使用的条目
+   */
+  private evictLRU(): void {
+    let oldestKey: string | null = null;
+    let oldestAccess = Infinity;
+    
+    // ✅ 找到最少访问的条目
+    for (const [key, entry] of this.cache) {
+      if (entry.lastAccess < oldestAccess) {
+        oldestAccess = entry.lastAccess;
+        oldestKey = key;
       }
     }
-    this.cache.set(path, normalized);
+    
+    if (oldestKey) {
+      this.cache.delete(oldestKey);
+    }
+  }
+
+  /**
+   * 定期重组：重置访问计数，避免溢出
+   */
+  private reorganize(): void {
+    this.accessCount = 0;
+    
+    // ✅ 将所有访问时间重置为相对值
+    const entries = Array.from(this.cache.entries())
+      .sort((a, b) => a[1].lastAccess - b[1].lastAccess);
+    
+    this.cache.clear();
+    
+    entries.forEach(([key, entry], index) => {
+      entry.lastAccess = index;
+      this.cache.set(key, entry);
+    });
   }
 
   clear(): void {
     this.cache.clear();
     this.totalHits = 0;
     this.totalAccesses = 0;
+    this.accessCount = 0;
   }
 
   getStats() {
@@ -76,7 +152,8 @@ class PathNormalizationCache {
       maxSize: this.maxSize,
       hitRate: this.totalAccesses > 0 ? this.totalHits / this.totalAccesses : 0,
       totalHits: this.totalHits,
-      totalAccesses: this.totalAccesses
+      totalAccesses: this.totalAccesses,
+      utilizationRate: this.cache.size / this.maxSize
     };
   }
 }
@@ -186,10 +263,8 @@ export class MetricsCollector {
   private readonly startTime: number;
   private memoryMonitorTimer: NodeJS.Timeout | null = null;
   
-  // Pre-compiled regex patterns for better performance
-  private static readonly UUID_PATTERN = /\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi;
-  private static readonly OBJECTID_PATTERN = /\/[a-f0-9]{24}/g;
-  private static readonly NUMERIC_ID_PATTERN = /\/\d+/g;
+  // ✅ 合并为单个正则表达式，一次扫描完成所有替换
+  private static readonly ID_PATTERN = /\/(?:([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})|([a-f0-9]{24})|(\d+))/gi;
 
   constructor(meterProvider: MeterProvider, serviceName: string) {
     this.serviceName = serviceName;
@@ -335,18 +410,24 @@ export class MetricsCollector {
     
     // Check cache first
     const cached = this.pathCache.get(path);
-    if (cached) {
+    if (cached !== undefined) {
       return cached;
     }
     
-    // Remove query parameters
-    const cleanPath = path.split('?')[0];
+    // ✅ 使用 indexOf 替代 split，避免创建数组
+    const queryIndex = path.indexOf('?');
+    const cleanPath = queryIndex === -1 ? path : path.substring(0, queryIndex);
     
-    // Apply normalization patterns (order matters: more specific first)
-    const normalized = cleanPath
-      .replace(MetricsCollector.UUID_PATTERN, '/:uuid')
-      .replace(MetricsCollector.OBJECTID_PATTERN, '/:objectid')
-      .replace(MetricsCollector.NUMERIC_ID_PATTERN, '/:id');
+    // ✅ 单次正则扫描替换所有ID模式
+    const normalized = cleanPath.replace(
+      MetricsCollector.ID_PATTERN,
+      (match, uuid, objectid, numeric) => {
+        if (uuid) return '/:uuid';
+        if (objectid) return '/:objectid';
+        if (numeric) return '/:id';
+        return match;
+      }
+    );
     
     // Cache the result
     this.pathCache.set(path, normalized);

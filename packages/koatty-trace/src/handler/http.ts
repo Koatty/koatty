@@ -51,43 +51,23 @@ export class HttpHandler extends BaseHandler implements Handler {
     const timeout = ext.timeout || 10000;
 
     this.commonPreHandle(ctx, ext);
+    
     ctx?.res?.once('finish', () => {
       const now = Date.now();
       const msg = `{"action":"${ctx.method}","status":"${ctx.status}","startTime":"${ctx.startTime}","duration":"${(now - ctx.startTime) || 0}","requestId":"${ctx.requestId}","endTime":"${now}","path":"${ctx.originalPath || '/'}"}`;
       this.commonPostHandle(ctx, ext, msg);
-      // ctx = null;
     });
 
-    // try /catch
-    const response: any = ctx.res;
     try {
-      if (!ext.terminated) {
-        response.timeout = new Promise((_, reject) => {
-          setTimeout(() => {
-            reject(new Error('Deadline exceeded')); // 抛出超时异常
-          }, timeout);
-        });
+      // ✅ 使用基类的通用超时处理方法
+      await this.handleWithTimeout(ctx, next, ext, timeout);
 
-        await Promise.race([next(), response.timeout]).then(() => {
-          clearTimeout(response.timeout);
-        }).catch((err) => {
-          clearTimeout(response.timeout);
-          throw err;
-        });
-      }
-
-      if (ctx.body !== undefined && ctx.status === 404) {
-        ctx.status = 200;
-      }
-
-      if (ctx.status >= 400) {
-        throw new Exception(ctx.message, 1, ctx.status);
-      }
+      // ✅ 使用基类的通用状态检查方法
+      this.checkAndSetStatus(ctx);
+      
       return respond(ctx, ext);
     } catch (err: any) {
       return this.handleError(err, ctx, ext);
-    } finally {
-      clearTimeout(response.timeout);
     }
   }
 }

@@ -190,6 +190,14 @@ export function Trace(options: TraceOptions, app: Koatty) {
     });
   }
 
+  // ✅ 创建静态配置对象（只创建一次）
+  const staticExt = {
+    debug: app.appDebug,
+    timeout: options.timeout,
+    encoding: options.encoding,
+    globalErrorHandler: geh,
+  };
+
   return async (ctx: KoattyContext, next: KoattyNext) => {
     Helper.define(ctx, 'startTime', Date.now());
 
@@ -209,9 +217,7 @@ export function Trace(options: TraceOptions, app: Koatty) {
     if (options.enableTrace && tracer) {
       const serviceName = app.name || "unknownKoattyProject";
       spanManager.createSpan(tracer, ctx, serviceName);
-      app.once(AppEvent.appStop, () => {
-        spanManager?.endSpan();
-      })
+      // Note: Span cleanup is handled by SpanManager.destroy() on app stop
     }
 
     // Record topology if enabled
@@ -223,15 +229,11 @@ export function Trace(options: TraceOptions, app: Koatty) {
       topology.recordServiceDependency(app.name, serviceName);
     }
 
-    const ext = {
-      debug: app.appDebug,
-      timeout: options.timeout,
-      encoding: options.encoding,
-      requestId,
-      terminated: false,
-      spanManager,
-      globalErrorHandler: geh,
-    };
+    // ✅ 使用原型链继承静态配置，只添加动态属性
+    const ext = Object.create(staticExt) as extensionOptions;
+    ext.requestId = requestId;
+    ext.terminated = false;
+    ext.spanManager = spanManager;
 
     // Handle async hooks if enabled
     if (options.asyncHooks && (ctx.req || ctx.res)) {

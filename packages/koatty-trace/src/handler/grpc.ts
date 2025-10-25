@@ -61,49 +61,61 @@ export class GrpcHandler extends BaseHandler implements Handler {
       const status = StatusCodeConvert(ctx.status);
       const msg = `{"action":"${ctx.method}","status":"${status}","startTime":"${ctx.startTime}","duration":"${(now - ctx.startTime) || 0}","requestId":"${ctx.requestId}","endTime":"${now}","path":"${ctx.originalPath}"}`;
       this.commonPostHandle(ctx, ext, msg);
-      // ctx = null;
     });
     (<IRpcServerCallImpl<any, any>>ctx?.rpc?.call).once("error", (err) => {
       this.handleError(err, ctx, ext);
     });
 
-    // try /catch
-    const response: any = {};
-
     try {
-      if (!ext.terminated) {
-        response.timeout = new Promise((_, reject) => {
-          setTimeout(() => {
-            reject(new Error('Deadline exceeded')); // 抛出超时异常
-          }, timeout);
-        });
+      // ✅ 使用基类的通用超时处理方法
+      await this.handleWithTimeout(ctx, next, ext, timeout);
 
-        await Promise.race([next(), response.timeout]).then(() => {
-          clearTimeout(response.timeout);
-        }).catch((err) => {
-          clearTimeout(response.timeout);
-          throw err;
-        });
-      }
+      // ✅ 使用基类的通用状态检查方法
+      this.checkAndSetStatus(ctx);
 
-      if (ctx.body !== undefined && ctx.status === 404) {
-        ctx.status = 200;
-      }
-      if (ctx.status >= 400) {
-        throw new Exception(ctx.message, 0, ctx.status);
-      }
-
-      // Handle response stream compression
+      // ✅ 安全的流压缩处理
       if (compression !== 'none' && ctx.body instanceof Stream) {
-        const compressStream = compression === 'gzip' ? 
-          zlib.createGzip({ level: 6 }) : zlib.createBrotliCompress({
-            params: {
-              [zlib.constants.BROTLI_PARAM_QUALITY]: 4
-            }
+        try {
+          const compressStream = compression === 'gzip' ? 
+            zlib.createGzip({ level: 6 }) : zlib.createBrotliCompress({
+              params: {
+                [zlib.constants.BROTLI_PARAM_QUALITY]: 4
+              }
+            });
+          
+          // 监听压缩流的错误
+          compressStream.once('error', (compressErr) => {
+            Logger.Error('gRPC compression stream error:', compressErr);
+            // 如果压缩失败,使用原始body
+            ctx.body = ctx.body;
           });
-        ctx.body = ctx.body.pipe(compressStream);
+          
+          // 监听源流的错误
+          (ctx.body as Stream).once('error', (streamErr) => {
+            Logger.Error('gRPC source stream error:', streamErr);
+            compressStream.destroy();
+          });
+          
+          ctx.body = (ctx.body as Stream).pipe(compressStream);
+        } catch (pipeErr) {
+          Logger.Error('gRPC stream pipe error:', pipeErr);
+          // 如果pipe失败,继续使用原始body
+        }
       }
-      ctx.rpc.callback(null, ctx.body);
+      
+      // ✅ 安全的gRPC回调
+      try {
+        ctx.rpc.callback(null, ctx.body);
+      } catch (callbackErr) {
+        Logger.Error('gRPC callback error:', callbackErr);
+        // 尝试发送错误响应
+        try {
+          ctx.rpc.callback(callbackErr, null);
+        } catch (fallbackErr) {
+          Logger.Error('gRPC fallback callback error:', fallbackErr);
+        }
+      }
+      
       return null;
     } catch (err: any) {
       return this.handleError(err, ctx, ext);

@@ -30,16 +30,18 @@ const eventMethods = {
   remove: ['off', 'removeListener']
 }
 
-// Lightweight wrapper cache
-const wrapperCache = new Map<string, Function>();
+// ✅ 使用 WeakMap 存储 emitter -> { resource, wrappedHandlers } 映射
+const emitterResourceMap = new WeakMap<EventEmitter, {
+  resource: AsyncResource;
+  wrappedHandlers: WeakMap<Function, Function>;
+}>();
 
 export function createAsyncResource(key = Symbol('koatty-tracer').toString()):
  AsyncResource & { emitDestroy: () => void } {
   const resource = new AsyncResource(key);
   
-  // Clean up wrapper cache on destroy
+  // ✅ WeakMap 会自动清理，无需手动 clear
   resource.emitDestroy = () => {
-    wrapperCache.clear();
     AsyncResource.prototype.emitDestroy.call(resource);
     return resource;
   };
@@ -56,28 +58,48 @@ export function createAsyncResource(key = Symbol('koatty-tracer').toString()):
  * @param {AsyncResource} asyncResource
  */
 export function wrapEmitter(emitter: EventEmitter, asyncResource: AsyncResource) {
-  for (const method of eventMethods.add) {
-    wrapEmitterMethod(emitter, method, (original: Function) => function (name: string, handler: (...args: any[]) => void) {
-      const cacheKey = `${name}:${handler.toString()}`;
-      if (!wrapperCache.has(cacheKey)) {
-        const wrappedHandler = (...args: any[]) => {
-          asyncResource.runInAsyncScope(handler, emitter, ...args);
-        };
-        wrapperCache.set(cacheKey, wrappedHandler);
-        return original.call(this, name, wrappedHandler);
-      }
-      return original.call(this, name, handler);
-    });
+  // ✅ 防止重复包装
+  if (emitterResourceMap.has(emitter)) {
+    return;
   }
 
-  for (const method of eventMethods.remove) {
-    wrapEmitterMethod(emitter, method, (original: Function) => function (name: string, handler: (...args: any[]) => void) {
-      const cacheKey = `${name}:${handler.toString()}`;
-      if (wrapperCache.has(cacheKey)) {
-        wrapperCache.delete(cacheKey);
+  // ✅ 为此 emitter 创建独立的 handler 映射
+  const wrappedHandlers = new WeakMap<Function, Function>();
+  emitterResourceMap.set(emitter, { resource: asyncResource, wrappedHandlers });
+
+  // 包装 add 方法
+  for (const method of eventMethods.add) {
+    wrapEmitterMethod(emitter, method, (original: Function) => 
+      function (this: EventEmitter, name: string, handler: (...args: any[]) => void) {
+        // ✅ 使用 WeakMap 存储 handler -> wrappedHandler 映射
+        let wrappedHandler = wrappedHandlers.get(handler);
+        
+        if (!wrappedHandler) {
+          wrappedHandler = (...args: any[]) => {
+            asyncResource.runInAsyncScope(handler, emitter, ...args);
+          };
+          wrappedHandlers.set(handler, wrappedHandler);
+        }
+        
+        return original.call(this, name, wrappedHandler);
       }
-      return original.call(this, name, handler);
-    });
+    );
+  }
+
+  // 包装 remove 方法
+  for (const method of eventMethods.remove) {
+    wrapEmitterMethod(emitter, method, (original: Function) => 
+      function (this: EventEmitter, name: string, handler: (...args: any[]) => void) {
+        const wrappedHandler = wrappedHandlers.get(handler);
+        
+        if (wrappedHandler) {
+          wrappedHandlers.delete(handler);
+          return original.call(this, name, wrappedHandler);
+        }
+        
+        return original.call(this, name, handler);
+      }
+    );
   }
 }
 

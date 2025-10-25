@@ -14,6 +14,7 @@ import { W3CTraceContextPropagator } from "@opentelemetry/core";
 import { KoattyContext } from "koatty_core";
 import { DefaultLogger as logger } from "koatty_logger";
 import { TraceOptions } from "../trace/itrace";
+import { AtomicCounter } from './atomicCounter';
 
 /**
  * Interface for active span tracking
@@ -45,19 +46,21 @@ interface ActiveSpanEntry {
 export class SpanManager {
   private readonly activeSpans = new Map<string, ActiveSpanEntry>();
   private span: Span | undefined;
+  // ✅ 添加 WeakMap 用于存储 ctx -> span 映射
+  private readonly contextSpans = new WeakMap<KoattyContext, Span>();
   private readonly propagator: W3CTraceContextPropagator;
   private readonly options: NonNullable<TraceOptions['opentelemetryConf']>;
   private readonly cleanupInterval: NodeJS.Timeout;
   private readonly startTime: number;
   private isDestroyed = false;
 
-  // Performance counters
-  private stats = {
-    spansCreated: 0,
-    spansEnded: 0,
-    spansTimedOut: 0,
-    memoryEvictions: 0,
-    errors: 0
+  // ✅ 替换统计计数器为 AtomicCounter
+  private readonly stats = {
+    spansCreated: new AtomicCounter(),
+    spansEnded: new AtomicCounter(),
+    spansTimedOut: new AtomicCounter(),
+    memoryEvictions: new AtomicCounter(),
+    errors: new AtomicCounter()
   };
 
   constructor(options: TraceOptions) {
@@ -111,12 +114,16 @@ export class SpanManager {
       if (typeof logger.debug === 'function' && this.activeSpans.size > 0) {
         logger.debug('SpanManager stats:', {
           activeSpans: this.activeSpans.size,
-          ...this.stats,
+          spansCreated: this.stats.spansCreated.get(),
+          spansEnded: this.stats.spansEnded.get(),
+          spansTimedOut: this.stats.spansTimedOut.get(),
+          memoryEvictions: this.stats.memoryEvictions.get(),
+          errors: this.stats.errors.get(),
           memoryUsage: Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + 'MB'
         });
       }
     } catch (error) {
-      this.stats.errors++;
+      this.stats.errors.increment();
       logger.error('Error during periodic cleanup:', error);
     }
   }
@@ -150,7 +157,7 @@ export class SpanManager {
 
     for (const [traceId] of sortedEntries) {
       this.forceEndSpan(traceId, 'memory_pressure');
-      this.stats.memoryEvictions++;
+      this.stats.memoryEvictions.increment();
     }
 
     if (sortedEntries.length > 0) {
@@ -172,12 +179,12 @@ export class SpanManager {
       this.activeSpans.delete(traceId);
       
       if (reason === 'timeout') {
-        this.stats.spansTimedOut++;
+        this.stats.spansTimedOut.increment();
       }
       
       logger.debug(`Span force-ended: ${traceId}, reason: ${reason}`);
     } catch (error) {
-      this.stats.errors++;
+      this.stats.errors.increment();
       logger.error(`Error force-ending span ${traceId}:`, error);
     }
   }
@@ -192,6 +199,12 @@ export class SpanManager {
     }
 
     try {
+      // ✅ 检查是否已存在 span (幂等性)
+      if (this.contextSpans.has(ctx)) {
+        logger.warn('Span already exists for this context');
+        return this.contextSpans.get(ctx);
+      }
+
       // Apply sampling
       const shouldSample = Math.random() < (this.options.samplingRate || 1.0);
       if (!shouldSample) {
@@ -201,28 +214,33 @@ export class SpanManager {
       // Validate tracer
       if (!tracer?.startSpan) {
         logger.error('Invalid tracer provided to createSpan');
-        this.stats.errors++;
+        this.stats.errors.increment();
         return undefined;
       }
 
       // Create span
-      this.span = tracer.startSpan(serviceName, {
+      const span = tracer.startSpan(serviceName, {
         attributes: {
           'service.name': serviceName,
           'request.id': ctx.requestId || 'unknown'
         }
       });
 
-      this.stats.spansCreated++;
+      // ✅ 存储到 WeakMap
+      this.contextSpans.set(ctx, span);
+      // 保持向后兼容，同时设置 this.span
+      this.span = span;
       
-      // Setup timeout and tracking
-      this.setupSpanTimeout(ctx);
-      this.injectContext(ctx);
-      this.setBasicAttributes(ctx);
+      this.stats.spansCreated.increment();
+      
+      // ✅ 传递 span 参数
+      this.setupSpanTimeout(ctx, span);
+      this.injectContext(ctx, span);
+      this.setBasicAttributes(ctx, span);
 
-      return this.span;
+      return span;
     } catch (error) {
-      this.stats.errors++;
+      this.stats.errors.increment();
       logger.error('Error creating span:', error);
       return undefined;
     }
@@ -230,18 +248,25 @@ export class SpanManager {
 
   /**
    * Get current span safely
+   * @param ctx - KoattyContext to get span for (optional for backward compatibility)
    */
-  getSpan(): Span | undefined {
+  getSpan(ctx?: KoattyContext): Span | undefined {
+    if (ctx) {
+      return this.contextSpans.get(ctx);
+    }
+    // 向后兼容：如果没有传 ctx，返回 this.span
     return this.span;
   }
 
   /**
    * Setup span timeout with enhanced error handling
+   * @param ctx - KoattyContext
+   * @param span - Span instance
    */
-  setupSpanTimeout(ctx?: KoattyContext): void {
-    if (!this.options.spanTimeout || !this.span || this.isDestroyed) return;
+  setupSpanTimeout(ctx: KoattyContext, span: Span): void {
+    if (!this.options.spanTimeout || !span || this.isDestroyed) return;
 
-    const traceId = this.span.spanContext().traceId;
+    const traceId = span.spanContext().traceId;
     
     // Check if span already exists (avoid duplicates)
     if (this.activeSpans.has(traceId)) {
@@ -258,10 +283,10 @@ export class SpanManager {
 
       // Add to active spans with atomic operation
       this.activeSpans.set(traceId, { 
-        span: this.span!,
+        span,
         timer,
         createdAt: Date.now(),
-        requestId: ctx?.requestId
+        requestId: ctx.requestId
       });
 
       // Check memory limits after adding (this ensures we check the current size)
@@ -273,7 +298,7 @@ export class SpanManager {
       }
       // Remove from activeSpans if it was added
       this.activeSpans.delete(traceId);
-      this.stats.errors++;
+      this.stats.errors.increment();
       logger.error('Failed to setup span timeout:', error);
       throw error;
     }
@@ -281,13 +306,15 @@ export class SpanManager {
 
   /**
    * Inject context with error handling
+   * @param ctx - KoattyContext
+   * @param span - Span instance
    */
-  injectContext(ctx: KoattyContext): void {
-    if (!this.span || this.isDestroyed) return;
+  injectContext(ctx: KoattyContext, span: Span): void {
+    if (!span || this.isDestroyed) return;
     
     try {
       const carrier: { [key: string]: string } = {};
-      context.with(trace.setSpan(context.active(), this.span), () => {
+      context.with(trace.setSpan(context.active(), span), () => {
         this.propagator.inject(context.active(), carrier, defaultTextMapSetter);
         Object.entries(carrier).forEach(([key, value]) => {
           if (ctx.set && typeof ctx.set === 'function') {
@@ -296,16 +323,18 @@ export class SpanManager {
         });
       });
     } catch (error) {
-      this.stats.errors++;
+      this.stats.errors.increment();
       logger.error('Error injecting context:', error);
     }
   }
 
   /**
    * Set basic attributes with validation
+   * @param ctx - KoattyContext
+   * @param span - Span instance
    */
-  setBasicAttributes(ctx: KoattyContext): void {
-    if (!this.span || this.isDestroyed) return;
+  setBasicAttributes(ctx: KoattyContext, span: Span): void {
+    if (!span || this.isDestroyed) return;
     
     try {
       // Set safe attributes
@@ -321,35 +350,38 @@ export class SpanManager {
         safeAttributes["http.route"] = ctx.path;
       }
 
-      this.span.setAttributes(safeAttributes);
+      span.setAttributes(safeAttributes);
 
       // Apply custom attributes if provided
       if (this.options.spanAttributes && typeof this.options.spanAttributes === 'function') {
         try {
           const customAttrs = this.options.spanAttributes(ctx);
           if (customAttrs && typeof customAttrs === 'object') {
-            this.span.setAttributes(customAttrs);
+            span.setAttributes(customAttrs);
           }
         } catch (error) {
           logger.error('Error applying custom span attributes:', error);
         }
       }
     } catch (error) {
-      this.stats.errors++;
+      this.stats.errors.increment();
       logger.error('Error setting basic attributes:', error);
     }
   }
 
   /**
    * Set span attributes safely
+   * @param ctx - KoattyContext
+   * @param attributes - SpanAttributes to set
    */
-  setSpanAttributes(attributes: SpanAttributes): this {
-    if (!this.span || this.isDestroyed) return this;
+  setSpanAttributes(ctx: KoattyContext, attributes: SpanAttributes): this {
+    const span = this.contextSpans.get(ctx);
+    if (!span || this.isDestroyed) return this;
     
     try {
-      this.span.setAttributes(attributes);
+      span.setAttributes(attributes);
     } catch (error) {
-      this.stats.errors++;
+      this.stats.errors.increment();
       logger.error('Error setting span attributes:', error);
     }
     return this;
@@ -357,25 +389,31 @@ export class SpanManager {
 
   /**
    * Add span event safely
+   * @param ctx - KoattyContext
+   * @param name - Event name
+   * @param attributes - Optional event attributes
    */
-  addSpanEvent(name: string, attributes?: SpanAttributes): void {
-    if (!this.span || this.isDestroyed) return;
+  addSpanEvent(ctx: KoattyContext, name: string, attributes?: SpanAttributes): void {
+    const span = this.contextSpans.get(ctx);
+    if (!span || this.isDestroyed) return;
     
     try {
-      this.span.addEvent(name, attributes);
+      span.addEvent(name, attributes);
     } catch (error) {
-      this.stats.errors++;
+      this.stats.errors.increment();
       logger.error('Error adding span event:', error);
     }
   }
 
   /**
    * End span with proper cleanup
+   * @param ctx - KoattyContext
    */
-  endSpan(): void {
-    if (!this.span || this.isDestroyed) return;
+  endSpan(ctx: KoattyContext): void {
+    const span = this.contextSpans.get(ctx);
+    if (!span || this.isDestroyed) return;
     
-    const traceId = this.span.spanContext().traceId;
+    const traceId = span.spanContext().traceId;
     
     try {
       // Clean up from active spans
@@ -386,14 +424,19 @@ export class SpanManager {
       }
 
       // End the span
-      this.span.end();
-      this.stats.spansEnded++;
+      span.end();
+      this.stats.spansEnded.increment();
       
-      // Clear current span reference
-      this.span = undefined;
+      // Clear from WeakMap (context will be GC'd automatically)
+      this.contextSpans.delete(ctx);
+      
+      // Clear current span reference if it matches
+      if (this.span === span) {
+        this.span = undefined;
+      }
       
     } catch (error) {
-      this.stats.errors++;
+      this.stats.errors.increment();
       logger.error("SpanManager.endSpan error:", error);
     }
   }
@@ -403,7 +446,11 @@ export class SpanManager {
    */
   getStats() {
     return {
-      ...this.stats,
+      spansCreated: this.stats.spansCreated.get(),
+      spansEnded: this.stats.spansEnded.get(),
+      spansTimedOut: this.stats.spansTimedOut.get(),
+      memoryEvictions: this.stats.memoryEvictions.get(),
+      errors: this.stats.errors.get(),
       activeSpansCount: this.activeSpans.size,
       uptime: Date.now() - this.startTime,
       isDestroyed: this.isDestroyed,
@@ -442,3 +489,4 @@ export class SpanManager {
     }
   }
 }
+

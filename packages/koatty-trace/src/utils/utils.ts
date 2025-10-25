@@ -50,3 +50,6 @@ export function getRequestId(ctx: KoattyContext, options: TraceOptions): string 
 export function getTraceId(options?: TraceOptions) {
   return Helper.isFunction(options?.idFactory) ? options.idFactory() : randomUUID();
 }
+
+// Export TimeoutController
+export { TimeoutController } from './timeout';

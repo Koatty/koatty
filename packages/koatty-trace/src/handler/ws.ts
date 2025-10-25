@@ -57,42 +57,45 @@ export class WsHandler extends BaseHandler implements Handler {
     const useCompression = wsExtensions.includes('permessage-deflate');
     
     this.commonPreHandle(ctx, ext);
+    
     ctx?.res?.once("finish", () => {
       const now = Date.now();
       const msg = `{"action":"${ctx.method}","status":"${ctx.status}","startTime":"${ctx.startTime}","duration":"${(now - ctx.startTime) || 0}","requestId":"${ctx.requestId}","endTime":"${now}","path":"${ctx.originalPath || '/'}"}`;
       this.commonPostHandle(ctx, ext, msg);
-      // ctx = null;
     });
 
-    // try /catch
-    const response: any = ctx.res;
     try {
-      if (!ext.terminated) {
-        response.timeout = new Promise((_, reject) => {
-          setTimeout(() => {
-            reject(new Error('Deadline exceeded'));
-          }, timeout);
-        });
+      // ✅ 使用基类的通用超时处理方法
+      await this.handleWithTimeout(ctx, next, ext, timeout);
 
-        await Promise.race([next(), response.timeout]).then(() => {
-          clearTimeout(response.timeout);
-        }).catch((err) => {
-          clearTimeout(response.timeout);
-          throw err;
-        });
-      }
-
-      if (ctx.body !== undefined && ctx.status === 404) {
-        ctx.status = 200;
-      }
-      if (ctx.status >= 400) {
-        throw new Exception(ctx.message, 1, ctx.status);
-      }
+      // ✅ 使用基类的通用状态检查方法
+      this.checkAndSetStatus(ctx);
       
-      // Only send if connection is open and body exists
+      // ✅ 安全的WebSocket发送 - 只在连接开启且有数据时发送
       if (ctx?.websocket?.readyState === 1 && !Helper.isTrueEmpty(ctx.body)) {
-        const sendOptions = useCompression ? { compress: true } : {};
-        ctx.websocket.send(inspect(ctx.body), sendOptions);
+        try {
+          const sendOptions = useCompression ? { compress: true } : {};
+          // 使用inspect安全转换,限制深度避免循环引用问题
+          const message = inspect(ctx.body, { 
+            depth: 10, 
+            breakLength: Infinity,
+            compact: true 
+          });
+          
+          // ✅ WebSocket send - 包装在try-catch中捕获同步错误
+          // 注意: 某些WebSocket实现支持回调,某些不支持,所以我们使用try-catch
+          ctx.websocket.send(message, sendOptions);
+          
+          // 监听WebSocket的error事件(如果还没有监听)
+          if (!ctx.websocket.listenerCount || ctx.websocket.listenerCount('error') === 0) {
+            ctx.websocket.once('error', (wsErr: Error) => {
+              Logger.Error('WebSocket error:', wsErr);
+            });
+          }
+        } catch (sendErr) {
+          Logger.Error('WebSocket send error:', sendErr);
+          // 不抛出异常,因为消息已经处理完成
+        }
       }
       return null;
     } catch (err: any) {

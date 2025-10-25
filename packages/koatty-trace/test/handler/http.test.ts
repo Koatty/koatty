@@ -67,8 +67,12 @@ describe('HttpHandler', () => {
         flushHeaders: jest.fn()
       },
       res: {
-        end: jest.fn(function(this: any, data?: any) {
+        end: jest.fn(function(this: any, data?: any, callback?: Function) {
           if (data) this.body = data;
+          // 模拟Node.js的res.end行为：异步调用callback
+          if (callback) {
+            setImmediate(() => callback());
+          }
           return this;
         }),
         once: jest.fn(),
@@ -120,7 +124,9 @@ describe('HttpHandler', () => {
     it('should handle successful request', async () => {
       await handler.handle(mockCtx, mockNext, mockExt);
       expect(mockNext).toHaveBeenCalled();
-      expect(mockCtx.res.end).toHaveBeenCalledWith('test response');
+      expect(mockCtx.res.end).toHaveBeenCalled();
+      const endCall = mockCtx.res.end.mock.calls[0];
+      expect(endCall[0]).toBe('test response');
     });
 
     it('should return error response on timeout', async () => {
@@ -161,7 +167,9 @@ describe('HttpHandler', () => {
     it('should handle JSON response', async () => {
       mockCtx.body = { key: 'value' };
       await handler.handle(mockCtx, mockNext, mockExt);
-      expect(mockCtx.res.end).toHaveBeenCalledWith(JSON.stringify({ key: 'value' }));
+      expect(mockCtx.res.end).toHaveBeenCalled();
+      const endCall = mockCtx.res.end.mock.calls[0];
+      expect(endCall[0]).toBe(JSON.stringify({ key: 'value' }));
     });
 
     describe('compressMiddleware', () => {

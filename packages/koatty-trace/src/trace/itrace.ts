@@ -161,6 +161,8 @@ export interface extensionOptions {
   timeout?: number,
   /** 编码格式 */
   encoding?: string,
+  /** 请求ID */
+  requestId?: string,
   /** 是否终止请求 */
   terminated?: boolean,
   /** OpenTelemetry Span对象，用于链路追踪 */

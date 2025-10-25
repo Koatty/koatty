@@ -14,6 +14,8 @@ import { Span } from '@opentelemetry/api';
 import { SemanticAttributes } from "@opentelemetry/semantic-conventions";
 import { extensionOptions } from "../trace/itrace";
 import { collectRequestMetrics } from '../opentelemetry/prometheus';
+import { TimeoutController } from "../utils/timeout";
+import { Exception } from "koatty_exception";
 
 
 export interface Handler {
@@ -40,6 +42,45 @@ export abstract class BaseHandler implements Handler {
     return catcher(ctx, err, ext);
   }
 
+  /**
+   * 通用超时处理包装器
+   * @param ctx - Koatty context
+   * @param next - Next middleware
+   * @param ext - Extension options
+   * @param timeout - Timeout in milliseconds
+   */
+  protected async handleWithTimeout(
+    ctx: KoattyContext,
+    next: Function,
+    ext: extensionOptions,
+    timeout: number
+  ): Promise<void> {
+    if (ext.terminated) {
+      return;
+    }
+
+    const timeoutCtrl = new TimeoutController();
+    try {
+      await Promise.race([next(), timeoutCtrl.createTimeout(timeout)]);
+    } finally {
+      timeoutCtrl.clear();
+    }
+  }
+
+  /**
+   * 检查并设置响应状态
+   * - 将404转为200(如果有body)
+   * - 状态>=400时抛出异常
+   */
+  protected checkAndSetStatus(ctx: KoattyContext): void {
+    if (ctx.body !== undefined && ctx.status === 404) {
+      ctx.status = 200;
+    }
+    if (ctx.status >= 400) {
+      throw new Exception(ctx.message, 1, ctx.status);
+    }
+  }
+
   private setSecurityHeaders(ctx: KoattyContext) {
     ctx.set('X-Content-Type-Options', 'nosniff');
     ctx.set('X-Frame-Options', 'DENY');
@@ -48,7 +89,8 @@ export abstract class BaseHandler implements Handler {
 
   private startTraceSpan(ctx: KoattyContext, ext: extensionOptions) {
     if (ext.spanManager) {
-      ext.spanManager.setSpanAttributes({
+      // ✅ 传递 ctx 参数
+      ext.spanManager.setSpanAttributes(ctx, {
         [SemanticAttributes.HTTP_URL]: ctx.originalUrl,
         [SemanticAttributes.HTTP_METHOD]: ctx.method
       });
@@ -57,13 +99,14 @@ export abstract class BaseHandler implements Handler {
 
   private endTraceSpan(ctx: KoattyContext, ext: extensionOptions, msg?: string) {
     if (ext.spanManager) {
-      ext.spanManager.setSpanAttributes({
+      // ✅ 传递 ctx 参数
+      ext.spanManager.setSpanAttributes(ctx, {
         [SemanticAttributes.HTTP_STATUS_CODE]: ctx.status,
         [SemanticAttributes.HTTP_METHOD]: ctx.method,
         [SemanticAttributes.HTTP_URL]: ctx.url
       });
-      ext.spanManager.addSpanEvent("request", { "message": msg });
-      ext.spanManager.endSpan();
+      ext.spanManager.addSpanEvent(ctx, "request", { "message": msg });
+      ext.spanManager.endSpan(ctx);
     }
   }
 
