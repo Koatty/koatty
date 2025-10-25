@@ -11,11 +11,11 @@
 import type { KoattyContext } from "koatty_core";
 import { DefaultLogger as Logger } from "koatty_logger";
 import type { extensionOptions } from "../trace/itrace";
-// @ts-ignore
+// @ts-expect-error - koa-compress types may not be available
 import compress from 'koa-compress';
 import { Readable } from 'stream';
 import zlib from 'node:zlib';
-// @ts-ignore
+// @ts-expect-error - koa-compress types may not be available
 import type { CompressOptions } from 'koa-compress';
 
 // StatusEmpty

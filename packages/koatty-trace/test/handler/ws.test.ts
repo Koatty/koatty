@@ -66,10 +66,15 @@ describe('WsHandler', () => {
       set: jest.fn((key: string, value: string) => {
         mockCtx.headers[key.toLowerCase()] = value;
       }),
-      res :{
+      res: {
         emit: jest.fn(),
         on: jest.fn(),
         once: jest.fn(),
+        end: jest.fn(),
+        setHeader: jest.fn(),
+        getHeader: jest.fn(),
+        removeHeader: jest.fn(),
+        headersSent: false
       },
       respond: true,
       writable: true
