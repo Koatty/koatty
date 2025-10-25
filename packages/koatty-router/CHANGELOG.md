@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.2](https://github.com/koatty/koatty_router/compare/koatty-router@2.0.1...koatty-router@2.0.2) (2025-10-25)
+
+
+### Features
+
+* **trace:** enhance tracing with timeout handling and status checks ([caa6a10](https://github.com/koatty/koatty_router/commit/caa6a10d0d82064567f1a3f8f3146f28a7b7398d))
+
+
+### Bug Fixes
+
+* **koatty-serve:** 修复不稳定的时间相关测试 ([cf2d6b5](https://github.com/koatty/koatty_router/commit/cf2d6b5754a56217df1b912faf7cd40b01dbcbdc))
+* **koatty-trace:** 修复ESLint错误和测试mock问题 ([b24e1f9](https://github.com/koatty/koatty_router/commit/b24e1f9dcc55c64f5d97f3ca01bc53161e7bdb7c))
+
 ### 2.0.1 (2025-10-25)
 
 
