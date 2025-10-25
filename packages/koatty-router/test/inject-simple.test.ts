@@ -41,12 +41,6 @@ jest.mock('koatty_validation', () => ({
       }
     })
   },
-  Exception: jest.fn((message, code, status) => {
-    const error = new Error(message);
-    (error as any).code = code;
-    (error as any).status = status;
-    return error;
-  }),
   convertParamsType: jest.fn((value, type) => {
     if (type === 'number') return Number(value);
     return value;
@@ -62,6 +56,15 @@ jest.mock('koatty_validation', () => ({
     'Array': 'array',
     'Object': 'object'
   }
+}));
+
+jest.mock('koatty_exception', () => ({
+  Exception: jest.fn((message, code, status) => {
+    const error = new Error(message);
+    (error as any).code = code;
+    (error as any).status = status;
+    return error;
+  })
 }));
 
 jest.mock('koatty_logger', () => ({
@@ -97,7 +100,7 @@ describe('Inject Simple Tests', () => {
     
     Helper = require('koatty_lib').Helper;
     FunctionValidator = require('koatty_validation').FunctionValidator;
-    Exception = require('koatty_validation').Exception;
+    Exception = require('koatty_exception').Exception;
     
     // Dynamically import compileValidator
     const injectModule = await import('../src/utils/inject');
