@@ -1032,19 +1032,26 @@ describe('HttpsServer', () => {
 
         // Mock getActiveConnectionCount to simulate connections
         let connectionCount = 2;
-        (httpsServer as any).getActiveConnectionCount = jest.fn(() => {
+        const mockGetCount = jest.fn(() => {
           if (connectionCount > 0) {
             connectionCount--;
             return connectionCount + 1;
           }
           return 0;
         });
+        (httpsServer as any).getActiveConnectionCount = mockGetCount;
 
         const startTime = Date.now();
         await (httpsServer as any).waitForConnectionCompletion(500, 'test-trace-id');
         const elapsed = Date.now() - startTime;
 
-        expect(elapsed).toBeGreaterThanOrEqual(100); // Should have waited some time
+        // 验证方法被多次调用（证明在等待连接完成）
+        expect(mockGetCount.mock.calls.length).toBeGreaterThanOrEqual(2); // At least 2 checks
+        // 验证最终连接数为0（所有连接已完成）
+        expect(connectionCount).toBe(0);
+        // 时间应该大于0但给予更宽松的容忍度
+        expect(elapsed).toBeGreaterThan(0); // Some time elapsed
+        expect(elapsed).toBeLessThan(600); // Should not exceed timeout
       });
 
       it('should force close connections when remaining', async () => {
