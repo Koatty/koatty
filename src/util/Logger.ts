@@ -9,7 +9,7 @@
  */
 
 
-import { KoattyApplication } from "koatty_core";
+import { AppEvent, KoattyApplication } from "koatty_core";
 import { Helper } from "koatty_lib";
 import { DefaultLogger, LogLevelType } from "koatty_logger";
 
@@ -32,6 +32,13 @@ export function SetLogger(app: KoattyApplication, config: {
   logFilePath?: string;
   sensFields?: string[];
 }) {
+  if (!app.appDebug) {
+    DefaultLogger.enableBuffering({
+      maxBufferSize: 200,
+      flushInterval: 500,
+      flushOnLevel: 'error'
+    });
+  }
   if (config.logLevel) {
     DefaultLogger.setLevel(config.logLevel);
   }
@@ -43,4 +50,8 @@ export function SetLogger(app: KoattyApplication, config: {
   if (config.sensFields) {
     DefaultLogger.setSensFields(config.sensFields);
   }
+  app.once(AppEvent.appStop, async () => {
+    await DefaultLogger.flush(); // 等待所有日志写入完成
+    await DefaultLogger.destroy(); // 释放所有资源
+  });
 }

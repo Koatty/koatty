@@ -1,0 +1,20 @@
+{
+  "name": "@koatty/example-basic-app",
+  "version": "1.0.0",
+  "description": "Koatty framework basic application example",
+  "private": true,
+  "main": "src/App.ts",
+  "keywords": [
+    "koatty",
+    "example",
+    "demo"
+  ],
+  "author": "richenlin",
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "@types/node": "^24.9.1",
+    "ts-node": "^10.x.x",
+    "tsconfig-paths": "^4.x.x",
+    "typescript": "^5.x.x"
+  }
+}
