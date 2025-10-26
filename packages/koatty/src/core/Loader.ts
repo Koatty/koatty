@@ -274,7 +274,14 @@ export class Loader {
    */
   public static async LoadAllComponents(app: KoattyApplication, target: any) {
     // Preload all metadata to populate cache
-    IOC.preloadMetadata();
+    try {
+      if (Helper.isFunction((IOC as any).preloadMetadata)) {
+        (IOC as any).preloadMetadata();
+      }
+    } catch (error) {
+      // preloadMetadata is optional, ignore if not available
+      Logger.Warn('[Loader] preloadMetadata is optional, ignore if not available');
+    }
     // Load configuration
     Logger.Log('Koatty', '', 'Load Configurations ...');
     // configuration metadata

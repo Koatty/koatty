@@ -115,7 +115,7 @@ export function checkRuntime() {
   nodeVersion = nodeVersion.slice(0, nodeVersion.lastIndexOf('.'));
 
   if (Helper.toNumber(nodeEngines) > Helper.toNumber(nodeVersion)) {
-    Logger.Error(`Koatty need node version > ${nodeEngines}, current version is ${nodeVersion}, please upgrade it.`);
+    Logger.Fatal(`Koatty need node version > ${nodeEngines}, current version is ${nodeVersion}, please upgrade it.`);
     process.exit(-1);
   }
 }

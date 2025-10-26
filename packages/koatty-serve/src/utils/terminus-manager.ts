@@ -78,7 +78,7 @@ export class TerminusManager {
     signals.forEach(signal => {
       process.on(signal, () => {
         this.shutdownAll(signal).catch(err => {
-          Logger.Error('Error during shutdown', err);
+          Logger.Fatal('Error during shutdown', err);
           process.exit(1);
         });
       });
@@ -103,7 +103,7 @@ export class TerminusManager {
 
     // 设置全局超时
     const forceTimeout = setTimeout(() => {
-      Logger.Error('Could not close all servers in time, forcefully shutting down');
+      Logger.Fatal('Could not close all servers in time, forcefully shutting down');
       process.exit(1);
     }, 60000);
 
@@ -146,12 +146,12 @@ export class TerminusManager {
       await Promise.all(shutdownPromises);
       
       clearTimeout(forceTimeout);
-      Logger.Warn('All servers closed gracefully');
+      Logger.Fatal('All servers closed gracefully');
       process.exit(0);
       
     } catch (error) {
       clearTimeout(forceTimeout);
-      Logger.Error('Error during shutdown', error);
+      Logger.Fatal('Error during shutdown', error);
       process.exit(1);
     }
   }

@@ -11,7 +11,7 @@ app event
 **Signature:**
 
 ```typescript
-export declare const enum AppEvent 
+export declare enum AppEvent 
 ```
 
 ## Enumeration Members

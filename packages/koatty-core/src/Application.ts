@@ -483,7 +483,7 @@ export class Koatty extends Koa implements KoattyApplication {
     process.removeAllListeners('uncaughtException');
     process.on('uncaughtException', (err) => {
       if (err.message.includes('EADDRINUSE')) {
-        Logger.Error(Helper.toString(err));
+        Logger.Fatal(Helper.toString(err));
         process.exit(-1);
       }
       if (!isPrevent(err)) Logger.Error(err);

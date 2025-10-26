@@ -69,7 +69,8 @@ function parseEnv(conf: any) {
  * @returns {PropertyDecorator}
  */
 export function Config(key?: string, type?: string): PropertyDecorator {
-  return (target: object, propertyKey: string) => {
+  return (target: object, propertyKey: string | symbol) => {
+    const propName = typeof propertyKey === 'symbol' ? propertyKey.toString() : propertyKey;
     IOCContainer.savePropertyData(TAGGED_ARGS, {
       name: propertyKey,
       method: () => {
@@ -77,7 +78,7 @@ export function Config(key?: string, type?: string): PropertyDecorator {
         if (!app?.config) {
           return null;
         }
-        key = key || propertyKey;
+        key = key || propName;
         type = type || "config";
         return app.config(key, type);
       }

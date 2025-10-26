@@ -67,7 +67,7 @@
     "koatty_core": "workspace:*",
     "koatty_lib": "^1.x.x",
     "koatty_loader": "^1.x.x",
-    "koatty_logger": "^2.5.0",
+    "koatty_logger": "^2.x.x",
     "run-con": "^1.3.2"
   },
   "peerDependencies": {

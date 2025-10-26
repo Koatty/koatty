@@ -93,7 +93,7 @@ export class TimerManager {
       }
     });
 
-    this.logger.info('Timer manager initialized with optimization', {}, {
+    this.logger.debug('Timer manager initialized with optimization', {}, {
       config: this.optimizerConfig,
       supportedFrequencies: Object.values(TimerFrequency).filter(f => typeof f === 'number')
     });
@@ -261,7 +261,7 @@ export class TimerManager {
     const logicalTimerCount = this.performanceMetrics.totalTasks;
     const physicalTimerCount = this.timers.size;
     
-    this.logger.info(`Clearing all timers`, {}, { 
+    this.logger.debug(`Clearing all timers`, {}, { 
       logicalTimers: logicalTimerCount,
       physicalTimers: physicalTimerCount 
     });
@@ -294,7 +294,7 @@ export class TimerManager {
     this.timers.clear();
     this.consolidatedTimers.clear();
     
-    this.logger.info(`All timers cleared successfully`, {}, {
+    this.logger.debug(`All timers cleared successfully`, {}, {
       clearedLogicalTimers: logicalTimerCount,
       clearedPhysicalTimers: physicalTimerCount
     });
@@ -638,7 +638,7 @@ export class TimerManager {
    * 安全销毁管理器
    */
   destroy(): void {
-    this.logger.info('TimerManager destroying', {}, {
+    this.logger.debug('TimerManager destroying', {}, {
       activeTimers: this.timers.size,
       totalTasks: this.performanceMetrics.totalTasks,
       executedTasks: this.performanceMetrics.executedTasks,
@@ -649,7 +649,7 @@ export class TimerManager {
     this.taskQueues.clear();
     this.clearAllTimers();
     
-    this.logger.info('TimerManager destroyed successfully');
+    this.logger.debug('TimerManager destroyed successfully');
   }
 }
 

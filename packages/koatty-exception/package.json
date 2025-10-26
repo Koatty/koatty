@@ -98,7 +98,7 @@
     "@opentelemetry/semantic-conventions": "^1.37.0",
     "koatty_container": "^1.x.x",
     "koatty_lib": "^1.x.x",
-    "koatty_logger": "^2.5.0"
+    "koatty_logger": "^2.x.x"
   },
   "peerDependencies": {
     "koatty_container": "^1.x.x",

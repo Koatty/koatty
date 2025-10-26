@@ -1,0 +1,13 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/koatty-core" },
+    { "path": "./packages/koatty-exception" },
+    { "path": "./packages/koatty-router" },
+    { "path": "./packages/koatty-serve" },
+    { "path": "./packages/koatty-trace" },
+    { "path": "./packages/koatty" }
+  ]
+}
+
+

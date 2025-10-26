@@ -315,7 +315,7 @@ export interface KoattyRouter {
  * @export
  * @enum AppEvent
  */
-export const enum AppEvent {
+export enum AppEvent {
   appBoot = "appBoot",
   appReady = "appReady",
   appStart = "appStart",

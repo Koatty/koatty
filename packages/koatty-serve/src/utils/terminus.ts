@@ -101,7 +101,7 @@ export async function onSignal(event: string, app: KoattyApplication, server: Ko
 
   // 设置强制关闭超时
   const forceShutdown = setTimeout(() => {
-    Logger.Error('Could not close connections in time, forcefully shutting down');
+    Logger.Fatal('Could not close connections in time, forcefully shutting down');
     process.exit(1);
   }, forceTimeout);
 
@@ -131,11 +131,11 @@ export async function onSignal(event: string, app: KoattyApplication, server: Ko
     }
 
     clearTimeout(forceShutdown);
-    Logger.Warn('Closed out remaining connections, exiting gracefully');
+    Logger.Fatal('Closed out remaining connections, exiting gracefully');
     process.exit(0);
   } catch (error) {
     clearTimeout(forceShutdown);
-    Logger.Error('Server destroy error, forcing exit', error);
+    Logger.Fatal('Server destroy error, forcing exit', error);
     process.exit(1);
   }
 }

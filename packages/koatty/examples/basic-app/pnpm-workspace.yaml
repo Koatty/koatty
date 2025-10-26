@@ -1,0 +1,4 @@
+# This file ensures pnpm treats this as a standalone workspace
+packages:
+  - '.'
+
