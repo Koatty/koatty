@@ -7,5 +7,57 @@
 **Signature:**
 
 ```typescript
-Logger: import("koatty_logger").EnhancedLogger
+Logger: {
+    configure(config: Partial<import("koatty_logger").LoggerConfig>, hotReload?: boolean): void;
+    setMinLevel(level: LogLevelType): void;
+    getMinLevel(): LogLevelType | null;
+    setLogPath(path: string): void;
+    setSensitiveFields(fields: string[]): void;
+    enableBuffering(config?: {
+        maxBufferSize?: number;
+        flushInterval?: number;
+        flushOnLevel?: "error" | "warn" | "info" | "debug";
+    }): void;
+    disableBuffering(): void;
+    setSamplingRate(key: string, rate: number): void;
+    getConfig(): import("koatty_logger").LoggerConfig;
+    isInitialized(): boolean;
+    getStatus(): {
+        initialized: boolean;
+        failed: boolean;
+        usingFallback: boolean;
+    };
+    Debug(...args: any[]): void;
+    Info(...args: any[]): void;
+    Warn(...args: any[]): void;
+    Error(...args: any[]): void;
+    debug(...args: any[]): void;
+    info(...args: any[]): void;
+    warn(...args: any[]): void;
+    error(...args: any[]): void;
+    Fatal(...args: any[]): void;
+    fatal(...args: any[]): void;
+    fatalAndExit(message: string, exitCode?: number, error?: Error): Promise<never>;
+    Log(name: string, ...args: any[]): void;
+    log(name: string, ...args: any[]): void;
+    enable(b?: boolean): void;
+    getLevel(): LogLevelType;
+    setLevel(level: LogLevelType): void;
+    getLogFilePath(): string;
+    setLogFilePath(f: string): void;
+    getSensFields(): Set<string>;
+    setSensFields(fields: string[]): void;
+    clearSensFields(): void;
+    resetSensFields(fields: string[]): void;
+    destroy(): Promise<void>;
+    DebugSampled(key: string, message: string, ...args: any[]): void;
+    InfoSampled(key: string, message: string, ...args: any[]): void;
+    WarnSampled(key: string, message: string, ...args: any[]): void;
+    ErrorSampled(key: string, message: string, ...args: any[]): void;
+    configureBuffering(config: any): void;
+    configureSampling(key: string, rate: number): void;
+    getStats(): any;
+    flush(): Promise<void>;
+    stop(): Promise<void>;
+}
 ```
