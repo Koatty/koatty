@@ -27,7 +27,7 @@ export class SingleProtocolServer implements KoattyServer {
   private app: KoattyApplication;
   private serverInstance: KoattyServer | null = null; // Actual server instance
   server: NativeServer | null = null; // Native server instance
-  private logger = createLogger({ module: 'singleprotocol' });
+  private logger = createLogger({ module: 'KoattyServer' });
 
   readonly protocol: string = 'http';
   readonly options: ListeningOptions;
@@ -55,18 +55,18 @@ export class SingleProtocolServer implements KoattyServer {
     
     // Create server instance immediately to enable RegisterService calls
     // Note: This creates the server wrapper but doesn't start listening yet
-    this.logger.info('[SINGLEPROTOCOL] About to call initializeServerInstance', {}, {
+    this.logger.info('About to call initializeServerInstance', {}, {
       protocol: this.options.protocol
     });
     
     try {
       this.initializeServerInstance();
-      this.logger.info('[SINGLEPROTOCOL] initializeServerInstance completed successfully', {}, {
+      this.logger.info('initializeServerInstance completed successfully', {}, {
         protocol: this.options.protocol,
         hasServerInstance: !!this.serverInstance
       });
     } catch (error) {
-      this.logger.error('[SINGLEPROTOCOL] initializeServerInstance failed', {}, error);
+      this.logger.error('initializeServerInstance failed', {}, error);
       throw error;
     }
   }
@@ -93,7 +93,7 @@ export class SingleProtocolServer implements KoattyServer {
     };
 
     try {
-      this.logger.info('[SINGLEPROTOCOL] Initializing server instance', { traceId }, {
+      this.logger.info('Initializing server instance', { traceId }, {
         protocol: protocolType,
         port: port
       });
@@ -137,13 +137,13 @@ export class SingleProtocolServer implements KoattyServer {
       const server = this.createServerInstance(protocolType, options);
       this.serverInstance = server;
       
-      this.logger.info('[SINGLEPROTOCOL] Server instance initialized', { traceId }, {
+      this.logger.info('Server instance initialized', { traceId }, {
         protocol: protocolType,
         hasRegisterService: typeof (server as any).RegisterService === 'function'
       });
 
     } catch (error) {
-      this.logger.error('[SINGLEPROTOCOL] Failed to initialize server instance', { 
+      this.logger.error('Failed to initialize server instance', { 
         traceId, 
         protocol: protocolType, 
         port: port 
