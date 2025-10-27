@@ -46,26 +46,19 @@
 ### 一键发布命令
 
 ```bash
-# 发布补丁版本（1.0.0 -> 1.0.1）
-./scripts/release.sh <package-name>
+# 基本用法
+./scripts/release.sh <package-name> [release-type] [options]
 
-# 发布次版本（1.0.0 -> 1.1.0）
-./scripts/release.sh <package-name> minor
+# 发布类型
+patch       # 补丁版本 (1.0.0 -> 1.0.1)
+minor       # 次版本 (1.0.0 -> 1.1.0)
+major       # 主版本 (1.0.0 -> 2.0.0)
+prerelease  # 预发布版本 (1.0.0 -> 1.0.1-0)
 
-# 发布主版本（1.0.0 -> 2.0.0）
-./scripts/release.sh <package-name> major
-
-# 发布预发布版本（1.0.0 -> 1.0.1-0）
-./scripts/release.sh <package-name> prerelease
-
-# 发布并自动同步到独立仓库
-./scripts/release.sh <package-name> minor --sync
-
-# 模拟发布（不实际执行）
-./scripts/release.sh <package-name> --dry-run
-
-# 仅更新版本，不发布到 npm
-./scripts/release.sh <package-name> --no-npm
+# 选项
+--dry-run   # 模拟发布
+--sync      # 自动同步到独立仓库
+--no-npm    # 跳过 npm 发布
 ```
 
 ### 示例
