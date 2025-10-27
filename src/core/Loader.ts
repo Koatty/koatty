@@ -674,33 +674,33 @@ export class Loader {
    */
   protected async LoadRouter(ctls: string[]) {
     const router = this.app.router;
-    Logger.Info('[LOADER] ============ LoadRouter START ============');
-    Logger.Info('[LOADER] router type:', typeof router);
-    Logger.Info('[LOADER] router is object:', Helper.isObject(router));
-    Logger.Info('[LOADER] router has LoadRouter:', Helper.isFunction((router as any)?.LoadRouter));
-    Logger.Info('[LOADER] Controllers to load:', ctls);
+    Logger.Log('Koatty', '', '============ LoadRouter START ============');
+    Logger.Log('Koatty', '', 'router type:', typeof router);
+    Logger.Log('Koatty', '', 'router is object:', Helper.isObject(router));
+    Logger.Log('Koatty', '', 'router has LoadRouter:', Helper.isFunction((router as any)?.LoadRouter));
+    Logger.Log('Koatty', '', 'Controllers to load:', ctls);
     
     // load router for multi-protocol or single protocol
     if (Helper.isObject(router) && !Helper.isFunction((router as any).LoadRouter)) {
       // Multi-protocol routers (router is an object with protocol keys)
       const routers = router as Record<string, any>;
-      Logger.Info(`[LOADER] Multi-protocol routing: found ${Object.keys(routers).length} routers (${Object.keys(routers).join(', ')})`);
+      Logger.Log('Koatty', '', `Multi-protocol routing: found ${Object.keys(routers).length} routers (${Object.keys(routers).join(', ')})`);
       for (const proto in routers) {
-        Logger.Info(`[LOADER] Checking protocol: ${proto}, has LoadRouter:`, Helper.isFunction(routers[proto]?.LoadRouter));
+        Logger.Log('Koatty', '', `Checking protocol: ${proto}, has LoadRouter:`, Helper.isFunction(routers[proto]?.LoadRouter));
         if (routers[proto] && Helper.isFunction(routers[proto].LoadRouter)) {
-          Logger.Info(`[LOADER] Loading routes for protocol: ${proto}`);
+          Logger.Log('Koatty', '', `Loading routes for protocol: ${proto}`);
           await routers[proto].LoadRouter(this.app, ctls);
-          Logger.Info(`[LOADER] Completed loading routes for protocol: ${proto}`);
+          Logger.Log('Koatty', '', `Completed loading routes for protocol: ${proto}`);
         }
       }
     } else if (Helper.isFunction((router as any).LoadRouter)) {
       // Single protocol router (backward compatibility)
-      Logger.Info('[LOADER] Single protocol routing');
+      Logger.Log('Koatty', '', 'Single protocol routing');
       await (router as any).LoadRouter(this.app, ctls);
     } else {
-      Logger.Warn('[LOADER] No valid router found! router:', router);
+      Logger.Warn('No valid router found! router:', router);
     }
-    Logger.Info('[LOADER] ============ LoadRouter END ============');
+    Logger.Log('Koatty', '', '============ LoadRouter END ============');
   }
 }
 
