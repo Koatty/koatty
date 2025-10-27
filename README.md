@@ -3,11 +3,11 @@
 [![npm version](https://img.shields.io/npm/v/koatty)](https://www.npmjs.com/package/koatty)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
-Koa2 + TypeScript + IOC = Koatty. **Koatty** is a progressive Node.js framework for building efficient and scalable server-side applications. It's perfect for crafting enterprise-level APIs, microservices, and full-stack applications with TypeScript excellence.
+Koa + TypeScript + IOC = Koatty. **Koatty** is a progressive Node.js framework for building efficient and scalable server-side applications. It's perfect for crafting enterprise-level APIs, microservices, and full-stack applications with TypeScript excellence.
 
 ## Why Koatty? 💡
 
-- 🚄 **High Performance**: Built on top of Koa2 with optimized architecture
+- 🚄 **High Performance**: Built on top of Koa with optimized architecture
 - 🧩 **Full-Featured**: Supports gRPC, HTTP, WebSocket, scheduled tasks, and more
 - 🧠 **TypeScript First**: Native TypeScript support with elegant OOP design
 - 🌀 **Spring-like IOC Container**: Powerful dependency injection system with autowiring
@@ -43,7 +43,7 @@ export default {
   server: {
     hostname: '127.0.0.1',
     port: 3000,
-    protocol: ["http", "grpc"], // Multiple protocols: 'http' | 'https' | 'http2' | 'grpc' | 'ws' | 'wss' | 'graphql'
+    protocol: ["http", "grpc"], // Multiple protocols: 'http' | 'https' | 'http2' | 'http3' | 'grpc' | 'ws' | 'wss' | 'graphql'
     trace: false,
   },
   ...
@@ -134,7 +134,7 @@ export default {
   ```
 
 
-### 💉 Dependency Injection (IOC Container v1.17.0)
+### 💉 Dependency Injection
 
 **Enhanced Features:**
 -✅ **Intelligent Metadata Cache** - LRU caching mechanism, significantly improves performance
@@ -243,7 +243,7 @@ export class UserController {
 
 ### 🔌 Plugin System & Middleware
 
-**Protocol-Specific Middleware (New in v3.13):**
+**Protocol-Specific Middleware:**
 ```typescript
 // Middleware can now be bound to specific protocols
 @Middleware({ protocol: ["http", "https"] })
