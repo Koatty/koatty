@@ -278,7 +278,7 @@ export class Loader {
       if (Helper.isFunction((IOC as any).preloadMetadata)) {
         (IOC as any).preloadMetadata();
       }
-    } catch (error) {
+    } catch {
       // preloadMetadata is optional, ignore if not available
       Logger.Warn('[Loader] preloadMetadata is optional, ignore if not available');
     }

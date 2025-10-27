@@ -58,8 +58,38 @@ const path = require('path');
         });
     });
     
+    // Fix paths for dist/package.json (relative to dist/)
+    if (pkg.main && pkg.main.startsWith('./dist/')) {
+        pkg.main = pkg.main.replace('./dist/', './');
+        changed = true;
+        console.log(`✓ Fixed main: ./dist/... → ${pkg.main}`);
+    }
+    
+    if (pkg.types && pkg.types.startsWith('./dist/')) {
+        pkg.types = pkg.types.replace('./dist/', './');
+        changed = true;
+        console.log(`✓ Fixed types: ./dist/... → ${pkg.types}`);
+    }
+    
+    if (!pkg.types && pkg.main) {
+        pkg.types = pkg.main.replace(/\.js$/, '.d.ts');
+        changed = true;
+        console.log(`✓ Added types field: ${pkg.types}`);
+    }
+    
+    if (pkg.exports) {
+        Object.keys(pkg.exports).forEach(key => {
+            if (typeof pkg.exports[key] === 'string' && pkg.exports[key].startsWith('./dist/')) {
+                const oldPath = pkg.exports[key];
+                pkg.exports[key] = pkg.exports[key].replace('./dist/', './');
+                changed = true;
+                console.log(`✓ Fixed exports.${key}: ${oldPath} → ${pkg.exports[key]}`);
+            }
+        });
+    }
+    
     if (changed) {
         fs.writeFileSync(distPkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf8');
-        console.log('✅ Fixed workspace:* dependencies in dist/package.json');
+        console.log('✅ Fixed workspace:* dependencies and paths in dist/package.json');
     }
 })();
