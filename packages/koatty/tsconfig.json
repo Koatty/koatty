@@ -2,7 +2,7 @@
   "compilerOptions": {
     /* Basic Options */
     "target": "ES2019" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'. */,
-    "module": "CommonJS" /* Specify module code generation: 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */,
+    "module": "ESNext" /* Specify module code generation: 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */,
     "ignoreDeprecations": "5.0" /* Suppress deprecation warnings for TypeScript 5.x */,
     "lib": ["ES2019"],
     /* Specify library files to be included in the compilation:  */ // "allowJs": true /* Allow javascript files to be compiled. */,
@@ -32,7 +32,7 @@
     // "noImplicitReturns": true,             /* Report error when not all code paths in function return a value. */
     "noFallthroughCasesInSwitch": true /* Report errors for fallthrough cases in switch statement. */,
     /* Module Resolution Options */
-    "moduleResolution": "node" /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */,
+    "moduleResolution": "bundler" /* Specify module resolution strategy for bundlers */,
     // "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
     // "paths": {},                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
     // "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */

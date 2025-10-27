@@ -4,7 +4,7 @@
     "tsconfig.base.json",
     ".eslintrc.js"
   ],
-  "pipeline": {
+  "tasks": {
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", "*.tsbuildinfo"]
