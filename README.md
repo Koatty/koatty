@@ -22,15 +22,15 @@ Koatty Monorepo 采用 **混合架构**，将核心框架包集中管理，同�
 
 ### 核心包 (7个)
 
-| 包名 | 说明 | 版本 |
-|------|------|------|
-| `koatty` | 主框架 | 3.13.2 |
-| `koatty_core` | 核心功能 | 1.17.1 |
-| `koatty_router` | 路由组件 | 1.10.1 |
-| `koatty_serve` | 服务器组件 | 2.5.0 |
-| `koatty_exception` | 异常处理 | 1.8.1-0 |
-| `koatty_trace` | 链路追踪 | 1.16.0 |
-| `koatty_config` | 配置加载 | 1.2.2 |
+| 包名 | 说明 | 
+|------|------|
+| `koatty` | 主框架 |
+| `koatty_core` | 核心功能 | 
+| `koatty_router` | 路由组件 |
+| `koatty_serve` | 服务器组件 | 
+| `koatty_exception` | 异常处理 |
+| `koatty_trace` | 链路追踪 |
+| `koatty_config` | 配置加载 |
 
 ### 独立包 (保持独立)
 
@@ -98,16 +98,10 @@ koatty-monorepo/
 │   ├── koatty-exception/  # 异常
 │   ├── koatty-trace/      # 追踪
 │   └── koatty-config/     # 配置
-├── examples/              # 示例应用 ⭐
-│   ├── basic-app/         # 基础应用示例
-│   ├── README.md          # 示例说明
-│   └── .gitignore
 ├── scripts/               # 工具脚本
 │   ├── sync-to-repos.sh
 │   ├── check-sync-status.sh
 │   └── release.sh
-├── .vscode/               # VS Code配置 ⭐
-│   └── launch.json        # 调试配置
 ├── .changeset/            # 版本管理
 ├── .github/workflows/     # CI/CD
 ├── package.json
@@ -175,37 +169,15 @@ Monorepo 中的更改会自动同步到独立仓库，保持向后兼容。
 ./scripts/check-sync-status.sh
 
 # 手动同步
-./scripts/sync-to-repos.sh
+./scripts/sync-standalone.sh
 ```
 
 ## 文档
 
-- [迁移完成报告](MIGRATION_COMPLETE.md) - 详细的迁移状态和下一步操作
-- [架构设计](../koatty/docs/MONOREPO_ARCHITECTURE.md)
-- [迁移方案](../koatty/docs/MONOREPO_MIGRATION_PLAN.md)
-- [同步策略](../koatty/docs/MONOREPO_SYNC_STRATEGY.md)
-- [快速开始](../koatty/docs/MONOREPO_QUICK_START.md)
+- [同步策略](RELEASE-GUIDE.md)
 
-## 优势
-
-- ✅ **统一管理**: 7个核心包集中维护
-- ✅ **开发效率**: 无需 npm link，修改即生效
-- ✅ **原子提交**: 跨包修改一次提交
-- ✅ **增量构建**: Turborepo 缓存，构建速度提升 90%+
-- ✅ **向后兼容**: 自动同步到独立仓库，用户无感知
-
-## 贡献
-
-欢迎贡献！请阅读 [CONTRIBUTING.md](CONTRIBUTING.md) 了解详情。
 
 ## License
 
 BSD-3-Clause © [richenlin](mailto:richenlin@gmail.com)
-
-## 联系
-
-- **GitHub**: https://github.com/koatty/koatty-monorepo
-- **官网**: https://koatty.org
-- **Email**: richenlin@gmail.com
-- **Discussions**: https://github.com/Koatty/koatty/discussions
 
