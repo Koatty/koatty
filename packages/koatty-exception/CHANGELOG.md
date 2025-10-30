@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.3](https://github.com/koatty/koatty_exception/compare/koatty-exception@2.0.2...koatty-exception@2.0.3) (2025-10-30)
+
+
+### Features
+
+* sync version to dist/package.json during release ([c57ca04](https://github.com/koatty/koatty_exception/commit/c57ca04c91bfb9acb41238ee72b54afb0ee4a683))
+
 ### [2.0.2](https://github.com/koatty/koatty_exception/compare/koatty-exception@2.0.1...koatty-exception@2.0.2) (2025-10-30)
 
 
