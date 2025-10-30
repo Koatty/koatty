@@ -290,6 +290,19 @@ echo ""
 echo -e "${GREEN}版本变更: $CURRENT_VERSION → $NEW_VERSION${NC}"
 echo ""
 
+# 更新 dist/package.json 的版本号
+if [ -f "dist/package.json" ] && [ "$NEW_VERSION" != "$CURRENT_VERSION" ]; then
+    echo "同步版本号到 dist/package.json..."
+    node -e "
+        const fs = require('fs');
+        const pkg = JSON.parse(fs.readFileSync('dist/package.json', 'utf8'));
+        pkg.version = '$NEW_VERSION';
+        fs.writeFileSync('dist/package.json', JSON.stringify(pkg, null, 2) + '\n', 'utf8');
+    "
+    echo -e "${GREEN}✓${NC} dist/package.json 版本号已更新为 $NEW_VERSION"
+    echo ""
+fi
+
 # 如果是 dry-run，在这里停止
 if [ "$DRY_RUN" = true ]; then
     echo -e "${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
