@@ -4,7 +4,7 @@
   "description": "Full link tracking and error interception for koatty.",
   "scripts": {
     "build": "npm run build:js && npm run build:dts && npm run build:doc && npm run build:cp && npm run build:fix",
-    "build:cp": "node scripts/postBuild && npx -y copyfiles package.json LICENSE README.md dist/",
+    "build:cp": "npx -y copyfiles package.json LICENSE README.md dist/ && node scripts/postBuild",
     "build:fix": "node scripts/fixWorkspaceDeps",
     "build:js": "npx -y rollup --bundleConfigAsCjs -c .rollup.config.js",
     "build:doc": "npx -y api-documenter markdown --input temp --output docs/api",

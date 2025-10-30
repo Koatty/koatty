@@ -290,7 +290,7 @@ echo ""
 echo -e "${GREEN}版本变更: $CURRENT_VERSION → $NEW_VERSION${NC}"
 echo ""
 
-# 更新 dist/package.json 的版本号
+# 更新 dist/package.json 的版本号并再次验证 workspace:* 依赖
 if [ -f "dist/package.json" ] && [ "$NEW_VERSION" != "$CURRENT_VERSION" ]; then
     echo "同步版本号到 dist/package.json..."
     node -e "
@@ -301,6 +301,35 @@ if [ -f "dist/package.json" ] && [ "$NEW_VERSION" != "$CURRENT_VERSION" ]; then
     "
     echo -e "${GREEN}✓${NC} dist/package.json 版本号已更新为 $NEW_VERSION"
     echo ""
+fi
+
+# 最终验证：确保没有 workspace:* 依赖残留
+if [ -f "dist/package.json" ]; then
+    if grep -q "workspace:\*" dist/package.json 2>/dev/null; then
+        echo -e "${RED}✗ 错误: dist/package.json 仍包含 workspace:* 依赖${NC}"
+        echo -e "${YELLOW}尝试重新运行 build:fix...${NC}"
+        
+        if npm run build:fix; then
+            # 再次检查
+            if grep -q "workspace:\*" dist/package.json 2>/dev/null; then
+                echo -e "${RED}✗ 错误: build:fix 执行后仍有 workspace:* 依赖${NC}"
+                echo ""
+                echo "发现的 workspace:* 依赖:"
+                grep "workspace:\*" dist/package.json
+                echo ""
+                exit 1
+            else
+                echo -e "${GREEN}✓${NC} workspace:* 依赖已修复"
+                echo ""
+            fi
+        else
+            echo -e "${RED}✗ 错误: build:fix 执行失败${NC}"
+            exit 1
+        fi
+    else
+        echo -e "${GREEN}✓${NC} 验证通过: 无 workspace:* 依赖"
+        echo ""
+    fi
 fi
 
 # 如果是 dry-run，在这里停止
