@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/koatty/koatty_core/compare/koatty-core@2.0.0...koatty-core@2.0.1) (2025-10-30)
+
+
+### Features
+
+* add tsconfigRootDir to ESLint parser options ([89619bd](https://github.com/koatty/koatty_core/commit/89619bd3c59ec184b0defa19dae468263a77b449))
+* enhance config decorator and update dependencies ([a0a13ab](https://github.com/koatty/koatty_core/commit/a0a13ab8b316a7e3bb9e76137550bedb8f616c59))
+* enhance TypeScript support and fix package distribution paths ([20c0a9c](https://github.com/koatty/koatty_core/commit/20c0a9c681fbb703d76fd6abc428f0f0f483c24b))
+* **logger:** enhance Logger interface and update usage ([194978c](https://github.com/koatty/koatty_core/commit/194978cbb9969ca1eed6556981e29f03386bec85))
+* **trace:** enhance tracing with timeout handling and status checks ([caa6a10](https://github.com/koatty/koatty_core/commit/caa6a10d0d82064567f1a3f8f3146f28a7b7398d))
+
+
+### Bug Fixes
+
+* **koatty-serve:** 修复不稳定的时间相关测试 ([cf2d6b5](https://github.com/koatty/koatty_core/commit/cf2d6b5754a56217df1b912faf7cd40b01dbcbdc))
+* **koatty-trace:** 修复ESLint错误和测试mock问题 ([b24e1f9](https://github.com/koatty/koatty_core/commit/b24e1f9dcc55c64f5d97f3ca01bc53161e7bdb7c))
+
 ## 2.0.0 (2025-10-25)
 
 
