@@ -21,6 +21,14 @@ module.exports = {
     mongo: true,
     jest: true,
   },
+  ignorePatterns: [
+    'examples/**/*',
+    'dist/**/*',
+    'node_modules/**/*',
+    'temp/**/*',
+    '*.js',
+    '*.d.ts',
+  ],
   rules: {
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-require-imports": "warn",

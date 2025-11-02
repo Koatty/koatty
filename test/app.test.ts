@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { App } from '../demo/src/App';
+import { App } from '../examples/basic-app/src/App';
 import { ExecBootStrap, KoattyApplication } from '../src/index';
 
 describe('UT example', () => {
@@ -24,6 +24,6 @@ describe('UT example', () => {
   it('request', async () => {
     const res = await request(app.callback()).get('/');
     expect(res.status).toBe(200);
-    expect(res.body).toEqual({ "code": 0, "message": "Hello, koatty!" });
+    expect(res.body).toEqual({ "code": 0, "data": null, "message": "Hello, koatty!" });
   });
 });
