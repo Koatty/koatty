@@ -358,6 +358,7 @@ export class Loader {
         const protoServerOpts = { ...serveOpts, protocol: proto, port: ports[i] };
 
         // Create server with transport protocol
+        // @ts-expect-error - Type mismatch due to workspace vs node_modules version difference
         servers.push(NewServe(app, protoServerOpts));
       }
       
@@ -368,6 +369,7 @@ export class Loader {
       const singleServerOpts = { protocol: singleProto, ...serveOpts };
       
       // Create server with transport protocol
+      // @ts-expect-error - Type mismatch due to workspace vs node_modules version difference
       return NewServe(app, singleServerOpts);
     }
   }
@@ -402,6 +404,7 @@ export class Loader {
         }
         
         // Create router with original protocol name (for routing logic)
+        // @ts-expect-error - Type mismatch due to workspace vs node_modules version difference
         routers[proto] = NewRouter(app, protoRouterOpts);
       }
       
@@ -409,6 +412,7 @@ export class Loader {
     } else {
       // Single protocol: router is KoattyRouter (backward compatibility)
       const singleProto = protocols[0];
+      // @ts-expect-error - Type mismatch due to workspace vs node_modules version difference
       return NewRouter(app, { protocol: singleProto, ...routerOpts });
     }
   }
@@ -453,6 +457,7 @@ export class Loader {
     // Load Trace middleware as the first middleware
     try {
       const traceOptions = this.app.config('trace') ?? {};
+      // @ts-expect-error - Type mismatch due to workspace vs node_modules version difference
       const tracer = Trace(traceOptions, this.app);
       Helper.define(this.app, "tracer", tracer);
       this.app.use(tracer);

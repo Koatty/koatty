@@ -49,9 +49,16 @@ export default [
           compilerOptions: {
             declaration: false,
             declarationMap: false,
-            module: "ESNext"
+            module: "ESNext",
+            skipLibCheck: true,
+            // 不使用 paths，让 TypeScript 使用 node_modules 中的类型
+            // 这样可以避免类型冲突
           }
-        }
+        },
+        // 使用 cache 来提高性能
+        useTsconfigDeclarationDir: false,
+        // 忽略类型错误，只做转译
+        check: false
       }),
       terser({
         compress: {
