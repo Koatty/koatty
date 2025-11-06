@@ -586,8 +586,7 @@ packages:
   '@koa/router@14.0.0':
     resolution: {integrity: sha512-LBSu5K0qAaaQcXX/0WIB9PGDevyCxxpnc1uq13vV/CgObaVxuis5hKl3Eboq/8gcb6ebnkAStW9NB/Em2eYyFA==}
     engines: {node: '>= 20'}
-<<<<<<< HEAD
-=======
+
 
   '@matrixai/async-cancellable@2.0.1':
     resolution: {integrity: sha512-4oZC7RMehzZCfyVLk33fOZpW1Nz4WFxuHzznrjFDBre6FmGb63jc2uWjwn+BKplqyby1J/sdJbjO0iqNcweWHg==}
@@ -600,6 +599,7 @@ packages:
 
   '@matrixai/contexts@2.0.2':
     resolution: {integrity: sha512-nI29nv2UP43s+hO+N8SDNxlDHHfj0Evypg5IxZ/Y04o6/InDhCQmZErxMu4ZAOTtt21yuI4zssPRcBQdhtQygA==}
+
 
   '@matrixai/errors@2.1.3':
     resolution: {integrity: sha512-uPH09OHLykjCdX17Piyc1P0kw3pkJC8l2ydr6LzcWUPmP8i38oO9oq2AqX21UeyeBhGvDcBzQk890GUMb6iOIA==}
@@ -638,12 +638,12 @@ packages:
   '@matrixai/quic@2.0.9':
     resolution: {integrity: sha512-3Ld/RTZsqOVTggOYalt0U9yCmoseY9IfzUM+QOSU5+nxCs23ds4ol7dmbXon9NcGXsuePs6UkVFsNwwL7x9ZlQ==}
 
+
   '@matrixai/resources@2.0.1':
     resolution: {integrity: sha512-qP7wDz1HnQY7wV4NxybAE+A+488D7bGkkdgk2TIRaw8/fTWENi9Y/AFvOJrdKt3q5rDybB4OeTJIkN5qULE35A==}
 
   '@matrixai/timer@2.1.1':
     resolution: {integrity: sha512-8N4t3eISASJttKIuQKitVfCNxfaUp1Tritg9/92biGDxVwoP+Err8FVrjG30yWz56K/H+T9xUcZ58AH/mk15Sw==}
->>>>>>> cf5018d (feat: implement multi-protocol server support with backward compatibility and enhanced GraphQL/HTTP2 integration)
 
   '@microsoft/api-documenter@7.26.17':
     resolution: {integrity: sha512-LOS9U6EJVpejN0vNXFBPdbRW9D2bPJI8FYfLGSaEeiqPfMBlH5QYLKt+OaJomx72uj9Ei6/W49mftK/c+UGPjg==}
@@ -1490,12 +1490,6 @@ packages:
 
   '@types/node@22.18.8':
     resolution: {integrity: sha512-pAZSHMiagDR7cARo/cch1f3rXy0AEXwsVsVH09FcyeJVAzCnGgmYis7P3JidtTUjyadhTeSo8TgRPswstghDaw==}
-<<<<<<< HEAD
-
-  '@types/node@22.16.5':
-    resolution: {integrity: sha512-bJFoMATwIGaxxx8VJPeM8TonI8t579oRvgAuT8zFugJsJZgzqv0Fu8Mhp68iecjzG7cnN3mO2dJQ5uUM2EFrgQ==}
-=======
->>>>>>> cf5018d (feat: implement multi-protocol server support with backward compatibility and enhanced GraphQL/HTTP2 integration)
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -5086,8 +5080,7 @@ snapshots:
       path-to-regexp: 8.3.0
     transitivePeerDependencies:
       - supports-color
-<<<<<<< HEAD
-=======
+
 
   '@matrixai/async-cancellable@2.0.1': {}
 
@@ -5106,6 +5099,7 @@ snapshots:
 
   '@matrixai/contexts@2.0.2':
     dependencies:
+
       '@matrixai/async-cancellable': 2.0.1
       '@matrixai/async-locks': 5.0.2
       '@matrixai/errors': 2.1.3
@@ -5160,7 +5154,6 @@ snapshots:
     dependencies:
       '@matrixai/async-cancellable': 2.0.1
       '@matrixai/errors': 2.1.3
->>>>>>> cf5018d (feat: implement multi-protocol server support with backward compatibility and enhanced GraphQL/HTTP2 integration)
 
   '@microsoft/api-documenter@7.26.17(@types/node@22.13.10)':
     dependencies:
@@ -6252,6 +6245,7 @@ snapshots:
   '@types/node@22.13.10':
     dependencies:
       undici-types: 6.20.0
+
 
   '@types/node@22.18.8':
     dependencies:
@@ -7743,6 +7737,15 @@ snapshots:
     dependencies:
       '@types/estree': 1.0.6
 
+
+  is-regex@1.2.1:
+    dependencies:
+      call-bound: 1.0.4
+      gopd: 1.2.0
+      has-tostringtag: 1.0.2
+      hasown: 2.0.2
+
+
   is-stream@2.0.1: {}
 
   is-text-path@1.0.1:
@@ -8830,6 +8833,7 @@ snapshots:
       long: 5.3.1
 
   protobufjs@7.5.4:
+
     dependencies:
       '@protobufjs/aspromise': 1.1.2
       '@protobufjs/base64': 1.1.2
@@ -8841,6 +8845,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
+
       '@types/node': 22.18.8
       long: 5.3.2
 
