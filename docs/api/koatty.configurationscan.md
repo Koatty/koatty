@@ -47,6 +47,7 @@ _(Optional)_ The path or array of paths to scan for configuration files. If not 
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 ClassDecorator

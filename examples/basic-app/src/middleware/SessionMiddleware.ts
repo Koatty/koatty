@@ -6,7 +6,7 @@
  * @LastEditTime: 2023-01-13 15:06:31
  */
 
-// import { IMiddleware, Middleware } from "../../../src";
+// import { IMiddleware, Middleware } from "koatty";
 // import { App } from "../App";
 // const session = require('koa-session');
 

@@ -6,7 +6,7 @@
  * @LastEditTime: 2025-03-13 13:09:41
  */
 import { IsDefined } from "koatty_validation";
-import { Component } from "../../../src/index";
+import { Component } from "../../../../src/index";
 //_ENUM_IMPORT
 
 @Component()

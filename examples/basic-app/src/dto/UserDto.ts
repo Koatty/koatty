@@ -6,7 +6,7 @@
  * @LastEditTime: 2025-03-13 11:19:04
  */
 import { IsDefined, IsNotEmpty } from "koatty_validation";
-import { Component } from "../../../src/index";
+import { Component } from "../../../../src/index";
 
 @Component()
 export class UserDto {

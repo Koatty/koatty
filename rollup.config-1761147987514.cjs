@@ -1,3 +1,15 @@
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var commonjs = require('@rollup/plugin-commonjs');
+var json = require('@rollup/plugin-json');
+var resolve = require('@rollup/plugin-node-resolve');
+var module$1 = require('module');
+var del = require('rollup-plugin-delete');
+var typescript = require('rollup-plugin-typescript2');
+var terser = require('@rollup/plugin-terser');
+
 /**
  * 
  * @Description: 
@@ -7,17 +19,9 @@
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
-import commonjs from '@rollup/plugin-commonjs';
-import json from "@rollup/plugin-json";
-import resolve from '@rollup/plugin-node-resolve';
-import { builtinModules } from 'module';
-import del from "rollup-plugin-delete";
-import typescript from 'rollup-plugin-typescript2';
-// import babel from '@rollup/plugin-babel';
-import terser from "@rollup/plugin-terser";
 const pkg = require('./package.json');
 
-export default [
+var _rollup_config = [
   {
     input: './src/index.ts',
     output: [
@@ -49,16 +53,9 @@ export default [
           compilerOptions: {
             declaration: false,
             declarationMap: false,
-            module: "ESNext",
-            skipLibCheck: true,
-            // 不使用 paths，让 TypeScript 使用 node_modules 中的类型
-            // 这样可以避免类型冲突
+            module: "ESNext"
           }
-        },
-        // 使用 cache 来提高性能
-        useTsconfigDeclarationDir: false,
-        // 忽略类型错误，只做转译
-        check: false
+        }
       }),
       terser({
         compress: {
@@ -80,10 +77,12 @@ export default [
       })
     ],
     external: [
-      ...builtinModules, // 排除 Node.js 内置模块
+      ...module$1.builtinModules, // 排除 Node.js 内置模块
       ...Object.keys(pkg.dependencies || {}), // 排除 package.json 中的外部依赖
       ...Object.keys(pkg.devDependencies || {}),
     ],
   },
 
-]
+];
+
+exports.default = _rollup_config;

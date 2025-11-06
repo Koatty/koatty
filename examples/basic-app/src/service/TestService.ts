@@ -6,7 +6,7 @@
  * @LastEditTime: 2024-01-16 01:00:28
  */
 
-import { Service, Autowired, Logger } from '../../../src/index';
+import { Service, Autowired, Logger } from '../../../../src/index';
 import { App } from '../App';
 import { UserDto } from '../dto/UserDto';
 // import { Scheduled, SchedulerLock } from "koatty_schedule";

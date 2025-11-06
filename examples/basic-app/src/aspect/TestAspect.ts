@@ -6,7 +6,7 @@
  * @LastEditTime: 2023-12-05 11:04:39
  */
 
-import { Aspect, Autowired, IAspect, Logger } from "../../../src/index";
+import { Aspect, Autowired, IAspect, Logger } from "../../../../src/index";
 import { App } from '../App';
 import { SayHelloRequestDto } from "../dto/SayHelloRequestDto";
 
@@ -16,7 +16,7 @@ export class TestAspect implements IAspect {
   @Autowired()
   sayHelloRequestDto: SayHelloRequestDto;
 
-  run(args: any[], proceed?: Function) {
+  run(...args: any[]) {
     Logger.Debug(args);
     return Promise.resolve();
   }

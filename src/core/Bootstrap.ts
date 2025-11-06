@@ -36,6 +36,7 @@ export function Bootstrap(bootFunc?: (...args: any[]) => any): ClassDecorator {
       throw new Error(`class does not inherit from Koatty`);
     }
     executeBootstrap(target, bootFunc);
+    return target;
   };
 }
 
@@ -206,7 +207,7 @@ const executeBootstrap = async function (target: any, bootFunc?: (...args: any[]
 
     return app;
   } catch (err) {
-    Logger.Error(err);
+    Logger.Fatal(err);
     process.exit(1);
   }
 };

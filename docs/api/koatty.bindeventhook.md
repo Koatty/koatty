@@ -79,6 +79,7 @@ The target class to bind the event hook
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 void

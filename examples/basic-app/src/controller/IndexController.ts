@@ -18,7 +18,7 @@ import {
   KoattyContext,
   Post, PostMapping,
   RequestBody
-} from '../../../src/index';
+} from '../../../../src/index';
 import { App } from '../App';
 import { Conf } from '../dto/Conf';
 import { UserDto } from '../dto/UserDto';

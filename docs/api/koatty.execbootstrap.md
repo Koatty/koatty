@@ -9,7 +9,7 @@ Decorator function for bootstrapping a Koatty application.
 **Signature:**
 
 ```typescript
-export declare function ExecBootStrap(bootFunc?: Function): (target: any) => Promise<KoattyApplication>;
+export declare function ExecBootStrap(bootFunc?: (...args: any[]) => any): (target: any) => Promise<KoattyApplication>;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ bootFunc
 
 </td><td>
 
-Function
+(...args: any\[\]) =&gt; any
 
 
 </td><td>
@@ -47,6 +47,7 @@ _(Optional)_ Optional function to be executed during bootstrap process
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 (target: any) =&gt; Promise&lt;KoattyApplication&gt;

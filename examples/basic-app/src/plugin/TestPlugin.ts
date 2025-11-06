@@ -6,13 +6,12 @@
  * @LastEditTime: 2022-03-15 14:24:48
  */
 
-import { Plugin, IPlugin, Logger } from '../../../src/index';
-import { App } from '../App';
+import { Plugin, IPlugin, Logger, KoattyApplication } from '../../../../src/index';
 // import { TestPlugin } from 'xxx';
 
 @Plugin()
 export class TestPlugin implements IPlugin {
-  run(options: any, app: App) {
+  run(options: object, app: KoattyApplication) {
     // return TestPlugin(options, app);
     // or
     // todo something

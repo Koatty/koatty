@@ -4,7 +4,7 @@
  * @ license: BSD (3-Clause)
  * @ version: 2020-05-18 11:17:26
  */
-import { Middleware, IMiddleware, KoattyContext, KoattyNext } from '../../../src/index';
+import { Middleware, IMiddleware, KoattyContext, KoattyNext } from '../../../../src/index';
 import { App } from '../App';
 // import { Static } from "koatty_static";
 

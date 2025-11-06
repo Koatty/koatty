@@ -16,7 +16,7 @@ import {
   Post,
   PostMapping,
   RequestParam
-} from '../../../src/index';
+} from '../../../../src/index';
 import { App } from "../App";
 import { UserDto } from "../dto/UserDto";
 

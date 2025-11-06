@@ -7,7 +7,7 @@
  */
 
 import * as path from 'path';
-import { Bootstrap, Koatty } from "../../src/index";
+import { Bootstrap, Koatty } from "../../../../koatty/src";
 import { TestBootStrap } from "./bootstrap/TestBootStrap";
 
 // bootstrap function

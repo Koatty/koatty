@@ -47,6 +47,7 @@ _(Optional)_ The path or array of paths to scan for components
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 ClassDecorator

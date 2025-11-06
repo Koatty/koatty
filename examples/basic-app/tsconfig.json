@@ -1,0 +1,57 @@
+{
+  "compilerOptions": {
+    /* Basic Options */
+    "target": "ES2019",
+    "module": "commonjs",
+    "lib": ["ES2019"],
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "removeComments": false,
+    "importHelpers": true,
+    
+    /* Strict Type-Checking Options */
+    "noImplicitAny": true,
+    "noImplicitThis": false,
+    "pretty": true,
+    
+    /* Module Resolution Options */
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "paths": {
+      "koatty": ["../../src"],
+      "koatty/*": ["../../src/*"]
+    },
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "types": [
+      "node"
+    ],
+    
+    /* Experimental Options */
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    
+    /* Advanced Options */
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true,
+    "require": ["tsconfig-paths/register"]
+  }
+}
+
+

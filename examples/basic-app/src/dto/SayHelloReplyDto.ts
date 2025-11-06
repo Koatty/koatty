@@ -3,15 +3,14 @@
  * @Usage: 
  * @Author: xxx
  * @Date: 2020-12-22 15:24:25
- * @LastEditTime: 2022-03-15 14:24:25
+ * @LastEditTime: 2022-03-15 14:24:21
  */
 
-import { Component } from "../../../src/index";
+import { Component } from "../../../../src/index";
 import { IsNotEmpty, IsDefined } from "koatty_validation";
-import { PhoneType } from "./PhoneType";
 
 @Component()
-export class SayHelloRequestDto {
+export class SayHelloReplyDto {
   // @IsNotEmpty()
   // name: string;
 
@@ -23,11 +22,5 @@ export class SayHelloRequestDto {
   // memo: string;
 
   @IsDefined()
-  id: number;
-
-  @IsDefined()
-  name: string;
-
-  @IsDefined()
-  phone: PhoneType;
+  message: string;
 }
