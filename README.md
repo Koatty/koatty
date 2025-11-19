@@ -137,11 +137,10 @@ export default {
 ### 💉 Dependency Injection
 
 **Enhanced Features:**
-
--✅ **Intelligent Metadata Cache** - LRU caching mechanism, significantly improves performance
--✅ **Metadata Preloading** - Preload at startup, optimize component registration
--✅ **Version Conflict Detection** - Automatically detect and resolve dependency version conflicts
--✅ **Circular Dependency Detection** - Circular dependency detection and resolution suggestions
+- ✅ **Intelligent Metadata Cache** - LRU caching mechanism, significantly improves performance
+- ✅ **Metadata Preloading** - Preload at startup, optimize component registration
+- ✅ **Version Conflict Detection** - Automatically detect and resolve dependency version conflicts
+- ✅ **Circular Dependency Detection** - Circular dependency detection and resolution suggestions
 
 ```typescript
 @Service()
