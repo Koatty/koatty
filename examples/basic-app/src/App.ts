@@ -14,8 +14,10 @@ import { TestBootStrap } from "./bootstrap/TestBootStrap";
 @Bootstrap(() => {
   // 调整libuv线程池大小
   process.env.UV_THREADPOOL_SIZE = '128';
-  // 忽略https自签名验证
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+  // 忽略https自签名验证 - 仅在开发环境使用
+  if (process.env.NODE_ENV === 'development') {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+  }
 })
 // 配置组件存放目录，默认: ./
 // @ComponentScan('./')

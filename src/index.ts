@@ -17,4 +17,23 @@ export * from "koatty_router";
 export * from "./core/Bootstrap";
 export { Logger } from "./util/Logger";
 
+function autoRegisterCorePlugins() {
+  try {
+    require('koatty_router/dist/RouterPlugin');
+  } catch (e) {
+  }
+
+  try {
+    require('koatty_serve/dist/ServePlugin');
+  } catch (e) {
+  }
+
+  try {
+    require('koatty_trace/dist/TracePlugin');
+  } catch (e) {
+  }
+}
+
+autoRegisterCorePlugins();
+
 

@@ -12,7 +12,15 @@
 export default {
   // List of loaded plugins, executed in the order of elements
   list: [],
-  config: { // plugin configuration
-
+  config: {
+    RouterPlugin: {
+      enabled: true,
+    },
+    ServePlugin: {
+      enabled: true,
+    },
+    TracePlugin: {
+      enabled: true,
+    },
   }
 };

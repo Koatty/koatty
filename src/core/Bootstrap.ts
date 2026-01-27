@@ -201,8 +201,13 @@ const executeBootstrap = async function (target: any, bootFunc?: (...args: any[]
     await asyncEvent(app, AppEvent.appReady);
 
     if (!isUTRuntime) {
-      // Start Server
+      Logger.Log('Koatty', '', 'Emit Before Server Start ...');
+      await asyncEvent(app, AppEvent.beforeServerStart);
+
       app.listen(listenCallback);
+
+      Logger.Log('Koatty', '', 'Emit After Server Start ...');
+      await asyncEvent(app, AppEvent.afterServerStart);
     }
 
     return app;
