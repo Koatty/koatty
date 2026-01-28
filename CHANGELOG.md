@@ -1,5 +1,39 @@
 # Changelog
 
+## 4.0.7
+
+### Patch Changes
+
+- build
+- Updated dependencies
+  - koatty_config@1.2.8
+  - koatty_container@1.17.4
+  - koatty_core@2.0.14
+  - koatty_exception@2.0.10
+  - koatty_lib@1.4.5
+  - koatty_loader@1.1.4
+  - koatty_logger@2.3.4
+  - koatty_router@2.0.9
+  - koatty_serve@3.0.7
+  - koatty_trace@2.0.6
+
+## 4.0.6
+
+### Patch Changes
+
+- build
+- Updated dependencies
+  - koatty_config@1.2.7
+  - koatty_container@1.17.3
+  - koatty_core@2.0.13
+  - koatty_exception@2.0.9
+  - koatty_lib@1.4.4
+  - koatty_loader@1.1.3
+  - koatty_logger@2.3.3
+  - koatty_router@2.0.8
+  - koatty_serve@3.0.6
+  - koatty_trace@2.0.5
+
 ## 4.0.5
 
 ### Patch Changes

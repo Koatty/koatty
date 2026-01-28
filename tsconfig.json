@@ -32,7 +32,7 @@
     // "noImplicitReturns": true,             /* Report error when not all code paths in function return a value. */
     "noFallthroughCasesInSwitch": true /* Report errors for fallthrough cases in switch statement. */,
     /* Module Resolution Options */
-    "moduleResolution": "bundler" /* Specify module resolution strategy for bundlers */,
+    "moduleResolution": "node" /* Use Node.js module resolution for better workspace support */,
     "resolvePackageJsonExports": false /* Disable strict package.json exports resolution for compatibility */,
     "skipLibCheck": true /* Skip type checking of declaration files */,
     // "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */

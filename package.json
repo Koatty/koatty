@@ -1,13 +1,13 @@
 {
   "name": "koatty",
-  "version": "4.0.5",
+  "version": "4.0.7",
   "description": "Koa + Typescript = koatty. Use Typescript's decorator implement auto injection.",
   "scripts": {
     "build": "npm run build:js && npm run build:dts && npm run build:doc && npm run build:cp",
     "build:cp": "node scripts/copyFiles && node scripts/postBuild",
     "build:js": "npx rollup --bundleConfigAsCjs -c .rollup.config.js",
     "build:doc": "npx api-documenter markdown --input temp --output docs/api",
-    "build:dts": "npx tsc --skipLibCheck && npx api-extractor run --local --verbose",
+    "build:dts": "bash scripts/build-dts.sh",
     "eslint": "eslint --ext .ts,.js ./",
     "test": "npm run eslint && jest --passWithNoTests",
     "test:cov": "jest --collectCoverage --detectOpenHandles"
@@ -70,7 +70,7 @@
     "husky": "^4.x.x",
     "jest": "^29.x.x",
     "jest-html-reporters": "^3.x.x",
-    "koatty_validation": "^1.6.4",
+    "koatty_validation": "^1.6.6",
     "reflect-metadata": "^0.x.x",
     "rollup": "^4.x.x",
     "rollup-plugin-delete": "^2.x.x",
@@ -83,16 +83,16 @@
   },
   "dependencies": {
     "koa": "^3.1.1",
-    "koatty_config": "workspace:*",
-    "koatty_container": "workspace:*",
-    "koatty_core": "workspace:*",
-    "koatty_exception": "workspace:*",
-    "koatty_lib": "workspace:*",
-    "koatty_loader": "workspace:*",
-    "koatty_logger": "workspace:*",
-    "koatty_router": "workspace:*",
-    "koatty_serve": "workspace:*",
-    "koatty_trace": "workspace:*",
+    "koatty_config": "^1.2.8",
+    "koatty_container": "^1.17.4",
+    "koatty_core": "^2.0.14",
+    "koatty_exception": "^2.0.10",
+    "koatty_lib": "^1.4.5",
+    "koatty_loader": "^1.1.4",
+    "koatty_logger": "^2.3.4",
+    "koatty_router": "^2.0.9",
+    "koatty_serve": "^3.0.7",
+    "koatty_trace": "^2.0.6",
     "ts-morph": "^27.0.2"
   }
 }
