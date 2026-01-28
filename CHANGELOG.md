@@ -1,41 +1,67 @@
 # Changelog
 
+## 4.0.3
+
+### Patch Changes
+
+- build
+
+## 4.0.2
+
+### Patch Changes
+
+- build
+
+## 4.0.1
+
+### Patch Changes
+
+- Updated dependencies
+  - koatty_lib@1.4.2
+  - koatty_container@1.17.1
+  - koatty_config@1.2.5
+  - koatty_core@2.0.11
+  - koatty_exception@2.0.7
+  - koatty_loader@1.1.1
+  - koatty_logger@2.3.1
+  - koatty_router@2.0.5
+  - koatty_serve@3.0.3
+  - koatty_trace@2.0.3
+
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
 ## 4.0.0 (2025-11-02)
 
-
 ### ⚠ BREAKING CHANGES
 
-* **scripts:** - Tag格式从 v{version} 改为 {package-name}@{version}
+- **scripts:** - Tag 格式从 v{version} 改为 {package-name}@{version}
 
 ### Features
 
-* add examples directory with basic-app example ([ef49c6f](https://github.com/thinkkoa/koatty/commit/ef49c6f932b88ba947fc4c7f448d91b016e3e020))
-* add tsconfigRootDir to ESLint parser options ([89619bd](https://github.com/thinkkoa/koatty/commit/89619bd3c59ec184b0defa19dae468263a77b449))
-* enhance config decorator and update dependencies ([a0a13ab](https://github.com/thinkkoa/koatty/commit/a0a13ab8b316a7e3bb9e76137550bedb8f616c59))
-* enhance TypeScript support and fix package distribution paths ([20c0a9c](https://github.com/thinkkoa/koatty/commit/20c0a9c681fbb703d76fd6abc428f0f0f483c24b))
-* improve type safety in compress middleware ([61beb1d](https://github.com/thinkkoa/koatty/commit/61beb1d206bebfd5f6fec9a2d1297f420be217a2))
-* **koatty_core:** upgrade to Koa 3.0 ([fe246ad](https://github.com/thinkkoa/koatty/commit/fe246ad773521b6117d212378b07faa30abd17e0))
-* **koatty_router:** migrate from koa-graphql to graphql-http ([847821a](https://github.com/thinkkoa/koatty/commit/847821ac80109c6f4fd953e0701ad695e4fb771f))
-* **logger:** enhance Logger interface and update usage ([194978c](https://github.com/thinkkoa/koatty/commit/194978cbb9969ca1eed6556981e29f03386bec85))
-* make exception context fields optional and improve trace handling ([e0ec4db](https://github.com/thinkkoa/koatty/commit/e0ec4db1ba7299b1d22018558f61288cb2564dc6))
-* **release:** add release guide and automation script ([c5f01b1](https://github.com/thinkkoa/koatty/commit/c5f01b17765a9b1eeb07c448b27be5ade9278569))
-* sync version to dist/package.json during release ([c57ca04](https://github.com/thinkkoa/koatty/commit/c57ca04c91bfb9acb41238ee72b54afb0ee4a683))
-* **trace:** enhance tracing with timeout handling and status checks ([caa6a10](https://github.com/thinkkoa/koatty/commit/caa6a10d0d82064567f1a3f8f3146f28a7b7398d))
-* update sync script to use HTTPS instead of SSH for package repos ([91c9fd7](https://github.com/thinkkoa/koatty/commit/91c9fd74f080685cb2e8fab66e4765cbf86be57c))
-* upgrade to Koa 3.0 (WIP) ([d14114c](https://github.com/thinkkoa/koatty/commit/d14114c63d0f62fcd3a64296cbb6648ec1ee1e83))
-
+- add examples directory with basic-app example ([ef49c6f](https://github.com/thinkkoa/koatty/commit/ef49c6f932b88ba947fc4c7f448d91b016e3e020))
+- add tsconfigRootDir to ESLint parser options ([89619bd](https://github.com/thinkkoa/koatty/commit/89619bd3c59ec184b0defa19dae468263a77b449))
+- enhance config decorator and update dependencies ([a0a13ab](https://github.com/thinkkoa/koatty/commit/a0a13ab8b316a7e3bb9e76137550bedb8f616c59))
+- enhance TypeScript support and fix package distribution paths ([20c0a9c](https://github.com/thinkkoa/koatty/commit/20c0a9c681fbb703d76fd6abc428f0f0f483c24b))
+- improve type safety in compress middleware ([61beb1d](https://github.com/thinkkoa/koatty/commit/61beb1d206bebfd5f6fec9a2d1297f420be217a2))
+- **koatty_core:** upgrade to Koa 3.0 ([fe246ad](https://github.com/thinkkoa/koatty/commit/fe246ad773521b6117d212378b07faa30abd17e0))
+- **koatty_router:** migrate from koa-graphql to graphql-http ([847821a](https://github.com/thinkkoa/koatty/commit/847821ac80109c6f4fd953e0701ad695e4fb771f))
+- **logger:** enhance Logger interface and update usage ([194978c](https://github.com/thinkkoa/koatty/commit/194978cbb9969ca1eed6556981e29f03386bec85))
+- make exception context fields optional and improve trace handling ([e0ec4db](https://github.com/thinkkoa/koatty/commit/e0ec4db1ba7299b1d22018558f61288cb2564dc6))
+- **release:** add release guide and automation script ([c5f01b1](https://github.com/thinkkoa/koatty/commit/c5f01b17765a9b1eeb07c448b27be5ade9278569))
+- sync version to dist/package.json during release ([c57ca04](https://github.com/thinkkoa/koatty/commit/c57ca04c91bfb9acb41238ee72b54afb0ee4a683))
+- **trace:** enhance tracing with timeout handling and status checks ([caa6a10](https://github.com/thinkkoa/koatty/commit/caa6a10d0d82064567f1a3f8f3146f28a7b7398d))
+- update sync script to use HTTPS instead of SSH for package repos ([91c9fd7](https://github.com/thinkkoa/koatty/commit/91c9fd74f080685cb2e8fab66e4765cbf86be57c))
+- upgrade to Koa 3.0 (WIP) ([d14114c](https://github.com/thinkkoa/koatty/commit/d14114c63d0f62fcd3a64296cbb6648ec1ee1e83))
 
 ### Bug Fixes
 
-* **koatty_core:** attempt to fix test timeouts ([fb197ea](https://github.com/thinkkoa/koatty/commit/fb197eab7d193616ed4255753c22df0b400c1bc6))
-* **koatty-serve:** 修复不稳定的时间相关测试 ([cf2d6b5](https://github.com/thinkkoa/koatty/commit/cf2d6b5754a56217df1b912faf7cd40b01dbcbdc))
-* **koatty-trace:** 修复ESLint错误和测试mock问题 ([b24e1f9](https://github.com/thinkkoa/koatty/commit/b24e1f9dcc55c64f5d97f3ca01bc53161e7bdb7c))
-* resolve workspace dependencies in build process ([d8a2661](https://github.com/thinkkoa/koatty/commit/d8a266123fee1dea8ea7be6a39401bf0c052688b))
-* **scripts:** 修复monorepo中tag冲突问题 ([d2602bc](https://github.com/thinkkoa/koatty/commit/d2602bcc8c245e6f2137a678ec0e5e2fd6ef673a))
-* **scripts:** 增强release脚本的验证和调试信息 ([2e0db49](https://github.com/thinkkoa/koatty/commit/2e0db499234bd4f132bbfc65559105fd9f98f926))
-* 解决依赖问题以支持Koa 3.0升级 ([30cf0b5](https://github.com/thinkkoa/koatty/commit/30cf0b53ed032c7de5ea24b4c2ed965e8d4948df))
+- **koatty_core:** attempt to fix test timeouts ([fb197ea](https://github.com/thinkkoa/koatty/commit/fb197eab7d193616ed4255753c22df0b400c1bc6))
+- **koatty-serve:** 修复不稳定的时间相关测试 ([cf2d6b5](https://github.com/thinkkoa/koatty/commit/cf2d6b5754a56217df1b912faf7cd40b01dbcbdc))
+- **koatty-trace:** 修复 ESLint 错误和测试 mock 问题 ([b24e1f9](https://github.com/thinkkoa/koatty/commit/b24e1f9dcc55c64f5d97f3ca01bc53161e7bdb7c))
+- resolve workspace dependencies in build process ([d8a2661](https://github.com/thinkkoa/koatty/commit/d8a266123fee1dea8ea7be6a39401bf0c052688b))
+- **scripts:** 修复 monorepo 中 tag 冲突问题 ([d2602bc](https://github.com/thinkkoa/koatty/commit/d2602bcc8c245e6f2137a678ec0e5e2fd6ef673a))
+- **scripts:** 增强 release 脚本的验证和调试信息 ([2e0db49](https://github.com/thinkkoa/koatty/commit/2e0db499234bd4f132bbfc65559105fd9f98f926))
+- 解决依赖问题以支持 Koa 3.0 升级 ([30cf0b5](https://github.com/thinkkoa/koatty/commit/30cf0b53ed032c7de5ea24b4c2ed965e8d4948df))
 
 ## 3.13.3
 

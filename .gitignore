@@ -9,3 +9,4 @@ npm-debug.log
 yarn-error.log
 jest_html_reporters.html
 jest-html-reporters-attach
+.turbo/turbo-build.log

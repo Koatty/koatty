@@ -13,8 +13,8 @@ import { IOC, TAGGED_CLS } from "koatty_container";
 import {
   AppEvent, AppEventArr, EventHookFunc, IMiddleware, IMiddlewareOptions, protocolMiddleware,
   implementsAspectInterface, implementsControllerInterface,
-  implementsMiddlewareInterface, implementsPluginInterface,
-  implementsServiceInterface, IPlugin, KoattyApplication, KoattyServer, MIDDLEWARE_OPTIONS,
+  implementsMiddlewareInterface,
+  implementsServiceInterface, IPlugin, KoattyApplication, Koatty, KoattyServer, MIDDLEWARE_OPTIONS,
   ComponentManager, asyncEvent
 } from 'koatty_core';
 import { Helper } from "koatty_lib";
@@ -482,7 +482,7 @@ export class Loader {
     // Load Trace middleware as the first middleware
     try {
       const traceOptions = this.app.config('trace') ?? {};
-      const tracer = Trace(traceOptions, this.app) as any;
+      const tracer = Trace(traceOptions, this.app as Koatty) as any;
       Helper.define(this.app, "tracer", tracer);
       this.app.use(tracer);
       Logger.Debug(`Load trace middleware`);
