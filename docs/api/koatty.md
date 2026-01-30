@@ -19,17 +19,6 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[BindEventHook(eventName, eventFunc, target)](./koatty.bindeventhook.md)
-
-
-</td><td>
-
-Bind event hook to target class.
-
-
-</td></tr>
-<tr><td>
-
 [Bootstrap(bootFunc)](./koatty.bootstrap.md)
 
 
