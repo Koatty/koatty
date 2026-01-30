@@ -8,7 +8,8 @@
 
 export default {
   // Used koa-router
-
+  prefix: "",
+  
   // prefix: string;
   // /**
   //  * Methods which should be supported by the router.

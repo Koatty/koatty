@@ -134,6 +134,15 @@ export function ConfigurationScan(scanPath?: string | string[]): ClassDecorator 
  */
 const executeBootstrap = async function (target: any, bootFunc?: (...args: any[]) => any,
   isInitiative = false): Promise<KoattyApplication> {
+  // Disable winston internal debug logs
+  // Filter out winston from NODE_DEBUG to prevent internal logging
+  if (process.env.NODE_DEBUG) {
+    const debugModules = process.env.NODE_DEBUG.split(',')
+      .filter(m => !m.includes('winston'))
+      .join(',');
+    process.env.NODE_DEBUG = debugModules;
+  }
+  
   // checked runtime
   checkRuntime();
   // unittest running environment
@@ -180,7 +189,6 @@ const executeBootstrap = async function (target: any, bootFunc?: (...args: any[]
     return app;
   } catch (err) {
     Logger.Fatal(err);
-    process.exit(1);
   }
 };
 

@@ -9,6 +9,10 @@
 export default {
   list: [], //加载的中间件列表
   config: { //中间件配置
+    
+    // ============================================
+    // Static Middleware - 静态资源服务器
+    // ============================================
     // 静态服务器中间件默认未开启
     // StaticMiddleware: false,
     // 需要开启请修改为:
@@ -16,6 +20,9 @@ export default {
       cache: true
     },
 
+    // ============================================
+    // Session Middleware - 会话管理
+    // ============================================
     SessionMiddleware: {
       key: 'koa.sess', /** (string) cookie key (default is koa.sess) */
       /** (number || 'session') maxAge in ms (default is 1 days) */

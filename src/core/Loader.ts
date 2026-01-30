@@ -14,13 +14,11 @@ import {
   AppEvent, AppEventArr, IMiddleware, IMiddlewareOptions, protocolMiddleware,
   implementsAspectInterface, implementsControllerInterface,
   implementsMiddlewareInterface,
-  implementsServiceInterface, IPlugin, KoattyApplication, Koatty, KoattyServer, MIDDLEWARE_OPTIONS,
+  implementsServiceInterface, IPlugin, KoattyApplication, Koatty, MIDDLEWARE_OPTIONS,
   ComponentManager, asyncEvent
 } from 'koatty_core';
 import { Helper } from "koatty_lib";
 import { Load } from "koatty_loader";
-import { NewRouter } from "koatty_router";
-import { NewServe } from "koatty_serve";
 import { Trace } from "koatty_trace";
 import * as path from "path";
 import { checkClass } from "../util/Helper";
@@ -258,15 +256,20 @@ export class Loader {
           const componentManager = new ComponentManager(app);
           Helper.define(app, 'componentManager', componentManager);
 
+          // Step 1: Discover components (scan metadata)
           componentManager.discoverComponents();
-          componentManager.registerCoreComponentHooks();
-          componentManager.registerAppEvents(target);
-
+          
           const stats = componentManager.getStats();
           Logger.Log('Koatty', '', `Discovered ${stats.coreComponents} core components, ${stats.userComponents} user components`);
 
+          // Step 2: Load components (create instances)
           Logger.Log('Koatty', '', 'Load Components ...');
           await loader.LoadComponents(componentManager);
+
+          // Step 3: Register event hooks (instances now exist)
+          componentManager.registerAppEvents(target);
+          componentManager.registerCoreComponentHooks();
+          
           await asyncEvent(app, event);
           break;
 
@@ -289,13 +292,13 @@ export class Loader {
 
         case AppEvent.loadController:
           Logger.Log('Koatty', '', 'Load Controllers ...');
-          const controllers = await loader.LoadControllers();
+          await loader.LoadControllers();
           await asyncEvent(app, event);
           break;
 
         case AppEvent.loadRouter:
-          Logger.Log('Koatty', '', 'Load Routers ...');
-          await loader.LoadRouter(controllers);
+          Logger.Log('Koatty', '', 'Initialize Router and Load Routes ...');
+          // RouterComponent.initRouter() handles both router creation and route loading
           await asyncEvent(app, event);
           break;
 
@@ -313,96 +316,6 @@ export class Loader {
           await asyncEvent(app, event);
           break;
       }
-    }
-  }
-
-  /**
-   * Create and configure servers for all protocols.
-   * Supports both single protocol and multi-protocol configurations.
-   * 
-   * @static
-   * @param {KoattyApplication} app - The Koatty application instance
-   * @param {any} serveOpts - Server configuration options
-   * @param {string[]} protocols - Array of protocol names
-   * @returns {KoattyServer | KoattyServer[]} Single server or array of servers
-   */
-  public static CreateServers(app: KoattyApplication, serveOpts: any, protocols: string[]): KoattyServer | KoattyServer[] {
-    if (protocols.length > 1) {
-      // Multi-protocol: create multiple server instances
-      const servers: KoattyServer[] = [];
-      
-      // Handle port allocation for multi-protocol
-      // Support: port as array [3000, 3001] or single value 3000 (auto-increment)
-      const basePort = Helper.isArray(serveOpts.port) ? serveOpts.port : [serveOpts.port];
-      const ports: number[] = [];
-      
-      for (let i = 0; i < protocols.length; i++) {
-        if (i < basePort.length) {
-          // Use port from array
-          ports.push(Helper.toNumber(basePort[i]));
-        } else {
-          // Auto-increment from first port to prevent conflicts
-          ports.push(Helper.toNumber(basePort[0]) + i);
-        }
-      }
-      
-      for (let i = 0; i < protocols.length; i++) {
-        const proto = protocols[i];
-        const protoServerOpts = { ...serveOpts, protocol: proto, port: ports[i] };
-
-        // Create server with transport protocol
-        servers.push(NewServe(app, protoServerOpts));
-      }
-      
-      return servers;
-    } else {
-      // Single protocol: create single server instance (backward compatibility)
-      const singleProto = protocols[0];
-      const singleServerOpts = { protocol: singleProto, ...serveOpts };
-      
-      // Create server with transport protocol
-      return NewServe(app, singleServerOpts);
-    }
-  }
-
-  /**
-   * Create and configure routers for all protocols.
-   * Supports both single protocol and multi-protocol configurations.
-   * 
-   * Each protocol needs its own router instance with isolated context
-   * to avoid property redefinition conflicts.
-   * 
-   * @static
-   * @param {KoattyApplication} app - The Koatty application instance
-   * @param {any} routerOpts - Router configuration options
-   * @param {string[]} protocols - Array of protocol names
-   * @returns {any} Single router or dictionary of routers (Record<protocol, router>)
-   */
-  public static CreateRouters(app: KoattyApplication, routerOpts: any, protocols: string[]): any {
-    if (protocols.length > 1) {
-      // Multi-protocol: router is Record<string, KoattyRouter>
-      // CRITICAL: Each protocol needs its own context to avoid property redefinition conflicts
-      // Problem: koatty_router defines readonly properties (like requestParam) on app.context
-      // When multiple routers try to define the same property, it causes "Cannot redefine property" error
-      const routers: Record<string, any> = {};
-      
-      for (const proto of protocols) {
-        const protoRouterOpts = { protocol: proto, ...routerOpts };
-        
-        // Support protocol-specific ext config
-        if (routerOpts.ext && routerOpts.ext[proto]) {
-          protoRouterOpts.ext = routerOpts.ext[proto];
-        }
-        
-        // Create router with original protocol name (for routing logic)
-        routers[proto] = NewRouter(app, protoRouterOpts);
-      }
-      
-      return routers;
-    } else {
-      // Single protocol: router is KoattyRouter (backward compatibility)
-      const singleProto = protocols[0];
-      return NewRouter(app, { protocol: singleProto, ...routerOpts });
     }
   }
 
@@ -443,20 +356,29 @@ export class Loader {
    * @throws {Error} When middleware loading fails
    */
   protected async LoadMiddlewares() {
-    // Load Trace middleware as the first middleware
-    try {
-      const traceOptions = this.app.config('trace') ?? {};
-      const tracer = Trace(traceOptions, this.app as Koatty) as any;
-      Helper.define(this.app, "tracer", tracer);
-      this.app.use(tracer);
-      Logger.Debug(`Load trace middleware`);
-    } catch (error: any) {
-      Logger.Warn(`Trace middleware failed to load: ${error.message}`);
-    }
-
+    // ============================================
+    // Load middleware configuration
+    // ============================================
     let middlewareConf = this.app.config(undefined, "middleware");
     if (Helper.isEmpty(middlewareConf)) {
       middlewareConf = { config: {}, list: []};
+    }
+    
+    // ============================================
+    // Trace Middleware（请求链路追踪中间件）
+    // ============================================
+    // Koatty-Trace 是一个纯粹的 Middleware
+    // 配置位置：config/middleware.ts 中的 config.trace
+    // 
+    // 作为第一个加载的中间件，用于追踪整个请求链路
+    try {
+      const traceOptions = middlewareConf.config?.trace ?? {};
+      const tracer = Trace(traceOptions, this.app as Koatty) as any;
+      Helper.define(this.app, "tracer", tracer);
+      this.app.use(tracer);
+      Logger.Debug(`Trace middleware registered`);
+    } catch (error: any) {
+      Logger.Warn(`Trace middleware failed to load: ${error.message}`);
     }
 
     //Mount application middleware
@@ -481,7 +403,7 @@ export class Loader {
 
     //Automatically call middleware
     const middlewareConfig = middlewareConf.config || {};
-    for (const key of appMList) {
+    for (const key of Array.from(appMList)) {
       const handle: IMiddleware = IOC.get(key, "MIDDLEWARE");
       if (!handle) {
         throw Error(`Middleware ${key} load error.`);
@@ -569,7 +491,7 @@ export class Loader {
         controllers.push(item.id);
       }
     });
-
+    this.app.setMetaData("_controllers", controllers);
     return controllers;
   }
 
@@ -654,42 +576,7 @@ export class Loader {
     }
   }
 
-  /**
-   * Load router configuration from controller files.
-   * Support multi-protocol routing.
-   * @param ctls Array of controller file paths to be loaded
-   * @protected
-   */
-  protected async LoadRouter(ctls: string[]) {
-    const router = this.app.router;
-    Logger.Log('Koatty', '', '============ LoadRouter START ============');
-    Logger.Log('Koatty', '', 'router type:', typeof router);
-    Logger.Log('Koatty', '', 'router is object:', Helper.isObject(router));
-    Logger.Log('Koatty', '', 'router has LoadRouter:', Helper.isFunction((router as any)?.LoadRouter));
-    Logger.Log('Koatty', '', 'Controllers to load:', ctls);
-    
-    // load router for multi-protocol or single protocol
-    if (Helper.isObject(router) && !Helper.isFunction((router as any).LoadRouter)) {
-      // Multi-protocol routers (router is an object with protocol keys)
-      const routers = router as Record<string, any>;
-      Logger.Log('Koatty', '', `Multi-protocol routing: found ${Object.keys(routers).length} routers (${Object.keys(routers).join(', ')})`);
-      for (const proto in routers) {
-        Logger.Log('Koatty', '', `Checking protocol: ${proto}, has LoadRouter:`, Helper.isFunction(routers[proto]?.LoadRouter));
-        if (routers[proto] && Helper.isFunction(routers[proto].LoadRouter)) {
-          Logger.Log('Koatty', '', `Loading routes for protocol: ${proto}`);
-          await routers[proto].LoadRouter(this.app, ctls);
-          Logger.Log('Koatty', '', `Completed loading routes for protocol: ${proto}`);
-        }
-      }
-    } else if (Helper.isFunction((router as any).LoadRouter)) {
-      // Single protocol router (backward compatibility)
-      Logger.Log('Koatty', '', 'Single protocol routing');
-      await (router as any).LoadRouter(this.app, ctls);
-    } else {
-      Logger.Warn('No valid router found! router:', router);
-    }
-    Logger.Log('Koatty', '', '============ LoadRouter END ============');
-  }
+
 }
 
 

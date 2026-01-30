@@ -3,13 +3,13 @@
  * @Usage: Test插件实现
  * @Author: xxx
  * @Date: 2020-12-22 16:00:49
- * @LastEditTime: 2022-03-15 14:24:48
+ * @LastEditTime: 2026-01-30 10:23:00
  */
 
-import { Plugin, IPlugin, Logger, KoattyApplication } from '../../../../src/index';
+import { Component, IPlugin, Logger, KoattyApplication } from '../../../../src/index';
 // import { TestPlugin } from 'xxx';
 
-@Plugin()
+@Component("TestPlugin", { scope: 'core', priority: 50 })
 export class TestPlugin implements IPlugin {
   run(options: object, app: KoattyApplication) {
     // return TestPlugin(options, app);
