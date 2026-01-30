@@ -11,7 +11,7 @@
 import { LoadConfigs as loadConf } from "koatty_config";
 import { IOC, TAGGED_CLS } from "koatty_container";
 import {
-  AppEvent, AppEventArr, EventHookFunc, IMiddleware, IMiddlewareOptions, protocolMiddleware,
+  AppEvent, AppEventArr, IMiddleware, IMiddlewareOptions, protocolMiddleware,
   implementsAspectInterface, implementsControllerInterface,
   implementsMiddlewareInterface,
   implementsServiceInterface, IPlugin, KoattyApplication, Koatty, KoattyServer, MIDDLEWARE_OPTIONS,
@@ -69,7 +69,6 @@ export class Loader {
     * Sets up logging levels, defines essential paths, and loads application metadata.
     *
     * @param {KoattyApplication} app - The Koatty application instance
-    * @description
     * - Sets logging level based on environment
     * - Defines root, app and framework paths on app object
     * - Loads application name and version from package.json
@@ -214,55 +213,6 @@ export class Loader {
   }
 
   /**
-   * Load application event hooks from target class.
-   * Register event handlers for application lifecycle events (boot, ready, start, stop).
-   * 
-   * @param app KoattyApplication instance
-   * @param target Target class to load event hooks from
-   * @static
-   */
-  public static LoadAppEventHooks(app: KoattyApplication, target: any) {
-    const eventFuncs: Map<string, EventHookFunc[]> = new Map();
-    for (const event of AppEventArr) {
-      let funcs: unknown;
-      switch (event) {
-        case AppEvent.appBoot:
-          funcs = IOC.getClassMetadata(TAGGED_CLS, AppEvent.appBoot, target);
-          if (Helper.isArray(funcs)) {
-            eventFuncs.set(AppEvent.appBoot, funcs);
-          }
-          break;
-        case AppEvent.appReady:
-          funcs = IOC.getClassMetadata(TAGGED_CLS, AppEvent.appReady, target);
-          if (Helper.isArray(funcs)) {
-            eventFuncs.set(AppEvent.appReady, funcs);
-          }
-          break;
-        case AppEvent.appStart:
-          funcs = IOC.getClassMetadata(TAGGED_CLS, AppEvent.appStart, target);
-          if (Helper.isArray(funcs)) {
-            eventFuncs.set(AppEvent.appStart, funcs);
-          }
-          break;
-        case AppEvent.appStop:
-          funcs = IOC.getClassMetadata(TAGGED_CLS, AppEvent.appStop, target);
-          if (Helper.isArray(funcs)) {
-            eventFuncs.set(AppEvent.appStop, funcs);
-          }
-          break;
-        default:
-          break;
-      }
-    }
-    // loop event emit
-    for (const [event, funcs] of eventFuncs) {
-      for (const func of funcs) {
-        app.once(event, () => func(app));
-      }
-    }
-  }
-
-  /**
    * Load all components and initialize the application.
    * 
    * @param app - The KoattyApplication instance
@@ -286,70 +236,84 @@ export class Loader {
       Logger.Warn('[Loader] preloadMetadata is optional, ignore if not available');
     }
 
-    Logger.Log('Koatty', '', 'Load Configurations ...');
     const configurationMeta = Loader.GetConfigurationMeta(app, target);
     const loader = new Loader(app);
-    loader.LoadConfigs(configurationMeta);
 
-    Loader.SetLogger(app);
+    for (const event of AppEventArr) {
+      switch (event) {
+        case AppEvent.appBoot:
+          Logger.Log('Koatty', '', 'Load Configurations ...');
+          loader.LoadConfigs(configurationMeta);
+          Loader.SetLogger(app);
+          await asyncEvent(app, event);
+          break;
 
-    Logger.Log('Koatty', '', 'Emit Config Loaded ...');
-    await asyncEvent(app, AppEvent.configLoaded);
+        case AppEvent.loadConfigure:
+          Logger.Log('Koatty', '', 'Emit loadConfigure ...');
+          await asyncEvent(app, event);
+          break;
 
-    Logger.Log('Koatty', '', 'Initializing Component Manager ...');
-    const componentManager = new ComponentManager(app);
-    Helper.define(app, 'componentManager', componentManager);
+        case AppEvent.loadComponent:
+          Logger.Log('Koatty', '', 'Initializing Component Manager ...');
+          const componentManager = new ComponentManager(app);
+          Helper.define(app, 'componentManager', componentManager);
 
-    componentManager.discoverPlugins();
-    componentManager.registerCorePluginHooks();
+          componentManager.discoverComponents();
+          componentManager.registerCoreComponentHooks();
+          componentManager.registerAppEvents(target);
 
-    const stats = componentManager.getStats();
-    Logger.Log('Koatty', '', `Discovered ${stats.corePlugins} core plugins, ${stats.userPlugins} user plugins`);
+          const stats = componentManager.getStats();
+          Logger.Log('Koatty', '', `Discovered ${stats.coreComponents} core components, ${stats.userComponents} user components`);
 
-    Logger.Log('Koatty', '', 'Emit Before Component Load ...');
-    await asyncEvent(app, AppEvent.beforeComponentLoad);
+          Logger.Log('Koatty', '', 'Load Components ...');
+          await loader.LoadComponents(componentManager);
+          await asyncEvent(app, event);
+          break;
 
-    Logger.Log('Koatty', '', 'Load Components ...');
-    await loader.LoadComponents(componentManager);
+        case AppEvent.loadPlugin:
+          Logger.Log('Koatty', '', 'Emit loadPlugin ...');
+          await asyncEvent(app, event);
+          break;
 
-    Logger.Log('Koatty', '', 'Emit After Component Load ...');
-    await asyncEvent(app, AppEvent.afterComponentLoad);
+        case AppEvent.loadMiddleware:
+          Logger.Log('Koatty', '', 'Load Middlewares ...');
+          await loader.LoadMiddlewares();
+          await asyncEvent(app, event);
+          break;
 
-    Logger.Log('Koatty', '', 'Emit Before Middleware Load ...');
-    await asyncEvent(app, AppEvent.beforeMiddlewareLoad);
+        case AppEvent.loadService:
+          Logger.Log('Koatty', '', 'Load Services ...');
+          await loader.LoadServices();
+          await asyncEvent(app, event);
+          break;
 
-    Logger.Log('Koatty', '', 'Load Middlewares ...');
-    await loader.LoadMiddlewares();
+        case AppEvent.loadController:
+          Logger.Log('Koatty', '', 'Load Controllers ...');
+          const controllers = await loader.LoadControllers();
+          await asyncEvent(app, event);
+          break;
 
-    Logger.Log('Koatty', '', 'Emit After Middleware Load ...');
-    await asyncEvent(app, AppEvent.afterMiddlewareLoad);
+        case AppEvent.loadRouter:
+          Logger.Log('Koatty', '', 'Load Routers ...');
+          await loader.LoadRouter(controllers);
+          await asyncEvent(app, event);
+          break;
 
-    Logger.Log('Koatty', '', 'Emit Before Service Load ...');
-    await asyncEvent(app, AppEvent.beforeServiceLoad);
+        case AppEvent.loadServe:
+          Logger.Log('Koatty', '', 'Emit loadServe ...');
+          await asyncEvent(app, event);
+          break;
 
-    Logger.Log('Koatty', '', 'Load Services ...');
-    await loader.LoadServices();
+         case AppEvent.appReady:
+           Logger.Log('Koatty', '', 'Emit appReady ...');
+           await asyncEvent(app, event);
+           break;
 
-    Logger.Log('Koatty', '', 'Emit After Service Load ...');
-    await asyncEvent(app, AppEvent.afterServiceLoad);
-
-    Logger.Log('Koatty', '', 'Emit Before Controller Load ...');
-    await asyncEvent(app, AppEvent.beforeControllerLoad);
-
-    Logger.Log('Koatty', '', 'Load Controllers ...');
-    const controllers = await loader.LoadControllers();
-
-    Logger.Log('Koatty', '', 'Emit After Controller Load ...');
-    await asyncEvent(app, AppEvent.afterControllerLoad);
-
-    Logger.Log('Koatty', '', 'Emit Before Router Load ...');
-    await asyncEvent(app, AppEvent.beforeRouterLoad);
-
-    Logger.Log('Koatty', '', 'Load Routers ...');
-    await loader.LoadRouter(controllers);
-
-    Logger.Log('Koatty', '', 'Emit After Router Load ...');
-    await asyncEvent(app, AppEvent.afterRouterLoad);
+         default:
+          await asyncEvent(app, event);
+          break;
+      }
+    }
   }
 
   /**
@@ -664,7 +628,7 @@ export class Loader {
     });
 
     if (componentManager) {
-      await componentManager.loadUserPlugins();
+      await componentManager.loadUserComponents();
     } else {
       Logger.Warn('Loading plugins in legacy mode');
       let pluginsConf = this.app.config(undefined, "plugin");

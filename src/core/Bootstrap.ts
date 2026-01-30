@@ -8,7 +8,7 @@
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 import { IOC, TAGGED_CLS } from "koatty_container";
-import { AppEvent, EventHookFunc, Koatty, KoattyApplication, asyncEvent } from 'koatty_core';
+import { AppEvent, Koatty, KoattyApplication, asyncEvent } from 'koatty_core';
 import { Helper } from "koatty_lib";
 import { checkRuntime, checkUTRuntime, KOATTY_VERSION } from "../util/Helper";
 import { Logger } from "../util/Logger";
@@ -35,6 +35,7 @@ export function Bootstrap(bootFunc?: (...args: any[]) => any): ClassDecorator {
     if (!(target.prototype instanceof Koatty)) {
       throw new Error(`class does not inherit from Koatty`);
     }
+    IOC.saveClass('COMPONENT', target, 'KOATTY_APP');
     executeBootstrap(target, bootFunc);
     return target;
   };
@@ -113,25 +114,6 @@ export function ConfigurationScan(scanPath?: string | string[]): ClassDecorator 
  * Bind event hook to target class.
  * 
  * @param eventName - The application event name to bind
- * @param eventFunc - The event hook function to be executed
- * @param target - The target class to bind the event hook
- * @returns {*}
- * @throws Error if the decorated class does not inherit from Koatty.
- * @example
- * ```typescript
- * export function TestDecorator(): ClassDecorator {
- *   return (target: Function) => {
- *     BindEventHook(AppEvent.appBoot, (app: KoattyApplication) => {
- *      // todo
- *      return Promise.resolve();
- *   }, target)   
- *  }
- * }
- */
-export function BindEventHook(eventName: AppEvent, eventFunc: EventHookFunc, target: any) {
-  IOC.attachClassMetadata(TAGGED_CLS, eventName, eventFunc, target);
-}
-
 /**
  * Execute bootstrap process for Koatty application.
  * 
@@ -188,26 +170,11 @@ const executeBootstrap = async function (target: any, bootFunc?: (...args: any[]
     Logger.Log('Koatty', '', 'ComponentScan ...');
     Loader.CheckAllComponents(app, target);
 
-    // Load App event hooks
-    Loader.LoadAppEventHooks(app, target);
-    Logger.Log('Koatty', '', 'Emit App Boot ...');
-    await asyncEvent(app, AppEvent.appBoot);
-
     // Load All components
     await Loader.LoadAllComponents(app, target);
 
-    // Emit app ready event
-    Logger.Log('Koatty', '', 'Emit App Ready ...');
-    await asyncEvent(app, AppEvent.appReady);
-
     if (!isUTRuntime) {
-      Logger.Log('Koatty', '', 'Emit Before Server Start ...');
-      await asyncEvent(app, AppEvent.beforeServerStart);
-
       app.listen(listenCallback);
-
-      Logger.Log('Koatty', '', 'Emit After Server Start ...');
-      await asyncEvent(app, AppEvent.afterServerStart);
     }
 
     return app;
@@ -232,5 +199,9 @@ const listenCallback = (app: KoattyApplication) => {
   Logger.Log("Koatty", "", `Koatty Version: v${KOATTY_VERSION}`);
   Logger.Log("Koatty", "", `App Environment: ${app.env}`);
   if (app.appDebug) Logger.Warn(`Running in debug mode.`);
-  Logger.Log("Koatty", "", "====================================");
+  Logger.Log('Koatty', '', '====================================');
+  
+  // Trigger appStart event after server starts listening
+  // Listeners are registered via app.once in LoadAppEventHooks
+  asyncEvent(app, AppEvent.appStart);
 };
