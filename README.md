@@ -23,7 +23,7 @@ Koa + TypeScript + IOC = Koatty. **Koatty** is a progressive Node.js framework f
 - ✅ **Protocol-Specific Middleware** - Bind middleware to specific protocols with `@Middleware({ protocol: [...] })`
 - ✅ **Graceful Shutdown** - Enhanced connection pool management and cleanup handlers
 - ✅ **Enhanced gRPC Support** - Timeout detection, duplicate call protection, streaming improvements
-- ✅ **Application Lifecycle Hooks** - Custom decorators with `BindEventHook` API for boot/ready/stop events
+- ✅ **Application Lifecycle Hooks** - Custom decorators with `@OnEvent` decorator API for framework lifecycle events
 - ✅ **Version Conflict Detection** - Automatic detection and resolution of dependency conflicts
 - ✅ **GraphQL over HTTP/2** - Automatic HTTP/2 upgrade with SSL for multiplexing and compression
 - ✅ **Global Exception Handling** - `@ExceptionHandler()` decorator for centralized error management
@@ -274,24 +274,34 @@ export class LoggerPlugin implements IPlugin {
 
 **Application Lifecycle Events:**
 ```typescript
-// Use BindEventHook to customize application behavior
-export function CustomDecorator(): ClassDecorator {
-  return (target: Function) => {
-    BindEventHook(AppEvent.appBoot, async (app: KoattyApplication) => {
-      // Executed during application boot
-      console.log('App is booting...');
-    }, target);
-    
-    BindEventHook(AppEvent.appReady, async (app: KoattyApplication) => {
-      // Executed when app is ready
-      console.log('App is ready!');
-    }, target);
-    
-    BindEventHook(AppEvent.appStop, async (app: KoattyApplication) => {
-      // Executed during graceful shutdown
-      console.log('App is stopping...');
-    }, target);
-  };
+// Use @OnEvent to hook into application lifecycle events
+@Component("MyComponent", { 
+  scope: 'user', 
+  priority: 50,
+  description: 'Custom component example'
+})
+export class MyComponent {
+  
+  // Execute when router loads
+  @OnEvent(AppEvent.loadRouter)
+  async initRouter(app: KoattyApplication) {
+    console.log('Initializing router...');
+    // Custom router initialization logic
+  }
+  
+  // Execute when application is ready
+  @OnEvent(AppEvent.appReady)
+  async onReady(app: KoattyApplication) {
+    console.log('Application ready');
+    // Service registration, connection pool initialization, etc.
+  }
+  
+  // Execute when application stops
+  @OnEvent(AppEvent.appStop)
+  async cleanup(app: KoattyApplication) {
+    console.log('Cleaning up resources...');
+    // Close connections, release resources
+  }
 }
 ```
 
