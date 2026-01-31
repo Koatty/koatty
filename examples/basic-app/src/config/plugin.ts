@@ -25,16 +25,6 @@ export default {
   // Component/Plugin configuration
   // ============================================================
   config: {
-    // --- Core components (@Component) ---
-    // Framework built-in components, usually do not need to modify
-    // Can be disabled by setting enabled: false
-    RouterComponent: {
-      enabled: true,
-    },
-    ServeComponent: {
-      enabled: true,
-    },
-
     // --- User plugins (@Plugin) ---
     // TestPlugin: {
     //     "host": "localhost"
