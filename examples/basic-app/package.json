@@ -12,7 +12,7 @@
   "author": "richenlin",
   "license": "BSD-3-Clause",
   "devDependencies": {
-    "@types/node": "^24.9.1",
+    "@types/node": "^25.1.0",
     "ts-node": "^10.x.x",
     "tsconfig-paths": "^4.x.x",
     "typescript": "^5.x.x"
