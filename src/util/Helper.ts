@@ -9,8 +9,10 @@
  */
 
 import { Helper } from "koatty_lib";
-import { engines, version } from "../../package.json";
 import { Logger } from "./Logger";
+
+const pkg = require("../../package.json");
+const { engines, version } = pkg;
 
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
@@ -116,7 +118,6 @@ export function checkRuntime() {
 
   if (Helper.toNumber(nodeEngines) > Helper.toNumber(nodeVersion)) {
     Logger.Fatal(`Koatty need node version > ${nodeEngines}, current version is ${nodeVersion}, please upgrade it.`);
-    process.exit(-1);
   }
 }
 

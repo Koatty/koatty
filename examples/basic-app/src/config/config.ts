@@ -7,5 +7,8 @@
  */
 export default {
   /*app config*/
+  logsLevel: "debug", // Level log is printed to the console, "debug" | "info" | "warning" | "error"
+  // logsPath: "./logs", // Log file directory
+  // sensFields: ["password"] // Defined privacy fields will not be printed in logs.
 
 };

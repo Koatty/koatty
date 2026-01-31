@@ -11,15 +11,14 @@
 import { LoadConfigs as loadConf } from "koatty_config";
 import { IOC, TAGGED_CLS } from "koatty_container";
 import {
-  AppEvent, AppEventArr, EventHookFunc, IMiddleware, IMiddlewareOptions, protocolMiddleware,
+  AppEvent, AppEventArr, IMiddleware, IMiddlewareOptions, protocolMiddleware,
   implementsAspectInterface, implementsControllerInterface,
-  implementsMiddlewareInterface, implementsPluginInterface,
-  implementsServiceInterface, IPlugin, KoattyApplication, KoattyServer, MIDDLEWARE_OPTIONS
+  implementsMiddlewareInterface,
+  implementsServiceInterface, IPlugin, KoattyApplication, Koatty, MIDDLEWARE_OPTIONS,
+  ComponentManager, asyncEvent
 } from 'koatty_core';
 import { Helper } from "koatty_lib";
 import { Load } from "koatty_loader";
-import { NewRouter } from "koatty_router";
-import { NewServe } from "koatty_serve";
 import { Trace } from "koatty_trace";
 import * as path from "path";
 import { checkClass } from "../util/Helper";
@@ -63,18 +62,18 @@ export class Loader {
     this.app = app;
   }
 
-  /**
-   * Initialize application configuration and environment settings.
-   * Sets up logging levels, defines essential paths, and loads application metadata.
-   * 
-   * @param {KoattyApplication} app - The Koatty application instance
-   * @description
-   * - Sets logging level based on environment
-   * - Defines root, app and framework paths
-   * - Loads application name and version from package.json
-   * - Sets environment variables for paths
-   * - Maintains backward compatibility with legacy path variables
-   */
+   /**
+    * Initialize application configuration and environment settings.
+    * Sets up logging levels, defines essential paths, and loads application metadata.
+    *
+    * @param {KoattyApplication} app - The Koatty application instance
+    * - Sets logging level based on environment
+    * - Defines root, app and framework paths on app object
+    * - Loads application name and version from package.json
+    * - Sets environment variables for paths (deprecated, for backward compatibility)
+    * - Maintains backward compatibility with legacy path variables
+    * @deprecated Use app.rootPath, app.appPath, app.koattyPath instead of process.env.ROOT_PATH, etc.
+    */
   public static initialize(app: KoattyApplication) {
     if (app.env == 'development') {
       Logger.setLevel("debug");
@@ -90,7 +89,7 @@ export class Loader {
     Helper.define(app, 'appPath', appPath);
     Helper.define(app, 'koattyPath', koattyPath);
 
-    // 
+    //
     if (Helper.isEmpty(app.name)) {
       const pkg = Helper.safeRequire(`${path.dirname(appPath)}/package.json`);
       if (pkg.name) {
@@ -99,6 +98,9 @@ export class Loader {
       }
     }
 
+    // Set environment variables for backward compatibility (deprecated)
+    // Use app.rootPath, app.appPath, app.koattyPath instead
+    Logger.Warn('Using process.env for paths is deprecated. Use app.rootPath, app.appPath, app.koattyPath instead.');
     process.env.ROOT_PATH = rootPath;
     process.env.APP_PATH = appPath;
     process.env.KOATTY_PATH = koattyPath;
@@ -209,55 +211,6 @@ export class Loader {
   }
 
   /**
-   * Load application event hooks from target class.
-   * Register event handlers for application lifecycle events (boot, ready, start, stop).
-   * 
-   * @param app KoattyApplication instance
-   * @param target Target class to load event hooks from
-   * @static
-   */
-  public static LoadAppEventHooks(app: KoattyApplication, target: any) {
-    const eventFuncs: Map<string, EventHookFunc[]> = new Map();
-    for (const event of AppEventArr) {
-      let funcs: unknown;
-      switch (event) {
-        case AppEvent.appBoot:
-          funcs = IOC.getClassMetadata(TAGGED_CLS, AppEvent.appBoot, target);
-          if (Helper.isArray(funcs)) {
-            eventFuncs.set(AppEvent.appBoot, funcs);
-          }
-          break;
-        case AppEvent.appReady:
-          funcs = IOC.getClassMetadata(TAGGED_CLS, AppEvent.appReady, target);
-          if (Helper.isArray(funcs)) {
-            eventFuncs.set(AppEvent.appReady, funcs);
-          }
-          break;
-        case AppEvent.appStart:
-          funcs = IOC.getClassMetadata(TAGGED_CLS, AppEvent.appStart, target);
-          if (Helper.isArray(funcs)) {
-            eventFuncs.set(AppEvent.appStart, funcs);
-          }
-          break;
-        case AppEvent.appStop:
-          funcs = IOC.getClassMetadata(TAGGED_CLS, AppEvent.appStop, target);
-          if (Helper.isArray(funcs)) {
-            eventFuncs.set(AppEvent.appStop, funcs);
-          }
-          break;
-        default:
-          break;
-      }
-    }
-    // loop event emit
-    for (const [event, funcs] of eventFuncs) {
-      for (const func of funcs) {
-        app.once(event, () => func(app));
-      }
-    }
-  }
-
-  /**
    * Load all components and initialize the application.
    * 
    * @param app - The KoattyApplication instance
@@ -273,147 +226,96 @@ export class Loader {
    * @async
    */
   public static async LoadAllComponents(app: KoattyApplication, target: any) {
-    // Preload all metadata to populate cache
     try {
       if (Helper.isFunction((IOC as any).preloadMetadata)) {
         (IOC as any).preloadMetadata();
       }
     } catch {
-      // preloadMetadata is optional, ignore if not available
       Logger.Warn('[Loader] preloadMetadata is optional, ignore if not available');
     }
-    // Load configuration
-    Logger.Log('Koatty', '', 'Load Configurations ...');
-    // configuration metadata
+
     const configurationMeta = Loader.GetConfigurationMeta(app, target);
     const loader = new Loader(app);
-    loader.LoadConfigs(configurationMeta);
-    // Set Logger
-    Loader.SetLogger(app);
 
-    // Create Server and Router (support multi-protocol)
-    const serveOpts = app.config('server') ?? { protocol: "http" };
-    const protocol = serveOpts.protocol ?? "http";
-    const routerOpts = app.config(undefined, 'router') ?? {};
-    const protocols = Helper.isArray(protocol) ? protocol : [protocol];
-    
-    // Create servers for all protocols
-    const servers = Loader.CreateServers(app, serveOpts, protocols);
-    Helper.define(app, "server", servers);
-    
-    // Create routers for all protocols
-    const routers = Loader.CreateRouters(app, routerOpts, protocols);
-    Helper.define(app, "router", routers);
+    for (const event of AppEventArr) {
+      switch (event) {
+        case AppEvent.appBoot:
+          Logger.Log('Koatty', '', 'Load Configurations ...');
+          loader.LoadConfigs(configurationMeta);
+          Loader.SetLogger(app);
+          await asyncEvent(app, event);
+          break;
 
-    // Load Components
-    Logger.Log('Koatty', '', 'Load Components ...');
-    await loader.LoadComponents();
-    // Load Middleware
-    Logger.Log('Koatty', '', 'Load Middlewares ...');
-    await loader.LoadMiddlewares();
-    // Load Services
-    Logger.Log('Koatty', '', 'Load Services ...');
-    await loader.LoadServices();
-    // Load Controllers
-    Logger.Log('Koatty', '', 'Load Controllers ...');
-    const controllers = await loader.LoadControllers();
+        case AppEvent.loadConfigure:
+          Logger.Log('Koatty', '', 'Emit loadConfigure ...');
+          await asyncEvent(app, event);
+          break;
 
-    // Load Routers
-    Logger.Log('Koatty', '', 'Load Routers ...');
-    await loader.LoadRouter(controllers);
-  }
+        case AppEvent.loadComponent:
+          Logger.Log('Koatty', '', 'Initializing Component Manager ...');
+          const componentManager = new ComponentManager(app);
+          Helper.define(app, 'componentManager', componentManager);
 
-  /**
-   * Create and configure servers for all protocols.
-   * Supports both single protocol and multi-protocol configurations.
-   * 
-   * @static
-   * @param {KoattyApplication} app - The Koatty application instance
-   * @param {any} serveOpts - Server configuration options
-   * @param {string[]} protocols - Array of protocol names
-   * @returns {KoattyServer | KoattyServer[]} Single server or array of servers
-   */
-  public static CreateServers(app: KoattyApplication, serveOpts: any, protocols: string[]): KoattyServer | KoattyServer[] {
-    if (protocols.length > 1) {
-      // Multi-protocol: create multiple server instances
-      const servers: KoattyServer[] = [];
-      
-      // Handle port allocation for multi-protocol
-      // Support: port as array [3000, 3001] or single value 3000 (auto-increment)
-      const basePort = Helper.isArray(serveOpts.port) ? serveOpts.port : [serveOpts.port];
-      const ports: number[] = [];
-      
-      for (let i = 0; i < protocols.length; i++) {
-        if (i < basePort.length) {
-          // Use port from array
-          ports.push(Helper.toNumber(basePort[i]));
-        } else {
-          // Auto-increment from first port to prevent conflicts
-          ports.push(Helper.toNumber(basePort[0]) + i);
-        }
+          // Step 1: Discover components (scan metadata)
+          componentManager.discoverComponents();
+          
+          const stats = componentManager.getStats();
+          Logger.Log('Koatty', '', `Discovered ${stats.coreComponents} core components, ${stats.userComponents} user components`);
+
+          // Step 2: Load components (create instances)
+          Logger.Log('Koatty', '', 'Load Components ...');
+          await loader.LoadComponents(componentManager);
+
+          // Step 3: Register event hooks (instances now exist)
+          componentManager.registerAppEvents(target);
+          componentManager.registerCoreComponentHooks();
+          
+          await asyncEvent(app, event);
+          break;
+
+        case AppEvent.loadPlugin:
+          Logger.Log('Koatty', '', 'Emit loadPlugin ...');
+          await asyncEvent(app, event);
+          break;
+
+        case AppEvent.loadMiddleware:
+          Logger.Log('Koatty', '', 'Load Middlewares ...');
+          await loader.LoadMiddlewares();
+          await asyncEvent(app, event);
+          break;
+
+        case AppEvent.loadService:
+          Logger.Log('Koatty', '', 'Load Services ...');
+          await loader.LoadServices();
+          await asyncEvent(app, event);
+          break;
+
+        case AppEvent.loadController:
+          Logger.Log('Koatty', '', 'Load Controllers ...');
+          await loader.LoadControllers();
+          await asyncEvent(app, event);
+          break;
+
+        case AppEvent.loadRouter:
+          Logger.Log('Koatty', '', 'Initialize Router and Load Routes ...');
+          // RouterComponent.initRouter() handles both router creation and route loading
+          await asyncEvent(app, event);
+          break;
+
+        case AppEvent.loadServe:
+          Logger.Log('Koatty', '', 'Emit loadServe ...');
+          await asyncEvent(app, event);
+          break;
+
+         case AppEvent.appReady:
+           Logger.Log('Koatty', '', 'Emit appReady ...');
+           await asyncEvent(app, event);
+           break;
+
+         default:
+          await asyncEvent(app, event);
+          break;
       }
-      
-      for (let i = 0; i < protocols.length; i++) {
-        const proto = protocols[i];
-        const protoServerOpts = { ...serveOpts, protocol: proto, port: ports[i] };
-
-        // Create server with transport protocol
-        // @ts-expect-error - Type mismatch due to workspace vs node_modules version difference
-        servers.push(NewServe(app, protoServerOpts));
-      }
-      
-      return servers;
-    } else {
-      // Single protocol: create single server instance (backward compatibility)
-      const singleProto = protocols[0];
-      const singleServerOpts = { protocol: singleProto, ...serveOpts };
-      
-      // Create server with transport protocol
-      // @ts-expect-error - Type mismatch due to workspace vs node_modules version difference
-      return NewServe(app, singleServerOpts);
-    }
-  }
-
-  /**
-   * Create and configure routers for all protocols.
-   * Supports both single protocol and multi-protocol configurations.
-   * 
-   * Each protocol needs its own router instance with isolated context
-   * to avoid property redefinition conflicts.
-   * 
-   * @static
-   * @param {KoattyApplication} app - The Koatty application instance
-   * @param {any} routerOpts - Router configuration options
-   * @param {string[]} protocols - Array of protocol names
-   * @returns {any} Single router or dictionary of routers (Record<protocol, router>)
-   */
-  public static CreateRouters(app: KoattyApplication, routerOpts: any, protocols: string[]): any {
-    if (protocols.length > 1) {
-      // Multi-protocol: router is Record<string, KoattyRouter>
-      // CRITICAL: Each protocol needs its own context to avoid property redefinition conflicts
-      // Problem: koatty_router defines readonly properties (like requestParam) on app.context
-      // When multiple routers try to define the same property, it causes "Cannot redefine property" error
-      const routers: Record<string, any> = {};
-      
-      for (const proto of protocols) {
-        const protoRouterOpts = { protocol: proto, ...routerOpts };
-        
-        // Support protocol-specific ext config
-        if (routerOpts.ext && routerOpts.ext[proto]) {
-          protoRouterOpts.ext = routerOpts.ext[proto];
-        }
-        
-        // Create router with original protocol name (for routing logic)
-        // @ts-expect-error - Type mismatch due to workspace vs node_modules version difference
-        routers[proto] = NewRouter(app, protoRouterOpts);
-      }
-      
-      return routers;
-    } else {
-      // Single protocol: router is KoattyRouter (backward compatibility)
-      const singleProto = protocols[0];
-      // @ts-expect-error - Type mismatch due to workspace vs node_modules version difference
-      return NewRouter(app, { protocol: singleProto, ...routerOpts });
     }
   }
 
@@ -454,21 +356,29 @@ export class Loader {
    * @throws {Error} When middleware loading fails
    */
   protected async LoadMiddlewares() {
-    // Load Trace middleware as the first middleware
-    try {
-      const traceOptions = this.app.config('trace') ?? {};
-      // @ts-expect-error - Type mismatch due to workspace vs node_modules version difference
-      const tracer = Trace(traceOptions, this.app);
-      Helper.define(this.app, "tracer", tracer);
-      this.app.use(tracer);
-      Logger.Debug(`Load trace middleware`);
-    } catch (error: any) {
-      Logger.Warn(`Trace middleware failed to load: ${error.message}`);
-    }
-
+    // ============================================
+    // Load middleware configuration
+    // ============================================
     let middlewareConf = this.app.config(undefined, "middleware");
     if (Helper.isEmpty(middlewareConf)) {
       middlewareConf = { config: {}, list: []};
+    }
+    
+    // ============================================
+    // Trace Middleware（请求链路追踪中间件）
+    // ============================================
+    // Koatty-Trace 是一个纯粹的 Middleware
+    // 配置位置：config/middleware.ts 中的 config.trace
+    // 
+    // 作为第一个加载的中间件，用于追踪整个请求链路
+    try {
+      const traceOptions = middlewareConf.config?.trace ?? {};
+      const tracer = Trace(traceOptions, this.app as Koatty) as any;
+      Helper.define(this.app, "tracer", tracer);
+      this.app.use(tracer);
+      Logger.Debug(`Trace middleware registered`);
+    } catch (error: any) {
+      Logger.Warn(`Trace middleware failed to load: ${error.message}`);
     }
 
     //Mount application middleware
@@ -493,7 +403,7 @@ export class Loader {
 
     //Automatically call middleware
     const middlewareConfig = middlewareConf.config || {};
-    for (const key of appMList) {
+    for (const key of Array.from(appMList)) {
       const handle: IMiddleware = IOC.get(key, "MIDDLEWARE");
       if (!handle) {
         throw Error(`Middleware ${key} load error.`);
@@ -581,7 +491,7 @@ export class Loader {
         controllers.push(item.id);
       }
     });
-
+    this.app.setMetaData("_controllers", controllers);
     return controllers;
   }
 
@@ -597,7 +507,7 @@ export class Loader {
   protected async LoadServices() {
     const serviceList = IOC.listClass("SERVICE");
 
-    serviceList.forEach((item: ComponentItem) => {
+    for (const item of serviceList) {
       item.id = (item.id ?? "").replace("SERVICE:", "");
       if (item.id && Helper.isClass(item.target)) {
         Logger.Debug(`Load service: ${item.id}`);
@@ -608,7 +518,7 @@ export class Loader {
           throw Error(`The service ${item.id} must implements interface 'IService'.`);
         }
       }
-    });
+    }
   }
 
   /**
@@ -622,22 +532,14 @@ export class Loader {
    * @throws {Error} When plugin/aspect doesn't implement required interface
    * @throws {Error} When plugin loading fails
    */
-  protected async LoadComponents() {
+  protected async LoadComponents(componentManager?: ComponentManager) {
     const componentList = IOC.listClass("COMPONENT");
 
-    const pluginList = [];
-    componentList.forEach(async (item: ComponentItem) => {
+    componentList.forEach((item: ComponentItem) => {
       item.id = (item.id ?? "").replace("COMPONENT:", "");
       if (Helper.isClass(item.target)) {
-        // registering to IOC
         IOC.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
-        if (item.id && (item.id).endsWith("Plugin")) {
-          const ctl = IOC.getInsByClass(item.target);
-          if (!implementsPluginInterface(ctl)) {
-            throw Error(`The plugin ${item.id} must implements interface 'IPlugin'.`);
-          }
-          pluginList.push(item.id);
-        }
+
         if (item.id && (item.id).endsWith("Aspect")) {
           const ctl = IOC.getInsByClass(item.target);
           if (!implementsAspectInterface(ctl)) {
@@ -646,67 +548,35 @@ export class Loader {
         }
       }
     });
-    // load plugin config
-    let pluginsConf = this.app.config(undefined, "plugin");
-    if (Helper.isEmpty(pluginsConf)) {
-      pluginsConf = { config: {}, list: [] };
-    }
-    const pluginConfList = pluginsConf.list ?? [];
-    // load plugin list
-    for (const key of pluginConfList) {
-      const handle: IPlugin = IOC.get(key, "COMPONENT");
-      if (!handle) {
-        throw Error(`Plugin ${key} load error.`);
-      }
-      if (!Helper.isFunction(handle.run)) {
-        throw Error(`Plugin ${key} must implements interface 'IPlugin'.`);
-      }
-      if (pluginsConf.config[key] === false) {
-        Logger.Warn(`Plugin ${key} already loaded but not effective.`);
-        continue;
-      }
 
-      // sync exec 
-      await handle.run(pluginsConf.config[key] ?? {}, this.app);
-    }
-  }
-
-  /**
-   * Load router configuration from controller files.
-   * Support multi-protocol routing.
-   * @param ctls Array of controller file paths to be loaded
-   * @protected
-   */
-  protected async LoadRouter(ctls: string[]) {
-    const router = this.app.router;
-    Logger.Log('Koatty', '', '============ LoadRouter START ============');
-    Logger.Log('Koatty', '', 'router type:', typeof router);
-    Logger.Log('Koatty', '', 'router is object:', Helper.isObject(router));
-    Logger.Log('Koatty', '', 'router has LoadRouter:', Helper.isFunction((router as any)?.LoadRouter));
-    Logger.Log('Koatty', '', 'Controllers to load:', ctls);
-    
-    // load router for multi-protocol or single protocol
-    if (Helper.isObject(router) && !Helper.isFunction((router as any).LoadRouter)) {
-      // Multi-protocol routers (router is an object with protocol keys)
-      const routers = router as Record<string, any>;
-      Logger.Log('Koatty', '', `Multi-protocol routing: found ${Object.keys(routers).length} routers (${Object.keys(routers).join(', ')})`);
-      for (const proto in routers) {
-        Logger.Log('Koatty', '', `Checking protocol: ${proto}, has LoadRouter:`, Helper.isFunction(routers[proto]?.LoadRouter));
-        if (routers[proto] && Helper.isFunction(routers[proto].LoadRouter)) {
-          Logger.Log('Koatty', '', `Loading routes for protocol: ${proto}`);
-          await routers[proto].LoadRouter(this.app, ctls);
-          Logger.Log('Koatty', '', `Completed loading routes for protocol: ${proto}`);
-        }
-      }
-    } else if (Helper.isFunction((router as any).LoadRouter)) {
-      // Single protocol router (backward compatibility)
-      Logger.Log('Koatty', '', 'Single protocol routing');
-      await (router as any).LoadRouter(this.app, ctls);
+    if (componentManager) {
+      await componentManager.loadUserComponents();
     } else {
-      Logger.Warn('No valid router found! router:', router);
+      Logger.Warn('Loading plugins in legacy mode');
+      let pluginsConf = this.app.config(undefined, "plugin");
+      if (Helper.isEmpty(pluginsConf)) {
+        pluginsConf = { config: {}, list: [] };
+      }
+      const pluginConfList = pluginsConf.list ?? [];
+      for (const key of pluginConfList) {
+        const handle: IPlugin = IOC.get(key, "COMPONENT");
+        if (!handle) {
+          throw Error(`Plugin ${key} load error.`);
+        }
+        if (!Helper.isFunction(handle.run)) {
+          throw Error(`Plugin ${key} must implements interface 'IPlugin'.`);
+        }
+        if (pluginsConf.config[key] === false) {
+          Logger.Warn(`Plugin ${key} already loaded but not effective.`);
+          continue;
+        }
+
+        await handle.run(pluginsConf.config[key] ?? {}, this.app);
+      }
     }
-    Logger.Log('Koatty', '', '============ LoadRouter END ============');
   }
+
+
 }
 
 

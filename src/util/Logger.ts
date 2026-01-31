@@ -33,10 +33,10 @@ export function SetLogger(app: KoattyApplication, config: {
   sensFields?: string[];
 }) {
   if (!app.appDebug) {
-    DefaultLogger.enableBuffering({
-      maxBufferSize: 200,
-      flushInterval: 500,
-      flushOnLevel: 'error'
+    DefaultLogger.enableBatch(true);
+    DefaultLogger.setBatchConfig({
+      maxSize: 200,
+      flushInterval: 500
     });
   }
   if (config.logLevel) {
@@ -50,8 +50,8 @@ export function SetLogger(app: KoattyApplication, config: {
   if (config.sensFields) {
     DefaultLogger.setSensFields(config.sensFields);
   }
-  app.once(AppEvent.appStop, async () => {
-    await DefaultLogger.flush(); // 等待所有日志写入完成
+  (app as any).once(AppEvent.appStop, async () => {
+    await DefaultLogger.flushBatch(); // 等待所有日志写入完成
     await DefaultLogger.destroy(); // 释放所有资源
   });
 }
