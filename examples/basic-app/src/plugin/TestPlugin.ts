@@ -6,10 +6,10 @@
  * @LastEditTime: 2026-01-30 10:23:00
  */
 
-import { Component, IPlugin, Logger, KoattyApplication } from '../../../../src/index';
+import { Plugin, IPlugin, Logger, KoattyApplication } from '../../../../src/index';
 // import { TestPlugin } from 'xxx';
 
-@Component("TestPlugin", { scope: 'core', priority: 50 })
+@Plugin("TestPlugin")
 export class TestPlugin implements IPlugin {
   run(options: object, app: KoattyApplication) {
     // return TestPlugin(options, app);

@@ -1,17 +1,57 @@
 /*
- * @Description: 插件配置
- * @usage: 配置待加载的插件及加载顺序
- * @Author: xxx
- * @Date: 2020-12-22 15:24:25
- * @LastEditTime: 2023-12-05 21:12:51
+ * @Description: plugin config
+ * @Usage:
+ * @Author: richen
+ * @Date: 2023-12-09 21:56:32
+ * @LastEditTime: 2023-12-09 22:17:13
+ * @License: BSD (3-Clause)
+ * @Copyright (c): <richenlin(at)gmail.com>
  */
 
+
 export default {
-  list: ["TestPlugin"], //加载的插件列表,执行顺序按照数组元素顺序
-  config: { //插件配置
-    // ex:
+  // ============================================================
+  // User plugin loading list (executed in order)
+  // Note: Core components (@Component) are loaded automatically
+  // ============================================================
+  list: [
+    "TestPlugin",
+    // 'AuthPlugin',      // Authentication plugin
+    // 'CachePlugin',     // Cache plugin
+    // 'SchedulePlugin',  // Scheduled task plugin
+  ],
+
+  // ============================================================
+  // Component/Plugin configuration
+  // ============================================================
+  config: {
+    // --- Core components (@Component) ---
+    // Framework built-in components, usually do not need to modify
+    // Can be disabled by setting enabled: false
+    RouterComponent: {
+      enabled: true,
+    },
+    ServeComponent: {
+      enabled: true,
+    },
+
+    // --- User plugins (@Plugin) ---
     // TestPlugin: {
     //     "host": "localhost"
     // }
+    
+    // Configuration for user-defined plugins
+    // AuthPlugin: {
+    //   enabled: true,
+    //   // Plugin-specific configuration
+    //   secret: 'your-jwt-secret',
+    // },
+    // CachePlugin: {
+    //   enabled: true,
+    //   redis: {
+    //     host: 'localhost',
+    //     port: 6379,
+    //   },
+    // },
   }
 };

@@ -88,12 +88,6 @@ export default {
    *
    * @example
    * ```typescript
-   * // Single protocol config
-   * ext: {
-   *   protoFile: "./proto/service.proto",
-   *   poolSize: 10,
-   *   streamConfig: { maxConcurrentStreams: 50 }
-   * }
    *
    * // Multi-protocol config (recommended for multi-protocol servers)
    * ext: {
