@@ -100,7 +100,7 @@ export class Loader {
 
     // Set environment variables for backward compatibility (deprecated)
     // Use app.rootPath, app.appPath, app.koattyPath instead
-    Logger.Warn('Using process.env for paths is deprecated. Use app.rootPath, app.appPath, app.koattyPath instead.');
+    // Note: These env vars are set for legacy code compatibility but should not be used in new code
     process.env.ROOT_PATH = rootPath;
     process.env.APP_PATH = appPath;
     process.env.KOATTY_PATH = koattyPath;
