@@ -11,6 +11,9 @@
   ],
   "author": "richenlin",
   "license": "BSD-3-Clause",
+  "scripts": {
+    "dev": "node --nolazy -r ts-node/register ./src/App.ts"
+  },
   "devDependencies": {
     "@types/node": "^25.1.0",
     "ts-node": "^10.x.x",

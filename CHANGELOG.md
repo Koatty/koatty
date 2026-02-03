@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.1.2
+
+### Patch Changes
+
+- build
+- Updated dependencies
+  - koatty_serve@3.1.1
+  - koatty_trace@2.1.1
+
 ## 4.1.1
 
 ### Patch Changes
