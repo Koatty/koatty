@@ -22,8 +22,8 @@ import { Load } from "koatty_loader";
 import { Trace } from "koatty_trace";
 import * as path from "path";
 import { checkClass } from "../util/Helper";
-import { Logger, LogLevelType, SetLogger } from "../util/Logger";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
+import { DefaultLogger as Logger, LogLevelType } from "koatty_logger";
 
 /**
  * Interface representing a component item.
@@ -80,7 +80,6 @@ export class Loader {
     } else {
       Logger.setLevel("info");
     }
-
     // define path
     const rootPath = app.rootPath || process.cwd();
     const appPath = app.appPath || path.resolve(rootPath, app.appDebug ? 'src' : 'dist');
@@ -206,7 +205,28 @@ export class Loader {
       if (opt.sensFields) {
         sensFields = opt.sensFields;
       }
-      SetLogger(app, { logLevel, logFilePath, sensFields });
+      if (!app.appDebug) {
+        Logger.enableBatch(true);
+        Logger.setBatchConfig({
+          maxSize: 200,
+          flushInterval: 500
+        });
+      }
+      if (logLevel) {
+        Logger.setLevel(logLevel);
+      }
+      if (logFilePath && !app.silent) {
+        Helper.define(app, "logsPath", logFilePath);
+        process.env.LOGS_PATH = logFilePath;
+        Logger.setLogFilePath(logFilePath);
+      }
+      if (sensFields) {
+        Logger.setSensFields(sensFields);
+      }
+      (app as any).once(AppEvent.appStop, async () => {
+        await Logger.flushBatch(); // 等待所有日志写入完成
+        await Logger.destroy(); // 释放所有资源
+      });
     }
   }
 
