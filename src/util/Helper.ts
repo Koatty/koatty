@@ -9,7 +9,7 @@
  */
 
 import { Helper } from "koatty_lib";
-import { Logger } from "./Logger";
+import { DefaultLogger as Logger } from "koatty_logger";
 
 const pkg = require("../../package.json");
 const { engines, version } = pkg;

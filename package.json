@@ -1,6 +1,6 @@
 {
   "name": "koatty",
-  "version": "4.1.2",
+  "version": "4.1.4",
   "description": "Koa + Typescript = koatty. Use Typescript's decorator implement auto injection.",
   "scripts": {
     "build": "npm run build:js && npm run build:dts && npm run build:doc && npm run build:cp",
@@ -18,12 +18,35 @@
     "import": "./dist/index.mjs",
     "types": "./dist/index.d.ts"
   },
+  "keywords": [
+    "koatty",
+    "koa",
+    "typescript",
+    "framework",
+    "mvc",
+    "http",
+    "https",
+    "websocket",
+    "grpc",
+    "quic",
+    "http2",
+    "http3",
+    "di",
+    "aop",
+    "ioc",
+    "inversion of control",
+    "dependency injection",
+    "aspect-oriented programming",
+    "decorator",
+    "decorator pattern",
+    "decorator factory"
+  ],
   "directories": {
     "doc": "docs"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thinkkoa/koatty.git"
+    "url": "git+https://github.com/koatty/koatty.git"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -34,9 +57,9 @@
   },
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/thinkkoa/koatty/issues"
+    "url": "https://github.com/koatty/koatty/issues"
   },
-  "homepage": "https://github.com/thinkkoa/koatty",
+  "homepage": "https://github.com/koatty/koatty",
   "maintainers": [
     {
       "name": "richenlin",

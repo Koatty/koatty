@@ -22,8 +22,8 @@ import { Load } from "koatty_loader";
 import { Trace } from "koatty_trace";
 import * as path from "path";
 import { checkClass } from "../util/Helper";
-import { Logger, LogLevelType, SetLogger } from "../util/Logger";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
+import { DefaultLogger as Logger, LogLevelType } from "koatty_logger";
 
 /**
  * Interface representing a component item.
@@ -70,9 +70,8 @@ export class Loader {
     * - Sets logging level based on environment
     * - Defines root, app and framework paths on app object
     * - Loads application name and version from package.json
-    * - Sets environment variables for paths (deprecated, for backward compatibility)
+    * - Sets environment variables for paths
     * - Maintains backward compatibility with legacy path variables
-    * @deprecated Use app.rootPath, app.appPath, app.koattyPath instead of process.env.ROOT_PATH, etc.
     */
   public static initialize(app: KoattyApplication) {
     if (app.env == 'development') {
@@ -80,7 +79,6 @@ export class Loader {
     } else {
       Logger.setLevel("info");
     }
-
     // define path
     const rootPath = app.rootPath || process.cwd();
     const appPath = app.appPath || path.resolve(rootPath, app.appDebug ? 'src' : 'dist');
@@ -98,17 +96,15 @@ export class Loader {
       }
     }
 
-    // Set environment variables for backward compatibility (deprecated)
+    // Set environment variables for backward compatibility 
     // Use app.rootPath, app.appPath, app.koattyPath instead
-    // Note: These env vars are set for legacy code compatibility but should not be used in new code
     process.env.ROOT_PATH = rootPath;
     process.env.APP_PATH = appPath;
     process.env.KOATTY_PATH = koattyPath;
 
-    // Compatible with old version, will be deprecated
-    Helper.define(app, 'thinkPath', koattyPath);
+    // Compatible with old version, will be deprecated, do not use it in new code
     process.env.THINK_PATH = koattyPath;
-  
+    Helper.define(app, 'thinkPath', koattyPath);
   }
 
   /**
@@ -206,7 +202,28 @@ export class Loader {
       if (opt.sensFields) {
         sensFields = opt.sensFields;
       }
-      SetLogger(app, { logLevel, logFilePath, sensFields });
+      if (!app.appDebug) {
+        Logger.enableBatch(true);
+        Logger.setBatchConfig({
+          maxSize: 200,
+          flushInterval: 500
+        });
+      }
+      if (logLevel) {
+        Logger.setLevel(logLevel);
+      }
+      if (logFilePath && !app.silent) {
+        Helper.define(app, "logsPath", logFilePath);
+        process.env.LOGS_PATH = logFilePath;
+        Logger.setLogFilePath(logFilePath);
+      }
+      if (sensFields) {
+        Logger.setSensFields(sensFields);
+      }
+      (app as any).once(AppEvent.appStop, async () => {
+        await Logger.flushBatch(); // 等待所有日志写入完成
+        await Logger.destroy(); // 释放所有资源
+      });
     }
   }
 

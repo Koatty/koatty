@@ -63,27 +63,3 @@ Decorator function for bootstrapping a Koatty application.
 </td></tr>
 </tbody></table>
 
-## Variables
-
-<table><thead><tr><th>
-
-Variable
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[Logger](./koatty.logger.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
-

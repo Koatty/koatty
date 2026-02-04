@@ -46,6 +46,7 @@ export * from "koatty_serve";
 // ============================================================
 
 export * from "./core/Bootstrap";
-export { Logger } from "./util/Logger";
+export * from "./core/Decorator";
+export { Log, DefaultLogger as Logger, LogLevelType } from "koatty_logger";
 
 
