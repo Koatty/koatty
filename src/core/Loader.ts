@@ -70,9 +70,8 @@ export class Loader {
     * - Sets logging level based on environment
     * - Defines root, app and framework paths on app object
     * - Loads application name and version from package.json
-    * - Sets environment variables for paths (deprecated, for backward compatibility)
+    * - Sets environment variables for paths
     * - Maintains backward compatibility with legacy path variables
-    * @deprecated Use app.rootPath, app.appPath, app.koattyPath instead of process.env.ROOT_PATH, etc.
     */
   public static initialize(app: KoattyApplication) {
     if (app.env == 'development') {
@@ -97,17 +96,15 @@ export class Loader {
       }
     }
 
-    // Set environment variables for backward compatibility (deprecated)
+    // Set environment variables for backward compatibility 
     // Use app.rootPath, app.appPath, app.koattyPath instead
-    // Note: These env vars are set for legacy code compatibility but should not be used in new code
     process.env.ROOT_PATH = rootPath;
     process.env.APP_PATH = appPath;
     process.env.KOATTY_PATH = koattyPath;
 
-    // Compatible with old version, will be deprecated
-    Helper.define(app, 'thinkPath', koattyPath);
+    // Compatible with old version, will be deprecated, do not use it in new code
     process.env.THINK_PATH = koattyPath;
-  
+    Helper.define(app, 'thinkPath', koattyPath);
   }
 
   /**
