@@ -18,6 +18,29 @@
     "import": "./dist/index.mjs",
     "types": "./dist/index.d.ts"
   },
+  "keywords": [
+    "koatty",
+    "koa",
+    "typescript",
+    "framework",
+    "mvc",
+    "http",
+    "https",
+    "websocket",
+    "grpc",
+    "quic",
+    "http2",
+    "http3",
+    "di",
+    "aop",
+    "ioc",
+    "inversion of control",
+    "dependency injection",
+    "aspect-oriented programming",
+    "decorator",
+    "decorator pattern",
+    "decorator factory"
+  ],
   "directories": {
     "doc": "docs"
   },
