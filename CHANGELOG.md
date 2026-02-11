@@ -1,5 +1,19 @@
 # Changelog
 
+## 4.1.9
+
+### Patch Changes
+
+- build
+- Updated dependencies
+  - koatty_container@2.0.6
+  - koatty_core@2.1.6
+  - koatty_config@1.2.16
+  - koatty_exception@2.1.6
+  - koatty_router@2.1.6
+  - koatty_serve@3.1.7
+  - koatty_trace@2.1.7
+
 ## 4.1.8
 
 ### Patch Changes
