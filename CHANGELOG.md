@@ -1,5 +1,12 @@
 # Changelog
 
+## 4.1.10
+
+### Patch Changes
+
+- build
+  - koatty_router@2.1.7
+
 ## 4.1.9
 
 ### Patch Changes
