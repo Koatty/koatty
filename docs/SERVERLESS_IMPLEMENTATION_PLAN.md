@@ -1,272 +1,212 @@
-# Koatty 框架 Serverless 支持方案
+# Koatty Serverless 支持方案
 
-> **状态**: 待评审  
+> **状态**: 待实施  
 > **日期**: 2026-02-13  
-> **前置依赖**: [CALLBACK_REFACTORING_PLAN.md](./CALLBACK_REFACTORING_PLAN.md)（必须先完成）
+> **前置依赖**: [CALLBACK_REFACTORING_PLAN.md](./CALLBACK_REFACTORING_PLAN.md)（已完成）
 
 ---
 
-## 一、架构分析总结
+## 一、背景
 
-### 1.1 Koatty 核心架构
+### 1.1 前置改造成果
 
-Koatty 基于 Koa 扩展，采用多协议架构（HTTP/gRPC/WebSocket/GraphQL），主要组件包括：
+[CALLBACK_REFACTORING_PLAN](./CALLBACK_REFACTORING_PLAN.md) 中的四项改造 **已全部完成并通过编译验证**：
 
-- **Bootstrap**: `packages/koatty/src/core/Bootstrap.ts` - `ExecBootStrap` 执行初始化、组件加载、最终调用 `app.listen()`
-- **ServeComponent**: `packages/koatty-serve/src/ServeComponent.ts` - 在 `loadServe` 事件创建 HTTP/gRPC/WS 等服务器实例
-- **Application.listen**: `packages/koatty-core/src/Application.ts` - 调用 `this.server.Start()` 启动监听
-- **app.callback()**: 返回 `(req, res) => Promise` 标准 Node.js HTTP 请求处理器，与 Koa 兼容，**内置 compose 缓存**
+| # | 改造项 | 涉及包 | 状态 |
+|:-:|--------|--------|:----:|
+| 1 | callback compose 缓存 | `koatty-core` | **已完成** |
+| 2 | payload 中间件前移 | `koatty-router` | **已完成** |
+| 3 | callback 接口 Koa 兼容重载 | `koatty-core` | **已完成** |
+| 4 | Bootstrap 分离 + createApplication + getRequestHandler + Ready 状态 | `koatty-core` + `koatty` | **已完成** |
 
-### 1.2 前置改造成果（CALLBACK_REFACTORING_PLAN）
-
-在实施本 Serverless 方案前，以下基础改造**已完成**：
-
-| 改造项 | 内容 | 对 Serverless 的意义 |
-|--------|------|---------------------|
-| callback compose 缓存 | `callback()` 首次调用后缓存 handler，后续请求零 compose 开销 | Serverless 冷启动后首次请求更快，后续请求极低延迟 |
-| payload 中间件前移 | payload 注册到路由之前，ctx.requestBody 等方法正确可用 | 确保 Serverless handler 处理请求时 body 解析正常 |
-| callback 接口 Koa 兼容 | 重载签名兼容 Koa 标准 `callback()` 调用 | 兼容 `serverless-http`、`supertest` 等第三方库 |
-| **Bootstrap 分离** | **新增 `createApplication()` 工厂函数 + `getRequestHandler()` 方法** | **Serverless 核心入口 —— 初始化但不监听** |
-| **Ready 状态** | **新增 `app.isReady` 属性和 `app.markReady()` 方法** | **确保 handler 在初始化完成后才能使用** |
-
-### 1.3 改造后的 Bootstrap 流程
-
-```mermaid
-flowchart TD
-    subgraph shared [共享逻辑 bootstrapApplication]
-        A[Reflect.construct App] --> B[Loader.initialize]
-        B --> C[bootFunc]
-        C --> D[IOC.setApp]
-        D --> E[LoadAllComponents]
-        E --> F[app.markReady]
-    end
-
-    subgraph traditional [传统部署 ExecBootStrap]
-        F --> G[app.listen]
-        G --> H[server.Start 监听端口]
-    end
-
-    subgraph serverless [Serverless 部署 createApplication]
-        F --> I[返回 app 实例]
-        I --> J[app.getRequestHandler]
-        J --> K[传入云平台适配器]
-    end
-```
-
-### 1.4 关键方法签名（改造后）
+改造后框架已具备以下能力：
 
 ```typescript
-// 新增：仅初始化应用，不启动服务器（Serverless 入口）
-export async function createApplication(
-  target: any, bootFunc?: (...args: any[]) => any
-): Promise<KoattyApplication>
+import { createApplication } from 'koatty';
 
-// 新增：获取标准 HTTP handler（Serverless 使用）
-app.getRequestHandler(protocol?: string): (req, res) => Promise<any>
+// 初始化应用但不启动服务器监听
+const app = await createApplication(MyApp);
 
-// 已有（已优化：内置 compose 缓存）
-app.callback(protocol?: string): (req, res) => Promise<any>
+// 获取标准 (req, res) => Promise<any> 处理函数
+const handler = app.getRequestHandler();
 
-// 已有：传统启动
-app.listen(listenCallback?: any): NativeServer
+// app.isReady === true（Bootstrap 完成后自动标记）
 ```
 
-### 1.5 Serverless 与传统部署差异
+### 1.2 设计原则
 
-| 维度 | 传统部署 | Serverless |
-|------|----------|------------|
-| 入口函数 | `ExecBootStrap()` → `app.listen(port)` | `createApplication()` → `app.getRequestHandler()` |
-| 进程模型 | 常驻进程，持续监听 | 事件驱动，按需冷启动 |
-| 请求处理 | 直接 `req/res` 入参 | API Gateway 事件需转换为 HTTP |
-| 协议支持 | HTTP/gRPC/WS/GraphQL | 仅 HTTP（API Gateway） |
-| 定时任务 | @Scheduled 常驻执行 | 需改为 EventBridge/CloudWatch 触发 |
-| 生命周期 | 长期运行，graceful shutdown | Init → Invoke → Shutdown（最多 2 秒清理） |
-| 连接管理 | 持久连接池 | 冻结/解冻导致连接断开，需 lazy reconnect |
+**koatty 框架本身只做 callback 方案改造，serverless 适配由独立的 `koatty-serverless` 包承担。**
 
-### 1.6 各云厂商入口差异
-
-| 云厂商 | 入口签名 | 事件格式 | HTTP 转换方式 |
-|--------|----------|----------|---------------|
-| AWS Lambda | `(event, context) => Promise` | API Gateway v1/v2 格式不同 | 需要 serverless-express 转换 |
-| 阿里云 FC (HTTP 触发器) | `(req, resp, context) => void` | 原生 HTTP 对象 | 直接传入 `app.getRequestHandler()` |
-| 腾讯云 SCF | `(event, context) => Promise` | API Gateway 事件 | 需要事件转换 |
+- 框架核心零 serverless 概念侵入
+- `koatty-serverless` 作为 monorepo 中的独立包，通过 `createApplication()` + `getRequestHandler()` 公共 API 与框架对接
+- 用户可选择不安装 `koatty-serverless`，直接使用框架 API 手动集成（最简方式）
 
 ---
 
-## 二、设计方案
+## 二、koatty-serverless 包设计
 
-### 2.1 总体策略：适配器模式（基于已有基础设施）
+### 2.1 包结构
 
-由于 `createApplication()` 和 `getRequestHandler()` 已经提供了 **"初始化但不监听"** 的核心能力，
-Serverless 支持方案只需在此基础上增加一个**适配层**，将云厂商的事件格式转换为标准 HTTP 请求。
-
-```mermaid
-flowchart LR
-    subgraph Foundation [框架层 - 已完成]
-        A[createApplication] --> B[app.getRequestHandler]
-        B --> C["(req, res) => Promise"]
-    end
-
-    subgraph Adapter [koatty-serverless 适配层 - 本方案]
-        C --> D{云厂商适配器}
-        D -->|AWS| E[serverless-express]
-        D -->|阿里云 FC| F[直接 callback]
-        D -->|腾讯云 SCF| G[事件转换]
-    end
-
-    E --> H[Lambda Handler]
-    F --> I[FC Handler]
-    G --> J[SCF Handler]
+```
+packages/koatty-serverless/
+├── src/
+│   ├── index.ts                    # 统一入口：createHandler + 类型导出
+│   ├── types.ts                    # 公共类型定义
+│   ├── handler.ts                  # createHandler 核心实现
+│   ├── event-detector.ts           # 事件来源检测
+│   ├── lifecycle.ts                # Serverless 生命周期管理（shutdown 等）
+│   └── adapters/
+│       ├── adapter.ts              # ServerlessAdapter 接口
+│       ├── aws-lambda.ts           # AWS Lambda 适配器
+│       ├── alicloud-fc.ts          # 阿里云函数计算适配器
+│       └── tencent-scf.ts          # 腾讯云云函数适配器
+├── test/
+│   ├── handler.test.ts
+│   ├── event-detector.test.ts
+│   └── adapters/
+│       ├── aws-lambda.test.ts
+│       ├── alicloud-fc.test.ts
+│       └── tencent-scf.test.ts
+├── package.json
+├── tsconfig.json
+├── tsup.config.ts
+├── api-extractor.json
+└── README.md
 ```
 
-**与之前方案的关键区别**：
-- **不再需要** `bootstrapServerless()` 函数 —— 直接使用 `createApplication()`
-- **不再需要** `app.serverlessMode` 标记 —— `createApplication()` 天然不调用 listen
-- **不再需要修改** `executeBootstrap` —— 框架核心代码已在 callback 改造中完成
-- **NoopServer 降级为可选优化**（见 2.3 节）
+### 2.2 package.json
 
-### 2.2 核心改造点
-
-#### 2.2.1 框架层：零改动（已由 Callback 改造完成）
-
-Callback 改造方案已提供以下能力：
-
-```typescript
-// packages/koatty/src/core/Bootstrap.ts - 已新增
-export async function createApplication(target, bootFunc?): Promise<KoattyApplication>
-
-// packages/koatty-core/src/Application.ts - 已新增
-app.getRequestHandler(protocol?: string): (req, res) => Promise<any>
-app.isReady: boolean
+```jsonc
+{
+  "name": "koatty_serverless",
+  "version": "1.0.0",
+  "description": "Serverless adapter for Koatty framework - deploy to AWS Lambda, Alibaba Cloud FC, Tencent SCF",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "pnpm run build:js && pnpm run build:dts && pnpm run build:cp",
+    "build:js": "tsup",
+    "build:dts": "bash ../../scripts/build-dts.sh",
+    "build:cp": "node ../../scripts/postBuild.js",
+    "clean": "rimraf dist temp",
+    "lint": "eslint --ext .ts,.js ./src",
+    "test": "pnpm run lint && jest --passWithNoTests"
+  },
+  "dependencies": {
+    "koatty_core": "workspace:*"
+  },
+  "peerDependencies": {
+    "koatty": "^3.x",
+    "koatty_core": "^1.x"
+  },
+  "optionalDependencies": {
+    "@codegenie/serverless-express": "^4.x"
+  },
+  "devDependencies": {
+    // 标准 monorepo 开发依赖 ...
+  }
+}
 ```
 
-Serverless 方案**直接使用这些 API**，无需再改动框架核心代码。
+> **关键决策**：`@codegenie/serverless-express` 放在 `optionalDependencies`，仅 AWS Lambda 平台需要安装。
+> 阿里云 FC HTTP 触发器无需任何额外依赖。
 
-#### 2.2.2 适配器接口设计
+---
+
+## 三、核心 API 设计
+
+### 3.1 ServerlessAdapter 接口
 
 ```typescript
-// packages/koatty-serverless/src/adapter.ts
-
+// src/adapters/adapter.ts
 import type { KoattyApplication } from 'koatty_core';
 
 /**
  * Serverless 平台适配器接口。
- * 每个云厂商实现此接口，将平台特定的事件格式转换为 Koatty 可处理的形式。
+ * 每个云厂商实现此接口，负责将平台特定的事件/请求格式
+ * 转换为 Koatty 可处理的标准 HTTP (req, res)。
  */
 export interface ServerlessAdapter {
-  /** 适配器名称 */
+  /** 适配器名称（用于日志和调试） */
   readonly name: string;
 
   /**
-   * 将 app 包装为云厂商所需的 handler 函数。
-   * @param app 已初始化的 Koatty 应用实例（isReady === true）
+   * 将已初始化的 Koatty app 包装为云厂商要求签名的 handler 函数。
+   * @param app 已初始化的 Koatty 应用实例（app.isReady === true）
    * @returns 云厂商要求签名的 handler 函数
    */
   createHandler(app: KoattyApplication): (...args: any[]) => Promise<any>;
 }
 ```
 
-#### 2.2.3 AWS Lambda 适配器
+### 3.2 CreateHandlerOptions 配置
 
 ```typescript
-// packages/koatty-serverless/src/adapters/aws.ts
-import serverlessExpress from '@codegenie/serverless-express';
+// src/types.ts
 import type { KoattyApplication } from 'koatty_core';
-import type { ServerlessAdapter } from '../adapter';
-
-export class AwsLambdaAdapter implements ServerlessAdapter {
-  readonly name = 'aws-lambda';
-  private handler: any;
-
-  createHandler(app: KoattyApplication) {
-    // 方案 A：直接传入 app（Koatty 继承自 Koa，callback() 已兼容）
-    // serverless-express 内部调用 app.callback() 获取 handler
-    this.handler = serverlessExpress({ app: app as any });
-
-    return async (event: any, context: any) => {
-      context.callbackWaitsForEmptyEventLoop = false;
-      return this.handler(event, context);
-    };
-  }
-}
-```
-
-> **关于 `serverless-express` 兼容性**：  
-> `@codegenie/serverless-express` 的 `{ app }` 参数期望对象具有 `callback()` 方法返回 `(req, res) => void`。  
-> Koatty 的 `callback()` 无参调用返回 `(req, res) => Promise`（已通过 Callback 改造支持重载签名）。  
-> **需实际验证兼容性**。若不兼容，使用方案 B：
-> ```typescript
-> // 方案 B：直接使用 getRequestHandler() 绕过
-> const handler = app.getRequestHandler();
-> const wrappedApp = { callback: () => handler };
-> this.handler = serverlessExpress({ app: wrappedApp as any });
-> ```
-
-#### 2.2.4 阿里云 FC 适配器
-
-```typescript
-// packages/koatty-serverless/src/adapters/alicloud.ts
-import type { KoattyApplication } from 'koatty_core';
-import type { ServerlessAdapter } from '../adapter';
-
-export class AliCloudFcAdapter implements ServerlessAdapter {
-  readonly name = 'alicloud-fc';
-
-  createHandler(app: KoattyApplication) {
-    // 直接使用 getRequestHandler()，阿里云 FC HTTP 触发器入参已是标准 req/res
-    const httpHandler = app.getRequestHandler();
-
-    return (req: any, resp: any, context: any) => {
-      req.fcContext = context;
-      return httpHandler(req, resp);
-    };
-  }
-}
-```
-
-#### 2.2.5 腾讯云 SCF 适配器
-
-```typescript
-// packages/koatty-serverless/src/adapters/tencent.ts
-import type { KoattyApplication } from 'koatty_core';
-import type { ServerlessAdapter } from '../adapter';
-
-export class TencentScfAdapter implements ServerlessAdapter {
-  readonly name = 'tencent-scf';
-
-  createHandler(app: KoattyApplication) {
-    const httpHandler = app.getRequestHandler();
-
-    return async (event: any, context: any) => {
-      const { req, res, promise } = createMockHttpPair(event);
-      httpHandler(req, res);
-      return promise;
-    };
-  }
-}
-
-/**
- * 将腾讯云 API Gateway 事件转为模拟的 Node.js HTTP req/res 对。
- * 返回 promise 在 res.end() 时 resolve 为 API Gateway 响应格式。
- */
-function createMockHttpPair(event: any) {
-  // ... 实现事件到 IncomingMessage/ServerResponse 的映射
-  // 参考 serverless-tencent 或 @vendia/serverless-express 的实现
-}
-```
-
-#### 2.2.6 统一入口与事件路由
-
-```typescript
-// packages/koatty-serverless/src/index.ts
-import { createApplication } from 'koatty';
-import type { KoattyApplication } from 'koatty_core';
-import type { ServerlessAdapter } from './adapter';
-import { AwsLambdaAdapter } from './adapters/aws';
-import { AliCloudFcAdapter } from './adapters/alicloud';
-import { TencentScfAdapter } from './adapters/tencent';
+import type { ServerlessAdapter } from './adapters/adapter';
 
 export type Platform = 'aws' | 'alicloud' | 'tencent';
+
+export interface CreateHandlerOptions {
+  /** 目标云平台，默认 'aws' */
+  platform?: Platform;
+
+  /** 自定义适配器（优先于 platform 参数） */
+  adapter?: ServerlessAdapter;
+
+  /** 自定义 bootFunc，在 app 初始化期间执行 */
+  bootFunc?: (...args: any[]) => any;
+
+  /**
+   * 非 HTTP 事件处理器映射。
+   * 当 Lambda/FC 入口不仅处理 HTTP 请求，还处理定时触发、消息队列等事件时，
+   * 通过此映射将不同事件路由到对应的处理逻辑。
+   */
+  eventHandlers?: Record<string, EventHandler>;
+
+  /**
+   * 每次 Invoke 开始时执行的健康检查钩子。
+   * 用于应对 Lambda 冻结/解冻后连接断开的场景。
+   *
+   * @example
+   * ```typescript
+   * healthCheck: async (app) => {
+   *   const ds = IOC.get('TypeormStore')?.getDataSource();
+   *   if (ds && !ds.isInitialized) await ds.initialize();
+   * }
+   * ```
+   */
+  healthCheck?: (app: KoattyApplication) => Promise<void>;
+}
+
+export type EventHandler = (
+  event: any,
+  context: any,
+  app: KoattyApplication,
+) => Promise<any>;
+```
+
+### 3.3 createHandler — 统一入口
+
+```typescript
+// src/handler.ts
+import { createApplication } from 'koatty';
+import type { KoattyApplication } from 'koatty_core';
+import type { CreateHandlerOptions, Platform } from './types';
+import type { ServerlessAdapter } from './adapters/adapter';
+import { AwsLambdaAdapter } from './adapters/aws-lambda';
+import { AliCloudFcAdapter } from './adapters/alicloud-fc';
+import { TencentScfAdapter } from './adapters/tencent-scf';
+import { detectEventSource } from './event-detector';
+import { bindShutdownHook } from './lifecycle';
 
 const adapterMap: Record<Platform, new () => ServerlessAdapter> = {
   aws: AwsLambdaAdapter,
@@ -274,35 +214,26 @@ const adapterMap: Record<Platform, new () => ServerlessAdapter> = {
   tencent: TencentScfAdapter,
 };
 
-export interface CreateHandlerOptions {
-  /** 云平台类型，默认 'aws' */
-  platform?: Platform;
-  /** 自定义适配器（优先于 platform） */
-  adapter?: ServerlessAdapter;
-  /** 自定义 bootFunc */
-  bootFunc?: (...args: any[]) => any;
-  /** 非 HTTP 事件处理器映射（用于定时触发、消息队列等） */
-  eventHandlers?: Record<string, (event: any, context: any, app: KoattyApplication) => Promise<any>>;
-  /** 连接健康检查钩子（每次 Invoke 开始时执行） */
-  healthCheck?: (app: KoattyApplication) => Promise<void>;
-}
-
-let cachedApp: KoattyApplication | null = null;
-let cachedHandler: ((...args: any[]) => Promise<any>) | null = null;
-
 /**
  * 创建 Serverless Handler。
  *
+ * 内部自动管理 app 实例缓存（单例），确保仅在冷启动时执行一次 bootstrap。
+ * 后续 Invoke 复用同一个 app 实例和 handler 函数。
+ *
+ * @param AppClass - Koatty 应用类（必须继承自 Koatty）
+ * @param options - 配置选项
+ * @returns 云厂商要求签名的 handler 函数
+ *
  * @example AWS Lambda
  * ```typescript
- * import { createHandler } from 'koatty-serverless';
+ * import { createHandler } from 'koatty_serverless';
  * import { App } from './App';
  * export const handler = createHandler(App, { platform: 'aws' });
  * ```
  *
  * @example 阿里云 FC
  * ```typescript
- * import { createHandler } from 'koatty-serverless';
+ * import { createHandler } from 'koatty_serverless';
  * import { App } from './App';
  * export const handler = createHandler(App, { platform: 'alicloud' });
  * ```
@@ -311,20 +242,30 @@ export function createHandler(
   AppClass: any,
   options: CreateHandlerOptions = {},
 ) {
-  const { platform = 'aws', adapter, bootFunc, eventHandlers, healthCheck } = options;
+  const {
+    platform = 'aws',
+    adapter,
+    bootFunc,
+    eventHandlers,
+    healthCheck,
+  } = options;
+
+  let cachedApp: KoattyApplication | null = null;
+  let cachedHandler: ((...args: any[]) => Promise<any>) | null = null;
 
   return async (...args: any[]) => {
-    // 1. 初始化 app（利用全局缓存避免重复 bootstrap）
+    // 1. 冷启动：初始化 app 实例（利用闭包缓存避免重复 bootstrap）
     if (!cachedApp) {
       cachedApp = await createApplication(AppClass, bootFunc);
+      bindShutdownHook(cachedApp);
     }
 
-    // 2. 连接健康检查（应对 Lambda 冻结/解冻后连接断开）
+    // 2. 连接健康检查（每次 Invoke 执行，应对冻结/解冻后连接断开）
     if (healthCheck) {
       await healthCheck(cachedApp);
     }
 
-    // 3. 事件路由：检查是否为非 HTTP 事件（定时触发、消息队列等）
+    // 3. 事件路由：检查是否为非 HTTP 事件
     if (eventHandlers && args.length >= 2) {
       const [event] = args;
       const eventSource = detectEventSource(event);
@@ -341,78 +282,378 @@ export function createHandler(
     return cachedHandler(...args);
   };
 }
+```
+
+### 3.4 事件来源检测
+
+```typescript
+// src/event-detector.ts
 
 /**
- * 检测事件来源类型。
- * 根据事件结构判断是 HTTP 请求还是其他事件（SQS、SNS、定时触发等）。
+ * 检测 Serverless 事件的来源类型。
+ * 根据事件结构判断是 HTTP 请求还是其他事件（定时触发、消息队列等）。
+ *
+ * @returns 事件来源标识，null 表示 HTTP 请求（走适配器处理）
  */
-function detectEventSource(event: any): string | null {
-  if (event.source === 'aws.events' || event.source === 'serverless.timer') {
+export function detectEventSource(event: any): string | null {
+  if (!event || typeof event !== 'object') return null;
+
+  // AWS CloudWatch Events / EventBridge
+  if (event.source === 'aws.events' || event['detail-type']) {
     return 'scheduled';
   }
+  // 自定义定时触发
+  if (event.source === 'serverless.timer' || event.triggerType === 'Timer') {
+    return 'scheduled';
+  }
+  // AWS SQS
   if (event.Records?.[0]?.eventSource === 'aws:sqs') {
     return 'sqs';
   }
+  // AWS SNS
   if (event.Records?.[0]?.EventSource === 'aws:sns') {
     return 'sns';
   }
-  if (event.httpMethod || event.requestContext?.http) {
-    return null; // HTTP 事件不走事件路由
+  // AWS S3
+  if (event.Records?.[0]?.eventSource === 'aws:s3') {
+    return 's3';
   }
+  // 阿里云定时触发器
+  if (event.triggerName && event.triggerTime) {
+    return 'scheduled';
+  }
+  // HTTP 事件（API Gateway v1/v2、FC HTTP 触发器）— 不走事件路由
+  if (event.httpMethod || event.requestContext?.http || event.headers) {
+    return null;
+  }
+
   return event.triggerType || null;
 }
-
-export { ServerlessAdapter } from './adapter';
-export { AwsLambdaAdapter } from './adapters/aws';
-export { AliCloudFcAdapter } from './adapters/alicloud';
-export { TencentScfAdapter } from './adapters/tencent';
 ```
 
-#### 2.2.7 用户入口示例
+### 3.5 Serverless 生命周期管理
 
-**AWS Lambda**：
+```typescript
+// src/lifecycle.ts
+import type { KoattyApplication } from 'koatty_core';
+
+let shutdownBound = false;
+
+/**
+ * 绑定 Serverless 关闭处理。
+ *
+ * Lambda/FC 在实例回收前发送 SIGTERM（最多 2 秒清理时间）。
+ * 此函数确保在收到 SIGTERM 时触发 Koatty 的 appStop 事件链，
+ * 执行数据库断连等清理操作。
+ *
+ * 注意：createApplication() 不调用 app.listen()，
+ * 而 listen() 内部负责绑定 appStop 事件。
+ * 因此 Serverless 模式下需要手动绑定。
+ */
+export function bindShutdownHook(app: KoattyApplication): void {
+  if (shutdownBound) return;
+  shutdownBound = true;
+
+  const shutdown = async () => {
+    try {
+      app.stop?.();
+    } catch (e) {
+      console.error('[koatty-serverless] Shutdown error:', e);
+    }
+    process.exit(0);
+  };
+
+  process.on('SIGTERM', shutdown);
+  process.on('SIGINT', shutdown);
+}
+```
+
+---
+
+## 四、平台适配器实现
+
+### 4.1 AWS Lambda 适配器
+
+```typescript
+// src/adapters/aws-lambda.ts
+import type { KoattyApplication } from 'koatty_core';
+import type { ServerlessAdapter } from './adapter';
+
+export class AwsLambdaAdapter implements ServerlessAdapter {
+  readonly name = 'aws-lambda';
+  private handler: any;
+
+  createHandler(app: KoattyApplication) {
+    // 延迟 require，仅在 AWS 平台时加载 serverless-express
+    let serverlessExpress: any;
+    try {
+      serverlessExpress = require('@codegenie/serverless-express');
+    } catch {
+      throw new Error(
+        '[koatty-serverless] AWS Lambda adapter requires "@codegenie/serverless-express". ' +
+        'Install it: npm install @codegenie/serverless-express'
+      );
+    }
+
+    // serverless-express 接受 app 对象，内部调用 app.callback()
+    // Koatty 继承自 Koa，callback() 无参调用返回标准 (req, res) handler
+    this.handler = serverlessExpress({ app: app as any });
+
+    return async (event: any, context: any) => {
+      // 避免 Lambda 等待 event loop 清空（数据库连接等会保持 loop 活跃）
+      context.callbackWaitsForEmptyEventLoop = false;
+      return this.handler(event, context);
+    };
+  }
+}
+```
+
+> **兼容性说明**：`@codegenie/serverless-express` 的 `{ app }` 参数期望对象具有
+> `callback()` 方法返回 `(req, res) => void`。Koatty 继承自 Koa，`callback()` 无参
+> 调用已兼容（通过 Callback 改造的重载签名保证）。
+>
+> 若实际集成发现不兼容，使用备选方案：
+> ```typescript
+> const handler = app.getRequestHandler();
+> const wrappedApp = { callback: () => handler };
+> this.handler = serverlessExpress({ app: wrappedApp as any });
+> ```
+
+### 4.2 阿里云 FC 适配器
+
+```typescript
+// src/adapters/alicloud-fc.ts
+import type { KoattyApplication } from 'koatty_core';
+import type { ServerlessAdapter } from './adapter';
+
+/**
+ * 阿里云函数计算适配器。
+ *
+ * 阿里云 FC HTTP 触发器的入参已是标准 Node.js HTTP 对象 (IncomingMessage, ServerResponse)，
+ * 因此可直接透传给 app.getRequestHandler()，无需事件转换。
+ * 这是最轻量的适配器实现。
+ */
+export class AliCloudFcAdapter implements ServerlessAdapter {
+  readonly name = 'alicloud-fc';
+
+  createHandler(app: KoattyApplication) {
+    const httpHandler = app.getRequestHandler();
+
+    return async (req: any, resp: any, context?: any) => {
+      // 将 FC context 挂载到 req 上，供业务代码读取
+      if (context) {
+        req.fcContext = context;
+      }
+      return httpHandler(req, resp);
+    };
+  }
+}
+```
+
+### 4.3 腾讯云 SCF 适配器
+
+```typescript
+// src/adapters/tencent-scf.ts
+import { IncomingMessage, ServerResponse } from 'http';
+import { Socket } from 'net';
+import type { KoattyApplication } from 'koatty_core';
+import type { ServerlessAdapter } from './adapter';
+
+/**
+ * 腾讯云云函数 (SCF) 适配器。
+ *
+ * 腾讯云 SCF 通过 API Gateway 接收 HTTP 请求，入参为 JSON 事件对象，
+ * 需要将其转换为模拟的 Node.js HTTP req/res 对。
+ */
+export class TencentScfAdapter implements ServerlessAdapter {
+  readonly name = 'tencent-scf';
+
+  createHandler(app: KoattyApplication) {
+    const httpHandler = app.getRequestHandler();
+
+    return async (event: any, context: any) => {
+      const { req, res, promise } = createMockHttpPair(event);
+      // 将 SCF context 挂载到 req
+      (req as any).scfContext = context;
+      httpHandler(req, res);
+      return promise;
+    };
+  }
+}
+
+/**
+ * 将腾讯云 API Gateway 事件转为模拟的 Node.js HTTP req/res 对。
+ * 返回 promise 在 res.end() 时 resolve 为 API Gateway 响应格式。
+ */
+function createMockHttpPair(event: any): {
+  req: IncomingMessage;
+  res: ServerResponse;
+  promise: Promise<any>;
+} {
+  const {
+    httpMethod = 'GET',
+    path = '/',
+    headers = {},
+    queryString = {},
+    body,
+    isBase64Encoded,
+  } = event;
+
+  // 构建 URL（含 query string）
+  const qs = Object.entries(queryString)
+    .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(String(v))}`)
+    .join('&');
+  const url = qs ? `${path}?${qs}` : path;
+
+  // 创建模拟 socket 和 req
+  const socket = new Socket();
+  const req = new IncomingMessage(socket);
+  req.method = httpMethod;
+  req.url = url;
+  req.headers = Object.fromEntries(
+    Object.entries(headers).map(([k, v]) => [k.toLowerCase(), v])
+  );
+
+  // 写入 body
+  if (body) {
+    const bodyBuf = isBase64Encoded
+      ? Buffer.from(body, 'base64')
+      : Buffer.from(body);
+    req.push(bodyBuf);
+  }
+  req.push(null); // EOF
+
+  // 创建 res 并捕获输出
+  const res = new ServerResponse(req);
+  const chunks: Buffer[] = [];
+
+  const promise = new Promise<any>((resolve) => {
+    const originalWrite = res.write.bind(res);
+    const originalEnd = res.end.bind(res);
+
+    res.write = function (chunk: any, ...args: any[]) {
+      if (chunk) chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+      return originalWrite(chunk, ...args);
+    } as any;
+
+    res.end = function (chunk?: any, ...args: any[]) {
+      if (chunk) chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+
+      const responseBody = Buffer.concat(chunks).toString('utf8');
+      const responseHeaders: Record<string, string> = {};
+      const rawHeaders = res.getHeaders();
+      for (const [key, val] of Object.entries(rawHeaders)) {
+        responseHeaders[key] = String(val);
+      }
+
+      resolve({
+        isBase64Encoded: false,
+        statusCode: res.statusCode,
+        headers: responseHeaders,
+        body: responseBody,
+      });
+
+      return originalEnd(chunk, ...args);
+    } as any;
+  });
+
+  return { req, res, promise };
+}
+```
+
+---
+
+## 五、统一导出
+
+```typescript
+// src/index.ts
+
+// 核心 API
+export { createHandler } from './handler';
+
+// 类型
+export type { CreateHandlerOptions, Platform, EventHandler } from './types';
+export type { ServerlessAdapter } from './adapters/adapter';
+
+// 适配器（用户可直接使用或扩展）
+export { AwsLambdaAdapter } from './adapters/aws-lambda';
+export { AliCloudFcAdapter } from './adapters/alicloud-fc';
+export { TencentScfAdapter } from './adapters/tencent-scf';
+
+// 工具
+export { detectEventSource } from './event-detector';
+```
+
+---
+
+## 六、用户使用示例
+
+### 6.1 AWS Lambda（最常见场景）
+
 ```typescript
 // src/lambda.ts
-import { createHandler } from 'koatty-serverless';
+import { createHandler } from 'koatty_serverless';
 import { App } from './App';
 
 export const handler = createHandler(App, {
   platform: 'aws',
   healthCheck: async (app) => {
-    // 检查数据库连接，断开则重连
-    const ds = app.getService?.('TypeormStore')?.getDataSource();
+    // 检查数据库连接，Lambda 冻结/解冻后可能断开
+    const ds = IOC.get('TypeormStore')?.getDataSource();
     if (ds && !ds.isInitialized) {
       await ds.initialize();
     }
   },
   eventHandlers: {
+    // CloudWatch Events 定时触发 → 执行后台任务
     scheduled: async (event, context, app) => {
-      const cronService = app.getService?.('CronService');
+      const cronService = IOC.get('CronService');
       await cronService?.runScheduledTasks();
+      return { statusCode: 200 };
+    },
+    // SQS 消息 → 异步处理
+    sqs: async (event, context, app) => {
+      for (const record of event.Records) {
+        const body = JSON.parse(record.body);
+        await IOC.get('MessageService')?.process(body);
+      }
       return { statusCode: 200 };
     },
   },
 });
 ```
 
-**阿里云 FC**：
+### 6.2 阿里云函数计算
+
 ```typescript
 // src/fc.ts
-import { createHandler } from 'koatty-serverless';
+import { createHandler } from 'koatty_serverless';
 import { App } from './App';
 
 export const handler = createHandler(App, { platform: 'alicloud' });
 ```
 
-**不使用 koatty-serverless（最简方式）**：
+### 6.3 腾讯云云函数
+
 ```typescript
-// src/handler.ts — 直接使用框架 API，无需额外适配包
+// src/scf.ts
+import { createHandler } from 'koatty_serverless';
+import { App } from './App';
+
+export const handler = createHandler(App, { platform: 'tencent' });
+```
+
+### 6.4 不使用 koatty-serverless（最简方式）
+
+对于阿里云 FC HTTP 触发器等入参已是标准 HTTP 对象的平台，可直接使用框架 API：
+
+```typescript
+// src/handler.ts
 import { createApplication } from 'koatty';
 import { App } from './App';
 
 let handler: (req: any, res: any) => Promise<any>;
 
-// 阿里云 FC HTTP 触发器：入参已是标准 req/res
 export async function httpHandler(req: any, resp: any, context: any) {
   if (!handler) {
     const app = await createApplication(App);
@@ -422,24 +663,129 @@ export async function httpHandler(req: any, resp: any, context: any) {
 }
 ```
 
-### 2.3 可选优化：NoopServer 与 serverlessMode
+### 6.5 自定义适配器
 
-> **注意**：以下优化**非必需**。`createApplication()` 已能正常工作，
-> 但在 `LoadAllComponents` 过程中仍会触发 `loadServe` 事件创建真实服务器实例（未启动监听）。
-> 若希望**跳过不必要的服务器创建**（尤其是 gRPC 等重量级协议），可实施以下优化。
+```typescript
+// 实现自定义适配器（如 Cloudflare Workers、Vercel Edge Functions）
+import type { ServerlessAdapter } from 'koatty_serverless';
+import type { KoattyApplication } from 'koatty_core';
 
-#### 2.3.1 NoopServer
+class CloudflareAdapter implements ServerlessAdapter {
+  readonly name = 'cloudflare-workers';
 
-在 `packages/koatty-serve` 中引入空操作服务器：
+  createHandler(app: KoattyApplication) {
+    const httpHandler = app.getRequestHandler();
+    return async (request: Request) => {
+      // 将 Cloudflare Request 转为 Node.js HTTP 格式 ...
+    };
+  }
+}
+
+// 使用
+export const handler = createHandler(App, {
+  adapter: new CloudflareAdapter(),
+});
+```
+
+---
+
+## 七、兼容性矩阵
+
+### 7.1 特性支持
+
+| 特性 | 传统部署 | Serverless (HTTP) | 说明 |
+|------|:--------:|:-----------------:|------|
+| HTTP Controller | 支持 | 支持 | |
+| 中间件链 | 支持 | 支持 | compose 缓存加速 |
+| AOP 切面 | 支持 | 支持 | |
+| IOC 依赖注入 | 支持 | 支持 | |
+| gRPC | 支持 | **不支持** | 长连接不适合 Serverless |
+| WebSocket | 支持 | **不支持** | 需用 API Gateway WebSocket API |
+| GraphQL | 支持 | 支持 | 走 HTTP 协议 |
+| @Scheduled 定时任务 | 支持 | 改用事件路由 | `eventHandlers.scheduled` |
+| TypeORM/数据库 | 支持 | 需适配 | healthCheck + RDS Proxy |
+| OpenTelemetry | 支持 | 支持 | 需 Lambda 兼容 exporter |
+
+### 7.2 各云厂商对照
+
+| 维度 | AWS Lambda | 阿里云 FC | 腾讯云 SCF |
+|------|-----------|-----------|-----------|
+| 入口签名 | `(event, context) => Promise` | `(req, resp, context) => void` | `(event, context) => Promise` |
+| HTTP 格式 | API Gateway 事件（需转换） | 标准 Node.js HTTP 对象 | API Gateway 事件（需转换） |
+| 适配器实现 | `serverless-express` 转换 | **直接透传** | 手动构建 mock req/res |
+| 额外依赖 | `@codegenie/serverless-express` | 无 | 无 |
+| 非 HTTP 事件 | SQS/SNS/EventBridge | Timer/OSS | Timer/COS |
+| Shutdown 信号 | SIGTERM (2s) | SIGTERM | SIGTERM |
+
+---
+
+## 八、冷启动优化
+
+### 8.1 耗时分析
+
+| 阶段 | 操作 | 预估耗时 | 优化空间 |
+|------|------|----------|----------|
+| 模块加载 | require/import 所有依赖 | 200-500ms | esbuild 单文件打包 |
+| Loader.initialize | 路径、环境初始化 | <10ms | 无 |
+| ComponentScan | 文件系统扫描 | 50-200ms | 显式组件注册 |
+| IOC 注册 | 组件解析、依赖注入 | 50-100ms | 按需加载 |
+| 中间件组装 | 构建中间件链 | <5ms | **已优化（compose 缓存）** |
+| AOP 织入 | 切面代理 | 20-50ms | 无 |
+| Server 创建 | loadServe 事件创建实例 | <10ms | 可选 NoopServer |
+| 数据库连接 | TypeORM 初始化 | 200-1000ms | Lazy connect、RDS Proxy |
+| **总计** | | **500-2000ms** | **目标 < 500ms** |
+
+### 8.2 优化策略
+
+| 策略 | 实现方式 | 预期效果 |
+|------|----------|----------|
+| App 实例缓存 | `createHandler` 内部闭包单例 | 仅冷启动执行一次 bootstrap |
+| Handler 缓存 | `getRequestHandler()` compose 缓存 | 首次请求后零 compose 开销 |
+| 单文件打包 | esbuild bundle → 减少文件 I/O | 减少 100-300ms |
+| 显式组件注册 | `@Components` 装饰器或 bootFunc 注册 | 减少 50-200ms |
+| 数据库 Lazy Connect | 首次查询时建立连接 | 减少 200-1000ms |
+| Provisioned Concurrency | 云厂商预留实例/预留并发 | 消除冷启动 |
+
+### 8.3 ComponentScan 打包兼容方案
+
+> **关键风险**：使用 esbuild/webpack 打包为单文件后，文件系统中不再有
+> `src/controller/*.ts` 等文件，`ComponentScan` 的 `fs.readdirSync` 将找不到组件。
+
+**方案：显式组件注册模式**
+
+```typescript
+// 在 bootFunc 中手动注册组件，绕过文件系统扫描
+const app = await createApplication(App, async (app) => {
+  IOC.reg('UserController', UserController, { type: 'CONTROLLER' });
+  IOC.reg('UserService', UserService, { type: 'SERVICE' });
+});
+```
+
+或通过装饰器声明（未来增强）：
+
+```typescript
+@Components([UserController, UserService, AuthMiddleware])
+export class App extends Koatty { ... }
+```
+
+### 8.4 可选优化：NoopServer
+
+`createApplication()` 不调用 `listen()`，但 `LoadAllComponents` 过程中仍会触发
+`loadServe` 事件创建真实服务器实例（未启动监听）。若希望跳过不必要的服务器创建：
+
+```typescript
+// config/server.ts — 用户配置
+export default {
+  serverless: true,  // 启用后创建 NoopServer 而非真实服务器
+  protocol: 'http',
+  port: 3000,
+};
+```
 
 ```typescript
 // packages/koatty-serve/src/server/NoopServer.ts
 import { KoattyServer, NativeServer } from 'koatty_core';
 
-/**
- * 空操作服务器 - Serverless 模式下使用。
- * 满足 KoattyServer 接口约束，但不执行任何实际操作。
- */
 export class NoopServer implements KoattyServer {
   options: any = {};
 
@@ -454,323 +800,75 @@ export class NoopServer implements KoattyServer {
 }
 ```
 
-#### 2.3.2 ServeComponent 条件加载
-
-```typescript
-// packages/koatty-serve/src/ServeComponent.ts
-@OnEvent(AppEvent.loadServe)
-async initServer(app: KoattyApplication): Promise<void> {
-  // 检查配置中是否启用了 serverless 优化
-  const serveOpts = app.config(undefined, 'server') || { protocol: "http" };
-
-  if (serveOpts.serverless === true) {
-    Logger.Log('Koatty', '', 'Serverless mode: using NoopServer (skip server creation)');
-    Helper.define(app, 'server', new NoopServer());
-    return;
-  }
-
-  // ... 现有服务器创建逻辑不变
-}
-```
-
-用户在 `config/server.ts` 中配置即可启用：
-
-```typescript
-// config/server.ts
-export default {
-  serverless: true,  // 启用后 loadServe 创建 NoopServer 而非真实服务器
-  protocol: 'http',
-  port: 3000,
-};
-```
-
-### 2.4 兼容性矩阵
-
-| 特性 | 传统部署 | Serverless (HTTP) | 说明 |
-|------|----------|-------------------|------|
-| HTTP Controller | 支持 | 支持 | |
-| 中间件 | 支持 | 支持 | compose 缓存加速 |
-| AOP | 支持 | 支持 | |
-| IOC/DI | 支持 | 支持 | |
-| gRPC | 支持 | 不支持 | 长连接不适合 Serverless |
-| WebSocket | 支持 | 不支持 | 需用 API Gateway WebSocket API |
-| GraphQL | 支持 | 支持 | 走 HTTP 协议 |
-| @Scheduled 定时任务 | 支持 | 改用事件路由 | 通过 `eventHandlers.scheduled` 处理 |
-| TypeORM/数据库连接 | 支持 | 需适配 | 连接池 + RDS Proxy/Serverless DB |
-| OpenTelemetry | 支持 | 支持 | 需 Lambda 兼容的 exporter |
+> NoopServer 为**可选优化**，`createApplication()` 不依赖它即可正常工作。
 
 ---
 
-## 三、冷启动优化与生命周期
-
-### 3.1 冷启动耗时分析
-
-Koatty 的 bootstrap 涉及以下阶段，需逐一评估耗时：
-
-| 阶段 | 操作 | 预估耗时 | 优化空间 |
-|------|------|----------|----------|
-| 模块加载 | require/import 所有依赖 | 200-500ms | esbuild 打包减少文件数 |
-| Loader.initialize | 路径、环境初始化 | <10ms | 无 |
-| ComponentScan | **文件系统扫描** | 50-200ms | 显式注册替代扫描 |
-| IOC 注册 | 组件解析、依赖注入 | 50-100ms | 按需加载 |
-| 中间件组装 | 构建中间件链 | <5ms | **已优化（compose 缓存）** |
-| AOP 织入 | 切面代理 | 20-50ms | 无 |
-| Server 创建 | 创建但不监听 | <10ms | **可选优化（NoopServer）** |
-| 数据库连接 | TypeORM 初始化 | 200-1000ms | Lazy connect、RDS Proxy |
-| **总计** | | **500-2000ms** | 目标 < 500ms |
-
-> **关键风险**：`ComponentScan` 依赖 `fs.readdirSync` 递归扫描 `src/` 目录。
-> 当使用 esbuild/webpack 打包为单文件后，文件系统中不再有 `src/controller/*.ts` 等文件，
-> 扫描将找不到任何组件，**导致应用无法正常启动**。
-
-### 3.2 ComponentScan 打包兼容性方案
-
-提供**显式组件注册模式**，绕过文件系统扫描：
-
-```typescript
-// 方案：在 App 类中通过装饰器显式声明所有组件
-@Components([
-  UserController,
-  UserService,
-  AuthMiddleware,
-  // ... 显式列出所有组件
-])
-export class App extends Koatty {
-  // ...
-}
-```
-
-或在 `createApplication` 的 bootFunc 中手动注册：
-
-```typescript
-const app = await createApplication(App, async (app) => {
-  // 显式注册组件，绕过 ComponentScan
-  IOC.reg('UserController', UserController, { type: 'CONTROLLER' });
-  IOC.reg('UserService', UserService, { type: 'SERVICE' });
-});
-```
-
-在 `Loader.CheckAllComponents` 中增加分支：
-
-```typescript
-static CheckAllComponents(app: KoattyApplication, target: any) {
-  if (Reflect.hasMetadata('COMPONENTS_LIST', target)) {
-    // 显式注册模式：直接从元数据读取组件列表
-    const components = Reflect.getMetadata('COMPONENTS_LIST', target);
-    components.forEach(comp => IOC.reg(comp));
-    return;
-  }
-  // ... 现有文件扫描逻辑
-}
-```
-
-### 3.3 冷启动优化策略
-
-| 策略 | 说明 | 预期效果 |
-|------|------|----------|
-| App 实例缓存 | `createHandler` 内部单例缓存，避免重复 bootstrap | 仅首次调用冷启动 |
-| Handler 缓存 | `getRequestHandler()` 内部 compose 缓存 | 首次请求后零 compose 开销 |
-| 模块预加载 | Handler 文件顶层 `import App`，利用 Lambda Init 阶段 | Init 期间完成模块加载 |
-| 单文件打包 | esbuild bundle 为单文件，减少文件 I/O | 减少 100-300ms |
-| 显式组件注册 | 绕过 `ComponentScan` 文件扫描 | 减少 50-200ms |
-| NoopServer | 跳过服务器实例创建 | 减少 <10ms（HTTP），更多（gRPC） |
-| 数据库 Lazy Connect | 首次查询时才建立连接 | 减少 200-1000ms |
-| Provisioned Concurrency | AWS 预留并发 / FC 预留实例 | 消除冷启动 |
-| 协议精简 | 打包时排除 gRPC/WS 相关代码 | 减少包体积和加载时间 |
-
-### 3.4 Lambda 生命周期对齐
+## 九、Lambda 生命周期对齐
 
 ```mermaid
 sequenceDiagram
     participant L as Lambda Runtime
-    participant H as Handler (createHandler)
+    participant H as createHandler
     participant A as Koatty App
 
-    Note over L: Init Phase
+    Note over L: Init Phase（冷启动）
     L->>H: 加载 handler 模块
-    H->>A: createApplication(App)
-    A->>A: IOC/AOP/中间件/路由初始化
+    H->>A: createApplication(AppClass)
+    A->>A: IOC / AOP / 中间件 / 路由初始化
     A->>A: app.markReady()
-    A-->>H: 返回 app 实例 (缓存)
-    H->>A: app.getRequestHandler()
-    A-->>H: 返回 cached handler
+    A-->>H: 返回 app 实例（缓存到闭包）
+    H->>H: bindShutdownHook(app)
+    H->>A: adapter.createHandler(app)
+    A-->>H: 返回 platformHandler（缓存到闭包）
 
-    Note over L: Invoke Phase (可多次)
+    Note over L: Invoke Phase（可多次复用）
     L->>H: handler(event, context)
-    H->>H: healthCheck(app)
-    H->>A: adapter → handler(req, res)
-    A->>A: compose 缓存命中 → 中间件 → 路由 → Controller
-    A-->>H: response
+    H->>H: healthCheck(app)（可选）
+    H->>H: detectEventSource(event)
+    alt HTTP 事件
+        H->>A: platformHandler(event, context)
+        A->>A: compose 缓存命中 → 中间件链 → Controller
+        A-->>H: HTTP response
+    else 非 HTTP 事件
+        H->>H: eventHandlers[source](event, context, app)
+    end
     H-->>L: result
 
-    Note over L: Shutdown Phase (SIGTERM, 最多 2 秒)
-    L->>A: SIGTERM → process event → appStop
+    Note over L: Shutdown Phase（SIGTERM, 2s）
+    L->>H: SIGTERM
+    H->>A: app.stop()
     A->>A: 关闭数据库连接等清理
 ```
 
-**Shutdown 处理**：
-
-Koatty 现有的 `bindProcessEvent(this, 'appStop')` 已监听 SIGTERM 信号。
-在 `createApplication()` 流程中，虽然没有调用 `listen()`（listen 内部注册 appStop），
-但 `LoadAllComponents` 执行到 `loadServe` 时，`BaseServer` 构造函数中可能已通过 `CreateTerminus` 注册了关闭处理。
-
-**建议**：在 `createApplication` 返回前，手动绑定 SIGTERM 处理：
-
-```typescript
-// 在 koatty-serverless/src/index.ts 的 createHandler 中
-if (!cachedApp) {
-  cachedApp = await createApplication(AppClass, bootFunc);
-
-  // Serverless 关闭处理
-  process.on('SIGTERM', async () => {
-    try {
-      await asyncEvent(cachedApp, AppEvent.appStop);
-    } catch (e) {
-      console.error('Serverless shutdown error:', e);
-    }
-    process.exit(0);
-  });
-}
-```
-
 ---
 
-## 四、插件与扩展适配
+## 十、测试策略
 
-### 4.1 TypeORM 插件
-
-| 问题 | 方案 |
-|------|------|
-| 冷启动时连接慢 | 支持 Lazy Connect：首次查询时才初始化 DataSource |
-| 冻结后连接断开 | `healthCheck` 钩子中检测并重建连接 |
-| 连接数超限 | 使用 RDS Proxy / PlanetScale / Neon 等 Serverless DB |
-| 连接池配置 | Serverless 模式下 `extra: { max: 1 }` 限制连接数 |
-
-HealthCheck 使用示例：
-
-```typescript
-export const handler = createHandler(App, {
-  platform: 'aws',
-  healthCheck: async (app) => {
-    const ds = app.getService?.('TypeormStore')?.getDataSource();
-    if (ds && !ds.isInitialized) {
-      await ds.initialize();
-    }
-  },
-});
-```
-
-### 4.2 Scheduled 插件
-
-```typescript
-// Serverless 模式下，ScheduledPlugin 可通过配置禁用内部定时器
-// config/plugin.ts
-export default {
-  schedule: {
-    enabled: process.env.KOATTY_SERVERLESS !== 'true',
-  },
-};
-```
-
-定时任务通过 `eventHandlers.scheduled` 路由到 Service 层，不依赖内建调度器。
-
-### 4.3 Trace/Metrics
-
-OpenTelemetry 可继续使用，需配置 Lambda 兼容的 exporter：
-
-```typescript
-// AWS Lambda: 使用 ADOT Lambda Layer 或 @opentelemetry/exporter-trace-otlp-http
-// 阿里云 FC: 使用 ARMS 集成
-```
-
----
-
-## 五、实施步骤
-
-### Phase 0：框架基础改造（前置依赖，已规划）
-
-> 详见 [CALLBACK_REFACTORING_PLAN.md](./CALLBACK_REFACTORING_PLAN.md)
-
-| # | 改造项 | 涉及包 | 状态 |
-|:-:|--------|--------|:----:|
-| 1 | callback compose 缓存 | `koatty-core` | 待实施 |
-| 2 | payload 中间件前移 | `koatty-router` | 待实施 |
-| 3 | callback 接口 Koa 兼容重载 | `koatty-core` | 待实施 |
-| 4 | Bootstrap 分离 + createApplication + getRequestHandler + Ready 状态 | `koatty-core` + `koatty` | 待实施 |
-
-**Phase 0 完成后，以下能力即可使用**：
-```typescript
-import { createApplication } from 'koatty';
-const app = await createApplication(App);
-const handler = app.getRequestHandler(); // (req, res) => Promise<any>
-```
-
-### Phase 1：koatty-serverless 适配包（1-2 周）
-
-依赖：Phase 0 全部完成
-
-1. **新建包**：`packages/koatty-serverless`，定义 `ServerlessAdapter` 接口
-2. **AWS Lambda 适配器**：集成 `@codegenie/serverless-express`，验证 callback 兼容性
-3. **阿里云 FC 适配器**：HTTP 触发器直接桥接
-4. **腾讯云 SCF 适配器**：事件转换层
-5. **统一入口**：`createHandler()` + 事件路由 + 健康检查钩子
-6. **单元测试**：
-   - `createHandler` 正确初始化 app 并缓存
-   - `detectEventSource` 正确识别 HTTP/SQS/SNS/Scheduled 事件
-   - 各平台适配器正确创建 handler
-7. **集成测试**：
-   - 模拟 API Gateway v1/v2 事件 → 验证 HTTP 请求路由到 Controller
-   - 模拟定时触发事件 → 验证 `eventHandlers.scheduled` 正确执行
-   - 模拟阿里云 FC HTTP 触发器 → 验证 req/res 透传
-
-### Phase 2：冷启动优化（1 周）
-
-8. **NoopServer**（可选）：在 `koatty-serve` 中实现，ServeComponent 通过配置判断
-9. **显式组件注册**：`@Components` 装饰器或 bootFunc 手动注册
-10. **esbuild 打包配置**：提供示例 `esbuild.config.ts`，单文件输出 + 外部化特定包
-11. **冷启动 Benchmark**：
-    - 建立基准测试：测量 bootstrap 各阶段耗时
-    - 对比：文件扫描 vs 显式注册、打包前 vs 打包后
-    - 目标：冷启动 < 500ms
-
-### Phase 3：文档与示例（1 周）
-
-12. **部署指南**：AWS Lambda (SAM/CDK/Serverless Framework)、阿里云 FC、腾讯云 SCF
-13. **示例项目**：`packages/koatty/examples/serverless-aws/`，完整可运行的 Lambda 项目
-14. **迁移指南**：现有 Koatty 项目如何增加 Serverless 部署入口
-15. **限制说明**：明确 gRPC/WebSocket 不支持、@Scheduled 替代方案等
-
----
-
-## 六、测试策略
-
-### 6.1 单元测试
+### 10.1 单元测试
 
 | 测试项 | 覆盖点 |
 |--------|--------|
-| `createApplication` | 返回 app、不调用 listen、app.isReady === true |
-| `getRequestHandler` | 返回有效 handler、compose 缓存生效 |
-| `createHandler` | app 初始化并缓存、事件路由正确 |
-| `NoopServer` (可选) | Start/Stop 方法安全执行 |
-| `detectEventSource` | 正确识别 HTTP/SQS/SNS/Scheduled 事件 |
-| `AwsLambdaAdapter` | serverless-express 正确初始化 |
-| `AliCloudFcAdapter` | req/res 正确透传 |
-| `healthCheck` | 每次 Invoke 前正确执行 |
+| `createHandler` | 初始化 app 并缓存、重复调用不重复 bootstrap |
+| `detectEventSource` | HTTP/SQS/SNS/Scheduled/S3/未知事件 正确识别 |
+| `AwsLambdaAdapter` | serverless-express 正确初始化、callbackWaitsForEmptyEventLoop |
+| `AliCloudFcAdapter` | req/res 透传、fcContext 挂载 |
+| `TencentScfAdapter` | 事件到 req/res 转换、响应格式正确 |
+| `healthCheck` | 每次 Invoke 前执行、异常不阻断请求 |
+| `bindShutdownHook` | SIGTERM 触发清理、仅绑定一次 |
+| `eventHandlers` 路由 | 正确分发到对应 handler |
 
-### 6.2 集成测试
-
-使用 `@architect/sandbox` 或 `aws-lambda-rig` 本地模拟 Lambda 运行时：
+### 10.2 集成测试
 
 ```typescript
 // test/integration/lambda.test.ts
-import { createHandler } from 'koatty-serverless';
-import { App } from '../fixtures/App';
+import { createHandler } from '../src';
 
 describe('Lambda Integration', () => {
   let handler: any;
 
   beforeAll(() => {
-    handler = createHandler(App, { platform: 'aws' });
+    handler = createHandler(TestApp, { platform: 'aws' });
   });
 
   it('should handle API Gateway v2 HTTP event', async () => {
@@ -784,20 +882,26 @@ describe('Lambda Integration', () => {
   });
 
   it('should route scheduled events', async () => {
-    const scheduledHandler = createHandler(App, {
+    const scheduledHandler = createHandler(TestApp, {
       platform: 'aws',
       eventHandlers: {
         scheduled: async () => ({ ok: true }),
       },
     });
-    const event = { source: 'aws.events', detail: {} };
+    const event = { source: 'aws.events', 'detail-type': 'Scheduled Event' };
     const result = await scheduledHandler(event, {});
     expect(result).toEqual({ ok: true });
+  });
+
+  it('should cache app across invocations', async () => {
+    await handler({ httpMethod: 'GET', path: '/' }, {});
+    await handler({ httpMethod: 'GET', path: '/' }, {});
+    // bootstrap 只执行一次
   });
 });
 ```
 
-### 6.3 冷启动 Benchmark
+### 10.3 冷启动 Benchmark
 
 ```typescript
 // test/benchmark/coldstart.ts
@@ -811,64 +915,48 @@ const elapsed = Number(process.hrtime.bigint() - start) / 1e6;
 
 console.log(`Cold start: ${elapsed.toFixed(0)}ms`);
 console.log(`  app.isReady: ${app.isReady}`);
-// 断言: elapsed < 500
+assert(elapsed < 500, `Cold start exceeded 500ms: ${elapsed}ms`);
 ```
 
-### 6.4 E2E 测试（CI/CD 中可选）
+---
 
-- 部署到真实 AWS Lambda（通过 SAM/CDK）
-- 发送 HTTP 请求验证响应
-- 检查 CloudWatch Logs 中的冷启动耗时
+## 十一、实施步骤
+
+| Phase | 内容 | 预估周期 | 依赖 |
+|:-----:|------|:--------:|:----:|
+| **0** | 框架 Callback 改造 | — | **已完成** |
+| **1** | 创建 `koatty-serverless` 包骨架 + 接口定义 + 统一入口 | 2-3 天 | Phase 0 |
+| **2** | 实现三个平台适配器 + 事件检测 + 生命周期管理 | 3-5 天 | Phase 1 |
+| **3** | 单元测试 + 集成测试 | 2-3 天 | Phase 2 |
+| **4** | 冷启动优化（显式组件注册、esbuild 打包配置） | 3-5 天 | Phase 3 |
+| **5** | 文档 + 示例项目 + 迁移指南 | 2-3 天 | Phase 4 |
 
 ---
 
-## 七、依赖
+## 十二、风险与取舍
 
-| 依赖 | 用途 | 安装范围 |
-|------|------|----------|
-| `@codegenie/serverless-express` | AWS Lambda HTTP 事件转换 | koatty-serverless |
-| `esbuild` | Serverless 打包（单文件输出） | devDependency |
-| `@architect/sandbox` (可选) | 本地 Lambda 模拟测试 | devDependency |
-
-> **注意**：`koatty` 框架本身无新增依赖。`createApplication()` 和 `getRequestHandler()`
-> 均为框架内部代码，不引入任何外部包。
-
----
-
-## 八、风险与取舍
-
-### 8.1 技术风险
+### 12.1 技术风险
 
 | 风险 | 影响 | 缓解措施 |
 |------|------|----------|
-| `serverless-express` 与 Koatty callback 不兼容 | AWS 适配器不可用 | 预研验证；备选方案：通过 `getRequestHandler()` 包装 |
+| `serverless-express` 与 Koatty callback 不兼容 | AWS 适配器不可用 | 预研验证；备选：`getRequestHandler()` 包装 |
 | esbuild 打包后 ComponentScan 失败 | 应用无法启动 | 提供显式组件注册模式 |
-| reflect-metadata 在打包后丢失 | IOC/AOP 失效 | esbuild 配置 `keepNames: true` + emitDecoratorMetadata |
-| Lambda 冻结后数据库连接断开 | 请求失败 | healthCheck 钩子 + RDS Proxy |
-| `loadServe` 创建不必要的服务器实例 | 轻微内存浪费 | 可选优化：NoopServer（Phase 2） |
+| reflect-metadata 打包后丢失 | IOC/AOP 失效 | esbuild `keepNames: true` + emitDecoratorMetadata |
+| Lambda 冻结后数据库连接断开 | 请求失败 | healthCheck + RDS Proxy |
+| `loadServe` 创建不必要的服务器实例 | 轻微内存浪费 | 可选 NoopServer 优化 |
 
-### 8.2 取舍决策
+### 12.2 取舍决策
 
-- **gRPC/WebSocket**：Serverless 场景下明确不支持，文档中说明替代方案（API Gateway WebSocket API、gRPC-Web 转 HTTP）
-- **有状态连接**：WebSocket 长连接、gRPC 流式不适合 Lambda，仅适合短连接 HTTP
-- **NoopServer**：降级为可选优化，`createApplication()` 无需 NoopServer 即可工作
-- **多云支持**：优先实现 AWS Lambda 适配器（生态最完善），阿里云/腾讯云可延后
-- **IaC 模板**：提供 SAM/CDK 模板降低接入成本，Serverless Framework/Terraform 可社区贡献
-
-### 8.3 与同构方案（ISOMORPHIC_APPLICATION_PLAN）的协调
-
-| 交叉点 | 协调方式 |
-|--------|----------|
-| shared 包中引入 proto 生成代码 | Serverless 打包时通过 esbuild external 排除 gRPC 相关依赖 |
-| DTO/验证规则共享 | shared 包保持环境无关，Serverless 可正常使用 |
-| Schema 生成脚本 | CI 中先 codegen → 再 serverless build，保证类型一致 |
-| 构建顺序 | shared → koatty-api (serverless build) → web，三者独立打包 |
+- **gRPC/WebSocket**：Serverless 下明确不支持，文档说明替代方案
+- **NoopServer**：降级为可选优化，不阻塞核心功能
+- **多云优先级**：AWS Lambda > 阿里云 FC > 腾讯云 SCF
+- **`@codegenie/serverless-express`**：放在 optionalDependencies，仅 AWS 用户安装
 
 ---
 
 ## 附录：API 快速参考
 
-### 框架层 API（Phase 0 提供）
+### 框架层 API（已就绪）
 
 ```typescript
 import { createApplication, ExecBootStrap } from 'koatty';
@@ -878,26 +966,27 @@ const app = await createApplication(MyApp, bootFunc?);
 const handler = app.getRequestHandler('http');  // (req, res) => Promise
 app.isReady;  // true
 
-// 传统部署：初始化 + 监听（保持不变）
+// 传统部署：初始化 + 监听（不变）
 @ExecBootStrap()
 class MyApp extends Koatty { ... }
 ```
 
-### koatty-serverless API（Phase 1 提供）
+### koatty-serverless API
 
 ```typescript
-import { createHandler } from 'koatty-serverless';
+import { createHandler } from 'koatty_serverless';
 
 // 一行创建 Serverless handler
 export const handler = createHandler(MyApp, {
   platform: 'aws' | 'alicloud' | 'tencent',
   bootFunc?: Function,
-  adapter?: ServerlessAdapter,         // 自定义适配器
-  healthCheck?: (app) => Promise,      // 连接健康检查
-  eventHandlers?: {                    // 非 HTTP 事件路由
-    scheduled?: (event, context, app) => Promise,
-    sqs?: (event, context, app) => Promise,
-    sns?: (event, context, app) => Promise,
+  adapter?: ServerlessAdapter,          // 自定义适配器
+  healthCheck?: (app) => Promise<void>, // 连接健康检查
+  eventHandlers?: {                     // 非 HTTP 事件路由
+    scheduled?: EventHandler,
+    sqs?: EventHandler,
+    sns?: EventHandler,
+    [key: string]: EventHandler,
   },
 });
 ```
