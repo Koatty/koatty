@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.1.11
+
+### Patch Changes
+
+- build
+
 ## 4.1.10
 
 ### Patch Changes
