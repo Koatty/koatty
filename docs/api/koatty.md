@@ -52,6 +52,19 @@ Configuration scan decorator, used to scan and load configuration files.
 </td></tr>
 <tr><td>
 
+[createApplication(target, bootFunc)](./koatty.createapplication.md)
+
+
+</td><td>
+
+Create a fully initialized Koatty application WITHOUT starting a server.
+
+Use this for: - Serverless deployment (AWS Lambda, Alibaba Cloud FC, Tencent SCF, etc.) - Custom server setup (attach handler to an existing HTTP server) - Testing (use app.getRequestHandler() with supertest)
+
+
+</td></tr>
+<tr><td>
+
 [ExecBootStrap(bootFunc)](./koatty.execbootstrap.md)
 
 

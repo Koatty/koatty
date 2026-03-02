@@ -37,28 +37,17 @@ export function ExecBootStrap(bootFunc?: (...args: any[]) => any) {
 }
 
 /**
- * Bind event hook to target class.
- * 
- * @param eventName - The application event name to bind
-/**
- * Execute bootstrap process for Koatty application.
- * 
+ * Core bootstrap logic: initialize application, load all components, mark as ready.
+ * Does NOT call app.listen() — caller decides how to start the server.
+ *
  * @param target - The target class to instantiate the application
- * @param bootFunc - Function to execute during bootstrap process
+ * @param bootFunc - Optional function to execute during bootstrap process
  * @param isInitiative - Whether the bootstrap is initiated manually
- * @returns Promise<KoattyApplication> The bootstrapped application instance
- * 
- * This function performs the following steps:
- * 1. Checks runtime environment
- * 2. Creates application instance
- * 3. Initializes environment
- * 4. Executes boot function
- * 5. Sets up IOC container
- * 6. Scans and loads components
- * 7. Triggers application events
- * 8. Starts server (except in test environment)
+ * @returns Promise<KoattyApplication> The fully initialized (but not listening) application instance
+ *
+ * @internal
  */
-const executeBootstrap = async function (target: any, bootFunc?: (...args: any[]) => any,
+const bootstrapApplication = async function (target: any, bootFunc?: (...args: any[]) => any,
   isInitiative = false): Promise<KoattyApplication> {
   // Disable winston internal debug logs
   // Filter out winston from NODE_DEBUG to prevent internal logging
@@ -68,7 +57,7 @@ const executeBootstrap = async function (target: any, bootFunc?: (...args: any[]
       .join(',');
     process.env.NODE_DEBUG = debugModules;
   }
-  
+
   // checked runtime
   checkRuntime();
   // unittest running environment
@@ -84,30 +73,52 @@ const executeBootstrap = async function (target: any, bootFunc?: (...args: any[]
     Logger.enable(false);
   }
 
+  if (!app.silent) console.log(LOGO);
+  if (!(app instanceof Koatty)) {
+    throw new Error(`class ${target.name} does not inherit from Koatty`);
+  }
+
+  // Initialize env
+  Loader.initialize(app);
+
+  // exec bootFunc
+  if (Helper.isFunction(bootFunc)) {
+    Logger.Log('Koatty', '', 'Execute bootFunc ...');
+    await bootFunc(app);
+  }
+  // Set IOC.app
+  IOC.setApp(app);
+
+  // Check all bean
+  Logger.Log('Koatty', '', 'ComponentScan ...');
+  Loader.CheckAllComponents(app, target);
+
+  // Load All components
+  await Loader.LoadAllComponents(app, target);
+
+  // Mark application as ready (all components loaded, middleware registered)
+  app.markReady();
+
+  return app;
+};
+
+/**
+ * Execute bootstrap process for Koatty application (traditional server mode).
+ * Calls bootstrapApplication() for initialization, then starts the server.
+ *
+ * @param target - The target class to instantiate the application
+ * @param bootFunc - Optional function to execute during bootstrap process
+ * @param isInitiative - Whether the bootstrap is initiated manually
+ * @returns Promise<KoattyApplication> The bootstrapped application instance
+ */
+const executeBootstrap = async function (target: any, bootFunc?: (...args: any[]) => any,
+  isInitiative = false): Promise<KoattyApplication> {
   try {
-    if (!app.silent) console.log(LOGO);
-    if (!(app instanceof Koatty)) {
-      throw new Error(`class ${target.name} does not inherit from Koatty`);
-    }
+    const app = await bootstrapApplication(target, bootFunc, isInitiative);
+    if (!app) return; // e.g. UT runtime + not initiative
 
-    // Initialize env
-    Loader.initialize(app);
-
-    // exec bootFunc
-    if (Helper.isFunction(bootFunc)) {
-      Logger.Log('Koatty', '', 'Execute bootFunc ...');
-      await bootFunc(app);
-    }
-    // Set IOC.app
-    IOC.setApp(app);
-
-    // Check all bean
-    Logger.Log('Koatty', '', 'ComponentScan ...');
-    Loader.CheckAllComponents(app, target);
-
-    // Load All components
-    await Loader.LoadAllComponents(app, target);
-
+    // Start listening (traditional server mode)
+    const isUTRuntime = checkUTRuntime();
     if (!isUTRuntime) {
       app.listen(listenCallback);
     }
@@ -117,6 +128,53 @@ const executeBootstrap = async function (target: any, bootFunc?: (...args: any[]
     Logger.Fatal(err);
   }
 };
+
+/**
+ * Create a fully initialized Koatty application WITHOUT starting a server.
+ *
+ * Use this for:
+ * - Serverless deployment (AWS Lambda, Alibaba Cloud FC, Tencent SCF, etc.)
+ * - Custom server setup (attach handler to an existing HTTP server)
+ * - Testing (use app.getRequestHandler() with supertest)
+ *
+ * @param target - The Koatty application class decorated with @Bootstrap()
+ * @param bootFunc - Optional function to execute during bootstrap process
+ * @returns Promise<KoattyApplication> A ready application instance (not listening)
+ *
+ * @example
+ * ```typescript
+ * // Serverless entry point
+ * import { createApplication } from 'koatty';
+ * import { App } from './App';
+ *
+ * let cachedApp: KoattyApplication;
+ *
+ * export async function handler(req, res) {
+ *   if (!cachedApp) {
+ *     cachedApp = await createApplication(App);
+ *   }
+ *   return cachedApp.getRequestHandler()(req, res);
+ * }
+ *
+ * // Custom HTTP server
+ * import http from 'http';
+ * const app = await createApplication(App);
+ * http.createServer(app.getRequestHandler()).listen(3000);
+ * ```
+ */
+export async function createApplication(
+  target: any,
+  bootFunc?: (...args: any[]) => any,
+): Promise<KoattyApplication> {
+  if (!(target.prototype instanceof Koatty)) {
+    throw new Error(`class ${target.name} does not inherit from Koatty`);
+  }
+  const app = await bootstrapApplication(target, bootFunc, true);
+  if (!app) {
+    throw new Error('Failed to initialize application');
+  }
+  return app;
+}
 
 /**
  * Server listen callback function.
