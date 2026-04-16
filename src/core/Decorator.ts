@@ -6,7 +6,7 @@
  * @version 2026-02-03 10:00:00
  */
 
-import { IOC, TAGGED_CLS, createDualClassDecorator } from "koatty_container";
+import { IOC, TAGGED_CLS } from "koatty_container";
 import { Koatty } from "koatty_core";
 import { ExecBootStrap } from "./Bootstrap";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN } from "./Constants";
@@ -27,13 +27,13 @@ import { COMPONENT_SCAN, CONFIGURATION_SCAN } from "./Constants";
  * ```
  */
 export function Bootstrap(bootFunc?: (...args: any[]) => any) {
-  return createDualClassDecorator((target: Function, _context?: any) => {
+  return IOC.createDecorator((target: Function, _context?: any) => {
     if (!(target.prototype instanceof Koatty)) {
       throw new Error(`class does not inherit from Koatty`);
     }
     IOC.saveClass('COMPONENT', target, 'KOATTY_APP');
     ExecBootStrap(bootFunc)(target);
-  });
+  }, 'class');
 }
 
 /**
@@ -52,13 +52,13 @@ export function Bootstrap(bootFunc?: (...args: any[]) => any) {
  * ```
  */
 export function ComponentScan(scanPath?: string | string[]) {
-  return createDualClassDecorator((target: Function, _context?: any) => {
+  return IOC.createDecorator((target: Function, _context?: any) => {
     if (!(target.prototype instanceof Koatty)) {
       throw new Error(`class does not inherit from Koatty`);
     }
     scanPath = scanPath ?? '';
     IOC.saveClassMetadata(TAGGED_CLS, COMPONENT_SCAN, scanPath, target);
-  });
+  }, 'class');
 }
 
 
@@ -74,13 +74,14 @@ export function ComponentScan(scanPath?: string | string[]) {
  * export class App extends Koatty {
  *   // ...
  * }
+ * ```
  */
 export function ConfigurationScan(scanPath?: string | string[]) {
-  return createDualClassDecorator((target: Function, _context?: any) => {
+  return IOC.createDecorator((target: Function, _context?: any) => {
     if (!(target.prototype instanceof Koatty)) {
       throw new Error(`class does not inherit from Koatty`);
     }
     scanPath = scanPath ?? '';
     IOC.saveClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, scanPath, target);
-  });
+  }, 'class');
 }
