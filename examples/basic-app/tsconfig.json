@@ -3,6 +3,8 @@
   "compilerOptions": {
     "target": "ES2019",
     "module": "commonjs",
+    "useDefineForClassFields": false,
+
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "skipLibCheck": true,
