@@ -1,21 +1,16 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "ES2019",
-    "module": "commonjs",
-    "useDefineForClassFields": false,
-
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "downlevelIteration": true
+    "outDir": "./dist",
+    "rootDir": "./src"
   },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"],
   "ts-node": {
     "transpileOnly": true,
     "compilerOptions": {
-      "target": "ES2019",
+      "target": "ES2022",
       "module": "commonjs",
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true

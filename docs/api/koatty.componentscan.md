@@ -9,7 +9,7 @@ Component scan decorator for Koatty application. Scans the specified path(s) for
 **Signature:**
 
 ```typescript
-export declare function ComponentScan(scanPath?: string | string[]): ClassDecorator;
+export declare function ComponentScan(scanPath?: string | string[]): (target: any, context?: any) => any;
 ```
 
 ## Parameters
@@ -50,7 +50,7 @@ _(Optional)_ The path or array of paths to scan for components
 
 **Returns:**
 
-ClassDecorator
+(target: any, context?: any) =&gt; any
 
 {<!-- -->ClassDecorator<!-- -->} A class decorator that enables component scanning
 
