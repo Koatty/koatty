@@ -26,15 +26,14 @@ import { COMPONENT_SCAN, CONFIGURATION_SCAN } from "./Constants";
  * }
  * ```
  */
-export function Bootstrap(bootFunc?: (...args: any[]) => any): ClassDecorator {
-  return function (target: any) {
+export function Bootstrap(bootFunc?: (...args: any[]) => any) {
+  return IOC.createDecorator((target: Function, _context?: any) => {
     if (!(target.prototype instanceof Koatty)) {
       throw new Error(`class does not inherit from Koatty`);
     }
     IOC.saveClass('COMPONENT', target, 'KOATTY_APP');
     ExecBootStrap(bootFunc)(target);
-    return target;
-  };
+  }, 'class');
 }
 
 /**
@@ -52,14 +51,14 @@ export function Bootstrap(bootFunc?: (...args: any[]) => any): ClassDecorator {
  * }
  * ```
  */
-export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
-  return (target: any) => {
+export function ComponentScan(scanPath?: string | string[]) {
+  return IOC.createDecorator((target: Function, _context?: any) => {
     if (!(target.prototype instanceof Koatty)) {
       throw new Error(`class does not inherit from Koatty`);
     }
     scanPath = scanPath ?? '';
     IOC.saveClassMetadata(TAGGED_CLS, COMPONENT_SCAN, scanPath, target);
-  };
+  }, 'class');
 }
 
 
@@ -75,13 +74,14 @@ export function ComponentScan(scanPath?: string | string[]): ClassDecorator {
  * export class App extends Koatty {
  *   // ...
  * }
+ * ```
  */
-export function ConfigurationScan(scanPath?: string | string[]): ClassDecorator {
-  return (target: any) => {
+export function ConfigurationScan(scanPath?: string | string[]) {
+  return IOC.createDecorator((target: Function, _context?: any) => {
     if (!(target.prototype instanceof Koatty)) {
       throw new Error(`class does not inherit from Koatty`);
     }
     scanPath = scanPath ?? '';
     IOC.saveClassMetadata(TAGGED_CLS, CONFIGURATION_SCAN, scanPath, target);
-  };
+  }, 'class');
 }

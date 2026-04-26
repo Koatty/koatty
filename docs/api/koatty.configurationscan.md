@@ -9,7 +9,7 @@ Configuration scan decorator, used to scan and load configuration files.
 **Signature:**
 
 ```typescript
-export declare function ConfigurationScan(scanPath?: string | string[]): ClassDecorator;
+export declare function ConfigurationScan(scanPath?: string | string[]): (target: any, context?: any) => any;
 ```
 
 ## Parameters
@@ -50,7 +50,7 @@ _(Optional)_ The path or array of paths to scan for configuration files. If not 
 
 **Returns:**
 
-ClassDecorator
+(target: any, context?: any) =&gt; any
 
 A class decorator function that registers configuration scan metadata.
 
@@ -60,5 +60,11 @@ Error if the decorated class does not inherit from Koatty.
 
 ## Example
 
-\`\`\`<!-- -->typescript @<!-- -->ConfigurationScan() export class App extends Koatty { // ... }
+
+```typescript
+@ConfigurationScan()
+export class App extends Koatty {
+  // ...
+}
+```
 

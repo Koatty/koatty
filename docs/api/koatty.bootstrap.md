@@ -9,7 +9,7 @@ Bootstrap decorator for Koatty application class.
 **Signature:**
 
 ```typescript
-export declare function Bootstrap(bootFunc?: (...args: any[]) => any): ClassDecorator;
+export declare function Bootstrap(bootFunc?: (...args: any[]) => any): (target: any, context?: any) => any;
 ```
 
 ## Parameters
@@ -50,7 +50,7 @@ _(Optional)_ Optional function to execute during bootstrap process
 
 **Returns:**
 
-ClassDecorator
+(target: any, context?: any) =&gt; any
 
 ClassDecorator
 

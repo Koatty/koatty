@@ -247,8 +247,8 @@ export class Loader {
       if (Helper.isFunction((IOC as any).preloadMetadata)) {
         (IOC as any).preloadMetadata();
       }
-    } catch {
-      Logger.Warn('[Loader] preloadMetadata is optional, ignore if not available');
+    } catch (error) {
+      Logger.Error('[Loader] preloadMetadata failed:', error);
     }
 
     const configurationMeta = Loader.GetConfigurationMeta(app, target);
