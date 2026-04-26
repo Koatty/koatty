@@ -1,2 +1,0 @@
-Node.js version: v22.19.0
-✅ Node.js >= 18.0.0
