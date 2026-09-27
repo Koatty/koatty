@@ -44,10 +44,13 @@ export default {
       graphql: ['application/graphql+json'],
       websocket: ['application/websocket']
     },
-    limit: '20mb',
+    // body-size limit intentionally unset (ADR-102): the security profile
+    // decides (1mb in production, 20mb in development) unless the project
+    // config/router.ts sets payload.limit explicitly
     encoding: 'utf-8',
     multiples: true,
-    keepExtensions: true,
+    // keepExtensions intentionally unset: defaults to false (SEC-05) —
+    // never keep attacker-controlled extensions for uploaded temp files
   },
 
 
