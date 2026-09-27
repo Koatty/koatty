@@ -21,12 +21,13 @@ if ! node "$WORKSPACE_ROOT/scripts/wait-for-deps.js"; then
 fi
 
 # 运行 tsc
-# --force: ignore any committed/stale tsconfig.tsbuildinfo incremental cache.
-# A checkout-shipped tsbuildinfo makes tsc skip emit entirely (it believes
-# outputs are up to date), so temp/index.d.ts never materializes and
-# api-extractor fails with "mainEntryPointFilePath does not exist".
+# A committed/stale tsconfig.tsbuildinfo (composite projects cannot disable
+# incremental) makes tsc skip emit entirely — it believes outputs are up to
+# date — so temp/index.d.ts never materializes and api-extractor fails with
+# "mainEntryPointFilePath does not exist". Drop the cache before compiling.
+rm -f tsconfig.tsbuildinfo
 echo "📝 Running TypeScript compiler..."
-npx tsc --skipLibCheck --force || {
+npx tsc --skipLibCheck || {
   echo "⚠️  TypeScript compilation had errors, but continuing..."
 }
 
