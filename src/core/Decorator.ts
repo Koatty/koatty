@@ -8,6 +8,7 @@
 
 import { IOC, TAGGED_CLS } from "koatty_container";
 import { Koatty } from "koatty_core";
+import { DefaultLogger as Logger } from "koatty_logger";
 import { ExecBootStrap } from "./Bootstrap";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN } from "./Constants";
 
@@ -32,7 +33,13 @@ export function Bootstrap(bootFunc?: (...args: any[]) => any) {
       throw new Error(`class does not inherit from Koatty`);
     }
     IOC.saveClass('COMPONENT', target, 'KOATTY_APP');
-    ExecBootStrap(bootFunc)(target);
+    // The decorator cannot await the bootstrap promise; make sure a startup
+    // failure is still fatal (flush logs, exit 1) instead of surfacing as an
+    // unhandled rejection that leaves a silently dead process (COR-02).
+    ExecBootStrap(bootFunc)(target).catch((err) => {
+      Logger.Fatal(err);
+      process.exitCode = 1;
+    });
   }, 'class');
 }
 

@@ -125,7 +125,15 @@ const executeBootstrap = async function (target: any, bootFunc?: (...args: any[]
 
     return app;
   } catch (err) {
+    // COR-02: startup failures must surface. In test/UT runtime or when the
+    // bootstrap was invoked programmatically, rethrow so the caller observes
+    // the failure (Logger.Fatal would asynchronously exit(1) and kill the
+    // test runner). In production, Fatal flushes logs and exits with code 1.
+    if (checkUTRuntime() || isInitiative) {
+      throw err;
+    }
     Logger.Fatal(err);
+    process.exitCode = 1;
   }
 };
 
