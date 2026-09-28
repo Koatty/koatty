@@ -1,0 +1,1 @@
+{"version":2,"entries":{"/Volumes/ExternalSSD/Users/richen/Workspace/nodejs/koatty-monorepo/packages/koatty/examples/basic-app/src/config::2|**/**.js,**/**.ts,!**/**.d.ts|**/node_modules/**,**/logs/**,**/static/**":{"fingerprint":"c5f1a570b9ec5f470a4b3d37f89e521fbbbc802a3e0c71440a26728e5adbd371","files":["config.ts","db.ts","middleware.ts","plugin.ts","router.ts","server.ts"]}}}
