@@ -1,5 +1,13 @@
 # koatty
 
+## 4.4.0
+
+### Minor Changes
+
+- Phase C（P1 功能正确性）发布：优雅停机闭环（COR-03）、gRPC 四种调用形态（COR-04）、
+  中间件栈失效修复（COR-12）、Trace 每请求只记账一次（COR-15），
+  依赖 koatty_serve@3.5.0 / koatty_trace@2.4.0 / koatty_core@2.5.0。
+
 ## 4.3.3
 
 ### Patch Changes
