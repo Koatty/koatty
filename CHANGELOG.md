@@ -1,5 +1,35 @@
 # koatty
 
+## 4.3.3
+
+### Patch Changes
+
+- Updated dependencies
+  - koatty_core@2.4.0
+  - koatty_router@2.4.0
+  - koatty_serve@3.4.0
+  - koatty_logger@3.1.0
+  - koatty_config@1.4.2
+  - koatty_trace@2.3.2
+  - koatty_container@4.0.0
+  - koatty_exception@2.2.2
+
+## 4.3.2
+
+### Patch Changes
+
+- Updated dependencies
+  - koatty_trace@2.3.1
+
+## 4.3.1
+
+### Patch Changes
+
+- Updated dependencies
+  - koatty_loader@2.0.1
+  - koatty_router@2.3.1
+  - koatty_config@1.4.1
+
 ## 4.3.0
 
 ### Minor Changes
@@ -7,7 +37,6 @@
 - Phase B security hardening (koatty-hardening-and-ai-evolution-plan.md, ADR-101/102/103). Fail-closed defaults with a `security.legacyDefaults: true` rollback switch; see docs/migration/4.3.0.md for the full migration guide.
 
   Highlights:
-
   - SecurityProfile (strict/standard/development) exposed read-only as `app.security`, with a startup summary and per-item WARN when rolling back
   - body parsing failures return 400/413/415 instead of silently producing `{}`; body size limit follows the security profile (1mb in production)
   - DTO validation whitelist on by default (strict profile rejects unknown fields); `__proto__`/`constructor` keys never reach DTO instances
