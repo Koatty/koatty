@@ -27,9 +27,7 @@ fi
 # "mainEntryPointFilePath does not exist". Drop the cache before compiling.
 rm -f tsconfig.tsbuildinfo
 echo "📝 Running TypeScript compiler..."
-npx tsc --skipLibCheck || {
-  echo "⚠️  TypeScript compilation had errors, but continuing..."
-}
+npx tsc --skipLibCheck
 
 # 运行 api-extractor
 echo "📦 Running API Extractor..."

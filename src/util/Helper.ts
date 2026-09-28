@@ -129,7 +129,7 @@ export function checkRuntime() {
 export const checkUTRuntime = (): boolean => {
   let isUTRuntime = false;
   // UT runtime detection, only support jest
-  const argv = JSON.stringify(process.argv[1]);
+  const argv = String(process.argv[1] ?? "");
   if (argv.indexOf('jest') > -1) {
     isUTRuntime = true;
   }

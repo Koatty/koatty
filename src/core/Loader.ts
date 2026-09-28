@@ -12,7 +12,7 @@ import { LoadConfigs as loadConf } from "koatty_config";
 import { IOC, TAGGED_CLS } from "koatty_container";
 import {
   AppEvent, AppEventArr, IMiddleware, IMiddlewareOptions, protocolMiddleware,
-  implementsAspectInterface, implementsControllerInterface,
+  implementsAspectInterface,
   implementsMiddlewareInterface,
   implementsServiceInterface, IPlugin, KoattyApplication, Koatty, MIDDLEWARE_OPTIONS,
   ComponentManager, asyncEvent
@@ -21,9 +21,16 @@ import { Helper } from "koatty_lib";
 import { Load } from "koatty_loader";
 import { Trace } from "koatty_trace";
 import * as path from "path";
+import * as fs from "fs";
 import { checkClass } from "../util/Helper";
 import { COMPONENT_SCAN, CONFIGURATION_SCAN } from './Constants';
 import { DefaultLogger as Logger, LogLevelType } from "koatty_logger";
+
+import defaultConfig from '../config/config';
+import defaultMiddleware from '../config/middleware';
+import defaultPlugin from '../config/plugin';
+import defaultRouter from '../config/router';
+import defaultServer from '../config/server';
 
 /**
  * Interface representing a component item.
@@ -52,6 +59,7 @@ interface ComponentItem {
  */
 export class Loader {
   app: KoattyApplication;
+  private static loggingApps = new Set<KoattyApplication>();
 
   /**
    * Creates an instance of Loader.
@@ -96,8 +104,15 @@ export class Loader {
       }
     }
 
+    // Canonical path record (ARCH-01 / D-1 step 5). New code should read
+    // `app.paths`; the individual `app.rootPath` / `app.appPath` /
+    // `app.koattyPath` fields remain for backward compatibility.
+    Helper.define(app, 'paths', { rootPath, appPath, koattyPath });
+
     // Set environment variables for backward compatibility 
     // Use app.rootPath, app.appPath, app.koattyPath instead
+    // @deprecated Use `app.paths` (or the individual app.*Path fields). These
+    // process-level writes will be removed in 5.0.
     process.env.ROOT_PATH = rootPath;
     process.env.APP_PATH = appPath;
     process.env.KOATTY_PATH = koattyPath;
@@ -167,9 +182,21 @@ export class Loader {
     // configuration metadata
     const configurationMetas = Loader.GetConfigurationMeta(app, target);
     const exSet = new Set();
-    Load(componentMetas, '', (fileName: string, xpath: string, xTarget: any) => {
+    const manifestFile = path.join(app.rootPath, ".koatty", "manifest.json");
+    Load(componentMetas, app.rootPath, (fileName: string, xpath: string, xTarget: any) => {
       checkClass(fileName, xpath, xTarget, exSet);
-    }, ['**/**.js', '**/**.ts', '!**/**.d.ts'], [...configurationMetas, `${target.name || '.no'}.ts`]);
+      const exports = typeof xTarget === 'function' ? [xTarget] : Object.values(xTarget ?? {});
+      for (const component of exports) {
+        if (Helper.isClass(component)) app.container.saveClass(IOC.getType(component), component as Function, IOC.getIdentifier(component));
+      }
+    }, ['**/**.js', '**/**.ts', '!**/**.d.ts'], [...configurationMetas, `${target.name || '.no'}.ts`, `${target.name || '.no'}.js`], {
+      manifestFile: app.env === 'production' && fs.existsSync(manifestFile) ? manifestFile : undefined,
+    });
+    for (const item of IOC.listClass('COMPONENT')) {
+      const id = IOC.getIdentifier(item.target);
+      const options = IOC.getPropertyData<any>('COMPONENT_OPTIONS', item.target, id);
+      if (options?.scope === 'core') app.container.saveClass('COMPONENT', item.target, id);
+    }
     exSet.clear();
   }
 
@@ -186,6 +213,7 @@ export class Loader {
     const configs = data[0] || {};
     //Logger
     if (configs.config) {
+      Loader.loggingApps.add(app);
       const opt = configs.config;
       let logLevel: LogLevelType = "debug",
         logFilePath = "",
@@ -222,7 +250,10 @@ export class Loader {
       }
       (app as any).once(AppEvent.appStop, async () => {
         await Logger.flushBatch(); // 等待所有日志写入完成
-        await Logger.destroy(); // 释放所有资源
+        Loader.loggingApps.delete(app);
+        // Keep the shared logger usable, but do not leave an idle batch timer
+        // alive after the last application has stopped.
+        if (Loader.loggingApps.size === 0) Logger.enableBatch(false);
       });
     }
   }
@@ -244,8 +275,8 @@ export class Loader {
    */
   public static async LoadAllComponents(app: KoattyApplication, target: any) {
     try {
-      if (Helper.isFunction((IOC as any).preloadMetadata)) {
-        (IOC as any).preloadMetadata();
+      if (Helper.isFunction((app.container as any).preloadMetadata)) {
+        (app.container as any).preloadMetadata();
       }
     } catch (error) {
       Logger.Error('[Loader] preloadMetadata failed:', error);
@@ -320,6 +351,7 @@ export class Loader {
           break;
 
         case AppEvent.loadServe:
+          await app.container?.ready?.();
           Logger.Log('Koatty', '', 'Emit loadServe ...');
           await asyncEvent(app, event);
           break;
@@ -327,6 +359,8 @@ export class Loader {
          case AppEvent.appReady:
            Logger.Log('Koatty', '', 'Emit appReady ...');
            await asyncEvent(app, event);
+           await app.container?.ready?.();
+           app.container?.seal?.();
            break;
 
          default:
@@ -346,16 +380,18 @@ export class Loader {
    * @param {string[]} [loadPath] - Optional array of paths to load application configs from
    */
   protected LoadConfigs(loadPath?: string[]) {
-    const frameConfig: any = {};
-    // Logger.Debug(`Load configuration path: ${app.thinkPath}/config`);
-    Load(["./config"], this.app.koattyPath, function (name: string, path: string, exp: any) {
-      frameConfig[name] = exp;
-    });
+    // Bundle defaults into the package: a tsup single-file build has no sibling
+    // config directory. Clone before merging so applications cannot share mutations.
+    const frameConfig: any = Helper.clone({config: defaultConfig, middleware: defaultMiddleware,
+      plugin: defaultPlugin, router: defaultRouter, server: defaultServer}, true);
 
     if (Helper.isArray(loadPath)) {
       loadPath = loadPath.length > 0 ? loadPath : ["./config"];
     }
-    let appConfig = loadConf(loadPath, this.app.appPath);
+    const manifest = path.join(this.app.rootPath, '.koatty/manifest.json');
+    let appConfig = loadConf(loadPath, this.app.appPath, undefined, undefined, undefined,
+      this.app.env === 'production' && fs.existsSync(manifest)
+        ? {manifestFile: manifest, baseDir: this.app.rootPath} : undefined);
     appConfig = Helper.extend(frameConfig, appConfig, true);
 
     this.app.setMetaData("_configs", appConfig);
@@ -399,12 +435,12 @@ export class Loader {
     }
 
     //Mount application middleware
-    const appMiddleware = IOC.listClass("MIDDLEWARE") ?? [];
+    const appMiddleware = this.app.container.listClass("MIDDLEWARE") ?? [];
     appMiddleware.forEach((item: ComponentItem) => {
       item.id = (item.id ?? "").replace("MIDDLEWARE:", "");
       if (item.id && Helper.isClass(item.target)) {
-        IOC.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
-        const ctl = IOC.getInsByClass(item.target);
+        this.app.container.reg(item.id, item.target, { scope: "Prototype", type: "MIDDLEWARE", args: [] });
+        const ctl = this.app.container.getInsByClass(item.target);
         if (!implementsMiddlewareInterface(ctl)) {
           throw Error(`The middleware ${item.id} must implements interface 'IMiddleware'.`);
         }
@@ -421,7 +457,7 @@ export class Loader {
     //Automatically call middleware
     const middlewareConfig = middlewareConf.config || {};
     for (const key of Array.from(appMList)) {
-      const handle: IMiddleware = IOC.get(key, "MIDDLEWARE");
+      const handle: IMiddleware = this.app.container.get(key, "MIDDLEWARE");
       if (!handle) {
         throw Error(`Middleware ${key} load error.`);
       }
@@ -437,7 +473,7 @@ export class Loader {
       let decoratorOptions: IMiddlewareOptions = {};
       if (middlewareClass) {
         try {
-          decoratorOptions = IOC.getPropertyData(MIDDLEWARE_OPTIONS, middlewareClass, key) || {};
+          decoratorOptions = this.app.container.getPropertyData(MIDDLEWARE_OPTIONS, middlewareClass, key) || {};
         } catch {
           // If metadata not found, use empty object
           decoratorOptions = {};
@@ -492,7 +528,7 @@ export class Loader {
    * @throws {Error} If a controller does not implement the IController interface.
    */
   protected async LoadControllers() {
-    const controllerList = IOC.listClass("CONTROLLER");
+    const controllerList = this.app.container.listClass("CONTROLLER");
 
     const controllers: string[] = [];
     controllerList.forEach((item: ComponentItem) => {
@@ -500,11 +536,9 @@ export class Loader {
       if (item.id && Helper.isClass(item.target)) {
         Logger.Debug(`Load controller: ${item.id}`);
         // registering to IOC
-        IOC.reg(item.id, item.target, { scope: "Prototype", type: "CONTROLLER", args: [] });
-        const ctl = IOC.getInsByClass(item.target);
-        if (!implementsControllerInterface(ctl)) {
-          throw Error(`The controller ${item.id} must implements interface 'IController'.`);
-        }
+        this.app.container.reg(item.id, item.target, { scope: "Prototype", type: "CONTROLLER", args: [] });
+        // Controllers are constructed with the real request, so Request dependencies
+        // are never resolved merely to validate a startup-time dummy instance.
         controllers.push(item.id);
       }
     });
@@ -522,15 +556,17 @@ export class Loader {
    * @throws {Error} When service does not implement IService interface
    */
   protected async LoadServices() {
-    const serviceList = IOC.listClass("SERVICE");
+    const serviceList = this.app.container.listClass("SERVICE");
 
     for (const item of serviceList) {
       item.id = (item.id ?? "").replace("SERVICE:", "");
       if (item.id && Helper.isClass(item.target)) {
         Logger.Debug(`Load service: ${item.id}`);
         // registering to IOC
-        IOC.reg(item.id, item.target, { scope: "Singleton", type: "SERVICE", args: [] });
-        const ctl = IOC.getInsByClass(item.target);
+        const options = this.app.container.getPropertyData<any>('SERVICE_OPTIONS', item.target, item.id) ?? {};
+        this.app.container.reg(item.id, item.target, { scope: 'Singleton', ...options, type: 'SERVICE', args: options.args ?? [] });
+        if (options.scope === 'Request') continue;
+        const ctl = this.app.container.getInsByClass(item.target);
         if (!implementsServiceInterface(ctl)) {
           throw Error(`The service ${item.id} must implements interface 'IService'.`);
         }
@@ -550,15 +586,15 @@ export class Loader {
    * @throws {Error} When plugin loading fails
    */
   protected async LoadComponents(componentManager?: ComponentManager) {
-    const componentList = IOC.listClass("COMPONENT");
+    const componentList = this.app.container.listClass("COMPONENT");
 
     componentList.forEach((item: ComponentItem) => {
       item.id = (item.id ?? "").replace("COMPONENT:", "");
       if (Helper.isClass(item.target)) {
-        IOC.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
+        this.app.container.reg(item.id, item.target, { scope: "Singleton", type: "COMPONENT", args: [] });
 
         if (item.id && (item.id).endsWith("Aspect")) {
-          const ctl = IOC.getInsByClass(item.target);
+          const ctl = this.app.container.getInsByClass(item.target);
           if (!implementsAspectInterface(ctl)) {
             throw Error(`The aspect ${item.id} must implements interface 'IAspect'.`);
           }
@@ -576,7 +612,7 @@ export class Loader {
       }
       const pluginConfList = pluginsConf.list ?? [];
       for (const key of pluginConfList) {
-        const handle: IPlugin = IOC.get(key, "COMPONENT");
+        const handle: IPlugin = this.app.container.get(key, "COMPONENT");
         if (!handle) {
           throw Error(`Plugin ${key} load error.`);
         }

@@ -1,5 +1,23 @@
 # koatty
 
+## Unreleased — Phase A–D completion
+
+- appStart 在所有传输真正监听后触发一次，appReady 仅表示初始化完成；createApplication 不提前发出 appStart。
+- 生产启动消费经过路径与 SHA256 校验的 runtime manifest；内置配置直接打包，修复 tarball 中缺少 config 目录的启动失败。
+- 修复无脚本 argv 的嵌入启动及 ESM 类型导出；生成项目采用编译后清单构建流程。
+
+本轮尚未发布；验收边界见根目录 `docs/audits/phase-ad-completion-2026-09-28.md`。
+
+## Unreleased (Phase A–D remediation)
+
+- Bootstrap 自动创建应用独立容器，Loader/Router/注入链路使用 app.container；扫描同时处理默认导出与具名导出。
+- Loader 尊重 Service scope/args，Controller 在实际请求中构造，避免启动阶段解析 Request 依赖。
+- 应用停止刷新共享默认日志器；最后一个配置日志的应用停止后关闭批量刷新定时器，不销毁其他应用仍使用的进程级日志资源。
+- Jest 中导入 Bootstrap 类只登记定义，显式 createApplication/ExecBootStrap 才启动，避免测试产生无法管理的后台应用；生产自动启动不变。
+- app.paths 为路径入口；旧 env 路径写入保留兼容、已弃用。阶段发布仍受 D-5/D-7 等未关闭验收项约束。
+
+迁移说明：`docs/migration/phase-d-router-hotpath.md`。尚未发布。
+
 ## 4.4.0
 
 ### Minor Changes

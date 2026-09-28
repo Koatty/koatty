@@ -7,8 +7,8 @@
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
-import { IOC } from "koatty_container";
-import { AppEvent, Koatty, KoattyApplication, asyncEvent } from 'koatty_core';
+import { IOC, Container } from "koatty_container";
+import { Koatty, KoattyApplication } from 'koatty_core';
 import { Helper } from "koatty_lib";
 import { checkRuntime, checkUTRuntime, KOATTY_VERSION } from "../util/Helper";
 import { LOGO } from "./Constants";
@@ -86,8 +86,9 @@ const bootstrapApplication = async function (target: any, bootFunc?: (...args: a
     Logger.Log('Koatty', '', 'Execute bootFunc ...');
     await bootFunc(app);
   }
-  // Set IOC.app
-  IOC.setApp(app);
+  // Decorators populate the default catalogue; runtime instances belong to this app.
+  if (!app.container || app.container === IOC) app.container = new Container();
+  app.container.setApp(app);
 
   // Check all bean
   Logger.Log('Koatty', '', 'ComponentScan ...');
@@ -201,7 +202,4 @@ const listenCallback = (app: KoattyApplication) => {
   if (app.appDebug) Logger.Warn(`Running in debug mode.`);
   Logger.Log('Koatty', '', '====================================');
   
-  // Trigger appStart event after server starts listening
-  // Listeners are registered via app.once in LoadAppEventHooks
-  asyncEvent(app, AppEvent.appStart);
 };
