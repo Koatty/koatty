@@ -1,3 +1,9 @@
+## Unreleased — Phase A–F review (2026-09-30)
+
+Reference app emits safe SSE errors, drains active responses before shutdown and reports readiness; avoid duplicate guard audits; add socket/backpressure regressions and exclude examples from published files.
+
+Migration: `docs/migration/phase-a-f-review-fixes.md` in the monorepo. No release has been applied.
+
 # koatty
 
 ## Unreleased — Phase F audit fixes (2026-09-29)

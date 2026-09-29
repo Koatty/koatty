@@ -16,6 +16,8 @@
 module.exports = {
   rootDir: __dirname,
   testEnvironment: 'node',
+  collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
+  coverageThreshold: { global: { lines: 80, statements: 80 } },
   testMatch: ['<rootDir>/test/**/*.test.ts'],
   moduleFileExtensions: ['ts', 'js', 'json'],
   transform: {

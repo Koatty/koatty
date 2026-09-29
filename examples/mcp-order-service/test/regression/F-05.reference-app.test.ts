@@ -255,10 +255,11 @@ describe('F-05 authorization and approval', () => {
       instance.app.host.runWithIdentity({ headers: { 'x-api-key': 'refund-key' } }, () =>
         client.callTool({ name: 'order_refund', arguments: { orderNo: 'A-1001', reason: 'customer' } }),
       ),
-    ).rejects.toBeDefined();
+    ).rejects.toMatchObject({ code: -32600, message: expect.stringContaining('McpApprovalTimeoutError') });
 
     expect(service.refundHistory().length).toBe(before);
-    expect(await waitFor(() => audited.some((record) => record.status === 'pending-approval'))).toBe(true);
+    expect(audited.filter(record => record.target === 'order_refund' || (record as any).tool === 'order_refund')).toHaveLength(1);
+    expect(await waitFor(() => audited.some((record) => record.status === 'denied'))).toBe(true);
   });
 
   it('never executes the write tool when the approver rejects it', async () => {

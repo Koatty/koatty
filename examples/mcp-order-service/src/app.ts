@@ -56,7 +56,7 @@ export function createOrderServiceApp(options: OrderServiceAppOptions) {
       const previous = ctx?.genaiContext;
       if (ctx) ctx.genaiContext = operation.context;
       try {
-        const result = await options.guard.aspect.runGuarded(info.name, [info.args], proceed, { caller: info.identity.principal?.id });
+        const result = await options.guard.aspect.runGuarded(info.name, [info.args], proceed, { caller: info.identity.principal?.id, audit: false });
         operation.end({ status: 'success', result });
         return result;
       } catch (error) { operation.end({ status: 'error' }); throw error; }

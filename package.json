@@ -109,5 +109,11 @@
     "koatty_trace": "workspace:*",
     "ts-morph": "^27.0.2"
   },
-  "types": "./dist/index.d.ts"
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ]
 }

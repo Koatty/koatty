@@ -16,6 +16,7 @@ class Application extends Koatty { constructor() { super(); } }
 export function createReferenceServer(options: { keys: Record<string, string[]>; provider: LlmProvider; model: string }) {
   if (!Object.keys(options.keys).length) throw new Error('MCP_API_KEYS must declare at least one credential');
   const app = new Application();
+  let draining = false;
   const container = new Container(); app.container = container; container.setApp(app as any);
   container.reg('OrderService', OrderService, { type: 'SERVICE' } as any);
   container.reg('OrderTools', OrderTools, { type: 'SERVICE' } as any);
@@ -31,7 +32,10 @@ export function createReferenceServer(options: { keys: Record<string, string[]>;
     let ended = false;
     const end = () => { if (!ended) { ended = true; span.end(); } };
     ctx.res.once('finish', end); ctx.res.once('close', end);
-    try { await app.ctxStorage.run(ctx, next); } catch { ctx.status = 500; ctx.body = { error: 'request_failed' }; }
+    try { await app.ctxStorage.run(ctx, next); } catch (error) {
+      if (!['EPIPE', 'ECONNRESET'].includes((error as any)?.code) && !ctx.res.destroyed) app.emit('error', new Error('Request failed'), ctx);
+      if (!ctx.res.headersSent) { ctx.status = 500; ctx.body = { error: 'request_failed' }; }
+    }
     if (ctx.respond !== false && !ctx.res.writableEnded && !ctx.res.destroyed) {
       ctx.res.statusCode = ctx.status;
       ctx.res.setHeader('Content-Type', 'application/json');
@@ -39,7 +43,11 @@ export function createReferenceServer(options: { keys: Record<string, string[]>;
     }
   });
   app.use(async (ctx: any, next: any) => {
-    if (ctx.path === '/healthz' || ctx.path === '/readyz') { ctx.body = { ready: true }; return; }
+    if (ctx.path === '/healthz' || ctx.path === '/readyz') {
+      const ready = ctx.path === '/healthz' || !draining;
+      ctx.status = ready ? 200 : 503; ctx.body = { ready }; return;
+    }
+    if (draining) { ctx.status = 503; ctx.body = { error: 'draining' }; return; }
     if (ctx.path !== '/mcp' && ctx.path !== '/ask' && !ctx.path.startsWith('/approvals')) return next();
     try { ctx.principal = await service.host.resolveIdentity({ headers: ctx.headers, transport: 'http' }); }
     catch { ctx.status = 401; ctx.body = { error: 'unauthorized' }; return; }
@@ -76,9 +84,15 @@ export function createReferenceServer(options: { keys: Record<string, string[]>;
     }
   });
   const server = createServer(app.callback());
-  return { app, server, service, async close() {
-    await service.mcp.close(); server.closeAllConnections();
-    await new Promise<void>(resolve => server.close(() => resolve()));
+  return { app, server, service, beginDrain() { draining = true; }, async close() {
+    draining = true;
+    await new Promise<void>(resolve => {
+      const timer = setTimeout(() => { server.closeAllConnections(); }, 5000);
+      timer.unref();
+      server.close(() => { clearTimeout(timer); resolve(); });
+      server.closeIdleConnections();
+    });
+    await service.mcp.close();
     await app.stop();
   } };
 }

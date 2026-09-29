@@ -38,12 +38,18 @@ export function createAskController(options: AskControllerOptions) {
 
       await streamSSE(ctx, async function* (signal) {
         if (verdict?.decision === 'downgrade') yield { event: 'downgraded', data: { risk: verdict.risk } };
+        try {
         for await (const chunk of options.agent.stream(question, {
           signal, budgetScope: ctx.principal?.id, context: ctx.genaiContext,
         })) {
           if (chunk.type === 'text' && chunk.delta) yield { data: { delta: chunk.delta } };
         }
         yield { event: 'done', data: {} };
+        } catch (error) {
+          if (signal.aborted || ['EPIPE', 'ECONNRESET'].includes((error as any)?.code)) return;
+          ctx.app?.emit?.('error', new Error('LLM stream failed'), ctx);
+          yield { event: 'error', data: { code: 'stream_failed' } };
+        }
       });
     },
   };
