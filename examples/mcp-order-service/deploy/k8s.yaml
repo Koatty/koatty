@@ -1,0 +1,114 @@
+# Phase F (F-5) Kubernetes template for the app that mounts the
+# mcp-order-service module. Names/image are placeholders.
+#
+# Probes:
+#   /healthz -> liveness (process alive, must stay cheap)
+#   /readyz  -> readiness (MCP host + LLM routes usable)
+# Streaming endpoints (/mcp, /ask SSE) need a grace period so in-flight tool
+# calls and approval waits can finish; keep the gateway read timeout higher.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp-order-service
+  labels:
+    app.kubernetes.io/name: mcp-order-service
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mcp-order-service
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mcp-order-service
+    spec:
+      terminationGracePeriodSeconds: 45
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: app
+          image: registry.example.com/mcp-order-service:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3000
+          env:
+            # Container must be reachable by the Service; local mode binds loopback.
+            - name: HOST
+              value: "0.0.0.0"
+            - name: PORT
+              value: "3000"
+            - name: NODE_ENV
+              value: production
+            # Secrets (API keys, provider tokens) come from a Secret, never inline.
+            - name: MCP_API_KEYS
+              valueFrom:
+                secretKeyRef:
+                  name: mcp-order-service-secrets
+                  key: api-keys
+            - name: LLM_PROVIDER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: mcp-order-service-secrets
+                  key: llm-token
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            failureThreshold: 30
+            periodSeconds: 2
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcp-order-service
+spec:
+  selector:
+    app.kubernetes.io/name: mcp-order-service
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

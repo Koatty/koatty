@@ -1,0 +1,32 @@
+{
+  "name": "@koatty/example-mcp-order-service",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Phase F (F-5) reference app: MCP tools + resource + LLM SSE chat with koatty_guard guardrails and koatty_trace GenAI spans",
+  "license": "BSD-3-Clause",
+  "scripts": {
+    "test": "jest --config jest.config.js --coverage=false",
+    "test:tsc": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "class-validator": "^0.14.3",
+    "koatty": "4.x",
+    "koatty_core": "^2.6.0",
+    "koatty_guard": "^1.0.0",
+    "koatty_llm": "^1.0.0",
+    "koatty_mcp": "^1.0.0",
+    "koatty_trace": "^2.5.0",
+    "koatty_validation": "^4.1.0",
+    "reflect-metadata": "^0.2.2"
+  },
+  "devDependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/sdk-trace-base": "^2.5.0",
+    "@types/jest": "^29.5.x",
+    "@types/node": "^22.x.x",
+    "jest": "^29.x.x",
+    "ts-jest": "^29.x.x",
+    "typescript": "^5.7.3"
+  }
+}

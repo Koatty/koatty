@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    "target": "ES2021",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["ES2021"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "noEmit": true,
+    "types": ["node", "jest"],
+    "baseUrl": ".",
+    // Monorepo checkout only: the example is not a pnpm workspace project, so
+    // its declared dependencies are not linked into a local `node_modules`.
+    // These mappings mirror `jest.config.js` (`moduleNameMapper`) so that
+    // `tsc --noEmit` works straight from a checkout. Standalone use (after
+    // `pnpm install` inside this folder) does not need any of this.
+    "paths": {
+      "koatty_mcp": ["../../../koatty-mcp/src/index.ts"],
+      "koatty_llm": ["../../../koatty-llm/src/index.ts"],
+      "koatty_guard": ["../../../koatty-guard/src/index.ts"],
+      "koatty_trace": ["../../../koatty-trace/src/index.ts"],
+      "koatty_core": ["../../../koatty-core/dist/index.d.ts"],
+      "koatty_validation": ["../../../koatty-validation/dist/index.d.ts"],
+      "koatty_container": ["../../../koatty-container/dist/index.d.ts"],
+      "koatty_lib": ["../../../koatty-lib/dist/index.d.ts"],
+      "koatty_logger": ["../../../koatty-logger/dist/index.d.ts"],
+      "class-validator": ["../../../koatty-validation/node_modules/class-validator"],
+      "@opentelemetry/api": ["../../../koatty-trace/node_modules/@opentelemetry/api"],
+      "@opentelemetry/sdk-trace-base": ["../../../koatty-trace/node_modules/@opentelemetry/sdk-trace-base"],
+      "@modelcontextprotocol/sdk/client/index.js": ["../../../koatty-mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/client/index.d.ts"],
+      "@modelcontextprotocol/sdk/inMemory.js": ["../../../koatty-mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/inMemory.d.ts"],
+      "@modelcontextprotocol/sdk/server/index.js": ["../../../koatty-mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/server/index.d.ts"],
+      "@modelcontextprotocol/sdk/*.js": ["../../../koatty-mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/*"],
+      "@modelcontextprotocol/sdk/*": ["../../../koatty-mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/*"]
+    }
+  },
+  "include": ["src", "test"]
+}

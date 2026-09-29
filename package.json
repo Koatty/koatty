@@ -11,7 +11,8 @@
     "clean": "rimraf dist temp docs/api",
     "lint": "eslint --ext .ts,.js ./src",
     "test": "pnpm run lint && jest --passWithNoTests",
-    "test:cov": "jest --collectCoverage --detectOpenHandles"
+    "test:cov": "jest --collectCoverage --detectOpenHandles",
+    "test:example": "jest --config examples/mcp-order-service/jest.config.js --coverage=false"
   },
   "main": "./dist/index.js",
   "exports": {
