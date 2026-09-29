@@ -1,5 +1,11 @@
 # koatty
 
+## Unreleased — Phase F audit fixes (2026-09-29)
+
+- MCP 参考应用接入真实 SSE、流式工具循环、Guard、live trace；新增真实 HTTP/断线/链路测试及可构建启动入口，纳入 workspace 与 CI。
+- 迁移说明：`docs/migration/phase-f-audit-fixes.md`（主仓库）。
+
+
 ## Unreleased — Phase A–D completion
 
 - appStart 在所有传输真正监听后触发一次，appReady 仅表示初始化完成；createApplication 不提前发出 appStart。

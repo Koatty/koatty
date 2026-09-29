@@ -20,6 +20,8 @@
     // `tsc --noEmit` works straight from a checkout. Standalone use (after
     // `pnpm install` inside this folder) does not need any of this.
     "paths": {
+      "koatty_router": ["../../../koatty-router/src/index.ts"],
+      "koatty": ["../../src/index.ts"],
       "koatty_mcp": ["../../../koatty-mcp/src/index.ts"],
       "koatty_llm": ["../../../koatty-llm/src/index.ts"],
       "koatty_guard": ["../../../koatty-guard/src/index.ts"],

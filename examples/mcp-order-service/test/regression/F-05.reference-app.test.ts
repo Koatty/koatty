@@ -17,6 +17,7 @@
  *  h. injected external content is refused before it reaches the model.
  */
 import 'reflect-metadata';
+import { createReferenceServer } from '../../src/main';
 import { context as otelContext, trace as otelTrace } from '@opentelemetry/api';
 import {
   BasicTracerProvider,
@@ -130,7 +131,7 @@ function createApp(overrides: Record<string, any> = {}) {
 async function connectClient(instance: ReturnType<typeof createApp>) {
   const [clientTransport, serverTransport] = await createInMemoryPair();
   const client = new Client({ name: 'f05-client', version: '1.0.0' });
-  await instance.app.host.server.connect(serverTransport);
+  await instance.app.host.createServer({ headers: {}, principal: { id: 'test-reader', scopes: [] } }).connect(serverTransport);
   await client.connect(clientTransport);
   clients.push(client);
   return client;
@@ -179,7 +180,7 @@ describe('F-05 discovery and schema', () => {
     expect(query.annotations.readOnlyHint).toBe(true);
     expect(query.inputSchema.additionalProperties).toBe(false);
     expect(query.inputSchema.required).toEqual(['orderNo']);
-    expect(query.inputSchema.properties.page).toMatchObject({ type: 'integer', minimum: 1 });
+    expect(query.inputSchema.properties.page).toMatchObject({ anyOf: [{ type: 'integer', minimum: 1 }, { type: 'null' }] });
 
     const refund: any = instance.app.host.registry.getTool('order_refund');
     expect(refund.annotations.destructiveHint).toBe(true);
@@ -192,8 +193,8 @@ describe('F-05 discovery and schema', () => {
     const client = await connectClient(instance);
     const tools = await client.listTools();
     expect(tools.tools.map((tool) => tool.name).sort()).toEqual(['order_list', 'order_query', 'order_refund']);
-    const resources = await client.listResources();
-    expect(resources.resources.map((resource) => resource.uri)).toContain('order://{orderNo}');
+    const resources = await client.listResourceTemplates();
+    expect(resources.resourceTemplates.map((resource) => resource.uriTemplate)).toContain('order://{orderNo}');
   });
 });
 
@@ -313,7 +314,7 @@ describe('F-05 resource', () => {
 });
 
 describe('F-05 observability', () => {
-  it('stitches MCP request -> tool call -> LLM call into one trace without prompt text', async () => {
+  it('records separate tool and chat operations in the supplied request trace without prompt text', async () => {
     const requestSpan = tracer.startSpan('mcp.request');
     const requestContext = otelTrace.setSpan(otelContext.active(), requestSpan);
     const instance = createApp({ currentContext: () => requestContext });
@@ -371,21 +372,22 @@ describe('F-05 streaming, cancellation and content guard', () => {
     };
   }
 
-  it('cancels the provider stream when the client disconnects', async () => {
+  it('returns HTTP 200 SSE and cancels the provider on a real socket disconnect', async () => {
     const observed = { aborted: false, calls: 0 };
-    const instance = createApp({ llm: mockLlm(slowScript(observed)) });
-    const controller = new AbortController();
-    const { ctx, written } = fakeCtx('订单 A-1001 是什么状态？', controller.signal);
-
-    const pending = instance.app.ask.ask(ctx);
-    await delay(60);
-    controller.abort();
-
-    const started = Date.now();
-    await expect(pending).resolves.toBeUndefined();
-    expect(Date.now() - started).toBeLessThan(1000);
-    expect(observed.aborted).toBe(true);
-    expect(written.some((chunk) => chunk.includes('event: done'))).toBe(false);
+    const instance = createReferenceServer({ keys: API_KEYS, model: 'default', provider: { name: 'mock', stream: slowScript(observed) } });
+    await new Promise<void>(r => instance.server.listen(0, '127.0.0.1', r));
+    try {
+      const response = await fetch(`http://127.0.0.1:${(instance.server.address() as any).port}/ask`, {
+        method: 'POST', headers: { 'x-api-key': 'read-key', 'content-type': 'application/json' }, body: JSON.stringify({ question: 'Order status?' }),
+      });
+      expect(response.status).toBe(200);
+      expect(response.headers.get('content-type')).toContain('text/event-stream');
+      const reader = response.body!.getReader();
+      expect(new TextDecoder().decode((await reader.read()).value)).toContain('delta');
+      const started = Date.now(); await reader.cancel();
+      expect(await waitFor(() => observed.aborted, 900)).toBe(true);
+      expect(Date.now() - started).toBeLessThan(1000);
+    } finally { await instance.close(); }
   });
 
   it('refuses injected external content before it reaches the model', async () => {

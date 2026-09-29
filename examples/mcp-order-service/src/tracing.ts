@@ -20,18 +20,7 @@ export interface AuditSinkOptions {
   context?: () => any;
 }
 
-/**
- * Bridges `koatty_mcp`'s audit sink to `koatty_trace`'s GenAI recorder.
- *
- * `koatty_mcp` emits one audit record per tool call on every transport (HTTP,
- * stdio and the adapter-internal path), so this single seam is enough to get a
- * `gen_ai.tool` span for each call and, together with the request span of the
- * middleware and the `gen_ai.chat` span of the agent, one complete trace:
- * MCP request -> tool call -> LLM call.
- *
- * `koatty_mcp` currently has no dedicated observability hook, so this bridge is
- * the reference integration until one exists.
- */
+/** Audit-only adapter. Live tool spans are owned by the host aroundTool hook. */
 export function createAuditSink(options: AuditSinkOptions): { record(record: McpAuditRecord): void } {
   return {
     record(record: McpAuditRecord) {
@@ -45,15 +34,6 @@ export function createAuditSink(options: AuditSinkOptions): { record(record: Mcp
         error: record.error,
       } as any);
 
-      // ... and to the GenAI spans/metrics.
-      options.genai?.recordToolCall({
-        name: record.tool,
-        status: record.status === 'success' ? 'success' : 'error',
-        durationMs: record.durationMs,
-        toolCallId: record.requestId,
-        arguments: record.argumentSummary,
-        context: options.context?.(),
-      });
     },
   };
 }

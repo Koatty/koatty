@@ -1,3 +1,4 @@
+import { streamSSE } from 'koatty_router';
 import type { ContentGuard } from 'koatty_guard';
 import type { createSupportAgent } from '../agent/SupportAgent';
 
@@ -35,36 +36,15 @@ export function createAskController(options: AskControllerOptions) {
         return;
       }
 
-      ctx.set?.('Content-Type', 'text/event-stream');
-      ctx.set?.('Cache-Control', 'no-cache');
-      ctx.set?.('Connection', 'keep-alive');
-
-      if (verdict && verdict.decision === 'downgrade') {
-        // The content was flagged but not rejected: continue with the downgraded
-        // path (here: tell the client the turn is untrusted).
-        ctx.res?.write?.(`event: downgraded\ndata: ${JSON.stringify({ risk: verdict.risk })}\n\n`);
-      }
-
-      try {
-        for await (const chunk of options.agent.stream(question, { signal: ctx.signal })) {
-          if (chunk.type === 'text' && chunk.delta) {
-            ctx.res?.write?.(`data: ${JSON.stringify({ delta: chunk.delta })}\n\n`);
-          }
+      await streamSSE(ctx, async function* (signal) {
+        if (verdict?.decision === 'downgrade') yield { event: 'downgraded', data: { risk: verdict.risk } };
+        for await (const chunk of options.agent.stream(question, {
+          signal, budgetScope: ctx.principal?.id, context: ctx.genaiContext,
+        })) {
+          if (chunk.type === 'text' && chunk.delta) yield { data: { delta: chunk.delta } };
         }
-        ctx.res?.write?.('event: done\ndata: {}\n\n');
-      } catch (error: any) {
-        const aborted =
-          error?.name === 'AbortError' ||
-          error?.name === 'LlmAbortError' ||
-          error?.code === 'aborted' ||
-          ctx.signal?.aborted === true;
-        if (aborted) {
-          // The client is gone: nothing useful can be written, but the provider
-          // request has already been cancelled by the shared signal.
-          return;
-        }
-        throw error;
-      }
+        yield { event: 'done', data: {} };
+      });
     },
   };
 }

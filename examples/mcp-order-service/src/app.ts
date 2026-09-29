@@ -1,5 +1,5 @@
 import type { GuardBundle } from 'koatty_guard';
-import type { LlmClient } from 'koatty_llm';
+import { createLlmClient, type LlmClient } from 'koatty_llm';
 import { createMcpHost, createMcpHttpAdapter } from 'koatty_mcp';
 import type { McpSecurityOptions } from 'koatty_mcp';
 import type { GenAiRecorder } from 'koatty_trace';
@@ -38,10 +38,10 @@ export interface OrderServiceAppOptions {
  * model — the destructive tool stays behind scope + approval.
  */
 export function createOrderServiceApp(options: OrderServiceAppOptions) {
+  const currentContext = () => options.app.getCurrentContext?.()?.genaiContext ?? options.currentContext?.();
   const audit = createAuditSink({
     audit: options.guard.audit,
-    genai: options.genai,
-    context: options.currentContext,
+
   });
 
   const host = createMcpHost({
@@ -49,14 +49,46 @@ export function createOrderServiceApp(options: OrderServiceAppOptions) {
     security: options.security,
     approval: (options.approval ?? options.guard.approval) as any,
     audit,
+    onApproval: (input) => options.genai.recordApproval({ ...input, context: currentContext() }),
+    aroundTool: async (info, proceed) => {
+      const operation = options.genai.beginTool({ name: info.name, arguments: info.args, context: currentContext() });
+      const ctx = options.app.getCurrentContext?.();
+      const previous = ctx?.genaiContext;
+      if (ctx) ctx.genaiContext = operation.context;
+      try {
+        const result = await options.guard.aspect.runGuarded(info.name, [info.args], proceed, { caller: info.identity.principal?.id });
+        operation.end({ status: 'success', result });
+        return result;
+      } catch (error) { operation.end({ status: 'error' }); throw error; }
+      finally { if (ctx) ctx.genaiContext = previous; }
+    },
     redact: (value: any) => options.guard.masking.mask(value),
     serverName: 'koatty-mcp-order-service',
     serverVersion: '1.0.0',
     instructions: '订单查询（只读）与退款（写操作，需要 scope 与人工审批）。',
   });
 
+  const llm = createLlmClient({
+    ...options.llm.config,
+    prepareMessages: async messages => {
+      options.guard.aspect.checkRateLimit('llm.request');
+      for (const message of messages) {
+        const verdict = options.guard.content.inspect(message.content);
+        if (verdict.decision === 'reject' || verdict.decision === 'flag') throw new Error('content_rejected');
+      }
+      return options.guard.masking.mask(messages);
+    },
+    observeAttempt: input => {
+      const operation = options.genai.beginChat({ ...input, request: { messages: input.messages }, context: currentContext() });
+      return { end: result => operation.end(result) };
+    },
+  });
   const agent = createSupportAgent({
-    llm: options.llm,
+    llm,
+    toolRuntime: { registry: host.registry, invoke: (name: string, args: Record<string, unknown>, hooks?: { signal?: AbortSignal }) => {
+      const ctx = options.app.getCurrentContext?.();
+      return host.callTool(name, args, { principal: ctx?.principal, sessionId: 'internal', requestId: 'agent', headers: {} }, { signal: hooks?.signal ?? ctx?.signal });
+    } },
     genai: options.genai,
     model: options.model,
     provider: options.provider,

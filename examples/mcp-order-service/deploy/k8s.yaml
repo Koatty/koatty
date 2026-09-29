@@ -13,7 +13,8 @@ metadata:
   labels:
     app.kubernetes.io/name: mcp-order-service
 spec:
-  replicas: 2
+  # Local approval state and demo data: one replica only.
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -55,6 +56,8 @@ spec:
                 secretKeyRef:
                   name: mcp-order-service-secrets
                   key: api-keys
+            - name: LLM_MODEL
+              value: "configure-provider-model"
             - name: LLM_PROVIDER_TOKEN
               valueFrom:
                 secretKeyRef:

@@ -35,6 +35,8 @@ module.exports = {
     '^koatty_llm$': '<rootDir>/../../../koatty-llm/src/index.ts',
     '^koatty_guard$': '<rootDir>/../../../koatty-guard/src/index.ts',
     '^koatty_trace$': '<rootDir>/../../../koatty-trace/src/index.ts',
+    '^koatty_router$': '<rootDir>/../../../koatty-router/src/index.ts',
+    '^koatty$': '<rootDir>/../../src/index.ts',
     '^koatty_core$': '<rootDir>/../../../koatty-core/dist/index.js',
     '^koatty_validation$': '<rootDir>/../../../koatty-validation/dist/index.js',
     '^koatty_container$': '<rootDir>/../../../koatty-container/dist/index.js',
