@@ -328,6 +328,23 @@ export class MyComponent {
 
 *Tested on AWS t3.micro with 100 concurrent connections*
 
+## 🧠 Agent Skill (for AI coding agents)
+
+Koatty ships a maintained **Agent Skill** (`koatty`, versioned with `koatty_cli`) so AI coding agents — Claude Code, Cursor and any Agent-Skill-compatible tool — work the Koatty way out of the box: correct decorators, the plan/apply/verify workflow, and framework invariants (business logic in Services, `app.container`, DTO naming aligned with the Loader, no invented decorator APIs).
+
+```bash
+# New projects carry it automatically at .agents/skills/koatty/
+koatty new my-app
+
+# Existing projects: copy it from the installed npm package
+mkdir -p .agents/skills
+cp -R node_modules/koatty_cli/skills/koatty .agents/skills/koatty
+```
+
+The skill bundles `SKILL.md` plus four references (development, framework, MCP/Agent, verification). It forces agents to feature-detect the installed CLI (`capabilities --json`, `doctor --json`), validate the static manifest (`koatty manifest --validate`) before trusting schemas, and never bypass approval or replay a consumed plan. The development MCP (`koatty mcp`) can also search the versioned skill online via its `koatty_docs` tool.
+
+Full install/usage guide: [koatty-doc → Agent Skill](https://github.com/koatty/koatty-doc/blob/main/docs/extensions/skill.md).
+
 ## Documentation 📚
 
 - [中文文档](https://koatty.org/)
