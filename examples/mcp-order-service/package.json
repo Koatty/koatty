@@ -1,6 +1,6 @@
 {
   "name": "@koatty/example-mcp-order-service",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Phase F (F-5) reference app: MCP tools + resource + LLM SSE chat with koatty_guard guardrails and koatty_trace GenAI spans",
   "license": "BSD-3-Clause",
