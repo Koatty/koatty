@@ -7,6 +7,8 @@ Koa + TypeScript + IOC = Koatty. **Koatty** is a progressive Node.js framework f
 
 ## Why Koatty? 💡
 
+- 🤖 **AI-Friendly (5.0 headline)**: expose Services as MCP tools with `@Tool`, a unified multi-provider LLM client (`koatty_llm`), AI guardrails (`koatty_guard`) and GenAI observability — all reusing the same IoC, DTO validation and request scope
+- 🛡️ **Security Profile (5.0)**: `app.security` with strict/standard/development fail-closed defaults (DTO whitelist, WebSocket Origin checks, loopback-only metrics trust, TLS ≥ 1.2)
 - 🚄 **High Performance**: Built on top of Koa with optimized architecture
 - 🧩 **Full-Featured**: Supports gRPC, HTTP, WebSocket, scheduled tasks, and more
 - 🧠 **TypeScript First**: Native TypeScript support with elegant OOP design
@@ -16,7 +18,18 @@ Koa + TypeScript + IOC = Koatty. **Koatty** is a progressive Node.js framework f
 - 📦 **Modern Tooling**: CLI scaffolding, testing utilities, and production-ready configurations
 - 🌐 **Protocol Agnostic**: Write once, deploy as HTTP/gRPC/WebSocket services
 
-### ✨ New Features
+### ✨ New in v5.0
+
+- ✅ **AI Runtime packages** — first releases of `koatty_mcp` (MCP server host), `koatty_llm` (LLM client) and `koatty_guard` (guardrails); GenAI spans via `koatty_trace@2.5`
+- ✅ **Per-app container isolation** — registries, class identity, injection and AOP resolution are scoped per container; injection no longer writes to shared prototypes
+- ✅ **Strict security configuration** — invalid config keys/values/profiles fail startup instead of silently falling back; `KOATTY_ENV || NODE_ENV` resolves the security profile
+- ✅ **Certificate hot-reload** for HTTPS/HTTP2 with failure rollback
+- ✅ **Runtime manifest verification** — prebuilt apps can ship a manifest (`koatty manifest`); file paths and SHA256 are verified at boot
+- ✅ **Default WebSocket Origin checks** — configure `allowedOrigins` (empty allowlist rejects every origin)
+- ⚠️ **Breaking: HTTP/3 moved out of core** — install the experimental `koatty_http3` package instead of importing `Http3Server` from `koatty`; experimental APIs (`UseGuard`, `UseInterceptor`, `runSync`, `createIsolated`, SSE decorators) were removed in favour of the existing middleware/AOP pipeline
+- 📖 Migration guide: [docs/migration](https://github.com/koatty/koatty-monorepo/tree/main/docs/migration) and the documentation site section [v4 to v5](https://github.com/koatty/koatty-doc/blob/main/docs/migration/v4-to-v5.md)
+
+### ✨ Core New Features
 
 - ✅ **Multi-Protocol Architecture** - Run HTTP, HTTPS, HTTP/2, HTTP/3, gRPC, WebSocket, and GraphQL simultaneously
 - ✅ **Intelligent Metadata Cache** - LRU caching with preloading for 70%+ performance boost
@@ -43,7 +56,7 @@ export default {
   server: {
     hostname: '127.0.0.1',
     port: 3000,
-    protocol: ["http", "grpc"], // Multiple protocols: 'http' | 'https' | 'http2' | 'http3' | 'grpc' | 'ws' | 'wss' | 'graphql'
+    protocol: ["http", "grpc"], // Multiple protocols: 'http' | 'https' | 'http2' | 'http3' (requires koatty_http3) | 'grpc' | 'ws' | 'wss' | 'graphql'
     trace: false,
   },
   ...
